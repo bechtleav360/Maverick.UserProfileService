@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\UserProfileService.Common\UserProfileService.Common.csproj" />
+    <ProjectReference Include="..\UserProfileService.Saga.Events\UserProfileService.Saga.Events.csproj" />
+    <ProjectReference Include="..\UserProfileService.Saga.Validation\UserProfileService.Saga.Validation.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+		<Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\UserProfileService.Adapter.Marten\UserProfileService.Adapter.Marten.csproj" />
+        <ProjectReference Include="..\UserProfileService.Common.Logging\UserProfileService.Common.Logging.csproj" />
+        <ProjectReference Include="..\UserProfileService.EventSourcing.Abstractions\UserProfileService.EventSourcing.Abstractions.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+            <_Parameter1>UserProfileService.EventStore.UnitTests</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
+
+
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+            <_Parameter1>UserProfileService.MartenEventStore.UnitTests</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
+
+
+</Project>

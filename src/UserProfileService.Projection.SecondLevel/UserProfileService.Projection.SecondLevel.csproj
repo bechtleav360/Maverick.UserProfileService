@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>disable</Nullable>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Maverick.UserProfileService.AggregateEvents.Resolved\Maverick.UserProfileService.AggregateEvents.Resolved.csproj" />
+        <ProjectReference Include="..\UserProfileService.Common\UserProfileService.Common.csproj" />
+        <ProjectReference Include="..\UserProfileService.Informer\UserProfileService.Informer.csproj" />
+        <ProjectReference Include="..\UserProfileService.Messaging.Abstractions\UserProfileService.Messaging.Abstractions.csproj" />
+        <ProjectReference Include="..\UserProfileService.Projection.Common\UserProfileService.Projection.Common.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+            <_Parameter1>UserProfileService.Projection.SecondLevel.Tests</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
+
+</Project>

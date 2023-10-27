@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Maverick.UserProfileService.AggregateEvents.Common\Maverick.UserProfileService.AggregateEvents.Common.csproj" />
+        <ProjectReference Include="..\UserProfileService.Common\UserProfileService.Common.csproj" />
+    </ItemGroup>
+
+</Project>

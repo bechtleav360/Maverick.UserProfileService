@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>disable</Nullable>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Maverick.UserProfileService.Models\Maverick.UserProfileService.Models.csproj" />
+    <ProjectReference Include="..\UserProfileService.Common\UserProfileService.Common.csproj" />
+    <ProjectReference Include="..\UserProfileService.EventCollector.Abstractions.Messages\UserProfileService.EventCollector.Abstractions.Messages.csproj" />
+    <ProjectReference Include="..\UserProfileService.Projection.Abstractions\UserProfileService.Projection.Abstractions.csproj" />
+    <ProjectReference Include="..\UserProfileService.Validation.Abstractions\UserProfileService.Validation.Abstractions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Novell.Directory.Ldap.NETStandard" Version="3.6.0" />
+  </ItemGroup>
+
+</Project>

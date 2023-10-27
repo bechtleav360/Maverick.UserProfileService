@@ -1,0 +1,17 @@
+﻿{
+  "Validation": {
+    "Function": {
+      "DuplicateAllowed": false
+    },
+    "Group": {
+      "Name": {
+        "Duplicate": false,
+        "IgnoreCase": true,
+        "Regex": "^[a-zA-Z0-9ÄÖÜäöüß_\\]\\[\\-\\.\\\\ @]+$"
+      }
+    },
+    "User": {
+      "DuplicateEmailAllowed": "False"
+    }
+  }
+}

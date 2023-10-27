@@ -1,0 +1,4030 @@
+[
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1845",
+    "name": "Abteilung 1",
+    "displayName": "Abteilung 1",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1845"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1846",
+    "name": "Abteilung 2",
+    "displayName": "Abteilung 2",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1846"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1847",
+    "name": "Abteilung 3",
+    "displayName": "Abteilung 3",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1847"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1848",
+    "name": "Abteilung 4",
+    "displayName": "Abteilung 4",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1848"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1849",
+    "name": "Leitung",
+    "displayName": "Leitung",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1849"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1850",
+    "name": "Abteilung P-K",
+    "displayName": "Abteilung P-K",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1850"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1851",
+    "name": "Gleichstellungsbeauftragte",
+    "displayName": "Gleichstellungsbeauftragte",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1851"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1852",
+    "name": "Externe",
+    "displayName": "Externe",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1852"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1853",
+    "name": "BMZ Besch�ftigte",
+    "displayName": "BMZ Besch�ftigte",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1853"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1854",
+    "name": "Inaktive",
+    "displayName": "Inaktive",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1854"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1855",
+    "name": "Auszubildende",
+    "displayName": "Auszubildende",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1855"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1856",
+    "name": "Projektgruppen",
+    "displayName": "Projektgruppen",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1856"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1857",
+    "name": "Personalrat",
+    "displayName": "Personalrat",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1857"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1858",
+    "name": "Datenschutzbeauftragte",
+    "displayName": "Datenschutzbeauftragte",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1858"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1859",
+    "name": "Abeitung Z",
+    "displayName": "Abeitung Z",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1859"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1860",
+    "name": "222-2",
+    "displayName": "222-2",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1854/1860"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1861",
+    "name": "302-p",
+    "displayName": "302-p",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1854/1861"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1862",
+    "name": "220-2",
+    "displayName": "220-2",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1854/1862"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1863",
+    "name": "224",
+    "displayName": "224",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1854/1863"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1864",
+    "name": "UALP",
+    "displayName": "UALP",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1854/1864"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1865",
+    "name": "405",
+    "displayName": "405",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1854/1865"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1866",
+    "name": "315",
+    "displayName": "315",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1854/1866"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1867",
+    "name": "ALP-K",
+    "displayName": "ALP-K",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1854/1867"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1868",
+    "name": "K4",
+    "displayName": "K4",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1854/1868"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1869",
+    "name": "P1",
+    "displayName": "P1",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1854/1869"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1870",
+    "name": "200-p",
+    "displayName": "200-p",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1854/1870"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1871",
+    "name": "316",
+    "displayName": "316",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1854/1871"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1872",
+    "name": "Verbindungsb�ro",
+    "displayName": "Verbindungsb�ro",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1854/1872"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1873",
+    "name": "UALK",
+    "displayName": "UALK",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1854/1873"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1874",
+    "name": "ALP-KVz",
+    "displayName": "ALP-KVz",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1854/1874"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1875",
+    "name": "UALPVz",
+    "displayName": "UALPVz",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1854/1875"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1876",
+    "name": "UALKVz",
+    "displayName": "UALKVz",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1854/1876"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1877",
+    "name": "K2",
+    "displayName": "K2",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1854/1877"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1878",
+    "name": "P4",
+    "displayName": "P4",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1854/1878"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1879",
+    "name": "213 alt",
+    "displayName": "213 alt",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1854/1879"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1880",
+    "name": "314",
+    "displayName": "314",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1854/1880"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1881",
+    "name": "124",
+    "displayName": "124",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1854/1881"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1882",
+    "name": "123",
+    "displayName": "123",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1854/1882"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1883",
+    "name": "122",
+    "displayName": "122",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1854/1883"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1884",
+    "name": "PG MEMFIS",
+    "displayName": "PG MEMFIS",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1854/1884"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1885",
+    "name": "P2",
+    "displayName": "P2",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1854/1885"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1886",
+    "name": "P5",
+    "displayName": "P5",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1854/1886"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1887",
+    "name": "415",
+    "displayName": "415",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1854/1887"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1888",
+    "name": "K5",
+    "displayName": "K5",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1854/1888"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1889",
+    "name": "416",
+    "displayName": "416",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1854/1889"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1890",
+    "name": "PG Planungstool",
+    "displayName": "PG Planungstool",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1856/1890"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1891",
+    "name": "ALZ Koordinator",
+    "displayName": "ALZ Koordinator",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1859/1891"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1892",
+    "name": "Unterabrteilung Z1",
+    "displayName": "Unterabrteilung Z1",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1859/1892"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1893",
+    "name": "Unterabteilung Z2",
+    "displayName": "Unterabteilung Z2",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1859/1893"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1894",
+    "name": "ALZ",
+    "displayName": "ALZ",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1859/1894"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1895",
+    "name": "ALZVz",
+    "displayName": "ALZVz",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1859/1895"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1896",
+    "name": "Unterabteilung 11",
+    "displayName": "Unterabteilung 11",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1845/1896"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1897",
+    "name": "AL1",
+    "displayName": "AL1",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1845/1897"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1898",
+    "name": "AL1Vz",
+    "displayName": "AL1Vz",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1845/1898"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1899",
+    "name": "SEWOH",
+    "displayName": "SEWOH",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1845/1899"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1900",
+    "name": "V",
+    "displayName": "V",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1845/1900"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1901",
+    "name": "Unterabteilung 10",
+    "displayName": "Unterabteilung 10",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1845/1901"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1902",
+    "name": "AL1 Koordinator",
+    "displayName": "AL1 Koordinator",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1845/1902"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1903",
+    "name": "PGMIT",
+    "displayName": "PGMIT",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1845/1903"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1904",
+    "name": "PGZ",
+    "displayName": "PGZ",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1845/1904"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1905",
+    "name": "Unterabteilung 20",
+    "displayName": "Unterabteilung 20",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1846/1905"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1906",
+    "name": "Unterabteilung 21",
+    "displayName": "Unterabteilung 21",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1846/1906"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1907",
+    "name": "Unterabteilung 22",
+    "displayName": "Unterabteilung 22",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1846/1907"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1908",
+    "name": "AL2",
+    "displayName": "AL2",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1846/1908"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1909",
+    "name": "AL2Vz",
+    "displayName": "AL2Vz",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1846/1909"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1910",
+    "name": "Afrika-Beauftragter",
+    "displayName": "Afrika-Beauftragter",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1846/1910"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1911",
+    "name": "AL2 Koordinator",
+    "displayName": "AL2 Koordinator",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1846/1911"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1912",
+    "name": "Unterabteilung 30",
+    "displayName": "Unterabteilung 30",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1847/1912"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1913",
+    "name": "AL3",
+    "displayName": "AL3",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1847/1913"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1914",
+    "name": "AL3Vz",
+    "displayName": "AL3Vz",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1847/1914"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1915",
+    "name": "SEK",
+    "displayName": "SEK",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1847/1915"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1916",
+    "name": "AS2015",
+    "displayName": "AS2015",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1847/1916"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1917",
+    "name": "CIC",
+    "displayName": "CIC",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1847/1917"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1918",
+    "name": "ZIZ",
+    "displayName": "ZIZ",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1847/1918"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1919",
+    "name": "EXPO",
+    "displayName": "EXPO",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1847/1919"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1920",
+    "name": "Unterabteilung 31",
+    "displayName": "Unterabteilung 31",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1847/1920"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1921",
+    "name": "AL3 Koordinator",
+    "displayName": "AL3 Koordinator",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1847/1921"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1922",
+    "name": "SENE",
+    "displayName": "SENE",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1848/1922"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1923",
+    "name": "Unterabteilung 40",
+    "displayName": "Unterabteilung 40",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1848/1923"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1924",
+    "name": "Unterabteilung 41",
+    "displayName": "Unterabteilung 41",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1848/1924"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1925",
+    "name": "AL4Vz",
+    "displayName": "AL4Vz",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1848/1925"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1926",
+    "name": "AL4",
+    "displayName": "AL4",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1848/1926"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1927",
+    "name": "AL4 Koordinator",
+    "displayName": "AL4 Koordinator",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1848/1927"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1928",
+    "name": "EU BeauftragterVZ",
+    "displayName": "EU BeauftragterVZ",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1848/1928"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1929",
+    "name": "EU Beauftragter",
+    "displayName": "EU Beauftragter",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1848/1929"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1930",
+    "name": "SENEVz",
+    "displayName": "SENEVz",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1848/1930"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1931",
+    "name": "UNICEF Beauftragte",
+    "displayName": "UNICEF Beauftragte",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1848/1931"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1932",
+    "name": "UNICEF Beauftragte Vz",
+    "displayName": "UNICEF Beauftragte Vz",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1848/1932"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1933",
+    "name": "L5",
+    "displayName": "L5",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1849/1933"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1934",
+    "name": "L1",
+    "displayName": "L1",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1849/1934"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1935",
+    "name": "L4",
+    "displayName": "L4",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1849/1935"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1936",
+    "name": "L6",
+    "displayName": "L6",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1849/1936"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1937",
+    "name": "L3",
+    "displayName": "L3",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1849/1937"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1938",
+    "name": "L7",
+    "displayName": "L7",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1849/1938"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1939",
+    "name": "Min",
+    "displayName": "Min",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1849/1939"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1940",
+    "name": "PStsFuchtel",
+    "displayName": "PStsFuchtel",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1849/1940"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1941",
+    "name": "Sts",
+    "displayName": "Sts",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1849/1941"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1942",
+    "name": "PStsSilberhorn",
+    "displayName": "PStsSilberhorn",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1849/1942"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1943",
+    "name": "Post 2015 Sherpa",
+    "displayName": "Post 2015 Sherpa",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1849/1943"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1944",
+    "name": "L2",
+    "displayName": "L2",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1849/1944"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1945",
+    "name": "IR",
+    "displayName": "IR",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1849/1945"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1946",
+    "name": "UALLS",
+    "displayName": "UALLS",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1849/1946"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1947",
+    "name": "Unterabteilung K",
+    "displayName": "Unterabteilung K",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1850/1947"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1948",
+    "name": "Unterabteilung P",
+    "displayName": "Unterabteilung P",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1850/1948"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1949",
+    "name": "Praktikanten",
+    "displayName": "Praktikanten",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1852/1949"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1950",
+    "name": "Beratungskr�fte",
+    "displayName": "Beratungskr�fte",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1852/1950"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1951",
+    "name": "Referendare",
+    "displayName": "Referendare",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1852/1951"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1952",
+    "name": "BRH",
+    "displayName": "BRH",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1852/1952"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1953",
+    "name": "Unterabteilung 12",
+    "displayName": "Unterabteilung 12",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1854/1953"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1954",
+    "name": "201-p",
+    "displayName": "201-p",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1854/1954"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1955",
+    "name": "205 alt",
+    "displayName": "205 alt",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1854/1955"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1956",
+    "name": "305-p",
+    "displayName": "305-p",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1854/1956"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1957",
+    "name": "K1",
+    "displayName": "K1",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1854/1957"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1958",
+    "name": "121",
+    "displayName": "121",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1854/1958"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1959",
+    "name": "201-p-alt",
+    "displayName": "201-p-alt",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1854/1959"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1960",
+    "name": "113",
+    "displayName": "113",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1845/1896/1960"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1961",
+    "name": "110",
+    "displayName": "110",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1845/1896/1961"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1962",
+    "name": "111",
+    "displayName": "111",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1845/1896/1962"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1963",
+    "name": "112",
+    "displayName": "112",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1845/1896/1963"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1964",
+    "name": "UAL11",
+    "displayName": "UAL11",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1845/1896/1964"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1965",
+    "name": "UAL11Vz",
+    "displayName": "UAL11Vz",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1845/1896/1965"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1966",
+    "name": "114",
+    "displayName": "114",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1845/1896/1966"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1967",
+    "name": "116",
+    "displayName": "116",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1845/1896/1967"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1968",
+    "name": "115",
+    "displayName": "115",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1845/1896/1968"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1969",
+    "name": "105",
+    "displayName": "105",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1845/1901/1969"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1970",
+    "name": "UAL10",
+    "displayName": "UAL10",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1845/1901/1970"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1971",
+    "name": "UAL10Vz",
+    "displayName": "UAL10Vz",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1845/1901/1971"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1972",
+    "name": "100",
+    "displayName": "100",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1845/1901/1972"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1973",
+    "name": "102",
+    "displayName": "102",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1845/1901/1973"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1974",
+    "name": "101",
+    "displayName": "101",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1845/1901/1974"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1975",
+    "name": "103",
+    "displayName": "103",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1845/1901/1975"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1976",
+    "name": "104",
+    "displayName": "104",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1845/1901/1976"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1977",
+    "name": "200",
+    "displayName": "200",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1846/1905/1977"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1978",
+    "name": "201",
+    "displayName": "201",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1846/1905/1978"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1979",
+    "name": "203",
+    "displayName": "203",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1846/1905/1979"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1980",
+    "name": "204",
+    "displayName": "204",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1846/1905/1980"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1981",
+    "name": "205",
+    "displayName": "205",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1846/1905/1981"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1982",
+    "name": "UAL20",
+    "displayName": "UAL20",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1846/1905/1982"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1983",
+    "name": "UAL20Vz",
+    "displayName": "UAL20Vz",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1846/1905/1983"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1984",
+    "name": "202",
+    "displayName": "202",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1846/1905/1984"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1985",
+    "name": "212",
+    "displayName": "212",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1846/1906/1985"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1986",
+    "name": "211",
+    "displayName": "211",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1846/1906/1986"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1987",
+    "name": "214",
+    "displayName": "214",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1846/1906/1987"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1988",
+    "name": "213",
+    "displayName": "213",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1846/1906/1988"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1989",
+    "name": "UAL21",
+    "displayName": "UAL21",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1846/1906/1989"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1990",
+    "name": "UAL21Vz",
+    "displayName": "UAL21Vz",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1846/1906/1990"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1991",
+    "name": "210",
+    "displayName": "210",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1846/1906/1991"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1992",
+    "name": "220",
+    "displayName": "220",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1846/1907/1992"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1993",
+    "name": "221",
+    "displayName": "221",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1846/1907/1993"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1994",
+    "name": "223",
+    "displayName": "223",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1846/1907/1994"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1995",
+    "name": "222",
+    "displayName": "222",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1846/1907/1995"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1996",
+    "name": "UAL22",
+    "displayName": "UAL22",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1846/1907/1996"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1997",
+    "name": "UAL22Vz",
+    "displayName": "UAL22Vz",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1846/1907/1997"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1998",
+    "name": "302",
+    "displayName": "302",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1847/1912/1998"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "1999",
+    "name": "301",
+    "displayName": "301",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1847/1912/1999"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2000",
+    "name": "UAL30Vz",
+    "displayName": "UAL30Vz",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1847/1912/2000"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2001",
+    "name": "303",
+    "displayName": "303",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1847/1912/2001"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2002",
+    "name": "300",
+    "displayName": "300",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1847/1912/2002"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2003",
+    "name": "305",
+    "displayName": "305",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1847/1912/2003"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2004",
+    "name": "304",
+    "displayName": "304",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1847/1912/2004"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2005",
+    "name": "UAL30",
+    "displayName": "UAL30",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1847/1912/2005"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2006",
+    "name": "306",
+    "displayName": "306",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1847/1912/2006"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2007",
+    "name": "312",
+    "displayName": "312",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1847/1920/2007"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2008",
+    "name": "UAL31Vz",
+    "displayName": "UAL31Vz",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1847/1920/2008"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2009",
+    "name": "313",
+    "displayName": "313",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1847/1920/2009"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2010",
+    "name": "UAL31",
+    "displayName": "UAL31",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1847/1920/2010"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2011",
+    "name": "310",
+    "displayName": "310",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1847/1920/2011"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2012",
+    "name": "311",
+    "displayName": "311",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1847/1920/2012"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2013",
+    "name": "404",
+    "displayName": "404",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1848/1923/2013"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2014",
+    "name": "402",
+    "displayName": "402",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1848/1923/2014"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2015",
+    "name": "403",
+    "displayName": "403",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1848/1923/2015"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2016",
+    "name": "401",
+    "displayName": "401",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1848/1923/2016"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2017",
+    "name": "UAL40",
+    "displayName": "UAL40",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1848/1923/2017"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2018",
+    "name": "UAL40Vz",
+    "displayName": "UAL40Vz",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1848/1923/2018"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2019",
+    "name": "400",
+    "displayName": "400",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1848/1923/2019"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2020",
+    "name": "412",
+    "displayName": "412",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1848/1924/2020"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2021",
+    "name": "411",
+    "displayName": "411",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1848/1924/2021"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2022",
+    "name": "UAL41Vz",
+    "displayName": "UAL41Vz",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1848/1924/2022"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2023",
+    "name": "410",
+    "displayName": "410",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1848/1924/2023"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2024",
+    "name": "UAL41",
+    "displayName": "UAL41",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1848/1924/2024"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2025",
+    "name": "413",
+    "displayName": "413",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1848/1924/2025"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2026",
+    "name": "414",
+    "displayName": "414",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1848/1924/2026"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2027",
+    "name": "MinVz",
+    "displayName": "MinVz",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1849/1939/2027"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2028",
+    "name": "MinPR",
+    "displayName": "MinPR",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1849/1939/2028"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2029",
+    "name": "PStsFuchtelPR",
+    "displayName": "PStsFuchtelPR",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1849/1940/2029"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2030",
+    "name": "PStsFuchtelVz",
+    "displayName": "PStsFuchtelVz",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1849/1940/2030"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2031",
+    "name": "StsVz",
+    "displayName": "StsVz",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1849/1941/2031"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2032",
+    "name": "StsPR",
+    "displayName": "StsPR",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1849/1941/2032"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2033",
+    "name": "PStsSilberhornVz",
+    "displayName": "PStsSilberhornVz",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1849/1942/2033"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2034",
+    "name": "PStsSilberhornPR",
+    "displayName": "PStsSilberhornPR",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1849/1942/2034"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2035",
+    "name": "UALLSVz",
+    "displayName": "UALLSVz",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1849/1946/2035"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2036",
+    "name": "K3",
+    "displayName": "K3",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1850/1947/2036"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2037",
+    "name": "P3",
+    "displayName": "P3",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1850/1948/2037"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2038",
+    "name": "UAL12",
+    "displayName": "UAL12",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1854/1953/2038"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2039",
+    "name": "UAL12Vz",
+    "displayName": "UAL12Vz",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1854/1953/2039"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2040",
+    "name": "Z11",
+    "displayName": "Z11",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1859/1892/2040"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2041",
+    "name": "Z14",
+    "displayName": "Z14",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1859/1892/2041"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2042",
+    "name": "Z13",
+    "displayName": "Z13",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1859/1892/2042"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2043",
+    "name": "Z10",
+    "displayName": "Z10",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1859/1892/2043"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2044",
+    "name": "Z12",
+    "displayName": "Z12",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1859/1892/2044"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2045",
+    "name": "EPOS",
+    "displayName": "EPOS",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1859/1892/2045"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2046",
+    "name": "UALZ1",
+    "displayName": "UALZ1",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1859/1892/2046"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2047",
+    "name": "UALZ1Vz",
+    "displayName": "UALZ1Vz",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1859/1892/2047"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2048",
+    "name": "Z20",
+    "displayName": "Z20",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1859/1893/2048"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2049",
+    "name": "Z22",
+    "displayName": "Z22",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1859/1893/2049"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2050",
+    "name": "Z23",
+    "displayName": "Z23",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1859/1893/2050"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2051",
+    "name": "Z21",
+    "displayName": "Z21",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1859/1893/2051"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2052",
+    "name": "Z25",
+    "displayName": "Z25",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1859/1893/2052"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2053",
+    "name": "UALZ2",
+    "displayName": "UALZ2",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1859/1893/2053"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2054",
+    "name": "UALZ2Vz",
+    "displayName": "UALZ2Vz",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1859/1893/2054"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "2055",
+    "name": "Poststelle",
+    "displayName": "Poststelle",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/1859/1893/2048/2055"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.OrganizationalUnitProfile, Bechtle.A365.Common.Security.Profiles",
+    "profileKind": 4,
+    "parentOrganizations": null,
+    "isEntitledToVote": true,
+    "id": "42",
+    "name": "BONNEA",
+    "displayName": "BONNEA",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  }
+]

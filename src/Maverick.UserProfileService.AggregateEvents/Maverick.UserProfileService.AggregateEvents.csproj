@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <Nullable>disable</Nullable>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Maverick.UserProfileService.AggregateEvents.Common\Maverick.UserProfileService.AggregateEvents.Common.csproj"/>
+        <ProjectReference Include="..\Maverick.UserProfileService.AggregateEvents.Resolved\Maverick.UserProfileService.AggregateEvents.Resolved.csproj"/>
+    </ItemGroup>
+
+</Project>

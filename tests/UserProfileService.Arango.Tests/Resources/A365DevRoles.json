@@ -1,0 +1,50 @@
+[
+  {
+    "id": "Administrator",
+    "name": "Administrator"
+  },
+  {
+    "id": "Aktenplan",
+    "name": "Aktenplan"
+  },
+  {
+    "id": "Leitung",
+    "name": "Leitung"
+  },
+  {
+    "id": "Lesen",
+    "name": "Lesen"
+  },
+  {
+    "id": "Mitarbeit",
+    "name": "Mitarbeit"
+  },
+  {
+    "id": "Praktikant",
+    "name": "Praktikant"
+  },
+  {
+    "id": "Prüfer",
+    "name": "Prüfer"
+  },
+  {
+    "id": "Recherche",
+    "name": "Recherche"
+  },
+  {
+    "id": "RechercheCont",
+    "name": "RechercheCont"
+  },
+  {
+    "id": "Registrator",
+    "name": "Registrator"
+  },
+  {
+    "id": "Sachbearbeiter",
+    "name": "Sachbearbeiter"
+  },
+  {
+    "id": "SGV",
+    "name": "SGV"
+  }
+]

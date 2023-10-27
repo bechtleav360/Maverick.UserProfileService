@@ -1,0 +1,64 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+    <PropertyGroup>
+        <Description>UserProfileService Sync</Description>
+        <Copyright>Bechtle GmbH &amp; Co. KG IT-Systemhaus Bonn/Köln</Copyright>
+        <AssemblyTitle>UserProfileService</AssemblyTitle>
+        <Authors>Bechtle GmbH &amp; Co. KG IT-Systemhaus Bonn/Köln</Authors>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>disable</Nullable>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <AssemblyName>UserProfileService.Sync</AssemblyName>
+        <PackageId>UserProfileService.Sync</PackageId>
+        <PackageTags>UserProfileService Sync</PackageTags>
+        <PackageIconUrl>https://cloudshare.bechtlecloud.com/trial/help/hilfeseite_files/Bechtle_Logo.jpg</PackageIconUrl>
+        <PackageLicenseUrl>http://bechtle.com/egov</PackageLicenseUrl>
+        <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+        <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+        <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+        <UserSecretsId>0f79f75f-1881-4c4b-b84b-f35a0402f6dd</UserSecretsId>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <DockerfileContext>..\..</DockerfileContext>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Bogus" Version="34.0.2" />
+        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.14" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.1.0" />
+        <PackageReference Include="prometheus-net.AspNetCore" Version="6.0.0" />
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+        <PackageReference Include="Novell.Directory.Ldap.NETStandard" Version="3.6.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\UserProfileService.Messaging.ArangoDb\UserProfileService.Messaging.ArangoDb.csproj" />
+        <ProjectReference Include="..\UserProfileService.Hosting\UserProfileService.Hosting.csproj" />
+        <ProjectReference Include="..\UserProfileService.Adapter.Arango\UserProfileService.Adapter.Arango.csproj" />
+        <ProjectReference Include="..\UserProfileService.Common.Health\UserProfileService.Common.Health.csproj" />
+        <ProjectReference Include="..\UserProfileService.Messaging.ArangoDb\UserProfileService.Messaging.ArangoDb.csproj" />
+        <ProjectReference Include="..\UserProfileService.Redis\UserProfileService.Redis.csproj" />
+        <ProjectReference Include="..\UserProfileService.Saga.Events\UserProfileService.Saga.Events.csproj" />
+        <ProjectReference Include="..\UserProfileService.Sync.Common\UserProfileService.Sync.Common.csproj" />
+        <ProjectReference Include="..\UserProfileService.Sync.Projection\UserProfileService.Sync.Projection.csproj" />
+        <ProjectReference Include="..\UserProfileService.Validation.Abstractions\UserProfileService.Validation.Abstractions.csproj" />
+        <ProjectReference Include="..\UserProfileService.Validation.Agent\UserProfileService.EventCollector.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Update="appsettings.Development.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Update="appsettings.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+</Project>

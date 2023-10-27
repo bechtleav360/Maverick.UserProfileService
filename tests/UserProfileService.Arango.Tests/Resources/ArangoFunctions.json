@@ -1,0 +1,253 @@
+{
+  "Roles": [
+    {
+      "InternalId": "role1",
+      "Id": "Mngmnt",
+      "Name": "Management"
+    },
+    {
+      "InternalId": "role2",
+      "Id": "Sls",
+      "Name": "Sales"
+    },
+    {
+      "InternalId": "role3",
+      "Id": "Dvs",
+      "Name": "Devs"
+    },
+    {
+      "InternalId": "role4",
+      "Id": "Guests",
+      "Name": "G�ste"
+    }
+  ],
+  "OrgUnits": [
+    {
+      "$id": "1",
+      "ProfileKind": 4,
+      "ParentOrganizations": null,
+      "IsEntitledToVote": false,
+      "InternalId": "O1",
+      "Name": "Root",
+      "Id": "42",
+      "DisplayName": "Root",
+      "LastModified": "2019-01-03T13:06:36.8646503+01:00",
+      "Properties": {},
+      "ExpectedPaths": [
+        "1"
+      ],
+      "Description": null,
+      "IsMarkedForDeletion": false,
+      "Characteristics": {
+        "System": [
+          "Level1"
+        ]
+      }
+    },
+    {
+      "$id": "22",
+      "ProfileKind": 4,
+      "ParentOrganizations": [
+        {
+          "$ref": "1"
+        }
+      ],
+      "IsEntitledToVote": false,
+      "InternalId": "O22",
+      "Name": "OrgA",
+      "Id": "4711",
+      "DisplayName": "OE A",
+      "LastModified": "2019-01-04T13:06:36.8646503+01:00",
+      "Properties": {},
+      "ExpectedPaths": [
+        "1/22"
+      ],
+      "Description": null,
+      "IsMarkedForDeletion": false,
+      "Characteristics": {
+        "System": [
+          "Level2"
+        ]
+      }
+    },
+    {
+      "$id": "47",
+      "ProfileKind": 4,
+      "ParentOrganizations": [
+        {
+          "$ref": "1"
+        }
+      ],
+      "IsEntitledToVote": false,
+      "InternalId": "O47",
+      "Id": "12",
+      "Name": "OrgP",
+      "DisplayName": "OE P",
+      "LastModified": "2019-01-05T13:06:36.8646503+01:00",
+      "Properties": {},
+      "ExpectedPaths": [
+        "1/47"
+      ],
+      "Description": null,
+      "IsMarkedForDeletion": false
+    },
+    {
+      "$id": "121",
+      "ProfileKind": 4,
+      "ParentOrganizations": [
+        {
+          "$ref": "47"
+        }
+      ],
+      "IsEntitledToVote": false,
+      "InternalId": "O121",
+      "Id": "88",
+      "Name": "OrgZ",
+      "DisplayName": "OE Z",
+      "LastModified": "2019-01-04T13:06:36.8646503+01:00",
+      "Properties": {},
+      "ExpectedPaths": [
+        "1/47/121"
+      ],
+      "Description": null,
+      "IsMarkedForDeletion": false
+    }
+  ],
+  "Functions": [
+    {
+      "RoleId": "role1",
+      "ProfileKind": 8,
+      "ColorIndicator": "",
+      "IsEntitledToVote": true,
+      "Links": null,
+      "ParentOrganizations": [
+        {
+          "$ref": "47"
+        }
+      ],
+      "Id": "FFcfab73d8-d92e-43d2-8585-f5b65c972782",
+      "InternalId": "FFcfab73d8-d92e-43d2-8585-f5b65c972782",
+      "Name": "Management OrgP",
+      "DisplayName": "Management OrgP",
+      "LastModified": "0001-01-01T00:00:00",
+      "Properties": {},
+      "Paths": null,
+      "Description": "",
+      "IsMarkedForDeletion": false
+    },
+    {
+      "RoleId": "role1",
+      "ProfileKind": 8,
+      "ColorIndicator": "",
+      "IsEntitledToVote": true,
+      "Links": null,
+      "ParentOrganizations": [
+        {
+          "$ref": "22"
+        }
+      ],
+      "Id": "F91f21058-c399-4160-8b17-36140c011f09",
+      "InternalId": "F91f21058-c399-4160-8b17-36140c011f09",
+      "Name": "Management OrgA",
+      "DisplayName": "Management OrgA",
+      "LastModified": "0001-01-01T00:00:00",
+      "Properties": {},
+      "Paths": null,
+      "Description": "",
+      "IsMarkedForDeletion": false
+    },
+    {
+      "RoleId": "role3",
+      "ProfileKind": 8,
+      "ColorIndicator": "",
+      "IsEntitledToVote": true,
+      "Links": null,
+      "ParentOrganizations": [
+        {
+          "$ref": "121"
+        }
+      ],
+      "Id": "Fc476de07-effc-4616-b25a-e481d5f7159e",
+      "InternalId": "Fc476de07-effc-4616-b25a-e481d5f7159e",
+      "Name": "Devs OrgZ",
+      "DisplayName": "Devs OrgZ",
+      "LastModified": "0001-01-01T00:00:00",
+      "Properties": {},
+      "Paths": null,
+      "Description": "",
+      "IsMarkedForDeletion": false
+    },
+    {
+      "RoleId": "role4",
+      "ProfileKind": 8,
+      "ColorIndicator": "",
+      "IsEntitledToVote": true,
+      "Links": null,
+      "ParentOrganizations": [
+        {
+          "$ref": "121"
+        }
+      ],
+      "Id": "F526ac01f-c2cf-43de-8b18-9b1a173a7eec",
+      "InternalId": "F526ac01f-c2cf-43de-8b18-9b1a173a7eec",
+      "Name": "G�ste OrgZ",
+      "DisplayName": "G�ste OrgZ",
+      "LastModified": "0001-01-01T00:00:00",
+      "Properties": {},
+      "Paths": null,
+      "Description": "",
+      "IsMarkedForDeletion": false
+    }
+  ],
+  "Hierarchies": [
+    {
+      "_from": "O22",
+      "_to": "O1"
+    },
+    {
+      "_from": "O121",
+      "_to": "O47"
+    },
+    {
+      "_from": "O47",
+      "_to": "O1"
+    }
+  ],
+  "Assignments": [
+    {
+      "_from": "FFcfab73d8-d92e-43d2-8585-f5b65c972782",
+      "_to": "O47",
+      "InternalType": "FunctionOrgDefinition"
+    },
+    {
+      "_from": "FFcfab73d8-d92e-43d2-8585-f5b65c972782",
+      "_to": "role1",
+      "InternalType": "FunctionRoleDefinition"
+    },
+    {
+      "_from": "F91f21058-c399-4160-8b17-36140c011f09",
+      "_to": "O22",
+      "InternalType": "FunctionOrgDefinition"
+    },
+    {
+      "_from": "F91f21058-c399-4160-8b17-36140c011f09",
+      "_to": "role1",
+      "InternalType": "FunctionRoleDefinition"
+    },
+    {
+      "_from": "Fc476de07-effc-4616-b25a-e481d5f7159e",
+      "_to": "O121",
+      "InternalType": "FunctionOrgDefinition"
+    },
+    {
+      "_from": "Fc476de07-effc-4616-b25a-e481d5f7159e",
+      "_to": "role3",
+      "InternalType": "FunctionRoleDefinition"
+    },
+    {
+      "_from": "F526ac01f-c2cf-43de-8b18-9b1a173a7eec",
+      "_to": "role4",
+      "InternalType": "FunctionRoleDefinition"
+    }
+  ]
+}

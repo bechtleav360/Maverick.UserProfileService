@@ -1,0 +1,49 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>disable</Nullable>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <UserSecretsId>f7aeed80-e7d4-452e-8393-0ff769203978</UserSecretsId>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <DockerfileContext>..\..</DockerfileContext>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Maverick.UserProfileService.Models\Maverick.UserProfileService.Models.csproj" />
+        <ProjectReference Include="..\UserProfileService.Hosting\UserProfileService.Hosting.csproj" />
+        <ProjectReference Include="..\UserProfileService.Informer\UserProfileService.Informer.csproj" />
+        <ProjectReference Include="..\UserProfileService.Messaging.ArangoDb\UserProfileService.Messaging.ArangoDb.csproj" />
+        <ProjectReference Include="..\UserProfileService.Adapter.Arango\UserProfileService.Adapter.Arango.csproj" />
+        <ProjectReference Include="..\UserProfileService.Common.Health\UserProfileService.Common.Health.csproj" />
+        <ProjectReference Include="..\UserProfileService.Events.Payloads\UserProfileService.Events.Payloads.csproj" />
+        <ProjectReference Include="..\UserProfileService.Marten.EventStore\UserProfileService.Marten.EventStore.csproj" />
+        <ProjectReference Include="..\UserProfileService.Projection.FirstLevel\UserProfileService.Projection.FirstLevel.csproj" />
+        <ProjectReference Include="..\UserProfileService.Projection.SecondLevel.Assignments\UserProfileService.Projection.SecondLevel.Assignments.csproj" />
+        <ProjectReference Include="..\UserProfileService.Projection.SecondLevel.VolatileDataStore\UserProfileService.Projection.SecondLevel.VolatileDataStore.csproj" />
+        <ProjectReference Include="..\UserProfileService.Projection.SecondLevel\UserProfileService.Projection.SecondLevel.csproj" />
+        <ProjectReference Include="..\UserProfileService.Projection.VolatileData\UserProfileService.Projection.VolatileData.csproj" />
+        <ProjectReference Include="..\UserProfileService.Saga.Common\UserProfileService.Saga.Common.csproj" />
+        <ProjectReference Include="..\UserProfileService.Saga.Events\UserProfileService.Saga.Events.csproj" />
+        <ProjectReference Include="..\UserProfileService.Validation.Abstractions\UserProfileService.Validation.Abstractions.csproj" />
+        <ProjectReference Include="..\UserProfileService.Saga.Validation\UserProfileService.Saga.Validation.csproj" />
+        <ProjectReference Include="..\UserProfileService.Validation.Abstractions\UserProfileService.Validation.Abstractions.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.13" />
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+            <_Parameter1>UserProfileService.Saga.Worker.UnitTests</_Parameter1>
+            <_Parameter1>UserProfileService.EventNotifier.UnitTests</_Parameter1>
+            <_Parameter1>UserProfileService.Saga.Validation.UnitTests</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Update="appsettings.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+</Project>

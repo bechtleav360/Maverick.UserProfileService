@@ -1,0 +1,215 @@
+[
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.GroupProfile, Bechtle.A365.Common.Security.Profiles",
+    "members": [
+      "S-1-5-21-645386296-1317104354-3380405571-1536",
+      "S-1-5-21-645386296-1317104354-3380405571-1478"
+    ],
+    "weight": 0,
+    "profileKind": 2,
+    "securityIdentifier": null,
+    "functionAssignments": [],
+    "id": "09f35143-a902-4585-a500-8d9f63f90780",
+    "name": "MaverickDevelopers",
+    "displayName": "MaverickDevelopers",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "09f35143-a902-4585-a500-8d9f63f90780"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.GroupProfile, Bechtle.A365.Common.Security.Profiles",
+    "members": [],
+    "weight": 0,
+    "profileKind": 2,
+    "securityIdentifier": null,
+    "functionAssignments": [],
+    "id": "d288fc20-4922-4de6-a491-b788325dc3c7",
+    "name": "GroupName",
+    "displayName": "GroupName",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "d288fc20-4922-4de6-a491-b788325dc3c7"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.GroupProfile, Bechtle.A365.Common.Security.Profiles",
+    "members": null,
+    "weight": 0,
+    "profileKind": 2,
+    "securityIdentifier": null,
+    "functionAssignments": [],
+    "id": "R3JvdXA=:K1oyMSBMZXNlbg==",
+    "name": "+Z21 Lesen",
+    "displayName": "+Z21 Lesen",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "R3JvdXA=:K1oyMSBMZXNlbg=="
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.GroupProfile, Bechtle.A365.Common.Security.Profiles",
+    "members": null,
+    "weight": 0,
+    "profileKind": 2,
+    "securityIdentifier": null,
+    "functionAssignments": [],
+    "id": "R3JvdXA=:K1oyMSBTY2hyZWliZW4=",
+    "name": "+Z21 Schreiben",
+    "displayName": "+Z21 Schreiben",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "R3JvdXA=:K1oyMSBTY2hyZWliZW4="
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.GroupProfile, Bechtle.A365.Common.Security.Profiles",
+    "members": null,
+    "weight": 0,
+    "profileKind": 2,
+    "securityIdentifier": null,
+    "functionAssignments": [],
+    "id": "R3JvdXA=:K1oyMyBET01FQSBQcm9qZWt0dGVhbQ==",
+    "name": "+Z23 DOMEA Projektteam",
+    "displayName": "+Z23 DOMEA Projektteam",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "R3JvdXA=:K1oyMyBET01FQSBQcm9qZWt0dGVhbQ=="
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.GroupProfile, Bechtle.A365.Common.Security.Profiles",
+    "members": null,
+    "weight": 0,
+    "profileKind": 2,
+    "securityIdentifier": null,
+    "functionAssignments": [],
+    "id": "R3JvdXA=:K1oyMyBFUE9T",
+    "name": "+Z23 EPOS",
+    "displayName": "+Z23 EPOS",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "R3JvdXA=:K1oyMyBFUE9T"
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.GroupProfile, Bechtle.A365.Common.Security.Profiles",
+    "members": null,
+    "weight": 0,
+    "profileKind": 2,
+    "securityIdentifier": null,
+    "functionAssignments": [],
+    "id": "R3JvdXA=:K1oyMyBMZXNlbg==",
+    "name": "+Z23 Lesen",
+    "displayName": "+Z23 Lesen",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "R3JvdXA=:K1oyMyBMZXNlbg=="
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.GroupProfile, Bechtle.A365.Common.Security.Profiles",
+    "members": null,
+    "weight": 0,
+    "profileKind": 2,
+    "securityIdentifier": null,
+    "functionAssignments": [],
+    "id": "R3JvdXA=:K1oyMyBQR01JVA==",
+    "name": "+Z23 PGMIT",
+    "displayName": "+Z23 PGMIT",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "R3JvdXA=:K1oyMyBQR01JVA=="
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.GroupProfile, Bechtle.A365.Common.Security.Profiles",
+    "members": null,
+    "weight": 0,
+    "profileKind": 2,
+    "securityIdentifier": null,
+    "functionAssignments": [],
+    "id": "R3JvdXA=:K1oyMyBTY2hyZWliZW4=",
+    "name": "+Z23 Schreiben",
+    "displayName": "+Z23 Schreiben",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "R3JvdXA=:K1oyMyBTY2hyZWliZW4="
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  },
+  {
+    "$type": "Bechtle.A365.Common.Security.Profiles.GroupProfile, Bechtle.A365.Common.Security.Profiles",
+    "members": null,
+    "weight": 0,
+    "profileKind": 2,
+    "securityIdentifier": null,
+    "functionAssignments": [],
+    "id": "R3JvdXA=:Qk1aIEJlc2Now6RmdGlndGU=",
+    "name": "BMZ Beschäftigte",
+    "displayName": "BMZ Beschäftigte",
+    "lastModified": "0001-01-01T00:00:00",
+    "properties": {
+      "$type":
+        "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]], mscorlib"
+    },
+    "paths": [
+      "42/R3JvdXA=:Qk1aIEJlc2Now6RmdGlndGU="
+    ],
+    "description": null,
+    "isMarkedForDeletion": false
+  }
+]

@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>disable</Nullable>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="MassTransit.Abstractions" Version="8.0.16" />
+        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.22" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="System.ServiceModel.Primitives" Version="4.5.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\UserProfileService.Common.Logging\UserProfileService.Common.Logging.csproj" />
+      <ProjectReference Include="..\UserProfileService.Messaging\UserProfileService.Messaging.csproj" />
+    </ItemGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+</Project>

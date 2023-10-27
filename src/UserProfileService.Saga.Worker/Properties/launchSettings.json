@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "UserProfileService.Saga.Worker": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "http://localhost:51360;http://localhost:51361"
+    }
+  }
+}

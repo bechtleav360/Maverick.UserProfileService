@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>disable</Nullable>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Maverick.Client.ArangoDb\Maverick.Client.ArangoDb.csproj" />
+        <ProjectReference Include="..\Maverick.UserProfileService.Models\Maverick.UserProfileService.Models.csproj" />
+        <ProjectReference Include="..\UserProfileService.Common\UserProfileService.Common.csproj" />
+        <ProjectReference Include="..\UserProfileService.EventCollector.Abstractions\UserProfileService.EventCollector.Abstractions.csproj" />
+        <ProjectReference Include="..\UserProfileService.Events\UserProfileService.Events.csproj" />
+        <ProjectReference Include="..\UserProfileService.Projection.Abstractions\UserProfileService.Projection.Abstractions.csproj" />
+        <ProjectReference Include="..\UserProfileService.Projection.Common\UserProfileService.Projection.Common.csproj" />
+        <ProjectReference Include="..\UserProfileService.Sync.Abstractions\UserProfileService.Sync.Abstraction.csproj" />
+    </ItemGroup>
+
+</Project>

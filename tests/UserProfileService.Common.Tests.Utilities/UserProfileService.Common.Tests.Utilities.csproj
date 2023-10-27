@@ -1,0 +1,65 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>disable</Nullable>
+        <ImplicitUsings>disable</ImplicitUsings>
+    </PropertyGroup>
+    <PropertyGroup>
+        <LangVersion>8.0</LangVersion>
+    </PropertyGroup>
+    <ItemGroup>
+        <None Remove="Resources\SampleFunctions.json" />
+        <None Remove="Resources\SampleGroups.json" />
+        <None Remove="Resources\SampleRoles.json" />
+        <None Remove="Resources\SampleTags.json" />
+        <None Remove="Resources\SampleUsers.json" />
+    </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Include="Resources\SampleFunctions.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </EmbeddedResource>
+        <EmbeddedResource Include="Resources\SampleGroups.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </EmbeddedResource>
+        <EmbeddedResource Include="Resources\SampleRoles.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </EmbeddedResource>
+        <EmbeddedResource Include="Resources\SampleTags.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </EmbeddedResource>
+        <EmbeddedResource Include="Resources\SampleUsers.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </EmbeddedResource>
+    </ItemGroup>
+
+
+    <ItemGroup>
+        <PackageReference Include="AutoMapper" Version="10.1.1" />
+        <PackageReference Include="Bogus" Version="34.0.2.0" />
+        <PackageReference Include="FluentAssertions" Version="6.9.0" />
+        <PackageReference Include="Moq" Version="4.18.4" />
+        <PackageReference Include="xunit" Version="2.5.1" />
+        <PackageReference Include="xunit.assert" Version="2.5.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\Maverick.UserProfileService.AggregateEvents.Resolved\Maverick.UserProfileService.AggregateEvents.Resolved.csproj" />
+        <ProjectReference Include="..\..\src\Maverick.UserProfileService.Models\Maverick.UserProfileService.Models.csproj" />
+        <ProjectReference Include="..\..\src\UserProfileService.Events\UserProfileService.Events.csproj" />
+        <ProjectReference Include="..\..\src\UserProfileService.Marten.EventStore\UserProfileService.Marten.EventStore.csproj" />
+        <ProjectReference Include="..\..\src\UserProfileService.Projection.Abstractions\UserProfileService.Projection.Abstractions.csproj" />
+
+    </ItemGroup>
+
+    <ItemGroup>
+        <Resource Include="Resources\SampleGroups.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Update="Resources\EmployeeList.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>disable</Nullable>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Maverick.Client.ArangoDb\Maverick.Client.ArangoDb.csproj" />
+        <ProjectReference Include="..\UserProfileService.Common.Logging\UserProfileService.Common.Logging.csproj" />
+        <ProjectReference Include="..\UserProfileService.Messaging\UserProfileService.Messaging.csproj" />
+    </ItemGroup>
+
+</Project>

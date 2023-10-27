@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>disable</Nullable>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\UserProfileService.Common.Logging\UserProfileService.Common.Logging.csproj" />
+        <ProjectReference Include="..\UserProfileService.Common\UserProfileService.Common.csproj" />
+        <ProjectReference Include="..\UserProfileService.Saga.Events\UserProfileService.Saga.Events.csproj" />
+        <ProjectReference Include="..\UserProfileService.Validation.Abstractions\UserProfileService.Validation.Abstractions.csproj" />
+        <ProjectReference Include="..\UserProfileService.Validation.Agent\UserProfileService.EventCollector.csproj" />
+    </ItemGroup>
+</Project>

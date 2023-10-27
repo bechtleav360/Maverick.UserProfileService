@@ -1,0 +1,14 @@
+{
+  "Redis": {
+    "AbortOnConnectFail": "False",
+    "AllowAdmin": "True",
+    "ConnectRetry": 5,
+    "ConnectTimeout": 5000,
+    "EndpointUrls": [
+      "localhost:6379"
+    ],
+    "ExpirationTime": 7200,
+    "Password": null,
+    "User": null
+  }
+}

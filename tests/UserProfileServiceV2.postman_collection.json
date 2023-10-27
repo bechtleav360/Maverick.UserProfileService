@@ -1,0 +1,5617 @@
+{
+	"info": {
+		"_postman_id": "57dc5734-b9b4-4241-a8c5-7859dfe97e7a",
+		"name": "UserProfileServiceV2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Create User",
+					"item": [
+						{
+							"name": "Generate mocked user",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Generate mocked user\", function () {\r",
+											"    var jsonData = pm.response.json()[0];\r",
+											"    console.log(jsonData);\r",
+											"   \r",
+											"    pm.collectionVariables.set(\"body\", JSON.stringify(jsonData));\r",
+											"    \r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{userMockUrl}}",
+									"host": [
+										"{{userMockUrl}}"
+									]
+								},
+								"description": "generate mock user for the request"
+							},
+							"response": []
+						},
+						{
+							"name": "Create User",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"start polling operation\", () => {\r",
+											"    console.log(pm.collectionVariables.get(\"pollingUrl\"));\r",
+											"    pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"    console.log(pm.collectionVariables.get(\"pollingUrl\"));\r",
+											"    console.log(pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"   \r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{body}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/users",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Poll Status",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code != 202)\r",
+											"{\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    pm.collectionVariables.set(\"resultUrl\", pm.response.headers.get(\"Location\"));\r",
+											"  \r",
+											"\r",
+											"    pm.test(\"Polling-Finished\", () => {\r",
+											"        pm.response.to.have.status(302);\r",
+											"        pm.response.to.have.header(\"Location\");\r",
+											"    });\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.test(\"Polling-Response\", () => {\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"    pm.response.to.have.header(\"Retry-After\");\r",
+											"});\r",
+											"\r",
+											"var retries = parseInt(pm.collectionVariables.get(\"retryCount\"));\r",
+											"var maxRetries = parseInt(pm.collectionVariables.get(\"maxRetries\"));\r",
+											"\r",
+											"if (retries === undefined)\r",
+											"    retries = 0;\r",
+											"\r",
+											"if (retries > maxRetries)\r",
+											"{\r",
+											"    pm.test(\"Polling-Retry-Count\", () => {\r",
+											"        pm.expect(retries).to.lt(maxRetries);\r",
+											"    });\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.collectionVariables.set(\"retryCount\", retries + 1);\r",
+											"pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"postman.setNextRequest(pm.info.requestId);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": false
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{pollingUrl}}",
+									"host": [
+										"{{pollingUrl}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Result",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Returns Result\", () => {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+											"    \r",
+											"});\r",
+											"\r",
+											"pm.test(\"The response has the right properties\", () => {\r",
+											"    const responseJson = pm.response.json();\r",
+											"    var expectedUser = JSON.parse( pm.collectionVariables.get(\"body\"));\r",
+											"    \r",
+											"    pm.expect(responseJson.Name).to.eql(expectedUser.name);  \r",
+											"    pm.expect(responseJson.UserName).to.eql(expectedUser.userName);\r",
+											"    pm.expect(responseJson.FirstName).to.deep.eql(expectedUser.firstName);\r",
+											"    pm.expect(responseJson.LastName).to.eql(expectedUser.lastName);\r",
+											"    pm.expect(responseJson.DisplayName).to.eql(expectedUser.displayName);\r",
+											"    pm.expect(responseJson.Email).to.eql(expectedUser.email);\r",
+											"\r",
+											"     pm.collectionVariables.set(\"userId\", responseJson.Id);\r",
+											"}\r",
+											");"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{resultUrl}}",
+									"host": [
+										"{{resultUrl}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Update User",
+					"item": [
+						{
+							"name": "Generate mocked user",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Generate mocked user\", function () {\r",
+											"    var jsonData = pm.response.json()[0];\r",
+											"    delete jsonData.name;\r",
+											"    console.log(jsonData);\r",
+											"   \r",
+											"    pm.collectionVariables.set(\"body\", JSON.stringify(jsonData));\r",
+											"\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{userMockUrl}}",
+									"host": [
+										"{{userMockUrl}}"
+									]
+								},
+								"description": "generate mock user for the request"
+							},
+							"response": []
+						},
+						{
+							"name": "Update User",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Update User\", () => {\r",
+											"    pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");   \r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": true
+							},
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{body}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/users/{{userId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"users",
+										"{{userId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Poll Status",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code != 202)\r",
+											"{\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    pm.collectionVariables.set(\"resultUrl\", pm.response.headers.get(\"Location\"));\r",
+											"  \r",
+											"    pm.test(\"Polling-Finished\", () => {\r",
+											"        pm.response.to.have.status(302);\r",
+											"        pm.response.to.have.header(\"Location\");\r",
+											"    });\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.test(\"Polling-Response\", () => {\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"    pm.response.to.have.header(\"Retry-After\");\r",
+											"});\r",
+											"\r",
+											"var retries = parseInt(pm.collectionVariables.get(\"retryCount\"));\r",
+											"var maxRetries = parseInt(pm.collectionVariables.get(\"maxRetries\"));\r",
+											"\r",
+											"if (retries === undefined)\r",
+											"    retries = 0;\r",
+											"\r",
+											"if (retries > maxRetries)\r",
+											"{\r",
+											"    pm.test(\"Polling-Retry-Count\", () => {\r",
+											"        pm.expect(retries).to.lt(maxRetries);\r",
+											"    });\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.collectionVariables.set(\"retryCount\", retries + 1);\r",
+											"pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"postman.setNextRequest(pm.info.requestId);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": false
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{pollingUrl}}",
+									"host": [
+										"{{pollingUrl}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Result",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Returns Result\", () => {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+											"    \r",
+											"});\r",
+											"pm.test(\"The response has the right properties\", () => {\r",
+											"    const responseJson = pm.response.json();\r",
+											"    var expectedUser = JSON.parse( pm.collectionVariables.get(\"body\"));\r",
+											"       \r",
+											"    pm.expect(responseJson.UserName).to.eql(expectedUser.userName);\r",
+											"    pm.expect(responseJson.FirstName).to.eql(expectedUser.firstName);\r",
+											"    pm.expect(responseJson.LastName).to.eql(expectedUser.lastName);\r",
+											"    pm.expect(responseJson.DisplayName).to.eql(expectedUser.displayName);\r",
+											"    pm.expect(responseJson.Email).to.eql(expectedUser.email);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{resultUrl}}",
+									"host": [
+										"{{resultUrl}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get specific user",
+					"item": [
+						{
+							"name": "Get specific User",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Get specific user succeed\", () => {\r",
+											"   \r",
+											"    pm.response.to.be.ok;\r",
+											"    pm.response.to.be.withBody;\r",
+											"    pm.response.to.be.json;\r",
+											"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+											"    \r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/users/{{userId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"users",
+										"{{userId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "DeleteUser",
+					"item": [
+						{
+							"name": "Delete specified user",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Delete user\", () => {\r",
+											"    pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"\r",
+											"})\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/users/{{userId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"users",
+										"{{userId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Poll Status",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code != 202)\r",
+											"{\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"\r",
+											"    pm.test(\"Polling-Finished\", () => {\r",
+											"        pm.response.to.have.status(200);\r",
+											"    });\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.test(\"Polling-Response\", () => {\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"    pm.response.to.have.header(\"Retry-After\");\r",
+											"});\r",
+											"\r",
+											"var retries = parseInt(pm.collectionVariables.get(\"retryCount\"));\r",
+											"var maxRetries = parseInt(pm.collectionVariables.get(\"maxRetries\"));\r",
+											"\r",
+											"if (retries === undefined)\r",
+											"    retries = 0;\r",
+											"\r",
+											"if (retries > maxRetries)\r",
+											"{\r",
+											"    pm.test(\"Polling-Retry-Count\", () => {\r",
+											"        pm.expect(retries).to.lt(maxRetries);\r",
+											"    });\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.collectionVariables.set(\"retryCount\", retries + 1);\r",
+											"pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"postman.setNextRequest(pm.info.requestId);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": false
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{pollingUrl}}",
+									"host": [
+										"{{pollingUrl}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Check User is deleted",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Deleted user should not be found\", () => {\r",
+											"    pm.response.to.have.status(404);    \r",
+											"});\r",
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/users/{{userId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"users",
+										"{{userId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Groups",
+			"item": [
+				{
+					"name": "Create User",
+					"item": [
+						{
+							"name": "Generate mocked user",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Generate mocked user\", function () {\r",
+											"    var jsonData = pm.response.json()[0];\r",
+											"    console.log(jsonData);\r",
+											"   \r",
+											"    pm.collectionVariables.set(\"body\", JSON.stringify(jsonData));\r",
+											"    \r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{userMockUrl}}",
+									"host": [
+										"{{userMockUrl}}"
+									]
+								},
+								"description": "generate mock user for the request"
+							},
+							"response": []
+						},
+						{
+							"name": "Create User",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"start export\", () => {\r",
+											"    pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"   \r",
+											"})\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{body}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/users",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Poll Status",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code != 202)\r",
+											"{\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    pm.collectionVariables.set(\"resultUrl\", pm.response.headers.get(\"Location\"));\r",
+											"  \r",
+											"\r",
+											"    pm.test(\"Polling-Finished\", () => {\r",
+											"        pm.response.to.have.status(302);\r",
+											"        pm.response.to.have.header(\"Location\");\r",
+											"    });\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.test(\"Polling-Response\", () => {\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"    pm.response.to.have.header(\"Retry-After\");\r",
+											"});\r",
+											"\r",
+											"var retries = parseInt(pm.collectionVariables.get(\"retryCount\"));\r",
+											"var maxRetries = parseInt(pm.collectionVariables.get(\"maxRetries\"));\r",
+											"\r",
+											"if (retries === undefined)\r",
+											"    retries = 0;\r",
+											"\r",
+											"if (retries > maxRetries)\r",
+											"{\r",
+											"    pm.test(\"Polling-Retry-Count\", () => {\r",
+											"        pm.expect(retries).to.lt(maxRetries);\r",
+											"    });\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.collectionVariables.set(\"retryCount\", retries + 1);\r",
+											"pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"postman.setNextRequest(pm.info.requestId);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": false
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{pollingUrl}}",
+									"host": [
+										"{{pollingUrl}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Result",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Returns Result\", () => {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+											"    \r",
+											"});\r",
+											"\r",
+											"pm.test(\"The response has the right properties\", () => {\r",
+											"    const responseJson = pm.response.json();\r",
+											"    var expectedUser = JSON.parse( pm.collectionVariables.get(\"body\"));\r",
+											"\r",
+											"    pm.expect(responseJson.Name).to.eql(expectedUser.name);  \r",
+											"    pm.expect(responseJson.UserName).to.eql(expectedUser.userName);\r",
+											"    pm.expect(responseJson.FirstName).to.deep.eql(expectedUser.firstName);\r",
+											"    pm.expect(responseJson.LastName).to.eql(expectedUser.lastName);\r",
+											"    pm.expect(responseJson.DisplayName).to.eql(expectedUser.displayName);\r",
+											"    pm.expect(responseJson.Email).to.eql(expectedUser.email);\r",
+											"\r",
+											"     pm.collectionVariables.set(\"userId\", responseJson.Id);\r",
+											"}\r",
+											");"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{resultUrl}}",
+									"host": [
+										"{{resultUrl}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Create Group",
+					"item": [
+						{
+							"name": "Generater mocked group",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Generate mocked group\", function () {\r",
+											"    var jsonData = pm.response.json()[0];\r",
+											"      \r",
+											"    pm.collectionVariables.set(\"body\", JSON.stringify(jsonData));\r",
+											"    var parsedGroup = JSON.parse( pm.collectionVariables.get(\"body\")).displayName;\r",
+											"\r",
+											"    console.log(parsedGroup);   \r",
+											"\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{groupMockUrl}}",
+									"host": [
+										"{{groupMockUrl}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Group",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"start export\", () => {\r",
+											"    pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"  \r",
+											"})\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{body}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/groups",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"groups"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Poll Status",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code != 202)\r",
+											"{\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    pm.collectionVariables.set(\"resultUrl\", pm.response.headers.get(\"Location\"));\r",
+											"    console.log(pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"    pm.test(\"Polling-Finished\", () => {\r",
+											"        pm.response.to.have.status(302);\r",
+											"        pm.response.to.have.header(\"Location\");\r",
+											"    });\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.test(\"Polling-Response\", () => {\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"    pm.response.to.have.header(\"Retry-After\");\r",
+											"});\r",
+											"\r",
+											"var retries = parseInt(pm.collectionVariables.get(\"retryCount\"));\r",
+											"var maxRetries = parseInt(pm.collectionVariables.get(\"maxRetries\"));\r",
+											"\r",
+											"if (retries === undefined)\r",
+											"    retries = 0;\r",
+											"\r",
+											"if (retries > maxRetries)\r",
+											"{\r",
+											"    pm.test(\"Polling-Retry-Count\", () => {\r",
+											"        pm.expect(retries).to.lt(maxRetries);\r",
+											"    });\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.collectionVariables.set(\"retryCount\", retries + 1);\r",
+											"pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"postman.setNextRequest(pm.info.requestId);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": false
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{pollingUrl}}",
+									"host": [
+										"{{pollingUrl}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Result",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Returns Result\", () => {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+											"    \r",
+											"});\r",
+											"pm.test(\"The response has the right properties\", () => {\r",
+											"    const responseJson = pm.response.json();\r",
+											"    var expectedGroup = JSON.parse( pm.collectionVariables.get(\"body\"));\r",
+											"       \r",
+											"    pm.expect(responseJson.Name).to.eql(expectedGroup.name);\r",
+											"    pm.expect(responseJson.DisplayName).to.eql(expectedGroup.displayName);\r",
+											"    pm.expect(responseJson.IsSystem).to.eql(expectedGroup.isSystem);\r",
+											"    pm.expect(responseJson.Weigth).to.eql(expectedGroup.weigth);\r",
+											"  \r",
+											"\r",
+											"    pm.collectionVariables.set(\"groupId\", responseJson.Id);\r",
+											"}\r",
+											");"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{resultUrl}}",
+									"host": [
+										"{{resultUrl}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get created group",
+					"item": [
+						{
+							"name": "Get created group",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Correct status code\", () => {\r",
+											"    pm.response.to.have.status(200);\r",
+											"})\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/groups/{{groupId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"groups",
+										"{{groupId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Assign Profile to a group",
+					"item": [
+						{
+							"name": "Add profile to group",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Assign profile to group\", () => {\r",
+											"    pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"    //pm.response.to.have.header(\"Retry-After\");\r",
+											"})\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": true
+							},
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/groups/{{groupId}}/profiles/{{userId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"groups",
+										"{{groupId}}",
+										"profiles",
+										"{{userId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Poll Status",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code != 202)\r",
+											"{\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    pm.collectionVariables.set(\"resultUrl\", pm.response.headers.get(\"Location\"));\r",
+											"    console.log(pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"    pm.test(\"Polling-Finished\", () => {\r",
+											"        pm.response.to.have.status(302);\r",
+											"        pm.response.to.have.header(\"Location\");\r",
+											"    });\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.test(\"Polling-Response\", () => {\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"    pm.response.to.have.header(\"Retry-After\");\r",
+											"});\r",
+											"\r",
+											"var retries = parseInt(pm.collectionVariables.get(\"retryCount\"));\r",
+											"var maxRetries = parseInt(pm.collectionVariables.get(\"maxRetries\"));\r",
+											"\r",
+											"if (retries === undefined)\r",
+											"    retries = 0;\r",
+											"\r",
+											"if (retries > maxRetries)\r",
+											"{\r",
+											"    pm.test(\"Polling-Retry-Count\", () => {\r",
+											"        pm.expect(retries).to.lt(maxRetries);\r",
+											"    });\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.collectionVariables.set(\"retryCount\", retries + 1);\r",
+											"pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"postman.setNextRequest(pm.info.requestId);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": false
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{pollingUrl}}",
+									"host": [
+										"{{pollingUrl}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Result",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Returns Result\", () => {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+											"    \r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{resultUrl}}",
+									"host": [
+										"{{resultUrl}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get profiles after assignment",
+					"item": [
+						{
+							"name": "Get group after assignment",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Correct status code\", () => {\r",
+											"    pm.response.to.have.status(200);\r",
+											"})\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/groups/{{groupId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"groups",
+										"{{groupId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get user after assignment",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Correct status code\", () => {\r",
+											"    pm.response.to.have.status(200);\r",
+											"})\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/users/{{userId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"users",
+										"{{userId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Remove Profile from a group",
+					"item": [
+						{
+							"name": "Delete profile from a group",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"delete profile from group\", () => {\r",
+											"    pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"    \r",
+											"})\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": true
+							},
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/groups/{{groupId}}/profiles/{{userId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"groups",
+										"{{groupId}}",
+										"profiles",
+										"{{userId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Poll Status",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code != 202)\r",
+											"{\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    pm.collectionVariables.set(\"resultUrl\", pm.response.headers.get(\"Location\"));\r",
+											"    console.log(pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"    pm.test(\"Polling-Finished\", () => {\r",
+											"        pm.response.to.have.status(302);\r",
+											"        pm.response.to.have.header(\"Location\");\r",
+											"    });\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.test(\"Polling-Response\", () => {\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"    pm.response.to.have.header(\"Retry-After\");\r",
+											"});\r",
+											"\r",
+											"var retries = parseInt(pm.collectionVariables.get(\"retryCount\"));\r",
+											"var maxRetries = parseInt(pm.collectionVariables.get(\"maxRetries\"));\r",
+											"\r",
+											"if (retries === undefined)\r",
+											"    retries = 0;\r",
+											"\r",
+											"if (retries > maxRetries)\r",
+											"{\r",
+											"    pm.test(\"Polling-Retry-Count\", () => {\r",
+											"        pm.expect(retries).to.lt(maxRetries);\r",
+											"    });\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.collectionVariables.set(\"retryCount\", retries + 1);\r",
+											"pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"postman.setNextRequest(pm.info.requestId);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": false
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{pollingUrl}}",
+									"host": [
+										"{{pollingUrl}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Result",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Returns Result\", () => {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+											"    \r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{resultUrl}}",
+									"host": [
+										"{{resultUrl}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get group after unassigning",
+					"item": [
+						{
+							"name": "Get group after unassigning",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Correct status code\", () => {\r",
+											"    pm.response.to.have.status(200);\r",
+											"})\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/groups/{{groupId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"groups",
+										"{{groupId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get user after unassigning",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Correct status code\", () => {\r",
+											"    pm.response.to.have.status(200);\r",
+											"})\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/users/{{userId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"users",
+										"{{userId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Update Group",
+					"item": [
+						{
+							"name": "Generater mocked group",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Generate mocked group\", function () {\r",
+											"    var jsonData = pm.response.json()[0];\r",
+											"    delete jsonData.name;\r",
+											"      \r",
+											"    pm.collectionVariables.set(\"body\", JSON.stringify(jsonData));\r",
+											"   \r",
+											"\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{groupMockUrl}}",
+									"host": [
+										"{{groupMockUrl}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Group",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"update group\", () => {\r",
+											"    pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"    \r",
+											"})\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": true
+							},
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{body}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/groups/{{groupId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"groups",
+										"{{groupId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Poll Status",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code != 202)\r",
+											"{\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    pm.collectionVariables.set(\"resultUrl\", pm.response.headers.get(\"Location\"));\r",
+											"    console.log(pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"    pm.test(\"Polling-Finished\", () => {\r",
+											"        pm.response.to.have.status(302);\r",
+											"        pm.response.to.have.header(\"Location\");\r",
+											"    });\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.test(\"Polling-Response\", () => {\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"    pm.response.to.have.header(\"Retry-After\");\r",
+											"});\r",
+											"\r",
+											"var retries = parseInt(pm.collectionVariables.get(\"retryCount\"));\r",
+											"var maxRetries = parseInt(pm.collectionVariables.get(\"maxRetries\"));\r",
+											"\r",
+											"if (retries === undefined)\r",
+											"    retries = 0;\r",
+											"\r",
+											"if (retries > maxRetries)\r",
+											"{\r",
+											"    pm.test(\"Polling-Retry-Count\", () => {\r",
+											"        pm.expect(retries).to.lt(maxRetries);\r",
+											"    });\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.collectionVariables.set(\"retryCount\", retries + 1);\r",
+											"pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"postman.setNextRequest(pm.info.requestId);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": false
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{pollingUrl}}",
+									"host": [
+										"{{pollingUrl}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Result",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Returns Result\", () => {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+											"    \r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{resultUrl}}",
+									"host": [
+										"{{resultUrl}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get Group",
+					"item": [
+						{
+							"name": "Get created Group",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Get group should succeed\", () => {\r",
+											"   \r",
+											"    pm.response.to.be.ok;\r",
+											"    pm.response.to.be.withBody;\r",
+											"    pm.response.to.be.json;\r",
+											"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+											"    \r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/groups/{{groupId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"groups",
+										"{{groupId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Delete Group",
+					"item": [
+						{
+							"name": "Delete specified group",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Delete specified group\", () => {\r",
+											"    pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"   \r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/groups/{{groupId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"groups",
+										"{{groupId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Poll Status",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code != 202)\r",
+											"{\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"  \r",
+											"\r",
+											"    pm.test(\"Polling-Finished\", () => {\r",
+											"        pm.response.to.have.status(200);\r",
+											"    });\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.test(\"Polling-Response\", () => {\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"    pm.response.to.have.header(\"Retry-After\");\r",
+											"});\r",
+											"\r",
+											"var retries = parseInt(pm.collectionVariables.get(\"retryCount\"));\r",
+											"var maxRetries = parseInt(pm.collectionVariables.get(\"maxRetries\"));\r",
+											"\r",
+											"if (retries === undefined)\r",
+											"    retries = 0;\r",
+											"\r",
+											"if (retries > maxRetries)\r",
+											"{\r",
+											"    pm.test(\"Polling-Retry-Count\", () => {\r",
+											"        pm.expect(retries).to.lt(maxRetries);\r",
+											"    });\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.collectionVariables.set(\"retryCount\", retries + 1);\r",
+											"pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"postman.setNextRequest(pm.info.requestId);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": false
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{pollingUrl}}",
+									"host": [
+										"{{pollingUrl}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Check the group has been deleted",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Returns Result\", () => {\r",
+											"    pm.response.to.have.status(404);    \r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/groups/{{groupId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"groups",
+										"{{groupId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Roles",
+			"item": [
+				{
+					"name": "Create Role",
+					"item": [
+						{
+							"name": "Generate mocked role",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Generate mocked user\", function () {\r",
+											"    var jsonData = pm.response.json()[0];\r",
+											"    jsonData.isSystem = false;\r",
+											"    console.log(jsonData);\r",
+											"   \r",
+											"    pm.collectionVariables.set(\"body\", JSON.stringify(jsonData));\r",
+											"    \r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{roleMockUrl}}",
+									"host": [
+										"{{roleMockUrl}}"
+									]
+								},
+								"description": "generate mock user for the request"
+							},
+							"response": []
+						},
+						{
+							"name": "Create Role",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"start export\", () => {\r",
+											"    pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"    //pm.response.to.have.header(\"Retry-After\");\r",
+											"})\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{body}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/roles",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"roles"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Poll Status",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code != 202)\r",
+											"{\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    pm.collectionVariables.set(\"resultUrl\", pm.response.headers.get(\"Location\"));\r",
+											"  \r",
+											"\r",
+											"    pm.test(\"Polling-Finished\", () => {\r",
+											"        pm.response.to.have.status(302);\r",
+											"        pm.response.to.have.header(\"Location\");\r",
+											"    });\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.test(\"Polling-Response\", () => {\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"    pm.response.to.have.header(\"Retry-After\");\r",
+											"});\r",
+											"\r",
+											"var retries = parseInt(pm.collectionVariables.get(\"retryCount\"));\r",
+											"var maxRetries = parseInt(pm.collectionVariables.get(\"maxRetries\"));\r",
+											"\r",
+											"if (retries === undefined)\r",
+											"    retries = 0;\r",
+											"\r",
+											"if (retries > maxRetries)\r",
+											"{\r",
+											"    pm.test(\"Polling-Retry-Count\", () => {\r",
+											"        pm.expect(retries).to.lt(maxRetries);\r",
+											"    });\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.collectionVariables.set(\"retryCount\", retries + 1);\r",
+											"pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"postman.setNextRequest(pm.info.requestId);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": false
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{pollingUrl}}",
+									"host": [
+										"{{pollingUrl}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Result",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Returns Result\", () => {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+											"    \r",
+											"});\r",
+											"\r",
+											"\r",
+											"pm.test(\"The response has the right properties\", () => {\r",
+											"    const responseJson = pm.response.json();\r",
+											"    var expectedRole = JSON.parse( pm.collectionVariables.get(\"body\"));\r",
+											"       \r",
+											"    pm.expect(responseJson.Name).to.eql(expectedRole.name);\r",
+											"    pm.expect(responseJson.Description).to.deep.eql(expectedRole.description);\r",
+											"    pm.expect(responseJson.DisplayName).to.eql(expectedRole.displayName);\r",
+											"    pm.expect(responseJson.IsSystem).to.eql(expectedRole.isSystem);\r",
+											"\r",
+											"    pm.collectionVariables.set(\"roleId\",responseJson.Id);\r",
+											"\r",
+											"    \r",
+											"}\r",
+											");"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{resultUrl}}",
+									"host": [
+										"{{resultUrl}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Update a specific role",
+					"item": [
+						{
+							"name": "Generate mocked role",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Generate mocked role\", function () {\r",
+											"    var jsonData = pm.response.json()[0];\r",
+											"    delete jsonData.permissions;\r",
+											"    delete jsonData.isSystem;\r",
+											"    console.log(jsonData);\r",
+											"   \r",
+											"    pm.collectionVariables.set(\"body\", JSON.stringify(jsonData));\r",
+											"    \r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{roleMockUrl}}",
+									"host": [
+										"{{roleMockUrl}}"
+									]
+								},
+								"description": "generate mock user for the request"
+							},
+							"response": []
+						},
+						{
+							"name": "Update role",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"update role\", () => {\r",
+											"    pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"    \r",
+											"})\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{body}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/roles/{{roleId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"roles",
+										"{{roleId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Poll Status",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code != 202)\r",
+											"{\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    pm.collectionVariables.set(\"resultUrl\", pm.response.headers.get(\"Location\"));\r",
+											"  \r",
+											"\r",
+											"    pm.test(\"Polling-Finished\", () => {\r",
+											"        pm.response.to.have.status(302);\r",
+											"        pm.response.to.have.header(\"Location\");\r",
+											"    });\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.test(\"Polling-Response\", () => {\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"    //pm.response.to.have.header(\"Retry-After\");\r",
+											"});\r",
+											"\r",
+											"var retries = parseInt(pm.collectionVariables.get(\"retryCount\"));\r",
+											"var maxRetries = parseInt(pm.collectionVariables.get(\"maxRetries\"));\r",
+											"\r",
+											"if (retries === undefined)\r",
+											"    retries = 0;\r",
+											"\r",
+											"if (retries > maxRetries)\r",
+											"{\r",
+											"    pm.test(\"Polling-Retry-Count\", () => {\r",
+											"        pm.expect(retries).to.lt(maxRetries);\r",
+											"    });\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.collectionVariables.set(\"retryCount\", retries + 1);\r",
+											"pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"postman.setNextRequest(pm.info.requestId);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": false
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{pollingUrl}}",
+									"host": [
+										"{{pollingUrl}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Result",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Returns Result\", () => {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+											"    \r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{resultUrl}}",
+									"host": [
+										"{{resultUrl}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Check list of roles contains created role",
+					"item": [
+						{
+							"name": "Get list of roles",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Check HTTP status code\", () => {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    \r",
+											"})\r",
+											"pm.test(\"The created role is in the role list\", () => {\r",
+											"    const roleList = pm.response.json().Result;\r",
+											"   \r",
+											"    var found = false;\r",
+											"    for(var i = 0; i < roleList.length; i++) {\r",
+											"        if (roleList[i].Id == pm.collectionVariables.get(\"roleId\")) {\r",
+											"        found = true;\r",
+											"        break;\r",
+											"        }\r",
+											"    }\r",
+											"    pm.expect(found).to.eql(true);\r",
+											"   \r",
+											"}\r",
+											");"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/roles/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"roles",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get created role",
+					"item": [
+						{
+							"name": "Get created role",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Check HTTP status code\", () => {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    \r",
+											"})\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{body}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/roles/{{roleId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"roles",
+										"{{roleId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Assign profile to a role",
+					"item": [
+						{
+							"name": "Add profile to role",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Add profile to role\", () => {\r",
+											"    pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											" \r",
+											"})\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/roles/{{roleId}}/profiles/{{userId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"roles",
+										"{{roleId}}",
+										"profiles",
+										"{{userId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Poll Status",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code != 202)\r",
+											"{\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    pm.collectionVariables.set(\"resultUrl\", pm.response.headers.get(\"Location\"));\r",
+											"    console.log(pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"    pm.test(\"Polling-Finished\", () => {\r",
+											"        pm.response.to.have.status(302);\r",
+											"        pm.response.to.have.header(\"Location\");\r",
+											"    });\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.test(\"Polling-Response\", () => {\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"    pm.response.to.have.header(\"Retry-After\");\r",
+											"});\r",
+											"\r",
+											"var retries = parseInt(pm.collectionVariables.get(\"retryCount\"));\r",
+											"var maxRetries = parseInt(pm.collectionVariables.get(\"maxRetries\"));\r",
+											"\r",
+											"if (retries === undefined)\r",
+											"    retries = 0;\r",
+											"\r",
+											"if (retries > maxRetries)\r",
+											"{\r",
+											"    pm.test(\"Polling-Retry-Count\", () => {\r",
+											"        pm.expect(retries).to.lt(maxRetries);\r",
+											"    });\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.collectionVariables.set(\"retryCount\", retries + 1);\r",
+											"pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"postman.setNextRequest(pm.info.requestId);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": false
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{pollingUrl}}",
+									"host": [
+										"{{pollingUrl}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Result",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Returns Result\", () => {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+											"    \r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{resultUrl}}",
+									"host": [
+										"{{resultUrl}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get created role after assignment",
+					"item": [
+						{
+							"name": "Get created role after assignment",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Check HTTP status code\", () => {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    \r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{body}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/roles/{{roleId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"roles",
+										"{{roleId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get user of role after assignment",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Check HTTP status code\", () => {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    \r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{body}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/users/{{userId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"users",
+										"{{userId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Remove Profile from the role",
+					"item": [
+						{
+							"name": "Delete profile from the role",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Delete profile from the role\", () => {\r",
+											"    pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											" \r",
+											"})\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": true
+							},
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/roles/{{roleId}}/profiles/{{userId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"roles",
+										"{{roleId}}",
+										"profiles",
+										"{{userId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Poll Status",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code != 202)\r",
+											"{\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    pm.collectionVariables.set(\"resultUrl\", pm.response.headers.get(\"Location\"));\r",
+											"    console.log(pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"    pm.test(\"Polling-Finished\", () => {\r",
+											"        pm.response.to.have.status(302);\r",
+											"        pm.response.to.have.header(\"Location\");\r",
+											"    });\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.test(\"Polling-Response\", () => {\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"    pm.response.to.have.header(\"Retry-After\");\r",
+											"});\r",
+											"\r",
+											"var retries = parseInt(pm.collectionVariables.get(\"retryCount\"));\r",
+											"var maxRetries = parseInt(pm.collectionVariables.get(\"maxRetries\"));\r",
+											"\r",
+											"if (retries === undefined)\r",
+											"    retries = 0;\r",
+											"\r",
+											"if (retries > maxRetries)\r",
+											"{\r",
+											"    pm.test(\"Polling-Retry-Count\", () => {\r",
+											"        pm.expect(retries).to.lt(maxRetries);\r",
+											"    });\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.collectionVariables.set(\"retryCount\", retries + 1);\r",
+											"pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"postman.setNextRequest(pm.info.requestId);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": false
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{pollingUrl}}",
+									"host": [
+										"{{pollingUrl}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Result",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Returns Result\", () => {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"pm.test(\"Check the profile list from the role doesnt contain the removed role\", () => {\r",
+											"    const roleList = pm.response.json().Result;\r",
+											"   \r",
+											"    var found = false;\r",
+											"    for(var i = 0; i < roleList.length; i++) {\r",
+											"        if (roleList[i].Id == pm.collectionVariables.get(\"userId\")) {\r",
+											"        found = true;\r",
+											"        break;\r",
+											"        }\r",
+											"    }\r",
+											"    pm.expect(found).to.eql(false);\r",
+											"   \r",
+											"}\r",
+											");\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{resultUrl}}",
+									"host": [
+										"{{resultUrl}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get created role after assignment after unassigning",
+					"item": [
+						{
+							"name": "Get created role after unassigning",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Check HTTP status code\", () => {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    \r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{body}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/roles/{{roleId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"roles",
+										"{{roleId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get user of role after unassigning",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Check HTTP status code\", () => {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    \r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{body}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/users/{{userId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"users",
+										"{{userId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Delete Role",
+					"item": [
+						{
+							"name": "Delete specified role",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Delete specified role\", () => {\r",
+											"    pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"   \r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/roles/{{roleId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"roles",
+										"{{roleId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Poll Status",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code != 202)\r",
+											"{\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    pm.test(\"Polling-Finished\", () => {\r",
+											"        pm.response.to.have.status(200);\r",
+											"    });\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.test(\"Polling-Response\", () => {\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"    pm.response.to.have.header(\"Retry-After\");\r",
+											"});\r",
+											"\r",
+											"var retries = parseInt(pm.collectionVariables.get(\"retryCount\"));\r",
+											"var maxRetries = parseInt(pm.collectionVariables.get(\"maxRetries\"));\r",
+											"\r",
+											"if (retries === undefined)\r",
+											"    retries = 0;\r",
+											"\r",
+											"if (retries > maxRetries)\r",
+											"{\r",
+											"    pm.test(\"Polling-Retry-Count\", () => {\r",
+											"        pm.expect(retries).to.lt(maxRetries);\r",
+											"    });\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.collectionVariables.set(\"retryCount\", retries + 1);\r",
+											"pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"postman.setNextRequest(pm.info.requestId);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": false
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{pollingUrl}}",
+									"host": [
+										"{{pollingUrl}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Check the role has been deleted",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Deleted role should not be found\", () => {\r",
+											"    pm.response.to.have.status(404);\r",
+											"    \r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/roles/{{roleId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"roles",
+										"{{roleId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Functions",
+			"item": [
+				{
+					"name": "Create Role for function",
+					"item": [
+						{
+							"name": "Generate mocked role",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Generate mocked user\", function () {\r",
+											"    var jsonData = pm.response.json()[0];\r",
+											"    jsonData.isSystem = false;\r",
+											"    console.log(jsonData);\r",
+											"   \r",
+											"    pm.collectionVariables.set(\"body\", JSON.stringify(jsonData));\r",
+											"    \r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{roleMockUrl}}",
+									"host": [
+										"{{roleMockUrl}}"
+									]
+								},
+								"description": "generate mock user for the request"
+							},
+							"response": []
+						},
+						{
+							"name": "Create Role",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"start export\", () => {\r",
+											"    pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"    //pm.response.to.have.header(\"Retry-After\");\r",
+											"})\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{body}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/roles",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"roles"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Poll Status",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code != 202)\r",
+											"{\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    pm.collectionVariables.set(\"resultUrl\", pm.response.headers.get(\"Location\"));\r",
+											"  \r",
+											"\r",
+											"    pm.test(\"Polling-Finished\", () => {\r",
+											"        pm.response.to.have.status(302);\r",
+											"        pm.response.to.have.header(\"Location\");\r",
+											"    });\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.test(\"Polling-Response\", () => {\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"    pm.response.to.have.header(\"Retry-After\");\r",
+											"});\r",
+											"\r",
+											"var retries = parseInt(pm.collectionVariables.get(\"retryCount\"));\r",
+											"var maxRetries = parseInt(pm.collectionVariables.get(\"maxRetries\"));\r",
+											"\r",
+											"if (retries === undefined)\r",
+											"    retries = 0;\r",
+											"\r",
+											"if (retries > maxRetries)\r",
+											"{\r",
+											"    pm.test(\"Polling-Retry-Count\", () => {\r",
+											"        pm.expect(retries).to.lt(maxRetries);\r",
+											"    });\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.collectionVariables.set(\"retryCount\", retries + 1);\r",
+											"pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"postman.setNextRequest(pm.info.requestId);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": false
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{pollingUrl}}",
+									"host": [
+										"{{pollingUrl}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Result",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Returns Result\", () => {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+											"    \r",
+											"});\r",
+											"\r",
+											"\r",
+											"pm.test(\"The response has the right properties\", () => {\r",
+											"    const responseJson = pm.response.json();\r",
+											"    var expectedRole = JSON.parse( pm.collectionVariables.get(\"body\"));\r",
+											"       \r",
+											"    pm.expect(responseJson.Name).to.eql(expectedRole.name);\r",
+											"    pm.expect(responseJson.Description).to.deep.eql(expectedRole.description);\r",
+											"    pm.expect(responseJson.DisplayName).to.eql(expectedRole.displayName);\r",
+											"    pm.expect(responseJson.IsSystem).to.eql(expectedRole.isSystem);\r",
+											"\r",
+											"    pm.collectionVariables.set(\"roleId\",responseJson.Id);\r",
+											"\r",
+											"    \r",
+											"}\r",
+											");"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{resultUrl}}",
+									"host": [
+										"{{resultUrl}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Create Function",
+					"item": [
+						{
+							"name": "Generate mocked function",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Generate mocked function\", function () {\r",
+											"    var jsonData = pm.response.json()[0];\r",
+											"    jsonData.roleId = pm.collectionVariables.get(\"roleId\");\r",
+											"    console.log(jsonData);\r",
+											"   \r",
+											"    pm.collectionVariables.set(\"body\", JSON.stringify(jsonData));\r",
+											"    \r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{functionMockUrl}}",
+									"host": [
+										"{{functionMockUrl}}"
+									]
+								},
+								"description": "generate mock user for the request"
+							},
+							"response": []
+						},
+						{
+							"name": "Create Function",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"start export\", () => {\r",
+											"    pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"    //pm.response.to.have.header(\"Retry-After\");\r",
+											"})\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{body}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/functions",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"functions"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Poll Status",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code != 202)\r",
+											"{\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    pm.collectionVariables.set(\"resultUrl\", pm.response.headers.get(\"Location\"));\r",
+											"  \r",
+											"\r",
+											"    pm.test(\"Polling-Finished\", () => {\r",
+											"        pm.response.to.have.status(302);\r",
+											"        pm.response.to.have.header(\"Location\");\r",
+											"    });\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.test(\"Polling-Response\", () => {\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"    pm.response.to.have.header(\"Retry-After\");\r",
+											"});\r",
+											"\r",
+											"var retries = parseInt(pm.collectionVariables.get(\"retryCount\"));\r",
+											"var maxRetries = parseInt(pm.collectionVariables.get(\"maxRetries\"));\r",
+											"\r",
+											"if (retries === undefined)\r",
+											"    retries = 0;\r",
+											"\r",
+											"if (retries > maxRetries)\r",
+											"{\r",
+											"    pm.test(\"Polling-Retry-Count\", () => {\r",
+											"        pm.expect(retries).to.lt(maxRetries);\r",
+											"    });\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.collectionVariables.set(\"retryCount\", retries + 1);\r",
+											"pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"postman.setNextRequest(pm.info.requestId);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": false
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{pollingUrl}}",
+									"host": [
+										"{{pollingUrl}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Result",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Returns Result\", () => {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+											"    \r",
+											"});\r",
+											"\r",
+											"pm.test(\"The response has the right properties\", () => {\r",
+											"    const responseJson = pm.response.json();\r",
+											"    var expectedRole = JSON.parse( pm.collectionVariables.get(\"body\"));\r",
+											"       \r",
+											"    pm.expect(responseJson.Name).to.eql(expectedRole.name);\r",
+											"    pm.expect(responseJson.Description).to.deep.eql(expectedRole.description);\r",
+											"    pm.expect(responseJson.DisplayName).to.eql(expectedRole.displayName);\r",
+											"    pm.expect(responseJson.IsSystem).to.eql(expectedRole.isSystem);\r",
+											"\r",
+											"    pm.collectionVariables.set(\"functionId\",responseJson.Id);\r",
+											"\r",
+											"    \r",
+											"}\r",
+											");"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{resultUrl}}",
+									"host": [
+										"{{resultUrl}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get created function",
+					"item": [
+						{
+							"name": "Get created function",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Check HTTP status code\", () => {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    \r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/functions/{{functionId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"functions",
+										"{{functionId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Assign profile to a function",
+					"item": [
+						{
+							"name": "Add profile to function",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Add profile to function\", () => {\r",
+											"    pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											" \r",
+											"})\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/functions/{{functionId}}/profiles/{{userId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"functions",
+										"{{functionId}}",
+										"profiles",
+										"{{userId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Poll Status",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code != 202)\r",
+											"{\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    pm.collectionVariables.set(\"resultUrl\", pm.response.headers.get(\"Location\"));\r",
+											"    console.log(pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"    pm.test(\"Polling-Finished\", () => {\r",
+											"        pm.response.to.have.status(302);\r",
+											"        pm.response.to.have.header(\"Location\");\r",
+											"    });\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.test(\"Polling-Response\", () => {\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"    pm.response.to.have.header(\"Retry-After\");\r",
+											"});\r",
+											"\r",
+											"var retries = parseInt(pm.collectionVariables.get(\"retryCount\"));\r",
+											"var maxRetries = parseInt(pm.collectionVariables.get(\"maxRetries\"));\r",
+											"\r",
+											"if (retries === undefined)\r",
+											"    retries = 0;\r",
+											"\r",
+											"if (retries > maxRetries)\r",
+											"{\r",
+											"    pm.test(\"Polling-Retry-Count\", () => {\r",
+											"        pm.expect(retries).to.lt(maxRetries);\r",
+											"    });\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.collectionVariables.set(\"retryCount\", retries + 1);\r",
+											"pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"postman.setNextRequest(pm.info.requestId);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": false
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{pollingUrl}}",
+									"host": [
+										"{{pollingUrl}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Result",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Returns Result\", () => {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+											"    \r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{resultUrl}}",
+									"host": [
+										"{{resultUrl}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get function after assignment",
+					"item": [
+						{
+							"name": "Get function after assignment",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Check HTTP status code\", () => {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    \r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/functions/{{functionId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"functions",
+										"{{functionId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get functions of assigned user",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Check HTTP status code\", () => {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    \r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/users/{{userId}}/functions",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"users",
+										"{{userId}}",
+										"functions"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Delete function",
+					"item": [
+						{
+							"name": "Delete specified function",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Delete specified role\", () => {\r",
+											"    pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"   \r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/functions/{{functionId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"functions",
+										"{{functionId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Poll Status",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code != 202)\r",
+											"{\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    \r",
+											"    pm.test(\"Polling-Finished\", () => {\r",
+											"        pm.response.to.have.status(200);\r",
+											"    });\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.test(\"Polling-Response\", () => {\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"    pm.response.to.have.header(\"Retry-After\");\r",
+											"});\r",
+											"\r",
+											"var retries = parseInt(pm.collectionVariables.get(\"retryCount\"));\r",
+											"var maxRetries = parseInt(pm.collectionVariables.get(\"maxRetries\"));\r",
+											"\r",
+											"if (retries === undefined)\r",
+											"    retries = 0;\r",
+											"\r",
+											"if (retries > maxRetries)\r",
+											"{\r",
+											"    pm.test(\"Polling-Retry-Count\", () => {\r",
+											"        pm.expect(retries).to.lt(maxRetries);\r",
+											"    });\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.collectionVariables.set(\"retryCount\", retries + 1);\r",
+											"pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"postman.setNextRequest(pm.info.requestId);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": false
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{pollingUrl}}",
+									"host": [
+										"{{pollingUrl}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Check the function has been deleted",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Deleted role should not be found\", () => {\r",
+											"    pm.response.to.have.status(404);\r",
+											"    \r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/functions/{{functionId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"functions",
+										"{{functionId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get previously assigned user",
+					"item": [
+						{
+							"name": "Get functions of previously assigned user",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Check HTTP status code\", () => {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    \r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/users/{{userId}}/functions",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"users",
+										"{{userId}}",
+										"functions"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Tags",
+			"item": [
+				{
+					"name": "Create Group",
+					"item": [
+						{
+							"name": "Generater mocked group",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Generate mocked group\", function () {\r",
+											"    var jsonData = pm.response.json()[0];\r",
+											"      \r",
+											"    pm.collectionVariables.set(\"body\", JSON.stringify(jsonData));\r",
+											"    var parsedGroup = JSON.parse( pm.collectionVariables.get(\"body\")).displayName;\r",
+											"\r",
+											"    console.log(parsedGroup);   \r",
+											"\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{groupMockUrl}}",
+									"host": [
+										"{{groupMockUrl}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Group",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"start export\", () => {\r",
+											"    pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"  \r",
+											"})\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{body}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/groups",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"groups"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Poll Status",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code != 202)\r",
+											"{\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    pm.collectionVariables.set(\"resultUrl\", pm.response.headers.get(\"Location\"));\r",
+											"    console.log(pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"    pm.test(\"Polling-Finished\", () => {\r",
+											"        pm.response.to.have.status(302);\r",
+											"        pm.response.to.have.header(\"Location\");\r",
+											"    });\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.test(\"Polling-Response\", () => {\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"    pm.response.to.have.header(\"Retry-After\");\r",
+											"});\r",
+											"\r",
+											"var retries = parseInt(pm.collectionVariables.get(\"retryCount\"));\r",
+											"var maxRetries = parseInt(pm.collectionVariables.get(\"maxRetries\"));\r",
+											"\r",
+											"if (retries === undefined)\r",
+											"    retries = 0;\r",
+											"\r",
+											"if (retries > maxRetries)\r",
+											"{\r",
+											"    pm.test(\"Polling-Retry-Count\", () => {\r",
+											"        pm.expect(retries).to.lt(maxRetries);\r",
+											"    });\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.collectionVariables.set(\"retryCount\", retries + 1);\r",
+											"pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"postman.setNextRequest(pm.info.requestId);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": false
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{pollingUrl}}",
+									"host": [
+										"{{pollingUrl}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Result",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Returns Result\", () => {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+											"    \r",
+											"});\r",
+											"pm.test(\"The response has the right properties\", () => {\r",
+											"    const responseJson = pm.response.json();\r",
+											"    var expectedGroup = JSON.parse( pm.collectionVariables.get(\"body\"));\r",
+											"       \r",
+											"    pm.expect(responseJson.Name).to.eql(expectedGroup.name);\r",
+											"    pm.expect(responseJson.DisplayName).to.eql(expectedGroup.displayName);\r",
+											"    pm.expect(responseJson.IsSystem).to.eql(expectedGroup.isSystem);\r",
+											"    pm.expect(responseJson.Weigth).to.eql(expectedGroup.weigth);\r",
+											"    pm.expect(responseJson.ExternalId).to.eql(expectedGroup.externalId);\r",
+											"\r",
+											"    pm.collectionVariables.set(\"groupId\", responseJson.Id);\r",
+											"}\r",
+											");"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{resultUrl}}",
+									"host": [
+										"{{resultUrl}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Create Tag for User",
+					"item": [
+						{
+							"name": "Generate mocked Tag",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Generate mocked tag\", function () {\r",
+											"    var jsonData = pm.response.json()[0];\r",
+											"      \r",
+											"    pm.collectionVariables.set(\"body\", JSON.stringify(jsonData));\r",
+											"    var parsedTag = JSON.parse( pm.collectionVariables.get(\"body\")).name;\r",
+											"\r",
+											"    console.log(parsedTag);   \r",
+											"\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{tagMockUrl}}",
+									"host": [
+										"{{tagMockUrl}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Tag",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"start export\", () => {\r",
+											"    pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"  \r",
+											"})\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{body}}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/tags",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"tags"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Poll Status - Add Tag",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code != 202)\r",
+											"{\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    pm.collectionVariables.set(\"resultUrl\", pm.response.headers.get(\"Location\"));\r",
+											"    console.log(pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"    pm.test(\"Polling-Finished\", () => {\r",
+											"        pm.response.to.have.status(302);\r",
+											"        pm.response.to.have.header(\"Location\");\r",
+											"    });\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.test(\"Polling-Response\", () => {\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"    pm.response.to.have.header(\"Retry-After\");\r",
+											"});\r",
+											"\r",
+											"var retries = parseInt(pm.collectionVariables.get(\"retryCount\"));\r",
+											"var maxRetries = parseInt(pm.collectionVariables.get(\"maxRetries\"));\r",
+											"\r",
+											"if (retries === undefined)\r",
+											"    retries = 0;\r",
+											"\r",
+											"if (retries > maxRetries)\r",
+											"{\r",
+											"    pm.test(\"Polling-Retry-Count\", () => {\r",
+											"        pm.expect(retries).to.lt(maxRetries);\r",
+											"    });\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.collectionVariables.set(\"retryCount\", retries + 1);\r",
+											"pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"postman.setNextRequest(pm.info.requestId);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": false
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{pollingUrl}}",
+									"host": [
+										"{{pollingUrl}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Result - Add Tag",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Returns Result\", () => {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+											"    \r",
+											"});\r",
+											"pm.test(\"The response has the right properties\", () => {\r",
+											"    const responseJson = pm.response.json();\r",
+											"    var expectedGroup = JSON.parse( pm.collectionVariables.get(\"body\"));\r",
+											"       \r",
+											"    pm.expect(responseJson.Name).to.eql(expectedGroup.name);\r",
+											"    pm.expect(responseJson.DisplayName).to.eql(expectedGroup.displayName);\r",
+											"    pm.expect(responseJson.IsSystem).to.eql(expectedGroup.isSystem);\r",
+											"    pm.expect(responseJson.Weigth).to.eql(expectedGroup.weigth);\r",
+											"    pm.expect(responseJson.ExternalId).to.eql(expectedGroup.externalId);\r",
+											"\r",
+											"    pm.collectionVariables.set(\"groupId\", responseJson.Id);\r",
+											"}\r",
+											");"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{resultUrl}}",
+									"host": [
+										"{{resultUrl}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Tag to userProfile",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"start export\", () => {\r",
+											"    pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"})\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.test(\"Convert generated Tag to TagAssigment\", function () {\r",
+											"    var createdTag = JSON.parse( pm.collectionVariables.get(\"body\"));\r",
+											"   \r",
+											"    delete createdTag.name;\r",
+											"    delete createdTag.reference;\r",
+											"    delete createdTag.type;\r",
+											"\r",
+											"    console.log(createdTag);\r",
+											"   \r",
+											"    pm.collectionVariables.set(\"body\", JSON.stringify(jsonData));\r",
+											"    \r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{body}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/users/{{userId}}/tags",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"users",
+										"{{userId}}",
+										"tags"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Poll Status",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code != 202)\r",
+											"{\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    pm.collectionVariables.set(\"resultUrl\", pm.response.headers.get(\"Location\"));\r",
+											"  \r",
+											"\r",
+											"    pm.test(\"Polling-Finished\", () => {\r",
+											"        pm.response.to.have.status(302);\r",
+											"        pm.response.to.have.header(\"Location\");\r",
+											"    });\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.test(\"Polling-Response\", () => {\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"    pm.response.to.have.header(\"Retry-After\");\r",
+											"});\r",
+											"\r",
+											"var retries = parseInt(pm.collectionVariables.get(\"retryCount\"));\r",
+											"var maxRetries = parseInt(pm.collectionVariables.get(\"maxRetries\"));\r",
+											"\r",
+											"if (retries === undefined)\r",
+											"    retries = 0;\r",
+											"\r",
+											"if (retries > maxRetries)\r",
+											"{\r",
+											"    pm.test(\"Polling-Retry-Count\", () => {\r",
+											"        pm.expect(retries).to.lt(maxRetries);\r",
+											"    });\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.collectionVariables.set(\"retryCount\", retries + 1);\r",
+											"pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"postman.setNextRequest(pm.info.requestId);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": false
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{pollingUrl}}",
+									"host": [
+										"{{pollingUrl}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Result",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{resultUrl}}",
+									"host": [
+										"{{resultUrl}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Create Tag For Group",
+					"item": [
+						{
+							"name": "Add Tag to groupProfile",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"start export\", () => {\r",
+											"    pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"})\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "[{\r\n  \"name\":\"Z23\"\r\n},\r\n\r\n{\r\n    \"name\": \"OrgUnit\"\r\n}\r\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/groups/{{groupId}}/tags",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"groups",
+										"{{groupId}}",
+										"tags"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Poll Status",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code != 202)\r",
+											"{\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    pm.collectionVariables.set(\"resultUrl\", pm.response.headers.get(\"Location\"));\r",
+											"  \r",
+											"\r",
+											"    pm.test(\"Polling-Finished\", () => {\r",
+											"        pm.response.to.have.status(302);\r",
+											"        pm.response.to.have.header(\"Location\");\r",
+											"    });\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.test(\"Polling-Response\", () => {\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"    pm.response.to.have.header(\"Retry-After\");\r",
+											"});\r",
+											"\r",
+											"var retries = parseInt(pm.collectionVariables.get(\"retryCount\"));\r",
+											"var maxRetries = parseInt(pm.collectionVariables.get(\"maxRetries\"));\r",
+											"\r",
+											"if (retries === undefined)\r",
+											"    retries = 0;\r",
+											"\r",
+											"if (retries > maxRetries)\r",
+											"{\r",
+											"    pm.test(\"Polling-Retry-Count\", () => {\r",
+											"        pm.expect(retries).to.lt(maxRetries);\r",
+											"    });\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.collectionVariables.set(\"retryCount\", retries + 1);\r",
+											"pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"postman.setNextRequest(pm.info.requestId);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": false
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{pollingUrl}}",
+									"host": [
+										"{{pollingUrl}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Result",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{resultUrl}}",
+									"host": [
+										"{{resultUrl}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Objects",
+			"item": [
+				{
+					"name": "Create Object",
+					"item": [
+						{
+							"name": "Create Object",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"start export\", () => {\r",
+											"    pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"    pm.response.to.have.header(\"Retry-After\");\r",
+											"})\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"SGV\",\r\n//  \"description\": \"string\",\r\n  \"permissions\": [\r\n    \"*/READ\",\r\n    \"*/WRITE\"\r\n  ],\r\n  \"isSystem\": false\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/objects",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"objects"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Poll Status",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code != 202)\r",
+											"{\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    pm.collectionVariables.set(\"resultUrl\", pm.response.headers.get(\"Location\"));\r",
+											"  \r",
+											"\r",
+											"    pm.test(\"Polling-Finished\", () => {\r",
+											"        pm.response.to.have.status(302);\r",
+											"        pm.response.to.have.header(\"Location\");\r",
+											"    });\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.test(\"Polling-Response\", () => {\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"    pm.response.to.have.header(\"Retry-After\");\r",
+											"});\r",
+											"\r",
+											"var retries = parseInt(pm.collectionVariables.get(\"retryCount\"));\r",
+											"var maxRetries = parseInt(pm.collectionVariables.get(\"maxRetries\"));\r",
+											"\r",
+											"if (retries === undefined)\r",
+											"    retries = 0;\r",
+											"\r",
+											"if (retries > maxRetries)\r",
+											"{\r",
+											"    pm.test(\"Polling-Retry-Count\", () => {\r",
+											"        pm.expect(retries).to.lt(maxRetries);\r",
+											"    });\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.collectionVariables.set(\"retryCount\", retries + 1);\r",
+											"pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"postman.setNextRequest(pm.info.requestId);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": false
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{pollingUrl}}",
+									"host": [
+										"{{pollingUrl}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Result",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{resultUrl}}",
+									"host": [
+										"{{resultUrl}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Queries",
+			"item": [
+				{
+					"name": "Create User",
+					"item": [
+						{
+							"name": "Generate mocked user",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Generate mocked user\", function () {\r",
+											"    var jsonData = pm.response.json()[0];\r",
+											"    console.log(jsonData);\r",
+											"   \r",
+											"    pm.collectionVariables.set(\"body\", JSON.stringify(jsonData));\r",
+											"    \r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{userMockUrl}}",
+									"host": [
+										"{{userMockUrl}}"
+									]
+								},
+								"description": "generate mock user for the request"
+							},
+							"response": []
+						},
+						{
+							"name": "Create User",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"start polling operation\", () => {\r",
+											"    console.log(pm.collectionVariables.get(\"pollingUrl\"));\r",
+											"    pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"    console.log(pm.collectionVariables.get(\"pollingUrl\"));\r",
+											"    console.log(pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"   \r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{body}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/users",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Poll Status",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code != 202)\r",
+											"{\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    pm.collectionVariables.set(\"resultUrl\", pm.response.headers.get(\"Location\"));\r",
+											"  \r",
+											"\r",
+											"    pm.test(\"Polling-Finished\", () => {\r",
+											"        pm.response.to.have.status(302);\r",
+											"        pm.response.to.have.header(\"Location\");\r",
+											"    });\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.test(\"Polling-Response\", () => {\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"    pm.response.to.have.header(\"Retry-After\");\r",
+											"});\r",
+											"\r",
+											"var retries = parseInt(pm.collectionVariables.get(\"retryCount\"));\r",
+											"var maxRetries = parseInt(pm.collectionVariables.get(\"maxRetries\"));\r",
+											"\r",
+											"if (retries === undefined)\r",
+											"    retries = 0;\r",
+											"\r",
+											"if (retries > maxRetries)\r",
+											"{\r",
+											"    pm.test(\"Polling-Retry-Count\", () => {\r",
+											"        pm.expect(retries).to.lt(maxRetries);\r",
+											"    });\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.collectionVariables.set(\"retryCount\", retries + 1);\r",
+											"pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"postman.setNextRequest(pm.info.requestId);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": false
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{pollingUrl}}",
+									"host": [
+										"{{pollingUrl}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Result",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Returns Result\", () => {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+											"    \r",
+											"});\r",
+											"\r",
+											"pm.test(\"The response has the right properties\", () => {\r",
+											"    const responseJson = pm.response.json();\r",
+											"    var expectedUser = JSON.parse( pm.collectionVariables.get(\"body\"));\r",
+											"    \r",
+											"    pm.expect(responseJson.Name).to.eql(expectedUser.name);  \r",
+											"    pm.expect(responseJson.UserName).to.eql(expectedUser.userName);\r",
+											"    pm.expect(responseJson.FirstName).to.deep.eql(expectedUser.firstName);\r",
+											"    pm.expect(responseJson.LastName).to.eql(expectedUser.lastName);\r",
+											"    pm.expect(responseJson.DisplayName).to.eql(expectedUser.displayName);\r",
+											"    pm.expect(responseJson.Email).to.eql(expectedUser.email);\r",
+											"\r",
+											"    pm.collectionVariables.set(\"userId\", responseJson.Id);\r",
+											"    pm.collectionVariables.set(\"userName\", responseJson.UserName);\r",
+											"}\r",
+											");"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{resultUrl}}",
+									"host": [
+										"{{resultUrl}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Find User with Query",
+					"item": [
+						{
+							"name": "Get created user",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Returns Result\", () => {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+											"    \r",
+											"});\r",
+											"pm.test(\"The response has the right properties\", () => {\r",
+											"    const responseJson = pm.response.json();\r",
+											"    var expectedUserId = pm.collectionVariables.get(\"userId\");\r",
+											"     var expectedUserName = pm.collectionVariables.get(\"userName\");\r",
+											"    var userIdInResponse = responseJson.requestedFilters[0].result[0].key;\r",
+											"    var userName = responseJson.requestedFilters[0].result[0].value;\r",
+											"    console.log(expectedUserName);\r",
+											"    console.log(userName);\r",
+											"\r",
+											"     pm.expect(expectedUserId).to.eql(userIdInResponse);  \r",
+											"     pm.expect(expectedUserName).to.eql(userName);\r",
+											"     \r",
+											"\r",
+											"}\r",
+											");"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:5001/api/v2/queries?viewFilter=%20contains%28users.UserName.keyValue.filter%28%22{{userName}}%22%29",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "5001",
+									"path": [
+										"api",
+										"v2",
+										"queries"
+									],
+									"query": [
+										{
+											"key": "viewFilter",
+											"value": "%20contains%28users.UserName.keyValue.filter%28%22{{userName}}%22%29"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "DeleteUser",
+					"item": [
+						{
+							"name": "Delete specified user",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Delete user\", () => {\r",
+											"    pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"\r",
+											"})\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/users/{{userId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"users",
+										"{{userId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Poll Status",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code != 202)\r",
+											"{\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"\r",
+											"    pm.test(\"Polling-Finished\", () => {\r",
+											"        pm.response.to.have.status(200);\r",
+											"    });\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.test(\"Polling-Response\", () => {\r",
+											"    pm.response.to.have.status(202);\r",
+											"    pm.response.to.have.header(\"Location\");\r",
+											"    pm.response.to.have.header(\"Retry-After\");\r",
+											"});\r",
+											"\r",
+											"var retries = parseInt(pm.collectionVariables.get(\"retryCount\"));\r",
+											"var maxRetries = parseInt(pm.collectionVariables.get(\"maxRetries\"));\r",
+											"\r",
+											"if (retries === undefined)\r",
+											"    retries = 0;\r",
+											"\r",
+											"if (retries > maxRetries)\r",
+											"{\r",
+											"    pm.test(\"Polling-Retry-Count\", () => {\r",
+											"        pm.expect(retries).to.lt(maxRetries);\r",
+											"    });\r",
+											"    pm.collectionVariables.set(\"retryCount\", 0);\r",
+											"    return;\r",
+											"}\r",
+											"\r",
+											"pm.collectionVariables.set(\"retryCount\", retries + 1);\r",
+											"pm.collectionVariables.set(\"pollingUrl\", pm.response.headers.get(\"Location\"));\r",
+											"\r",
+											"postman.setNextRequest(pm.info.requestId);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(() => {}, 500);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": false
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{pollingUrl}}",
+									"host": [
+										"{{pollingUrl}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Check User is deleted",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Deleted user should not be found\", () => {\r",
+											"    pm.response.to.have.status(404);    \r",
+											"});\r",
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/users/{{userId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"users",
+										"{{userId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "maxRetries",
+			"value": "10"
+		},
+		{
+			"key": "pollingUrl",
+			"value": "https://localhost:44377/api/v2/status/17c690f7-67ae-446f-a6e9-b62fecd4b34b"
+		},
+		{
+			"key": "resultUrl",
+			"value": "/api/v2/users/2821d126-d325-4bff-bc5b-20bbf763060d"
+		},
+		{
+			"key": "userId",
+			"value": ""
+		},
+		{
+			"key": "groupId",
+			"value": ""
+		},
+		{
+			"key": "retryCount",
+			"value": 0
+		},
+		{
+			"key": "body",
+			"value": "{\"name\":\"Knipe\",\"displayName\":\"Zara\",\"userName\":\"bnaisbit0\",\"firstName\":\"Boycie\",\"lastName\":\"Naisbit\",\"email\":\"bnaisbit0@nsw.gov.au\"}"
+		},
+		{
+			"key": "userMockUrl",
+			"value": "https://api.mockaroo.com/api/f6d37470?count=1&key=eba46a90"
+		},
+		{
+			"key": "roleMockUrl",
+			"value": "https://api.mockaroo.com/api/f08de190?count=1&key=eba46a90"
+		},
+		{
+			"key": "groupMockUrl",
+			"value": "https://api.mockaroo.com/api/4200db00?count=1&key=eba46a90"
+		},
+		{
+			"key": "roleId",
+			"value": ""
+		},
+		{
+			"key": "functionMockUrl",
+			"value": "https://api.mockaroo.com/api/d07d0d50?count=1&key=f37d20a0"
+		},
+		{
+			"key": "functionId",
+			"value": "123"
+		},
+		{
+			"key": "tagMockUrl",
+			"value": "https://api.mockaroo.com/api/cd9696d0?count=1&key=eba46a90"
+		},
+		{
+			"key": "userName",
+			"value": ""
+		}
+	]
+}

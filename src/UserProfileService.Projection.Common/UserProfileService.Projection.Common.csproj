@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>disable</Nullable>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Maverick.UserProfileService.AggregateEvents.Resolved\Maverick.UserProfileService.AggregateEvents.Resolved.csproj" />
+        <ProjectReference Include="..\Maverick.UserProfileService.AggregateEvents\Maverick.UserProfileService.AggregateEvents.csproj" />
+        <ProjectReference Include="..\UserProfileService.Common\UserProfileService.Common.csproj" />
+        <ProjectReference Include="..\UserProfileService.EventSourcing.Abstractions\UserProfileService.EventSourcing.Abstractions.csproj" />
+        <ProjectReference Include="..\UserProfileService.Events\UserProfileService.Events.csproj" />
+        <ProjectReference Include="..\UserProfileService.Commands\UserProfileService.Commands.csproj" />
+        <ProjectReference Include="..\UserProfileService.Marten.EventStore\UserProfileService.Marten.EventStore.csproj" />
+        <ProjectReference Include="..\UserProfileService.Projection.Abstractions\UserProfileService.Projection.Abstractions.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+            <_Parameter1>UserProfileService.Projection.Common.Tests</_Parameter1>
+        </AssemblyAttribute>
+
+        <!-- Make assembly usable for Moq, so Moq is able to instanciate objects of 'internal' classes -->
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+            <_Parameter1>DynamicProxyGenAssembly2</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
+	
+</Project>

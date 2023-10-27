@@ -1,0 +1,216 @@
+@rootBearerToken = <some_token_string>
+@baseAddress = http://localhost:8529
+
+@baseAddressUPS = https://localhost:5001
+
+@BasicAuth = Authorization: Basic UPS:1
+@RootAuth = Authorization: Basic root:1
+
+@StefanId = f29a3405-f09d-4eb4-b1bd-8b62c5338e48
+
+//------------------------------- Administration -------------------------------------------
+GET {{baseAddress}}/_db/_system/_admin/database/target-version
+Content-Type: application/json
+Authorization: Bearer {{rootBearerToken}}
+###
+
+//-------------------------------- Database -----------------------------------------------
+/// Get all existing Databases
+GET {{baseAddress}}/_db/_system/_api/database
+Content-Type: application/json
+Authorization: Bearer {{rootBearerToken}}
+
+###
+/// Create a new database
+POST {{baseAddress}}/_api/database
+Content-Type: application/json
+{{BasicAuth}}
+
+{
+    "name": "GamesOfAndy",
+    "options": {
+        "sharding": "flexible",
+        "replicationFactor": 3
+    },
+    "users": [
+        {
+            "username": "andy",
+            "passwd": "andySecret",
+            "active": true
+        }
+    ]
+}
+
+###
+//--------------------------- Users -----------------------------------------------
+GET {{baseAddress}}/_api/user
+Content-Type: application/json
+{{BasicAuth}}
+
+###
+
+GET {{baseAddress}}/_api/user/andy HTTP/2.0
+Content-Type: application/json
+{{BasicAuth}}
+
+###
+
+PATCH {{baseAddress}}/_db/GamesOfAndy/_api/user/andy/
+Content-Type: application/json
+{{BasicAuth}}
+
+{
+    "user": "andy",
+    "active": true,
+    "extra": {
+        "queries": [
+            {
+                "value": "//RETURN FLATTEN(\nFOR group IN (\n FOR p IN Service_profiles\n FILTER p.Kind == \"Group\"\n COLLECT Name=p.Name INTO g\n RETURN { \n Name: Name, \n Count: LENGTH(g), \n Ids: g[*].p\n }\n)\nSORT group.Count DESC\nFILTER group.Count > 1\n\nRETURN {\n group: group.Name,\n count: group.Count,\n ids: group.Ids[* FILTER LENGTH(CURRENT.ExternalIds) == 0].Id\n}\n\n//RETURN group.Ids[* FILTER LENGTH(CURRENT.ExternalIds) == 0].Id[**])",
+                "parameter": {},
+                "name": "Detect-Duplicates"
+            }
+        ]
+    }
+}
+
+###
+//--------------------------- Creates a new UPS database -----------------------------------------------
+POST {{baseAddress}}/_api/database
+Content-Type: application/json
+{{RootAuth}}
+
+{
+    "name": "upsv2",
+    "options": {
+        "replicationFactor": 3
+    },
+    "users": [
+        {
+            "username": "UPS",
+            "passwd": "1",
+            "active": true
+        }
+    ]
+}
+
+###
+// --------------------------------- Remove collection --------------------------
+# @name AllCollections
+GET {{baseAddress}}/_db/upsv2_bug21458/_api/collection?excludeSystem=true HTTP/2.0
+{{BasicAuth}}
+
+###
+
+DELETE  {{baseAddress}}/_db/upsv2_bug21458/_api/collection/{{AllCollections.response.body.$.result[0].name}} HTTP/2.0
+{{BasicAuth}}
+
+### Get
+GET {{baseAddress}}/_db/upsv2/_api/transaction/145899671 HTTP/2.0
+Content-Type: application/json
+{{BasicAuth}}
+
+@FakeJson = {\"Name\":\"What ever\",\"DisplayName\": \"WhatEver\"}
+
+### PUT-CustomProperty-Api
+PUT {{baseAddressUPS}}/api/v2/profiles/{{StefanId}}/customproperties HTTP/1.1
+Content-Type: application/json-patch+json"
+
+[
+    {
+        "key": "USerFaker2__77",
+        "value": "{\"Name\":\"What ever\",\"DisplayName\": \"WhatEver\"}"
+    },
+    {
+        "key": "USerFaker3_72",
+        "value": "{\"Name\":\"What ever\",\"DisplayName\": \"WhatEver\"}"
+    },
+    {
+        "key": "USerFake9__13",
+        "value": "{\"Name\":\"What ever\",\"DisplayName\": \"WhatEver\"}"
+    }
+]
+
+#### Single Operation
+PUT {{baseAddressUPS}}/api/v2/profiles/{{StefanId}}/customproperties/UserJson2 HTTP/1.1
+Content-Type: text/plain"
+
+"{\"Name\":\"What ever\",\"DisplayName\": \"WhatEver\"}"
+
+#### ------------------------------------
+#### Lets assign some funtions to an user
+#### ------------------------------------
+
+# @name getTestUser
+GET https://localhost:5001/api/v2/users/view?Search=A365T_FADM002 HTTP/1.1
+Content-Type: application/json
+
+###
+
+@testUserId = {{getTestUser.response.body.$.result[0].id}}
+
+### check the functions of the user
+
+GET {{baseAddressUPS}}/api/v2/users/{{testUserId}}/functions HTTP/1.1
+Content-Type: application/json
+
+### check the user profile itself
+
+DELETE {{baseAddressUPS}}/api/v2/users/{{testUserId}} HTTP/1.1
+
+### check all assignmentes relevant for bonnea (r)
+
+GET {{baseAddressUPS}}/api/users/{{testUserId}}/allassignments HTTP/1.1
+Content-Type: application/json
+
+### check the user as old profile type (v1)
+
+GET {{baseAddressUPS}}/api/browse/{{testUserId}} HTTP/1.1
+Content-Type: application/json
+
+###  get some functions usfull for testing assignments
+# @name getFunctions
+GET {{baseAddressUPS}}/api/v2/functions?search=999%20Mitarbeit HTTP/1.1
+Content-Type: application/json
+
+### two function will be good enough
+
+@funcOne = {{getFunctions.response.body.$.result[0].id}}
+@funcTwo = {{getFunctions.response.body.$.result[1].id}}
+
+### The function object itself
+
+GET {{baseAddressUPS}}/api/v2/functions/{{funcOne}} HTTP/1.1
+
+### ... and as old type (v1)
+
+GET {{baseAddressUPS}}/api/browse/{{funcOne}} HTTP/1.1
+
+### Now let's assing the functions to the profile
+###  -> the first one will be valid in 3 minutes
+###  -> the second one valid for 3 minutes
+
+PUT {{baseAddressUPS}}/api/v2/users/{{testUserId}}/functions HTTP/1.1
+Content-Type: application/json
+
+{
+    "added": [
+        {
+            "Id": "{{funcOne}}",
+            "conditions": [
+                {
+                    "start": "{{$datetime iso8601 3 m}}",
+                    "end": "2022-05-24T12:34:03.247Z"
+                }
+            ]
+        },
+        {
+            "Id": "{{funcTwo}}",
+            "conditions": [
+                {
+                    "start": "{{$datetime iso8601 -1 d}}",
+                    "end": "{{$datetime iso8601 3 m}}"
+                }
+            ]
+        }
+    ]
+}

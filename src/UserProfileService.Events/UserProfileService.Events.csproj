@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    
+	<PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>disable</Nullable>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    </PropertyGroup>
+    
+	<ItemGroup>
+        <ProjectReference Include="..\Maverick.UserProfileService.Models\Maverick.UserProfileService.Models.csproj" />
+        <ProjectReference Include="..\UserProfileService.Events.Payloads\UserProfileService.Events.Payloads.csproj" />
+        <ProjectReference Include="..\UserProfileService.EventSourcing.Abstractions\UserProfileService.EventSourcing.Abstractions.csproj" />
+    </ItemGroup>
+	
+</Project>

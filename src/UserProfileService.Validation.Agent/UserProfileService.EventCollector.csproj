@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>disable</Nullable>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\UserProfileService.Commands\UserProfileService.Commands.csproj" />
+        <ProjectReference Include="..\UserProfileService.Common.Logging\UserProfileService.Common.Logging.csproj" />
+        <ProjectReference Include="..\UserProfileService.EventCollector.Abstractions\UserProfileService.EventCollector.Abstractions.csproj" />
+        <ProjectReference Include="..\UserProfileService.Validation.Abstractions\UserProfileService.Validation.Abstractions.csproj" />
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+            <_Parameter1>UserProfileService.EventCollector.UnitTests</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,51 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>obj\Debug\net6.0\UserProfileService.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>obj\Release\net6.0\UserProfileService.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="6.4.0" />
+    <PackageReference Include="Hellang.Middleware.ProblemDetails" Version="6.5.1" />
+    <PackageReference Include="IdentityModel.AspNetCore.OAuth2Introspection" Version="6.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.13" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.13" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Maverick.UserProfileService.FilterUtility\Maverick.UserProfileService.FilterUtility.csproj" />
+    <ProjectReference Include="..\Maverick.UserProfileService.Models\Maverick.UserProfileService.Models.csproj" />
+    <ProjectReference Include="..\UserProfileService.Adapter.Arango\UserProfileService.Adapter.Arango.csproj" />
+    <ProjectReference Include="..\UserProfileService.Adapter.Marten\UserProfileService.Adapter.Marten.csproj" />
+    <ProjectReference Include="..\UserProfileService.Api.Common\UserProfileService.Api.Common.csproj" />
+    <ProjectReference Include="..\UserProfileService.Common.Health\UserProfileService.Common.Health.csproj" />
+    <ProjectReference Include="..\UserProfileService.Common\UserProfileService.Common.csproj" />
+    <ProjectReference Include="..\UserProfileService.Hosting\UserProfileService.Hosting.csproj" />
+    <ProjectReference Include="..\UserProfileService.Redis\UserProfileService.Redis.csproj" />
+    <ProjectReference Include="..\UserProfileService.Saga.Events\UserProfileService.Saga.Events.csproj" />
+    <ProjectReference Include="..\UserProfileService.Validation.Abstractions\UserProfileService.Validation.Abstractions.csproj" />
+    <ProjectReference Include="..\UserProfileService.Saga.Validation\UserProfileService.Saga.Validation.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

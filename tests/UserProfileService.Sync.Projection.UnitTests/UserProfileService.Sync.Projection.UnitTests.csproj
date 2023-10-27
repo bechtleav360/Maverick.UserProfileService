@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>disable</Nullable>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.5.1">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\UserProfileService.Sync.Projection\UserProfileService.Sync.Projection.csproj" />
+        <ProjectReference Include="..\..\src\UserProfileService.Sync\UserProfileService.Sync.csproj" />
+        <ProjectReference Include="..\UserProfileService.Common.Tests\UserProfileService.Common.Tests.csproj" />
+        <ProjectReference Include="..\UserProfileService.Common.Tests.Utilities\UserProfileService.Common.Tests.Utilities.csproj" />
+    </ItemGroup>
+</Project>

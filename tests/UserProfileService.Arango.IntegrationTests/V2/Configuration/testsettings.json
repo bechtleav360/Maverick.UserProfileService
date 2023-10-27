@@ -1,0 +1,22 @@
+﻿{
+  "ProfileStorage": {
+    "ConnectionString": "endpoints=http://192.168.1.110:8529;UserName=root;Password=rootpassword;database=ups_test",
+    "MinutesBetweenChecks": 60,
+    "ClusterConfiguration": {
+      "DocumentCollections": {
+        "*": {
+          "NumberOfShards": 3,
+          "ReplicationFactor": 2,
+          "WriteConcern": 1
+        }
+      },
+      "EdgeCollections": {
+        "*": {
+          "NumberOfShards": 3,
+          "ReplicationFactor": 2,
+          "WriteConcern": 1
+        }
+      }
+    }
+  }
+}

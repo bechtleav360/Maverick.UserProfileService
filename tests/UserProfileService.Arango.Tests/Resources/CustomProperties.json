@@ -1,0 +1,482 @@
+[
+  {
+    "InternalId": "910c76d7-acb1-46c5-86e6-28105677e428",
+    "Key": "Maroon",
+    "Value": "Tin",
+    "CreatedDate": "2018-06-18T01:20:52Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "0e02dc84-b838-43f0-9a1f-9a37aea0bff5",
+    "Key": "Mauv",
+    "Value": "Flowdesk",
+    "CreatedDate": "2018-05-08T05:27:25Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "68a42b40-005b-4308-9f12-e2f86c3bae98",
+    "Key": "Turquoise",
+    "Value": "Home Ing",
+    "CreatedDate": "2018-07-08T19:22:54Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "00009a84-1b4c-4945-9150-e2227aafffd4",
+    "Key": "Mauv",
+    "Value": "Wrapsafe",
+    "CreatedDate": "2018-02-11T19:13:56Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "3c43ac03-c0e6-4fcf-b444-99791fdd75af",
+    "Key": "Aquamarine",
+    "Value": "Otcom",
+    "CreatedDate": "2018-06-30T14:32:02Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "1239d71a-53c8-41a4-99be-7dd77815ecb2",
+    "Key": "Green",
+    "Value": "Zamit",
+    "CreatedDate": "2018-10-27T15:35:05Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "39c07301-9842-4d8f-8796-58139c8f120f",
+    "Key": "Khaki",
+    "Value": "Tempsoft",
+    "CreatedDate": "2018-07-21T21:42:26Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "4f59a5c3-8fac-4a6c-9b5c-d276e6aaf2fc",
+    "Key": "Yellow",
+    "Value": "Job",
+    "CreatedDate": "2018-06-29T08:54:14Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "3fa43ca5-f870-4680-97c7-bc0c6fd86caf",
+    "Key": "Khaki",
+    "Value": "Temp",
+    "CreatedDate": "2018-07-09T15:26:09Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "c8d6aa79-a9f4-4867-8183-e4ffef6765c3",
+    "Key": "Blue",
+    "Value": "Fix San",
+    "CreatedDate": "2018-06-29T14:57:33Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "900770f4-365e-4606-aec6-500f31ca462b",
+    "Key": "Crimson",
+    "Value": "Tresom",
+    "CreatedDate": "2018-07-12T12:13:58Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "f128b196-198b-4d53-92e4-c55334d87e3b",
+    "Key": "Khaki",
+    "Value": "Ronstring",
+    "CreatedDate": "2018-05-22T16:02:41Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "b5a4a7d9-343c-4abb-962e-c04257321a0d",
+    "Key": "Violet",
+    "Value": "It",
+    "CreatedDate": "2018-10-03T15:43:29Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "f8b52854-9e50-4ad2-bc48-93bf1f34264b",
+    "Key": "Violet",
+    "Value": "Domainer",
+    "CreatedDate": "2018-01-14T23:24:13Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "d56bd802-e53f-4fa4-9c3a-fea1e7fbe475",
+    "Key": "Red",
+    "Value": "Bigtax",
+    "CreatedDate": "2018-04-18T04:16:31Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "b4f4d1d4-7662-4e53-b8ae-d42a6002159d",
+    "Key": "Indigo",
+    "Value": "Biodex",
+    "CreatedDate": "2018-06-12T17:27:49Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "8f194ccf-0e76-4985-8a5b-02ac81592d9d",
+    "Key": "Crimson",
+    "Value": "Domainer",
+    "CreatedDate": "2018-02-18T22:17:26Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "b29b0a2f-7fbf-4b3a-ab04-d7decc142e70",
+    "Key": "Mauv",
+    "Value": "Fixflex",
+    "CreatedDate": "2018-05-06T05:50:52Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "4e2cdbae-f036-4952-9982-5027a908aa54",
+    "Key": "Mauv",
+    "Value": "Zoolab",
+    "CreatedDate": "2018-02-21T20:01:40Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "00a7e7a6-fef1-422a-91e3-c04a47bb87dc",
+    "Key": "Maroon",
+    "Value": "Tresom",
+    "CreatedDate": "2018-12-28T00:29:16Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "79e44424-4641-4cdf-90cf-88f2732ed573",
+    "Key": "Purple",
+    "Value": "Lotlux",
+    "CreatedDate": "2018-03-13T21:08:03Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "53f5628f-024d-4951-8eb7-936685097339",
+    "Key": "Aquamarine",
+    "Value": "Keylex",
+    "CreatedDate": "2018-06-24T21:45:43Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "7e88ebe1-8ce3-498f-ad38-3818ec354690",
+    "Key": "Mauv",
+    "Value": "Wrapsafe",
+    "CreatedDate": "2018-01-31T11:33:01Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "e40b649a-251f-4ad8-b8a9-18a7eddcb6bb",
+    "Key": "Khaki",
+    "Value": "Tres-Zap",
+    "CreatedDate": "2018-09-22T06:47:48Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "df47c585-64a5-4003-bc98-fa251d2c7690",
+    "Key": "Yellow",
+    "Value": "Bitchip",
+    "CreatedDate": "2018-07-19T16:54:14Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "306d27be-4686-43a4-a5c4-e9f49c5dfcdd",
+    "Key": "Maroon",
+    "Value": "Sonsing",
+    "CreatedDate": "2018-08-24T23:44:28Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "dd3b88a4-5de3-4a51-83ce-759c8f1fb1d3",
+    "Key": "Puce",
+    "Value": "Solarbreeze",
+    "CreatedDate": "2018-10-13T14:18:35Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "214f30a4-dbca-4f88-ae54-136e2314dc32",
+    "Key": "Blue",
+    "Value": "Span",
+    "CreatedDate": "2018-01-11T21:28:27Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "5743e7da-42f2-4ea5-ba80-5776e90bceae",
+    "Key": "Violet",
+    "Value": "Bamity",
+    "CreatedDate": "2018-12-11T05:43:23Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "438d0f94-4cb8-437b-89b5-b2590bcb2e8c",
+    "Key": "Maroon",
+    "Value": "Hatity",
+    "CreatedDate": "2018-01-12T15:40:05Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "0dc4db3f-01c3-41cd-8aa7-b760e1a8cbee",
+    "Key": "Goldenrod",
+    "Value": "Lotlux",
+    "CreatedDate": "2018-02-05T12:03:19Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "832c989e-d811-4ba1-b778-aa030735f098",
+    "Key": "Aquamarine",
+    "Value": "Treeflex",
+    "CreatedDate": "2018-01-09T21:15:02Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "891339f0-101d-48ec-bbe6-c63f6f663115",
+    "Key": "Aquamarine",
+    "Value": "Sub-Ex",
+    "CreatedDate": "2018-01-20T12:33:40Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "ef59911b-e442-4ba0-856b-17dd5035c132",
+    "Key": "Orange",
+    "Value": "Konklab",
+    "CreatedDate": "2018-11-12T10:24:28Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "864e4321-d0bc-4728-9fd9-9d5445acc0f1",
+    "Key": "Red",
+    "Value": "Viva",
+    "CreatedDate": "2018-08-29T16:38:56Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "d46e4047-1530-471c-b1e2-8e7aabe4b612",
+    "Key": "Yellow",
+    "Value": "Voyatouch",
+    "CreatedDate": "2018-11-30T23:27:38Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "a2e55039-77c1-4376-8592-781faaaa89a0",
+    "Key": "Goldenrod",
+    "Value": "Gembucket",
+    "CreatedDate": "2018-05-28T19:46:16Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "96e14b03-4eb3-4ed5-8281-9c985ed6db06",
+    "Key": "Indigo",
+    "Value": "Y-Solowarm",
+    "CreatedDate": "2018-02-16T00:21:55Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "3f0460e9-d2e7-4f5b-8e98-ae747b67c6bd",
+    "Key": "Khaki",
+    "Value": "Flexidy",
+    "CreatedDate": "2018-08-01T15:53:41Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "607d9030-aa93-498a-9bcf-d13fe8be0118",
+    "Key": "Mauv",
+    "Value": "Zathin",
+    "CreatedDate": "2018-09-04T00:14:47Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "a8539994-fc2c-4e58-88c4-b80d39cefde3",
+    "Key": "Red",
+    "Value": "Mat Lam Tam",
+    "CreatedDate": "2018-07-09T10:52:47Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "514af098-5fc5-4488-bcb6-0cb190533814",
+    "Key": "Green",
+    "Value": "Mat Lam Tam",
+    "CreatedDate": "2018-05-29T18:59:04Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "c1b56414-8e52-4fda-9176-120d230a4b8c",
+    "Key": "Mauv",
+    "Value": "Aerified",
+    "CreatedDate": "2018-09-25T12:16:56Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "d947184f-8151-4093-9e0d-25e66c157f7c",
+    "Key": "Khaki",
+    "Value": "Latlux",
+    "CreatedDate": "2018-12-06T06:16:49Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "a9af1c88-8646-40d4-8e27-fead70efe48c",
+    "Key": "Green",
+    "Value": "Namfix",
+    "CreatedDate": "2018-08-24T11:27:40Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "e4905879-f5b0-4f5a-90b9-c5d4c9ec8145",
+    "Key": "Puce",
+    "Value": "Bamity",
+    "CreatedDate": "2018-07-18T19:21:33Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "2221c012-9c77-4fbb-a68d-88b2a7e048b1",
+    "Key": "Violet",
+    "Value": "Keylex",
+    "CreatedDate": "2018-04-30T09:17:21Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "dc647fb5-1f51-4630-a0d1-1f5064dc671c",
+    "Key": "Aquamarine",
+    "Value": "Greenlam",
+    "CreatedDate": "2018-09-01T14:31:48Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "f49f549f-d5cb-444a-a38f-a4206db5adb3",
+    "Key": "Violet",
+    "Value": "Alpha",
+    "CreatedDate": "2018-04-20T12:54:08Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "599fee60-7f4d-4ec1-aaad-cd0a862e1feb",
+    "Key": "Yellow",
+    "Value": "Wrapsafe",
+    "CreatedDate": "2018-07-11T07:58:33Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "2493d57c-9783-4560-b9dc-9231167f0b18",
+    "Key": "Crimson",
+    "Value": "Mat Lam Tam",
+    "CreatedDate": "2018-01-15T10:43:31Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "f9cc4894-fdd5-45cf-b21c-15ad95e53d2f",
+    "Key": "Green",
+    "Value": "Bamity",
+    "CreatedDate": "2018-10-27T00:17:08Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "0d7f11ce-8f84-4e75-8dfc-62bde4e7b611",
+    "Key": "Crimson",
+    "Value": "Zoolab",
+    "CreatedDate": "2018-09-20T07:54:32Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "fdc9c39f-7998-4fb7-b69c-46dddae27254",
+    "Key": "Orange",
+    "Value": "Y-find",
+    "CreatedDate": "2018-07-19T20:45:13Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "3e43b019-483c-4833-be6d-785911627328",
+    "Key": "Blue",
+    "Value": "Gembucket",
+    "CreatedDate": "2018-04-05T04:34:48Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "67d5e9f5-6362-457e-ba92-6f749bf5a105",
+    "Key": "Purple",
+    "Value": "Ronstring",
+    "CreatedDate": "2018-01-21T22:13:31Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "6aac5cdb-372a-4395-bd52-f058fc995bfc",
+    "Key": "Indigo",
+    "Value": "It",
+    "CreatedDate": "2018-10-15T14:44:31Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "0104dfe5-7383-4473-a8b5-cd621b2c9542",
+    "Key": "Turquoise",
+    "Value": "Transcof",
+    "CreatedDate": "2018-02-27T00:30:19Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "b991558c-3720-489d-b44d-fd439fb03150",
+    "Key": "Goldenrod",
+    "Value": "Pannier",
+    "CreatedDate": "2018-09-28T18:50:20Z",
+    "FromDate": null,
+    "ToDate": null
+  },
+  {
+    "InternalId": "9426d78d-f14c-4837-a27d-d12c3b4f93e6",
+    "Key": "Goldenrod",
+    "Value": "Trippledex",
+    "CreatedDate": "2018-09-16T09:35:03Z",
+    "FromDate": null,
+    "ToDate": null
+  }
+]

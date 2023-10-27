@@ -1,0 +1,72 @@
+[
+  {
+    "Members": null,
+    "Weight": 0,
+    "ProfileKind": 2,
+    "SecurityIdentifier": null,
+    "FunctionAssignments": null,
+    "InternalId": "G5e4ef714-8a88-40a1-8155-d345249b68cb",
+    "Id": "Group_1",
+    "Name": "MyTestGroup",
+    "DisplayName": "MyTestGroup",
+    "LastModified": "0001-01-01T00:00:00",
+    "Properties": {},
+    "Paths": null,
+    "Description": null,
+    "IsMarkedForDeletion": false
+  },
+  {
+    "Members": null,
+    "Weight": 0,
+    "ProfileKind": 2,
+    "SecurityIdentifier": null,
+    "FunctionAssignments": null,
+    "InternalId": "Ge6c94b50-5345-46d3-b4b0-2902d96fc556",
+    "Id": "Group_2",
+    "Name": "Developers",
+    "DisplayName": "Developers",
+    "LastModified": "0001-01-01T00:00:00",
+    "Properties": {},
+    "Paths": null,
+    "Description": null,
+    "IsMarkedForDeletion": false,
+    "Characteristics": {
+      "Importance": [
+        "high",
+        "very high"
+      ]
+    }
+  },
+  {
+    "Members": null,
+    "Weight": 0,
+    "ProfileKind": 2,
+    "SecurityIdentifier": null,
+    "FunctionAssignments": null,
+    "InternalId": "Gb3288561-efd1-45f3-90fe-d0a12e049365",
+    "Id": "Group_3",
+    "Name": "UselessGroup",
+    "DisplayName": "UselessGroup",
+    "LastModified": "0001-01-01T00:00:00",
+    "Properties": {},
+    "Paths": null,
+    "Description": null,
+    "IsMarkedForDeletion": false
+  },
+  {
+    "Members": null,
+    "Weight": 0,
+    "ProfileKind": 2,
+    "SecurityIdentifier": null,
+    "FunctionAssignments": null,
+    "InternalId": "G7585962d-0a55-4cfb-8212-472e3687f6d2",
+    "Name": "MockingFUn",
+    "Id": "Group_4",
+    "DisplayName": "MockingFUn",
+    "LastModified": "0001-01-01T00:00:00",
+    "Properties": {},
+    "Paths": null,
+    "Description": null,
+    "IsMarkedForDeletion": false
+  }
+]

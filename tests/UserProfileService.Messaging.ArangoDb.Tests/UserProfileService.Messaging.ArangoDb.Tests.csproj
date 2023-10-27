@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+      <TargetFramework>net6.0</TargetFramework>
+      <Nullable>disable</Nullable>
+      <ImplicitUsings>disable</ImplicitUsings>
+      <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.5.1">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="coverlet.collector" Version="3.2.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\UserProfileService.Messaging.ArangoDb\UserProfileService.Messaging.ArangoDb.csproj" />
+    <ProjectReference Include="..\..\src\UserProfileService.Sync\UserProfileService.Sync.csproj" />
+    <ProjectReference Include="..\UserProfileService.Projection.Common.Tests\UserProfileService.Projection.Common.Tests.csproj" />
+  </ItemGroup>
+
+</Project>
