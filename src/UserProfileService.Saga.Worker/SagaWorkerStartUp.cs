@@ -59,9 +59,16 @@ using UserProfileService.Saga.Worker.Utilities;
 
 namespace UserProfileService.Saga.Worker;
 
-public class StartUp : DefaultStartupBase
+/// <summary>
+///     The derived start up that is used for the saga worker.
+/// </summary>
+public class SagaWorkerStartUp : DefaultStartupBase
 {
-    public StartUp(IConfiguration configuration) : base(configuration)
+    /// <summary>
+    ///     Creates an instance of type <see cref="SagaWorkerStartUp" />
+    /// </summary>
+    /// <param name="configuration">Contains the configuration to initialize the application.</param>
+    public SagaWorkerStartUp(IConfiguration configuration) : base(configuration)
     {
     }
 
@@ -73,6 +80,7 @@ public class StartUp : DefaultStartupBase
             GetAssemblyVersion());
     }
 
+    /// <inheritdoc />
     protected override void AddLateConfiguration(
         IApplicationBuilder app,
         IWebHostEnvironment env)
@@ -115,10 +123,7 @@ public class StartUp : DefaultStartupBase
         app.UseSwaggerUI(c => { c.SwaggerEndpoint("v1/swagger.json", "UserProfileService Saga Worker"); });
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="services"></param>
+    /// <inheritdoc />
     public override void ConfigureServices(IServiceCollection services)
     {
         IConfigurationSection arangoConfigurationSection =
@@ -129,7 +134,7 @@ public class StartUp : DefaultStartupBase
             .AddArangoRepositoriesToReadFromProfileStorage(
                 arangoConfigurationSection,
                 WellKnownDatabasePrefixes.ApiService,
-                Logger);
+                _logger);
 
         services.AddTransient<IProjectionReadService, ProjectionReadService>();
         services.AddSingleton<IJsonSerializerSettingsProvider, DefaultJsonSettingsProvider>();
@@ -190,7 +195,7 @@ public class StartUp : DefaultStartupBase
             SagaWorkerConverter.GetAllConvertersForMartenProjections());
 
         services.AddMartenVolatileUserSettingsStore(Configuration.GetSection(WellKnownConfigurationKeys.MartenSettings))
-            .AddMartenUserStore(Logger);
+            .AddMartenUserStore(_logger);
 
         services.AddEventPublisherDependencies(
             setup => setup.AddVolatileDataEventPublisher(
@@ -337,7 +342,7 @@ public class StartUp : DefaultStartupBase
                             });
                 })
             .AddTransient<ICommandServiceFactory, CommandServiceFactory>();
-        
+
         services.AddNoneMessageInformer();
     }
 }
