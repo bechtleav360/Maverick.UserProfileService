@@ -13,7 +13,8 @@ namespace UserProfileService.Messaging.ArangoDb.Saga;
 ///     Describes the query context for saga repository to query sagas.
 /// </summary>
 /// <typeparam name="TSaga">Type of context saga.</typeparam>
-public interface ISagaRepositoryQueryContext<TSaga> : SagaRepositoryContext<TSaga> where TSaga : class, ISaga
+public interface ISagaRepositoryQueryContext<TSaga> : QuerySagaRepositoryContext<TSaga>,
+    LoadSagaRepositoryContext<TSaga> where TSaga : class, ISaga
 {
     /// <summary>
     ///     Load a list of sagas.
