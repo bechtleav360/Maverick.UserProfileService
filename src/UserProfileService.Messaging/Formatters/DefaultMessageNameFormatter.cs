@@ -38,7 +38,7 @@ public class DefaultMessageNameFormatter : IMessageNameFormatter
 
         _cache = new ConcurrentDictionary<Type, string>();
     }
-
+    
     private string CreateMessageName(Type type)
     {
         if (type.GetTypeInfo().IsGenericTypeDefinition)
@@ -115,10 +115,9 @@ public class DefaultMessageNameFormatter : IMessageNameFormatter
 
         return sb.ToString();
     }
-
     /// <inheritdoc />
-    public MessageName GetMessageName(Type type)
+    public string GetMessageName(Type type)
     {
-        return new MessageName(_cache.GetOrAdd(type, CreateMessageName));
+        return new string(_cache.GetOrAdd(type, CreateMessageName));
     }
 }
