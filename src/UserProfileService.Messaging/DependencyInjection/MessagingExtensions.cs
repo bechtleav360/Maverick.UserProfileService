@@ -53,7 +53,9 @@ public static class MessagingExtensions
             throw new InvalidMessagingConfigurationException("no 'Messaging:Type' set");
         }
 
-        configurator.SetEndpointNameFormatter(nameFormatter);
+        // configurator.SetEndpointNameFormatter(nameFormatter);
+        configurator.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter(
+            includeNamespace: false));
 
         if (messagingType.Equals("none", StringComparison.OrdinalIgnoreCase))
         {
@@ -121,7 +123,7 @@ public static class MessagingExtensions
     {
         configurator.MessageTopology.SetEntityNameFormatter(nameFormatter);
 
-        var messageSerializer = new CloudEventMessageSerializerFactory(metadata.Source, nameFormatter);
+        var messageSerializer = new CloudEventMessageSerializerFactory(nameFormatter);
 
         configurator.AddDeserializer(messageSerializer, true);
         configurator.AddSerializer(messageSerializer);

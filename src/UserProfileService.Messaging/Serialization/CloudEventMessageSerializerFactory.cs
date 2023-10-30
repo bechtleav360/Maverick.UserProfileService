@@ -12,15 +12,14 @@ public class CloudEventMessageSerializerFactory : ISerializerFactory
 
     /// <inheritdoc />
     public ContentType ContentType => _serializer.ContentType;
-
+    
     /// <summary>
     ///     Create a new instance of <see cref="CloudEventMessageSerializerFactory" />
     /// </summary>
-    /// <param name="source">unique source-uri for all new messages</param>
     /// <param name="nameFormatter">type-name formatter for all new messages</param>
-    public CloudEventMessageSerializerFactory(Uri source, IEndpointNameFormatter nameFormatter)
+    public CloudEventMessageSerializerFactory(IEndpointNameFormatter nameFormatter)
     {
-        _serializer = new CloudEventMessageSerializer(source, nameFormatter);
+        _serializer = new CloudEventMessageSerializer(nameFormatter);
     }
 
     /// <inheritdoc />

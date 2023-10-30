@@ -64,6 +64,7 @@ public class CloudEventMessageEnvelope : MessageEnvelope
         CorrelationId = cloudEvent["correlation"] as string;
         DestinationAddress = cloudEvent["destination"] as string;
         FaultAddress = cloudEvent["fault"] as string;
+        ResponseAddress = cloudEvent["response"] as string;
 
         Headers = cloudEvent.GetPopulatedAttributes()
             .ToDictionary(
@@ -74,8 +75,7 @@ public class CloudEventMessageEnvelope : MessageEnvelope
         Message = cloudEvent.Data;
         MessageId = cloudEvent.Id;
         MessageType = new[] { cloudEvent.Type ?? string.Empty };
-        ResponseAddress = cloudEvent["response"] as string;
-        RequestId = cloudEvent["message"] as string;
+        RequestId = cloudEvent["request"] as string;
         SentTime = cloudEvent.Time?.UtcDateTime;
         SourceAddress = cloudEvent.Source?.ToString();
 

@@ -25,7 +25,6 @@ public class CloudEventMessageSerializer :
     IObjectDeserializer
 {
     private readonly IEndpointNameFormatter _nameFormatter;
-    private readonly Uri _source;
 
     /// <inheritdoc cref="IMessageSerializer.ContentType" />
     public ContentType ContentType { get; } = new ContentType(MimeUtilities.MediaType);
@@ -38,13 +37,9 @@ public class CloudEventMessageSerializer :
     /// <summary>
     ///     Create a new instance of <see cref="CloudEventMessageSerializer" />
     /// </summary>
-    /// <param name="source">unique source-uri for all new messages</param>
     /// <param name="nameFormatter">type-name formatter for all new messages</param>
-    public CloudEventMessageSerializer(
-        Uri source,
-        IEndpointNameFormatter nameFormatter)
+    public CloudEventMessageSerializer(IEndpointNameFormatter nameFormatter)
     {
-        _source = source;
         _nameFormatter = nameFormatter;
 
         GlobalTopology.MarkMessageTypeNotConsumable(typeof(JsonElement));
@@ -144,7 +139,7 @@ public class CloudEventMessageSerializer :
             var envelope = new CloudEvent
             {
                 Id = context.MessageId?.ToString(),
-                Source = _source,
+                Source = context.SourceAddress,
                 Type = "urn:message:" + _nameFormatter.Message<T>(),
                 Time = context.SentTime,
                 Data = context.Message,
@@ -153,11 +148,16 @@ public class CloudEventMessageSerializer :
 
             envelope["traceparent"] = Activity.Current?.Id ?? string.Empty;
             envelope["conversation"] = context.ConversationId?.ToString("N") ?? string.Empty;
+
+            envelope["request"] = context.RequestId?.ToString("N") ?? string.Empty;
             envelope["correlation"] = context.CorrelationId?.ToString("N") ?? string.Empty;
+
             envelope["destination"] = context.DestinationAddress?.ToString() ?? string.Empty;
-            envelope["fault"] = context.FaultAddress?.ToString() ?? string.Empty;
-            envelope["initiator"] = context.InitiatorId?.ToString("N") ?? string.Empty;
             envelope["response"] = context.ResponseAddress?.ToString() ?? string.Empty;
+            envelope["fault"] = context.FaultAddress?.ToString() ?? string.Empty;
+
+            envelope["conversation"] = context.ConversationId?.ToString("N") ?? string.Empty;
+            envelope["initiator"] = context.InitiatorId?.ToString("N") ?? string.Empty;
 
             envelope["expiration"] = context.TimeToLive is not null
                 ? (context.SentTime + context.TimeToLive)?.ToString("O") ?? string.Empty

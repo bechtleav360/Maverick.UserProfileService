@@ -19,6 +19,11 @@ public class CustomEntityNameFormatter : IEndpointNameFormatter, IEntityNameForm
     public string Separator => _endpointFormatter.Separator;
 
     /// <summary>
+    ///     Instance of the <see cref="CustomEntityNameFormatter" /> set when called .AddMessaging
+    /// </summary>
+    public static IEndpointNameFormatter? Instance;
+
+    /// <summary>
     ///     Create a new instance of <see cref="CustomEntityNameFormatter" /> using the given
     ///     <see cref="IEndpointNameFormatter" />
     /// </summary>
