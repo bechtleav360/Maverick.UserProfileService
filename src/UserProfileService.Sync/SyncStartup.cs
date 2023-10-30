@@ -154,7 +154,7 @@ public class SyncStartup : DefaultStartupBase
             .AddArangoRepositoriesToReadFromProfileStorage(
                 arangoConfigurationSection,
                 WellKnownDatabasePrefixes.ApiService,
-                Logger);
+                _logger);
 
         services.AddMartenEventStore(
             Configuration,
@@ -178,7 +178,7 @@ public class SyncStartup : DefaultStartupBase
         services.AddProjectionResponseService();
 
         // Redis temp store
-        services.AddRedis(Configuration.GetSection("Redis"), Logger);
+        services.AddRedis(Configuration.GetSection("Redis"), _logger);
         services.TryAddSingleton<ICacheStore, RedisCacheStore>();
         services.TryAddSingleton<ITempStore, RedisTempObjectStore>();
         services.TryAddSingleton<IProcessTempHandler, ProcessTempHandler>();
