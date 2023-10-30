@@ -196,7 +196,42 @@ public class ArangoSagaRepositoryContextFactory<TSaga> :
 
     /// <inheritdoc />
     public async Task<T> Execute<T>(
-        Func<SagaRepositoryContext<TSaga>, Task<T>> asyncMethod,
+        Func<LoadSagaRepositoryContext<TSaga>, Task<T>> asyncMethod,
+        CancellationToken cancellationToken = default)
+        where T : class
+    {
+        _logger.EnterMethod();
+
+        if (asyncMethod == null)
+        {
+            throw new ArgumentNullException(nameof(asyncMethod));
+        }
+
+        IArangoDbClient database = _clientFactory();
+
+        await CreateDatabaseSchemaAsync(database);
+
+        var databaseContext = new ArangoDatabaseContext<TSaga>(database, _options, _loggerFactory);
+
+        try
+        {
+            var repositoryContext = new ArangoSagaRepositoryContext<TSaga>(
+                databaseContext,
+                _loggerFactory,
+                cancellationToken);
+
+            return await asyncMethod(repositoryContext).ConfigureAwait(false);
+        }
+        finally
+        {
+            await databaseContext.DisposeAsync().ConfigureAwait(false);
+            _logger.ExitMethod();
+        }
+    }
+
+    /// <inheritdoc />
+    public async Task<T> Execute<T>(
+        Func<QuerySagaRepositoryContext<TSaga>, Task<T>> asyncMethod,
         CancellationToken cancellationToken = default)
         where T : class
     {

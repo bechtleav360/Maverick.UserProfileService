@@ -103,7 +103,13 @@ namespace UserProfileService.Sync.UnitTests.Services
 
             mock.Setup(
                     m => m.Execute(
-                        It.IsAny<Func<SagaRepositoryContext<ProcessState>, Task<ProcessState>>>(),
+                        It.IsAny<Func<QuerySagaRepositoryContext<ProcessState>, Task<ProcessState>>>(),
+                        It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new ProcessState());
+
+            mock.Setup(
+                    m => m.Execute(
+                        It.IsAny<Func<LoadSagaRepositoryContext<ProcessState>, Task<ProcessState>>>(),
                         It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new ProcessState());
 
@@ -128,9 +134,16 @@ namespace UserProfileService.Sync.UnitTests.Services
 
             mock.Setup(
                     m => m.Execute(
-                        It.IsAny<Func<SagaRepositoryContext<ProcessState>, Task<ProcessState>>>(),
+                        It.IsAny<Func<QuerySagaRepositoryContext<ProcessState>, Task<ProcessState>>>(),
                         It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new ProcessState());
+            
+            mock.Setup(
+                    m => m.Execute<ProcessState>(
+                        It.IsAny<Func<LoadSagaRepositoryContext<ProcessState>, Task<ProcessState>>>(),
+                        It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new ProcessState());
+            
             var service = new SynchronizationTestService(null, logger, syncOptions, scheduleService.Object,null, mock.Object, GetMapper());
             
             // Act & Assert
@@ -188,9 +201,17 @@ namespace UserProfileService.Sync.UnitTests.Services
 
             mock.Setup(
                     m => m.Execute(
-                        It.IsAny<Func<SagaRepositoryContext<ProcessState>, Task<ProcessState>>>(),
+                        It.IsAny<Func<QuerySagaRepositoryContext<ProcessState>, Task<ProcessState>>>(),
                         It.IsAny<CancellationToken>()))
                 .ReturnsAsync(process);
+            
+                        
+            mock.Setup(
+                    m => m.Execute<ProcessState>(
+                        It.IsAny<Func<LoadSagaRepositoryContext<ProcessState>, Task<ProcessState>>>(),
+                        It.IsAny<CancellationToken>()))
+                .ReturnsAsync(process);
+            
             var service = new SynchronizationTestService(null, logger, syncOptions, scheduleService.Object, null, mock.Object, GetMapper());
 
             //Act
