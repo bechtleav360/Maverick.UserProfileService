@@ -10,7 +10,9 @@ namespace UserProfileService.Messaging.ArangoDb.Saga;
 ///     Describes a factory to execute query through <see cref="ISagaRepositoryQueryContext{TSaga}" />
 /// </summary>
 /// <typeparam name="TSaga">Type of the managed entity.</typeparam>
-public interface ISagaRepositoryQueryContextFactory<TSaga> : ISagaRepositoryContextFactory<TSaga>
+public interface ISagaRepositoryQueryContextFactory<TSaga> : ISagaRepositoryContextFactory<TSaga>,
+    ILoadSagaRepositoryContextFactory<TSaga>,
+    IQuerySagaRepositoryContextFactory<TSaga>
     where TSaga : class, ISaga
 {
     /// <summary>
