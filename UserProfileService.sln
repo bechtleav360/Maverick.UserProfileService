@@ -143,6 +143,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserProfileService.Api.Comm
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserProfileService.Informer", "src\UserProfileService.Informer\UserProfileService.Informer.csproj", "{7C10C8A2-FAD6-44C1-9B30-E5D0A3330C87}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserProfileService.Saga.StateMachine", "src\UserProfileService.Saga.StateMachine\UserProfileService.Saga.StateMachine.csproj", "{4E55EC54-A265-4033-AEB0-CC6BBD9A8418}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -409,6 +411,10 @@ Global
 		{7C10C8A2-FAD6-44C1-9B30-E5D0A3330C87}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C10C8A2-FAD6-44C1-9B30-E5D0A3330C87}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C10C8A2-FAD6-44C1-9B30-E5D0A3330C87}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E55EC54-A265-4033-AEB0-CC6BBD9A8418}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E55EC54-A265-4033-AEB0-CC6BBD9A8418}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E55EC54-A265-4033-AEB0-CC6BBD9A8418}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E55EC54-A265-4033-AEB0-CC6BBD9A8418}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -479,6 +485,7 @@ Global
 		{4C79AB4F-9ED9-4B15-AFB9-25DD0568B5DB} = {8C945828-5DE3-4F7E-8BB2-B49357AACE44}
 		{9036879A-44FE-4D69-A846-D9A96AFC5FE8} = {8C945828-5DE3-4F7E-8BB2-B49357AACE44}
 		{7C10C8A2-FAD6-44C1-9B30-E5D0A3330C87} = {8C945828-5DE3-4F7E-8BB2-B49357AACE44}
+		{4E55EC54-A265-4033-AEB0-CC6BBD9A8418} = {8C945828-5DE3-4F7E-8BB2-B49357AACE44}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A6D5DD18-86B0-418F-B93B-A271A344DD4A}
