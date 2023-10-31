@@ -1,4 +1,4 @@
-﻿using Asp.Versioning;
+﻿﻿using Asp.Versioning;
 using Hellang.Middleware.ProblemDetails;
 using Maverick.UserProfileService.FilterUtility.Abstraction;
 using Maverick.UserProfileService.FilterUtility.Implementations;
@@ -17,7 +17,6 @@ using System.Reflection;
 using System.Text.Json.Nodes;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using UserProfileService.Abstractions;
-using UserProfileService.Adapter.Arango.V2.Abstractions;
 using UserProfileService.Adapter.Arango.V2.Extensions;
 using UserProfileService.Adapter.Arango.V2.Helpers;
 using UserProfileService.Adapter.Marten.DependencyInjection;
@@ -36,7 +35,6 @@ using UserProfileService.Common.V2.Utilities;
 using UserProfileService.Configuration;
 using UserProfileService.Extensions;
 using UserProfileService.FilterHelper;
-using UserProfileService.Hosting;
 using UserProfileService.Hosting.Abstraction;
 using UserProfileService.Hosting.Tracing;
 using UserProfileService.Messaging.DependencyInjection;
@@ -50,14 +48,14 @@ namespace UserProfileService
     /// <summary>
     ///     Startup class to set up required services during starting the application.
     /// </summary>
-    public class Startup : DefaultStartupBase
+    public class UserProfileStartUp : DefaultStartupBase
     {
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="Startup" /> class with specified <paramref name="configuration" />.
+        ///     Initializes a new instance of the <see cref="UserProfileStartUp" /> class with specified <paramref name="configuration" />.
         /// </summary>
         /// <param name="configuration"> The configuration object to be used to configure services. </param>
-        public Startup(IConfiguration configuration) : base(configuration)
+        public UserProfileStartUp(IConfiguration configuration) : base(configuration)
         {
 
         }
@@ -66,14 +64,14 @@ namespace UserProfileService
         protected override void AddLateConfiguration(IApplicationBuilder app, IWebHostEnvironment env)
         {
             
-            Logger.LogInformation("Path bases configured");
+            _logger.LogInformation("Path bases configured");
 
             app.UseForwardedHeaders();
 
             app.UseMiddleware<RequestLoggingMiddleware>();
             app.UseMiddleware<ResponseHeaderMiddleware>();
 
-            Logger.LogInformation("Custom middleware types configured");
+            _logger.LogInformation("Custom middleware types configured");
 
             app.UseProblemDetails();
 
@@ -87,7 +85,7 @@ namespace UserProfileService
                         c.DocExpansion(DocExpansion.None);
                     });
 
-                Logger.LogInformation("Support for SwaggerUI activated");
+                _logger.LogInformation("Support for SwaggerUI activated");
             
 
             app.UseCors(
@@ -96,10 +94,9 @@ namespace UserProfileService
                     .AllowAnyHeader()
                     .AllowCredentials());
 
-            Logger.LogInformation("Metrics activated");
+            _logger.LogInformation("Metrics activated");
 
             app.UseAuthentication();
-
             app.UseAuthorization();
 
             app.UseEndpoints(
@@ -141,7 +138,7 @@ namespace UserProfileService
                         });
                 });
 
-            Logger.LogInformation("Initialization completed");
+            _logger.LogInformation("Initialization completed");
         }
 
         /// <inheritdoc />
@@ -155,13 +152,13 @@ namespace UserProfileService
             services.AddSyncRequester(
                 options => { Configuration.Bind(SyncConstants.SyncConfigSection, options); });
 
-            Logger.LogInformation("UPS sync requester registered");
+            _logger.LogInformation("UPS sync requester registered");
 
             services.Configure<IdentitySettings>(identitySettings);
 
-            services.AddMaverickIdentity(identitySettings, Logger);
+            services.AddMaverickIdentity(identitySettings, _logger);
 
-            services.AddSupportForAnonymousRequests(identitySettings, Logger);
+            services.AddSupportForAnonymousRequests(identitySettings, _logger);
 
             services.AddAuthorization(
                 o =>
@@ -180,7 +177,7 @@ namespace UserProfileService
                     })
                 .AddNewtonsoftJson(o => o.SerializerSettings.AddDefaultConverters());
 
-            Logger.LogInformation("Controller routes added");
+            _logger.LogInformation("Controller routes added");
 
             services.AddSwaggerGenNewtonsoftSupport();
 
@@ -257,7 +254,7 @@ namespace UserProfileService
 
             services.AddPayloadValidation();
 
-            Logger.LogInformation("Payload validation registered");
+            _logger.LogInformation("Payload validation registered");
 
             services.AddSingleton(
                 new ServiceDescriptor(
@@ -267,7 +264,7 @@ namespace UserProfileService
 
             services.AddSingleton<IJsonSerializerSettingsProvider, DefaultJsonSettingsProvider>();
 
-            Logger.LogInformation("Json settings provider registered");
+            _logger.LogInformation("Json settings provider registered");
 
             services.AddApiVersioning(
                     options =>
@@ -288,20 +285,20 @@ namespace UserProfileService
 
             services.AddArangoRepositoriesForService(
                 Configuration.GetSection(WellKnownConfigurationKeys.ProfileStorage),
-                Logger);
+                _logger);
 
-            Logger.LogInformation("Arango profile storage registered");
+            _logger.LogInformation("Arango profile storage registered");
 
             services.AddMartenVolatileUserSettingsStore(
                     Configuration.GetSection(WellKnownConfigurationKeys.MartenSettings))
-                .AddMartenUserStore(Logger);
+                .AddMartenUserStore(_logger);
 
-            Logger.LogInformation("Volatile user settings store registered");
+            _logger.LogInformation("Volatile user settings store registered");
 
             services.TryAddScoped<IOperationHandler, ApiOperationHandler>();
             services.TryAddScoped<IVolatileDataOperationHandler, ApiOperationHandler>();
 
-            Logger.LogInformation("Operation handlers registered");
+            _logger.LogInformation("Operation handlers registered");
 
             services.TryAddScoped<IFilterUtility<Filter>, FilterUtility>();
             services.TryAddScoped<IFilterUtility<List<ViewFilterModel>>, ViewFilterUtility>();
@@ -311,27 +308,27 @@ namespace UserProfileService
 
             services.AddScoped<IDeputyService, DeputyService>();
 
-            Logger.LogInformation("Deputy service registered");
+            _logger.LogInformation("Deputy service registered");
 
             services.AddDefaultCursorApiProvider();
 
             services.AddArangoTicketStore(
                 Configuration.GetSection(WellKnownConfigurationKeys.ProfileStorage),
                 WellKnownDatabasePrefixes.ApiService,
-                Logger);
+                _logger);
 
-            Logger.LogInformation("Arango ticket store registered");
+            _logger.LogInformation("Arango ticket store registered");
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IUserContextStore, UserContextStore>();
 
-            Logger.LogInformation("User context store registered");
+            _logger.LogInformation("User context store registered");
 
             services.AddScoped<IAuthorizationHandler, DenyAnonymousAuthorizationRequirementHandler>();
             services.AddScoped<IAuthorizationHandler, RolesAuthorizationRequirementHandler>();
             services.AddAutoMapper(typeof(Program));
             services.AddHostedService<InitializationService>();
-            Logger.LogInformation("Initialization service registered (hosted service)");
+            _logger.LogInformation("Initialization service registered (hosted service)");
 
             const string scheduledTag = "scheduled";
 
@@ -364,7 +361,7 @@ namespace UserProfileService
 
             services.AddSingleton<IDistributedHealthStatusStore, DistributedHealthStatusStore>();
 
-            Logger.LogInformation("Dependencies of health store registered");
+            _logger.LogInformation("Dependencies of health store registered");
 
             services.AddMessaging(
                 MessageSourceBuilder.GroupedApp("api", Constants.Messaging.ServiceGroup),
@@ -384,7 +381,7 @@ namespace UserProfileService
                             });
                 });
 
-            Logger.LogInformation("Message handlers registered");
+            _logger.LogInformation("Message handlers registered");
 
             services.AddProblemDetails(StartupHelpers.ConfigureProblemDetails);
             services.AddForwardedHeaders();

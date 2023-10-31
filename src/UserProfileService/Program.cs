@@ -3,6 +3,7 @@ using UserProfileService.Common.Logging;
 using UserProfileService.Common.Logging.Extensions;
 using UserProfileService.Hosting;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
+using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace UserProfileService;
 
@@ -25,7 +26,7 @@ public class Program
         // https://learn.microsoft.com/en-us/dotnet/api/system.text.regularexpressions.regex.matchtimeout?view=net-6.0#remarks
         AppDomain.CurrentDomain.SetData("REGEX_DEFAULT_MATCH_TIMEOUT", TimeSpan.FromSeconds(2));
 
-        IHostBuilder host = UseProfileServiceHostBuilder.CreateDefaultBuilder<Startup>(args);
+        IHostBuilder host = UseProfileServiceHostBuilder.CreateDefaultBuilder<UserProfileStartUp>(args);
 
         return host;
     }
@@ -39,6 +40,7 @@ public class Program
     {
         try
         {
+            _logger = SetIntermediateLogger();
             IHostBuilder host = CreateHostBuilder(args);
             await host.Build().RunAsync();
         }
@@ -61,5 +63,18 @@ public class Program
         {
             LogManager.Shutdown();
         }
+    }
+    
+    private static ILogger SetIntermediateLogger()
+    {
+        ILoggerFactory loggerFactory = LoggerFactory.Create(
+            builder => builder.ClearProviders()
+                .SetMinimumLevel(LogLevel.Trace)
+                .AddDebug()
+                .AddConsole());
+
+        ILogger logger = loggerFactory.CreateLogger("MainIntermediate");
+
+        return logger;
     }
 }
