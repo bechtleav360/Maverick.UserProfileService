@@ -1,46 +1,15 @@
-﻿using System;
+﻿﻿using System;
 using System.Diagnostics;
-using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
-using MassTransit;
-using Maverick.Client.ArangoDb.Public.Configuration;
-using Maverick.UserProfileService.AggregateEvents.Common;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Http;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Microsoft.OpenApi.Models;
-using Newtonsoft.Json.Converters;
 using NLog;
-using UserProfileService.Adapter.Arango.V2.Helpers;
-using UserProfileService.Common.Health;
-using UserProfileService.Common.Health.Consumers;
-using UserProfileService.Common.Health.Implementations;
-using UserProfileService.Common.Health.Report;
 using UserProfileService.Common.Logging;
 using UserProfileService.Common.Logging.Extensions;
-using UserProfileService.Common.V2.Abstractions;
-using UserProfileService.Common.V2.Contracts;
-using UserProfileService.Common.V2.Utilities;
 using UserProfileService.Hosting;
-using UserProfileService.Messaging.DependencyInjection;
-using UserProfileService.Redis;
-using UserProfileService.Sync.Abstraction.Configurations;
-using UserProfileService.Sync.Abstraction.Converters;
-using UserProfileService.Sync.Abstraction.Factories;
-using UserProfileService.Sync.Abstractions;
-using UserProfileService.Sync.Converter;
-using UserProfileService.Sync.Factories;
-using UserProfileService.Sync.Handlers;
-using UserProfileService.Sync.Services;
-using UserProfileService.Sync.States;
-using UserProfileService.Sync.Utilities;
-using UserProfileService.Sync.Validation;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
+using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace UserProfileService.Sync;
 
@@ -50,6 +19,7 @@ namespace UserProfileService.Sync;
 public class Program
 {
     private const string DefaultLoggerName = "UserProfileService.Saga.Sync";
+    private static ILogger _logger;
     
     /// <summary>
     ///     This activity should only created once on a central place and
@@ -79,17 +49,41 @@ public class Program
     {
         try
         {
+            _logger = SetIntermediateLogger();
             IHostBuilder host = CreateHostBuilder(args);
             await host.Build().RunAsync();
         }
         catch (Exception ex)
-        {
-            LogManager.GetLogger(DefaultLoggerName).Fatal(ex);
+        {    
+            if (_logger == null)
+            {
+                LogManager.GetLogger(DefaultLoggerName).Fatal(ex);
+            }
+            else
+            {
+                _logger.LogErrorMessage(
+                    ex,
+                    "Stopped program because of an exception!",
+                    LogHelpers.Arguments());
+            }
         }
         // Shutdown the log manager
         finally
         {
             LogManager.Shutdown();
         }
+    }
+    
+    private static ILogger SetIntermediateLogger()
+    {
+        ILoggerFactory loggerFactory = LoggerFactory.Create(
+            builder => builder.ClearProviders()
+                .SetMinimumLevel(LogLevel.Trace)
+                .AddDebug()
+                .AddConsole());
+
+        ILogger logger = loggerFactory.CreateLogger("MainIntermediate");
+
+        return logger;
     }
 }
