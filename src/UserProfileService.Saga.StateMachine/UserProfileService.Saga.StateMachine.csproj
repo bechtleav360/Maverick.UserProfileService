@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>UserProfileService.StateMachine</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\UserProfileService.Events\UserProfileService.Events.csproj" />
+      <ProjectReference Include="..\UserProfileService.Saga.Common\UserProfileService.Saga.Common.csproj" />
+    </ItemGroup>
+
+</Project>
