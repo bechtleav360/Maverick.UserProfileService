@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Maverick.UserProfileService.Models.Abstraction;
+﻿using Maverick.UserProfileService.Models.Abstraction;
 using Maverick.UserProfileService.Models.BasicModels;
 using Maverick.UserProfileService.Models.EnumModels;
 using Maverick.UserProfileService.Models.Models;
@@ -16,10 +12,10 @@ using UserProfileService.Common.V2.Exceptions;
 using UserProfileService.Common.V2.Extensions;
 using UserProfileService.Common.V2.Utilities;
 using UserProfileService.Saga.Validation.Abstractions;
-using UserProfileService.Saga.Worker.Abstractions;
-using UserProfileService.Saga.Worker.Utilities;
+using UserProfileService.StateMachine.Abstraction;
+using UserProfileService.StateMachine.Utilities;
 
-namespace UserProfileService.Saga.Worker.Services;
+namespace UserProfileService.StateMachine.Services;
 
 /// <summary>
 ///     Implementation of <see cref="IProjectionReadService" />
@@ -160,9 +156,9 @@ public class ProjectionReadService : IProjectionReadService, IValidationReadServ
             Filter = new Filter
             {
                 CombinedBy = BinaryOperator.And,
-                Definition = new List<Definitions>
+                Definition = new List<Maverick.UserProfileService.Models.RequestModels.Definitions>
                 {
-                    new Definitions
+                    new Maverick.UserProfileService.Models.RequestModels.Definitions
                     {
                         FieldName = nameof(UserBasic.Email),
                         Values = new[] { email },
@@ -206,9 +202,9 @@ public class ProjectionReadService : IProjectionReadService, IValidationReadServ
             Filter = new Filter
             {
                 CombinedBy = BinaryOperator.Or,
-                Definition = new List<Definitions>
+                Definition = new List<Maverick.UserProfileService.Models.RequestModels.Definitions>
                 {
-                    new Definitions
+                    new Maverick.UserProfileService.Models.RequestModels.Definitions
                     {
                         FieldName = nameof(GroupBasic.Name),
                         Values = new[] { name, displayName },
@@ -217,7 +213,7 @@ public class ProjectionReadService : IProjectionReadService, IValidationReadServ
                             ? FilterOperator.Contains
                             : FilterOperator.Equals
                     },
-                    new Definitions
+                    new Maverick.UserProfileService.Models.RequestModels.Definitions
                     {
                         FieldName = nameof(GroupBasic.DisplayName),
                         Values = new[] { name, displayName },
@@ -375,9 +371,9 @@ public class ProjectionReadService : IProjectionReadService, IValidationReadServ
                 Filter = new Filter
                 {
                     CombinedBy = BinaryOperator.And,
-                    Definition = new List<Definitions>
+                    Definition = new List<Maverick.UserProfileService.Models.RequestModels.Definitions>
                     {
-                        new Definitions
+                        new Maverick.UserProfileService.Models.RequestModels.Definitions
                         {
                             FieldName =
                                 $"{nameof(FunctionBasic.Role)}.{nameof(RoleBasic.Id)}",
@@ -385,7 +381,7 @@ public class ProjectionReadService : IProjectionReadService, IValidationReadServ
                             BinaryOperator = BinaryOperator.And,
                             Operator = FilterOperator.Equals
                         },
-                        new Definitions
+                        new Maverick.UserProfileService.Models.RequestModels.Definitions
                         {
                             FieldName =
                                 $"{nameof(FunctionBasic.Organization)}.{nameof(OrganizationBasic.Id)}",
@@ -434,9 +430,9 @@ public class ProjectionReadService : IProjectionReadService, IValidationReadServ
             Filter = new Filter
             {
                 CombinedBy = BinaryOperator.And,
-                Definition = new List<Definitions>
+                Definition = new List<Maverick.UserProfileService.Models.RequestModels.Definitions>
                 {
-                    new Definitions
+                    new Maverick.UserProfileService.Models.RequestModels.Definitions
                     {
                         FieldName =
                             $"{nameof(FunctionBasic.Role)}.{nameof(RoleBasic.Id)}",

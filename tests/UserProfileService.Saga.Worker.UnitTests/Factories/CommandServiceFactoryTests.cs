@@ -2,9 +2,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using UserProfileService.Saga.Validation.Abstractions;
-using UserProfileService.Saga.Worker.Abstractions;
-using UserProfileService.Saga.Worker.States.Factories;
-using UserProfileService.Saga.Worker.States.Services;
+using UserProfileService.StateMachine.Abstraction;
+using UserProfileService.StateMachine.Factories;
+using UserProfileService.StateMachine.Services;
 using Xunit;
 
 namespace UserProfileService.Saga.Worker.UnitTests.Factories

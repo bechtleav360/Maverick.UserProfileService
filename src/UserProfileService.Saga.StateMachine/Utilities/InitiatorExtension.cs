@@ -1,13 +1,11 @@
-﻿using System;
-using Maverick.UserProfileService.Models.Models;
+﻿using Maverick.UserProfileService.Models.Models;
 using UserProfileService.Commands;
 using UserProfileService.EventSourcing.Abstractions.Models;
-using UserProfileService.Messaging.Abstractions.Models;
 using EventInitiatorType = UserProfileService.EventSourcing.Abstractions.Models.InitiatorType;
 using AggregateInitiatorType = Maverick.UserProfileService.AggregateEvents.Common.InitiatorType;
 using InitiatorType = Maverick.UserProfileService.Models.EnumModels.InitiatorType;
 
-namespace UserProfileService.Saga.Worker.Utilities;
+namespace UserProfileService.StateMachine.Utilities;
 
 /// <summary>
 ///     Extension method for <see cref="SagaInitiator" />

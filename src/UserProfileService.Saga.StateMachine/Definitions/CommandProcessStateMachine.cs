@@ -1,4 +1,6 @@
-﻿using MassTransit;
+﻿// ReSharper disable UnassignedGetOnlyAutoProperty -> Properties will be used by MassTransit
+
+using MassTransit;
 using Maverick.UserProfileService.AggregateEvents.Common;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -14,13 +16,12 @@ using UserProfileService.Events.Payloads;
 using UserProfileService.StateMachine.Abstraction;
 using UserProfileService.StateMachine.Exceptions;
 using UserProfileService.StateMachine.Extension;
-using UserProfileService.StateMachine.Utitlities;
+using UserProfileService.StateMachine.Utilities;
 using UserProfileService.Validation.Abstractions.Configuration;
 using UserProfileService.Validation.Abstractions.Message;
 using ValidationResult = UserProfileService.Validation.Abstractions.ValidationResult;
-// ReSharper disable UnassignedGetOnlyAutoProperty -> Properties will be used by MassTransit
 
-namespace UserProfileService.StateMachine.Services;
+namespace UserProfileService.StateMachine.Definitions;
 
 /// <summary>
 ///     State machine definition for the default process in Saga Worker
@@ -482,7 +483,7 @@ public class CommandProcessStateMachine : MassTransitStateMachine<CommandProcess
     /// <param name="context">Context of current state machine and command.</param>
     /// <returns>Represents the async operation.</returns>
     /// <exception cref="DependencyResolveException">Will be thrown if resolving the interface of service type failed.</exception>
-    private async Task ExecuteCommandEventAsync(MassTransit.SagaConsumeContext<CommandProcessState, ValidationCompositeResponse> context)
+    private async Task ExecuteCommandEventAsync(SagaConsumeContext<CommandProcessState, ValidationCompositeResponse> context)
     {
         _logger.EnterMethod();
 

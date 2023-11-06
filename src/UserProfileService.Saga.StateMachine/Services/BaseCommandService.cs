@@ -1,6 +1,4 @@
 ﻿using System.Reflection;
-using FluentValidation;
-using MassTransit;
 using Maverick.UserProfileService.AggregateEvents.Common;
 using Microsoft.Extensions.Logging;
 using UserProfileService.Commands;
@@ -10,6 +8,8 @@ using UserProfileService.EventSourcing.Abstractions.Attributes;
 using UserProfileService.EventSourcing.Abstractions.Models;
 using UserProfileService.Saga.Validation.Abstractions;
 using UserProfileService.StateMachine.Abstraction;
+using UserProfileService.StateMachine.Utilities;
+using UserProfileService.Validation.Abstractions;
 
 namespace UserProfileService.StateMachine.Services;
 
@@ -145,7 +145,6 @@ public abstract class BaseCommandService<TMessage> : ICommandService<TMessage>
                 VersionInformation = version ?? 2
             }
         };
-
         return Logger.ExitMethod(@event);
     }
 }

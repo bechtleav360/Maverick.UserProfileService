@@ -1,7 +1,29 @@
-﻿namespace UserProfileService.StateMachine.Services;
+﻿using Maverick.UserProfileService.AggregateEvents.Common;
+using Maverick.UserProfileService.Models.BasicModels;
+using Maverick.UserProfileService.Models.Models;
+using Microsoft.Extensions.Logging;
+using UserProfileService.Commands;
+using UserProfileService.Common.Logging.Extensions;
+using UserProfileService.Events.Implementation.V2;
+using UserProfileService.Events.Payloads.V2;
+using UserProfileService.Saga.Events.Messages;
+using UserProfileService.Saga.Validation.Abstractions;
+using Maverick.UserProfileService.AggregateEvents.Common;
+using Maverick.UserProfileService.Models.BasicModels;
+using Microsoft.Extensions.Logging;
+using UserProfileService.Commands;
+using UserProfileService.Common.Logging.Extensions;
+using UserProfileService.Events.Implementation.V2;
+using UserProfileService.Events.Payloads.V2;
+using UserProfileService.Saga.Events.Messages;
+using UserProfileService.Saga.Validation.Abstractions;
+using UserProfileService.StateMachine.Abstraction;
+using UserProfileService.StateMachine.Utilities;
+
+namespace UserProfileService.StateMachine.Services;
 
 /// <summary>
-///     Default implementation for <see cref="ICommandService{RolePropertiesChangedMessage}" />.
+///     Default implementation for <see cref="ICommandService" />.
 /// </summary>
 // ReSharper disable UnusedType.Global => The class is used with reflection.
 public class RolePropertiesChangedMessageService : BaseCommandService<RolePropertiesChangedMessage>

@@ -12,4 +12,10 @@
       <ProjectReference Include="..\UserProfileService.Saga.Common\UserProfileService.Saga.Common.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="StateMachineDefinitions\CommandProcessStateDefinition.cs" />
+      <Compile Remove="Services\CommandProcessStateMachine.cs" />
+      <Compile Remove="Services\CommandProcessStateDefinition.cs" />
+    </ItemGroup>
+
 </Project>
