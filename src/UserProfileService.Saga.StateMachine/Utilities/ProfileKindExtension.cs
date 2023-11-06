@@ -1,6 +1,6 @@
 ﻿using Maverick.UserProfileService.Models.EnumModels;
 
-namespace UserProfileService.Saga.Worker.Utilities;
+namespace UserProfileService.StateMachine.Utilities;
 
 /// <summary>
 ///     The profile extension contains methods to convert <see cref="ProfileKind" />

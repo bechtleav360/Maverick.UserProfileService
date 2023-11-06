@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Maverick.UserProfileService.Models.Abstraction;
+﻿using Maverick.UserProfileService.Models.Abstraction;
 using Maverick.UserProfileService.Models.BasicModels;
 using Maverick.UserProfileService.Models.EnumModels;
 using Maverick.UserProfileService.Models.Models;
@@ -9,7 +6,7 @@ using Maverick.UserProfileService.Models.RequestModels;
 using Newtonsoft.Json.Linq;
 using UserProfileService.Common.V2.Exceptions;
 
-namespace UserProfileService.Saga.Worker.Abstractions;
+namespace UserProfileService.StateMachine.Abstraction;
 
 /// <summary>
 ///     Defines the service to read projection models.

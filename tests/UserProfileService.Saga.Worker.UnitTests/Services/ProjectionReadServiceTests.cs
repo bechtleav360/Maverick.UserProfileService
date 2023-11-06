@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using UserProfileService.Common.V2.Abstractions;
 using UserProfileService.Common.V2.Utilities;
-using UserProfileService.Saga.Worker.Services;
+using UserProfileService.StateMachine.Services;
 using Xunit;
 
 namespace UserProfileService.Saga.Worker.UnitTests.Services

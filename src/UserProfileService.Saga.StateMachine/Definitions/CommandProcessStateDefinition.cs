@@ -1,6 +1,6 @@
 ﻿using MassTransit;
 
-namespace UserProfileService.StateMachine.Services;
+namespace UserProfileService.StateMachine.Definitions;
 
 /// <summary>
 ///     Definition for <see cref="CommandProcessState" /> and <see cref="CommandProcessStateMachine" />.

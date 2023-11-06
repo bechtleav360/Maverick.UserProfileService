@@ -1,9 +1,8 @@
-﻿using System;
-using MassTransit;
+﻿using MassTransit;
 using UserProfileService.Commands;
 using ValidationResult = UserProfileService.Validation.Abstractions.ValidationResult;
 
-namespace UserProfileService.Saga.Worker.States;
+namespace UserProfileService.StateMachine.Definitions;
 
 /// <summary>
 ///     State context for a command that shall be processed.

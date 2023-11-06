@@ -18,7 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\UserProfileService.Events.Payloads\UserProfileService.Events.Payloads.csproj" />
     <ProjectReference Include="..\..\src\UserProfileService.Events\UserProfileService.Events.csproj" />
-    <ProjectReference Include="..\..\src\UserProfileService.Saga.Worker\UserProfileService.Saga.Worker.csproj" />
+    <ProjectReference Include="..\..\src\UserProfileService.Saga.StateMachine\UserProfileService.Saga.StateMachine.csproj" />
     <ProjectReference Include="..\..\src\UserProfileService\UserProfileService.csproj" />
     <ProjectReference Include="..\UserProfileService.Common.Tests.Utilities\UserProfileService.Common.Tests.Utilities.csproj" />
   </ItemGroup>

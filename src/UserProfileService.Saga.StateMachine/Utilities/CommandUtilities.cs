@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Windows.Input;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -11,9 +8,9 @@ using UserProfileService.Common.Logging.Extensions;
 using UserProfileService.Common.V2.Extensions;
 using UserProfileService.Saga.Events.Messages;
 using UserProfileService.Saga.Validation.Utilities;
-using UserProfileService.Saga.Worker.Abstractions;
+using UserProfileService.StateMachine.Abstraction;
 
-namespace UserProfileService.Saga.Worker.Utilities;
+namespace UserProfileService.StateMachine.Utilities;
 
 /// <summary>
 ///     Utilities for command related operations.
@@ -29,7 +26,7 @@ public static class CommandUtilities
     /// <param name="logger">The logger.</param>
     /// <returns>The deserialized object.</returns>
     /// <exception cref="InvalidOperationException">Will be thrown, if multiple command messages found for the given command.</exception>
-    public static object DeserializeCData(string command, string data, ILogger logger = null)
+    public static object? DeserializeCData(string command, string data, ILogger? logger = null)
     {
         logger?.EnterMethod();
 
@@ -67,7 +64,7 @@ public static class CommandUtilities
             "Found type '{type}' for command '{command}' with attribute '{attribute}'",
             LogHelpers.Arguments(exactType.Name, command, nameof(CommandAttribute)));
 
-        object deserializedData = JsonConvert.DeserializeObject(data, exactType);
+        object? deserializedData = JsonConvert.DeserializeObject(data, exactType);
 
         return logger == null ? deserializedData : logger.ExitMethod(deserializedData);
     }
@@ -78,7 +75,7 @@ public static class CommandUtilities
     /// <param name="message">Message to serialize.</param>
     /// <param name="logger">The logger.</param>
     /// <returns>Serialized message as string.</returns>
-    public static string SerializeCData(object message, ILogger logger = null)
+    public static string SerializeCData(object message, ILogger? logger = null)
     {
         logger?.EnterMethod();
 
@@ -96,7 +93,7 @@ public static class CommandUtilities
 
     /// <summary>
     ///     Returns the corresponding service associated with the command.
-    ///     For this, the service must use the interface <see cref="ICommandService{TMessage}" /> with the generic parameter of
+    ///     For this, the service must use the interface <see cref="ICommandService" /> with the generic parameter of
     ///     TMessage.
     ///     This generic parameter TMessage must define the <see cref="CommandAttribute" /> with the value of the given
     ///     command,
@@ -106,7 +103,7 @@ public static class CommandUtilities
     /// <param name="logger">The logger.</param>
     /// <returns>The related service type of the given command.</returns>
     /// <exception cref="ArgumentException">Will be thrown, if multiple command services found for the given command.</exception>
-    public static Type GetCommandServiceType(string command, ILogger logger = null)
+    public static Type GetCommandServiceType(string command, ILogger? logger = null)
     {
         logger?.EnterMethod();
 
@@ -161,7 +158,7 @@ public static class CommandUtilities
     /// <param name="logger">The logger.</param>
     /// <returns>Type of related message type.</returns>
     /// <exception cref="InvalidOperationException">Will be thrown, if multiple command messages found for the given command.</exception>
-    private static Type GetCommandMessageType(string command, ILogger logger = null)
+    private static Type GetCommandMessageType(string command, ILogger? logger = null)
     {
         logger?.EnterMethod();
 

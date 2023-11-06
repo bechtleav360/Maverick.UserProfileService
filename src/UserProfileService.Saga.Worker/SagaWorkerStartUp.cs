@@ -47,13 +47,14 @@ using UserProfileService.Saga.Common.DependencyInjection;
 using UserProfileService.Saga.Common.Implementations;
 using UserProfileService.Saga.Validation.Abstractions;
 using UserProfileService.Saga.Validation.DependencyInjection;
-using UserProfileService.Saga.Worker.Abstractions;
 using UserProfileService.Saga.Worker.Configuration;
 using UserProfileService.Saga.Worker.Services;
 using UserProfileService.Saga.Worker.Setup;
-using UserProfileService.Saga.Worker.States;
-using UserProfileService.Saga.Worker.States.Factories;
 using UserProfileService.Saga.Worker.Utilities;
+using UserProfileService.StateMachine.Abstraction;
+using UserProfileService.StateMachine.Definitions;
+using UserProfileService.StateMachine.Factories;
+using UserProfileService.StateMachine.Services;
 
 namespace UserProfileService.Saga.Worker;
 

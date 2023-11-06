@@ -4,7 +4,7 @@ using UserProfileService.Common.Logging;
 using UserProfileService.Common.Logging.Extensions;
 using UserProfileService.Saga.Validation.Utilities;
 using UserProfileService.StateMachine.Abstraction;
-using UserProfileService.StateMachine.Utitlities;
+using UserProfileService.StateMachine.Utilities;
 
 namespace UserProfileService.StateMachine.Factories;
 
@@ -17,7 +17,7 @@ namespace UserProfileService.StateMachine.Factories;
 /// </summary>
 public class CommandServiceFactory : ICommandServiceFactory
 {
-    private readonly ILogger<CommandServiceFactory> _logger;
+    private readonly ILogger<CommandServiceFactory>? _logger;
     private readonly IServiceProvider _serviceProvider;
 
     /// <summary>

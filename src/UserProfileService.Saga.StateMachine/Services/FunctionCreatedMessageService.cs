@@ -1,10 +1,11 @@
 ﻿using Maverick.UserProfileService.AggregateEvents.Common;
-using Maverick.UserProfileService.AggregateEvents.Common.Models;
+using Maverick.UserProfileService.Models.Models;
+using Maverick.UserProfileService.Models.RequestModels;
 using Microsoft.Extensions.Logging;
 using UserProfileService.Commands;
 using UserProfileService.Common.Logging.Extensions;
-using UserProfileService.Events.Implementation.V2;
-using UserProfileService.Events.Payloads.V2;
+using UserProfileService.Events.Implementation.V3;
+using UserProfileService.Events.Payloads.V3;
 using UserProfileService.Saga.Events.Messages;
 using UserProfileService.Saga.Validation.Abstractions;
 using UserProfileService.StateMachine.Abstraction;
@@ -24,7 +25,7 @@ public class FunctionCreatedMessageService : BaseCommandService<FunctionCreatedM
     /// <param name="logger">The logger.</param>
     public FunctionCreatedMessageService(
         IValidationService validationService,
-    // ReSharper disable once SuggestBaseTypeForParameterInConstructor => The logger can not be changed to ILogger without generic in the derived class.
+        // ReSharper disable once SuggestBaseTypeForParameterInConstructor => The logger can not be changed to ILogger without generic in the derived class.
         ILogger<FunctionCreatedMessage> logger) : base(
         validationService,
         logger)
@@ -60,7 +61,7 @@ public class FunctionCreatedMessageService : BaseCommandService<FunctionCreatedM
         Logger.EnterMethod();
 
         cancellationToken.ThrowIfCancellationRequested();
-        
+
         FunctionCreatedEvent eventData =
             CreateEvent<FunctionCreatedEvent, FunctionCreatedPayload>(
                 message,

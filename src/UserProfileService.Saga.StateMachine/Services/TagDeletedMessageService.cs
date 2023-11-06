@@ -1,4 +1,5 @@
 ﻿using Maverick.UserProfileService.AggregateEvents.Common;
+using Maverick.UserProfileService.Models.RequestModels;
 using Microsoft.Extensions.Logging;
 using UserProfileService.Commands;
 using UserProfileService.Common.Logging.Extensions;
@@ -11,7 +12,7 @@ using UserProfileService.StateMachine.Abstraction;
 namespace UserProfileService.StateMachine.Services;
 
 /// <summary>
-///     Default implementation for <see cref="ICommandService" />.
+///     Default implementation for <see cref="Abstraction.ICommandService" />.
 /// </summary>
 // ReSharper disable UnusedType.Global => The class is used with reflection.
 public class TagDeletedMessageService : BaseCommandService<TagDeletedMessage>
@@ -55,7 +56,7 @@ public class TagDeletedMessageService : BaseCommandService<TagDeletedMessage>
                 initiator,
                 m => m.Id);
 
-        Tag tag = await _readService.GetTagAsync(eventData.OldTag.Id);
+        Tag? tag = await _readService.GetTagAsync(eventData.OldTag.Id);
         eventData.OldTag = tag;
 
         return Logger.ExitMethod(eventData);
