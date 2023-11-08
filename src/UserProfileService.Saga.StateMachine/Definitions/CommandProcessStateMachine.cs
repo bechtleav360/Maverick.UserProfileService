@@ -1,5 +1,4 @@
 ﻿// ReSharper disable UnassignedGetOnlyAutoProperty -> Properties will be used by MassTransit
-
 using MassTransit;
 using Maverick.UserProfileService.AggregateEvents.Common;
 using Microsoft.Extensions.DependencyInjection;
@@ -60,6 +59,11 @@ public class CommandProcessStateMachine : MassTransitStateMachine<CommandProcess
     public State Rejected { get; }
 
     /// <summary>
+    ///     State if the validation is successful processed.
+    /// </summary>
+    public State ValidationSucceeded { get; }
+
+    /// <summary>
     ///     Defines the event to be handled in the state. See also <see cref="SubmitCommand" />.
     /// </summary>
     public Event<SubmitCommand> SubmitCommand { get; private set; }
@@ -113,7 +117,8 @@ public class CommandProcessStateMachine : MassTransitStateMachine<CommandProcess
             InternalValidated,
             Executed,
             Success,
-            Rejected);
+            Rejected,
+            ValidationSucceeded);
     }
 
     /// <summary>
@@ -165,59 +170,78 @@ public class CommandProcessStateMachine : MassTransitStateMachine<CommandProcess
                 .OnMissingInstance(c => c.Discard()));
     }
 
+    
     /// <summary>
-    ///     Defines the process of the state machine.
-    /// </summary>
+    ///     Defines the process of the state machine. Currently the state machine has seven states that behaved
+    ///     like this:
+    ///                                 (Rejected)
+    ///                                     |
+    ///                             InternalValidated 
+    ///          Current  --Submit  /        |
+    ///                      /     \        |
+    ///             (Rejected)        ValidationSucceeded -- Execute -- Success
+    ///                                     |                 |          
+    ///                                (Rejected)        (Rejected)
+    /// 
+    ///   Nearly from every state you can transition to the rejected state, except in the success or the current
+    ///   state. Form the submit state you can transition to internal validated or validation succeeded.
+    /// </summary>                                          
     private void DeclareStateMachine()
     {
         Initially(
             When(SubmitCommand)
                 .ThenAsync(ModifySubmitCommand)
-                .Publish(
-                    context => new ValidateCommand
-                    {
-                        Id = new CommandIdentifier(
-                            context.Saga.CorrelationId.ToString(),
-                            context.Message.Id.CollectingId)
-                    })
                 .TransitionTo(Submitted)
                 .CatchException(
                     Rejected,
                     GenerateFailureMessage));
 
-        During(
+        WhenEnter(
             Submitted,
-            When(ValidateCommand)
-                .ThenAsync(ValidateSubmitCommand)
+            f => f
+                .ThenAsync(Action)
                 .IfElse(
                     elseActivityCallback =>
                         !IsInvalidValidationResult(elseActivityCallback)
                         && ExternalValidationToTrigger(elseActivityCallback),
                     ifBinder => ifBinder.Publish(
-                        // The correlation id of the saga is used to collect the responses.
-                        // Only one ValidationTriggered per saga can be executed
-                        context => new ValidationTriggered(context.Saga.Data, context.Saga.Command)
-                        {
-                            CollectingId = context.Saga.CorrelationId
-                        }),
-                    elseBinder => elseBinder.Publish(
-                        c =>
-                            new ValidationCompositeResponse(
-                                c.Saga.CorrelationId,
-                                c.Saga.ValidationResult.IsValid,
-                                c.Saga.ValidationResult.Errors)))
-                .TransitionTo(InternalValidated)
+                            // The correlation id of the saga is used to collect the responses.
+                            // Only one ValidationTriggered per saga can be executed
+                            context => new ValidationTriggered(context.Saga.Data, context.Saga.Command)
+                            {
+                                CollectingId = context.Saga.CorrelationId
+                            })
+                        .TransitionTo(InternalValidated),
+                    elseBinder => elseBinder.IfElse(
+                            r => r.Saga.ValidationResult.IsValid,
+                            ifBinder => ifBinder.TransitionTo(ValidationSucceeded),
+                            elseElseBinder => elseElseBinder
+                                .Publish(
+                                    c =>
+                                        new SubmitCommandFailure(
+                                            c.Saga.Command,
+                                            c.Saga.CommandIdentifier.Id,
+                                            c.Saga.CommandIdentifier.CollectingId,
+                                            "Validation failed.",
+                                            c.Saga.ValidationResult.Errors))
+                                .TransitionTo(Rejected)
+                                .Finalize())
+                        .TransitionTo(ValidationSucceeded))
                 .CatchException(
                     Rejected,
-                    GenerateFailureMessage));
+                    context => new SubmitCommandFailure(
+                        context.Saga.Command,
+                        context.Saga.CommandIdentifier.Id,
+                        context.Saga.CommandIdentifier.CollectingId,
+                        context.Exception.Message,
+                        context.Exception)));
 
         During(
             InternalValidated,
             When(ValidateCompositeResponse)
                 .IfElse(
                     IsValidValidationResult,
-                    ifBinder => ifBinder.ThenAsync(ExecuteCommandEventAsync)
-                        .TransitionTo(Executed),
+                    ifBinder => ifBinder.TransitionTo(ValidationSucceeded),
                     elseBinder => elseBinder
                         .Then(ParseMessage)
                         .Publish(
@@ -233,6 +257,13 @@ public class CommandProcessStateMachine : MassTransitStateMachine<CommandProcess
                 .CatchException(
                     Rejected,
                     GenerateFailureMessage));
+
+        WhenEnter(
+            ValidationSucceeded,
+            f =>
+                f.ThenAsync(ExecuteCommandEventAsync)
+                    .TransitionTo(Executed)
+                    .CatchException(Rejected, GenerateFailureMessage));
 
         During(
             InternalValidated,
@@ -284,6 +315,7 @@ public class CommandProcessStateMachine : MassTransitStateMachine<CommandProcess
                 .TransitionTo(Rejected)
                 .Finalize());
 
+        
         During(
             Executed,
             When(ValidateCompositeResponse)
@@ -333,6 +365,18 @@ public class CommandProcessStateMachine : MassTransitStateMachine<CommandProcess
     private static SubmitCommandFailure
         GenerateFailureMessage<TCommand>(BehaviorExceptionContext<CommandProcessState, TCommand, Exception> context)
         where TCommand : class
+    {
+        return new SubmitCommandFailure(
+            context.Saga.Command,
+            context.Saga.CommandIdentifier.Id,
+            context.Saga.CommandIdentifier.CollectingId,
+            context.Exception.Message,
+            context.Exception);
+    }    /// <summary>
+    ///     Returns a message from an event exception
+    /// </summary>
+    private static SubmitCommandFailure
+        GenerateFailureMessage(BehaviorExceptionContext<CommandProcessState, Exception> context)
     {
         return new SubmitCommandFailure(
             context.Saga.Command,
@@ -446,7 +490,7 @@ public class CommandProcessStateMachine : MassTransitStateMachine<CommandProcess
     /// </summary>
     /// <param name="context">Current context of state machine.</param>
     /// <returns>Represents the async operation.</returns>
-    private async Task ValidateSubmitCommand(SagaConsumeContext<CommandProcessState, ValidateCommand> context)
+       private async Task Action(BehaviorContext<CommandProcessState> context)
     {
         _logger.LogInfoMessage(
             "Handle '{message}' with saga id '{id}'",
@@ -483,7 +527,7 @@ public class CommandProcessStateMachine : MassTransitStateMachine<CommandProcess
     /// <param name="context">Context of current state machine and command.</param>
     /// <returns>Represents the async operation.</returns>
     /// <exception cref="DependencyResolveException">Will be thrown if resolving the interface of service type failed.</exception>
-    private async Task ExecuteCommandEventAsync(SagaConsumeContext<CommandProcessState, ValidationCompositeResponse> context)
+    private async Task ExecuteCommandEventAsync(BehaviorContext<CommandProcessState> context)
     {
         _logger.EnterMethod();
 
