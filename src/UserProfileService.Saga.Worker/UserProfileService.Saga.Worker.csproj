@@ -11,25 +11,18 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Maverick.UserProfileService.Models\Maverick.UserProfileService.Models.csproj" />
         <ProjectReference Include="..\UserProfileService.Hosting\UserProfileService.Hosting.csproj" />
         <ProjectReference Include="..\UserProfileService.Informer\UserProfileService.Informer.csproj" />
         <ProjectReference Include="..\UserProfileService.Messaging.ArangoDb\UserProfileService.Messaging.ArangoDb.csproj" />
         <ProjectReference Include="..\UserProfileService.Adapter.Arango\UserProfileService.Adapter.Arango.csproj" />
         <ProjectReference Include="..\UserProfileService.Common.Health\UserProfileService.Common.Health.csproj" />
-        <ProjectReference Include="..\UserProfileService.Events.Payloads\UserProfileService.Events.Payloads.csproj" />
         <ProjectReference Include="..\UserProfileService.Marten.EventStore\UserProfileService.Marten.EventStore.csproj" />
         <ProjectReference Include="..\UserProfileService.Projection.FirstLevel\UserProfileService.Projection.FirstLevel.csproj" />
         <ProjectReference Include="..\UserProfileService.Projection.SecondLevel.Assignments\UserProfileService.Projection.SecondLevel.Assignments.csproj" />
         <ProjectReference Include="..\UserProfileService.Projection.SecondLevel.VolatileDataStore\UserProfileService.Projection.SecondLevel.VolatileDataStore.csproj" />
         <ProjectReference Include="..\UserProfileService.Projection.SecondLevel\UserProfileService.Projection.SecondLevel.csproj" />
         <ProjectReference Include="..\UserProfileService.Projection.VolatileData\UserProfileService.Projection.VolatileData.csproj" />
-        <ProjectReference Include="..\UserProfileService.Saga.Common\UserProfileService.Saga.Common.csproj" />
-        <ProjectReference Include="..\UserProfileService.Saga.Events\UserProfileService.Saga.Events.csproj" />
         <ProjectReference Include="..\UserProfileService.Saga.StateMachine\UserProfileService.Saga.StateMachine.csproj" />
-        <ProjectReference Include="..\UserProfileService.Validation.Abstractions\UserProfileService.Validation.Abstractions.csproj" />
-        <ProjectReference Include="..\UserProfileService.Saga.Validation\UserProfileService.Saga.Validation.csproj" />
-        <ProjectReference Include="..\UserProfileService.Validation.Abstractions\UserProfileService.Validation.Abstractions.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -47,43 +40,5 @@
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
-
-    <ItemGroup>
-      <Compile Remove="Services\ProjectionReadService.cs" />
-      <Compile Remove="Abstractions\ICommandService.cs" />
-      <Compile Remove="Abstractions\ICommandService.T.cs" />
-      <Compile Remove="Abstractions\ICommandServiceFactory.cs" />
-      <Compile Remove="States\Services\BaseCommandService.cs" />
-      <Compile Remove="States\Services\FunctionCreatedMessageService.cs" />
-      <Compile Remove="States\Services\FunctionDeletedMessageService.cs" />
-      <Compile Remove="States\Services\FunctionTagsAddedMessageService.cs" />
-      <Compile Remove="States\Services\FunctionTagsRemovedMessageService.cs" />
-      <Compile Remove="States\Services\GroupCreatedMessageService.cs" />
-      <Compile Remove="States\Services\ObjectAssignmentMessageService.cs" />
-      <Compile Remove="States\Services\OrganizationCreatedMessageService.cs" />
-      <Compile Remove="States\Services\ProfileClientSettingsDeletedMessageService.cs" />
-      <Compile Remove="States\Services\ProfileClientSettingsSetBatchMessageService.cs" />
-      <Compile Remove="States\Services\ProfileClientSettingsSetMessageService.cs" />
-      <Compile Remove="States\Services\ProfileClientSettingsUpdatedMessageService.cs" />
-      <Compile Remove="States\Services\ProfileDeletedMessageService.cs" />
-      <Compile Remove="States\Services\ProfilePropertiesChangedMessageService.cs" />
-      <Compile Remove="States\Services\ProfileTagsAddedMessageService.cs" />
-      <Compile Remove="States\Services\ProfileTagsRemovedMessageService.cs" />
-      <Compile Remove="States\Services\RoleCreatedMessageService.cs" />
-      <Compile Remove="States\Services\RoleDeletedMessageService.cs" />
-      <Compile Remove="States\Services\RolePropertiesChangedMessageService.cs" />
-      <Compile Remove="States\Services\RoleTagsAddedMessageService.cs" />
-      <Compile Remove="States\Services\RoleTagsRemovedMessageService.cs" />
-      <Compile Remove="States\Services\TagCreatedMessageService.cs" />
-      <Compile Remove="States\Services\TagDeletedMessageService.cs" />
-      <Compile Remove="States\Services\UserCreatedMessageService.cs" />
-      <Compile Remove="States\Services\UserSettingObjectDeletedMessageService.cs" />
-      <Compile Remove="States\Services\UserSettingObjectUpdatedMessageService.cs" />
-      <Compile Remove="States\Services\UserSettingSectionDeletedMessageService.cs" />
-      <Compile Remove="States\CommandProcessState.cs" />
-      <Compile Remove="States\CommandProcessStateDefinition.cs" />
-      <Compile Remove="States\CommandProcessStateMachine.cs" />
-      <Compile Remove="Utilities\CommandUtilities.cs" />
-      <Compile Remove="Utilities\ValidationExtension.cs" />
-    </ItemGroup>
+    
 </Project>
