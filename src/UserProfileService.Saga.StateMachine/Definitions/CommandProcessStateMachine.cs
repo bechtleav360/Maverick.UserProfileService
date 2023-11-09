@@ -178,13 +178,27 @@ public class CommandProcessStateMachine : MassTransitStateMachine<CommandProcess
     ///                                     |
     ///                             InternalValidated 
     ///          Current  --Submit  /        |
-    ///                      /     \        |
+    ///                      /     \         |
     ///             (Rejected)        ValidationSucceeded -- Execute -- Success
     ///                                     |                 |          
     ///                                (Rejected)        (Rejected)
     /// 
     ///   Nearly from every state you can transition to the rejected state, except in the success or the current
-    ///   state. Form the submit state you can transition to internal validated or validation succeeded.
+    ///   state. The rejected state defines the end of a saga. It specifies that a command failed and the error has to
+    ///   be analyzed. The reason can have multiple reasons and depends from which state the rejected state was reached.
+    ///
+    ///   The submit states that a command was triggered and the data has been prepared (for example the command is persisted)
+    ///   for the next steps. From the submit state there are two states that can be reached: the internal validation
+    ///   state and the validationSucceeded.
+    ///
+    ///    The internal validation states that the payload of an entity will validated. The validation can contain an
+    ///    internal validation if for example the right properties are set, or if the entity has a correct id. It can
+    ///    also include an validation from an external system that can validate entity with there own rules.
+    ///
+    ///   From the internal validation you can transition to the state validation succeeded state. The states only
+    ///   states, that the validation was done successfully. From that state you transition to the execution state that is a
+    ///   command that writes the event in the event store after all validation were successful. When the writing of the
+    ///   data were accomplished the state transitions to the state success and the saga was completed without any failures.  
     /// </summary>                                          
     private void DeclareStateMachine()
     {
@@ -199,7 +213,8 @@ public class CommandProcessStateMachine : MassTransitStateMachine<CommandProcess
         WhenEnter(
             Submitted,
             f => f
-                .ThenAsync(Action)
+                .ThenAsync(ValidateSubmitCommand)
+                // is done for internal or external validation (for an external system)
                 .IfElse(
                     elseActivityCallback =>
                         !IsInvalidValidationResult(elseActivityCallback)
@@ -213,6 +228,7 @@ public class CommandProcessStateMachine : MassTransitStateMachine<CommandProcess
                             })
                         .TransitionTo(InternalValidated),
                     elseBinder => elseBinder.IfElse(
+                            // the validation was done successfully.
                             r => r.Saga.ValidationResult.IsValid,
                             ifBinder => ifBinder.TransitionTo(ValidationSucceeded),
                             elseElseBinder => elseElseBinder
@@ -490,7 +506,7 @@ public class CommandProcessStateMachine : MassTransitStateMachine<CommandProcess
     /// </summary>
     /// <param name="context">Current context of state machine.</param>
     /// <returns>Represents the async operation.</returns>
-       private async Task Action(BehaviorContext<CommandProcessState> context)
+       private async Task ValidateSubmitCommand(BehaviorContext<CommandProcessState> context)
     {
         _logger.LogInfoMessage(
             "Handle '{message}' with saga id '{id}'",
