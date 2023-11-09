@@ -13,6 +13,5 @@
        <ProjectReference Include="..\UserProfileService.Saga.Common\UserProfileService.Saga.Common.csproj" />
         <ProjectReference Include="..\UserProfileService.Events.Payloads\UserProfileService.Events.Payloads.csproj" />
         <ProjectReference Include="..\UserProfileService.Saga.Events\UserProfileService.Saga.Events.csproj" />
-        <ProjectReference Include="..\UserProfileService.Saga.Validation\UserProfileService.Saga.Validation.csproj" />
     </ItemGroup>
 </Project>
