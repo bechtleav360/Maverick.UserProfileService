@@ -38,7 +38,7 @@ stages:
             displayName: Login to GITHUB
             inputs:
               command: login
-              containerRegistry: $(GitHub)
+              containerRegistry: GitHub
             
           - task: Docker@2
             displayName: Build UserProfileService
@@ -47,6 +47,5 @@ stages:
               Dockerfile: src/UserProfileService/Dockerfile
               buildContext: .
               containerRegistry: GitHub
-              container:  userprofileservice/test
-              tags: |
-                test
+              container:  userprofileservice
+              tags: latest
