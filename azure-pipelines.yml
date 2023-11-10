@@ -38,12 +38,12 @@ stages:
             displayName: Login to GITHUB
             inputs:
               command: login
-              containerRegistry: GitHub
+              containerRegistry: $(GitHub)
             
           - task: Docker@2
             displayName: Build UserProfileService
             inputs:
-              command: 'buildAndPush'
+              command: buildAndPush
               Dockerfile: src/UserProfileService/Dockerfile
               buildContext: .
               containerRegistry: GitHub
