@@ -43,9 +43,13 @@ stages:
           - task: Docker@2
             displayName: Build UserProfileService
             inputs:
-              command: buildAndPush
+              command: build
               Dockerfile: src/UserProfileService/Dockerfile
               buildContext: .
+          - task: Docker@2
+            displayName: Push UserProfileService
+            inputs:
+              command: push
               containerRegistry: GitHub
-              container:  userprofileservice
-              tags: latest
+              container: userprofile
+
