@@ -1,0 +1,48 @@
+# Don't forget to set the following variables for your (release) pipeline: docker.credentials.user, docker.credentials.password
+
+trigger:
+  - main
+
+variables:
+  - name: isRelease
+    value: $[eq(variables['Build.SourceBranchName'], 'main')]
+  - name: docker.image.registry
+    value: ghcr.io/bechtleav360
+  - name: docker.image.name
+    value: maverickuserprofileservice
+  - name: docker.image.version
+    ${{ if eq(variables['Build.SourceBranchName'], 'main') }}:
+      value: "latest"
+    ${{ else }}:
+      value: variables['Build.SourceBranchName']
+  - name: docker.url
+    value: https://ghcr.io
+  - name: docker.publish
+    ${{ if eq(variables['Build.SourceBranchName'], 'main')  }}:
+      value: true
+    ${{ else }}:
+      value: false
+
+
+stages:
+  - stage: Publishing
+    #dependsOn: Building
+    jobs:
+    
+    
+      - job: Pushing
+        steps:
+          - script: echo "Publishing image with build number $(Build.BuildNumber) and name $(docker.image.prefix)/$(docker.image.name) with user $(docker.credentials.user)"
+          
+          - task: Docker@2
+            displayName: Login to ACR
+            inputs:
+              command: login
+              containerRegistry: GitHub
+
+          - task: Docker@2
+            displayName: Build UserProfileService
+            inputs:
+              command: build
+              Dockerfile: src/UserProfileService/Dockerfile
+              buildContext: .
