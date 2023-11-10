@@ -46,6 +46,7 @@ stages:
               command: 'buildAndPush'
               Dockerfile: src/UserProfileService/Dockerfile
               buildContext: .
-              container:  userprofileservice
+              containerRegistry: GitHub
+              container:  userprofileservice/test
               tags: |
                 test
