@@ -1,0 +1,107 @@
+# Don't forget to set the following variables for your (release) pipeline: docker.credentials.user, docker.credentials.password
+
+trigger:
+  - main
+
+variables:
+  - name: isRelease
+    value: $[eq(variables['Build.SourceBranchName'], 'main')]
+  - name: docker.image.userprofile
+    value: bechtleav360/user-profile-service
+  - name: docker.image.userprofile.saga.worker
+    value: bechtleav360/user-profile-service-saga-worker
+  - name: docker.image.userprofile.sync
+    value: bechtleav360/user-profile-service-sync
+  - name: docker.image.version
+    ${{ if eq(variables['Build.SourceBranchName'], 'main') }}:
+      value: "latest"
+    ${{ else }}:
+      value: variables['Build.SourceBranchName']
+  - name: docker.publish
+    ${{ if eq(variables['Build.SourceBranchName'], 'main')  }}:
+      value: true
+    ${{ else }}:
+      value: false
+
+
+stages:
+  - stage: Publishing
+    #dependsOn: Building
+    jobs:
+    
+    
+      - job: Pushing
+        steps:
+          - script: echo "Publishing image with build number $(Build.BuildNumber) and name $(docker.image.userprofile)."
+          
+          - task: Docker@2
+            displayName: Login to GitHub
+            inputs:
+              command: login
+              containerRegistry: GitHub
+          
+          # Building the user profile service and pushing to the ghcr.io
+          - task: Docker@2
+            displayName: Build UserProfileService Image.
+            inputs:
+              command: build
+              Dockerfile: src/UserProfileService/Dockerfile
+              repository: $(docker.image.userprofile)
+              buildContext: '$(Build.SourcesDirectory)'
+              tags: latest
+              arguments: --label "org.opencontainers.image.source"="https://github.com/bechtleav360/Maverick.UserProfileService"  
+            
+          - task: Docker@2
+            displayName: Push UserProfileService image.
+            inputs:
+              command: push
+              repository: $(docker.image.userprofile)
+              containerRegistry: GitHub
+              tags: latest
+
+          # Building the user profile saga worker and pushing to the ghcr.io
+          - script: echo "Publishing image with build number $(Build.BuildNumber) and name $(docker.image.userprofile.saga.worker)."
+          
+          - task: Docker@2
+            displayName: Build UserProfileService.Saga.Worker Image.
+            inputs:
+              command: build
+              Dockerfile: src/UserProfileService.Saga.Worker/Dockerfile
+              repository: $(docker.image.userprofile.saga.worker)
+              buildContext: '$(Build.SourcesDirectory)'
+              tags: latest
+              arguments: --label "org.opencontainers.image.source"="https://github.com/bechtleav360/Maverick.UserProfileService"  
+            
+          - task: Docker@2
+            displayName: Push UserProfileService.Saga.Worker image.
+            inputs:
+              command: push
+              repository: $(docker.image.userprofile.saga.worker)
+              containerRegistry: GitHub
+              tags: latest
+
+        # Building the user profile sync and pushing to the ghcr.io
+          - script: echo "Publishing image with build number $(Build.BuildNumber) and name $(docker.image.userprofile.sync)."
+          
+          - task: Docker@2
+            displayName: Build UserProfileService.Sync Image.
+            inputs:
+              command: build
+              Dockerfile: src/UserProfileService.Saga.Worker/Dockerfile
+              repository: $(docker.image.userprofile.sync)
+              buildContext: '$(Build.SourcesDirectory)'
+              tags: latest
+              arguments: --label "org.opencontainers.image.source"="https://github.com/bechtleav360/Maverick.UserProfileService"  
+            
+          - task: Docker@2
+            displayName: Push UserProfileService.Saga.Worker image.
+            inputs:
+              command: push
+              repository: $(docker.image.userprofile.sync)
+              containerRegistry: GitHub
+              tags: latest
+            
+            
+              
+            
+            
