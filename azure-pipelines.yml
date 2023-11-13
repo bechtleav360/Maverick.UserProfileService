@@ -1,5 +1,3 @@
-# Don't forget to set the following variables for your (release) pipeline: docker.credentials.user, docker.credentials.password
-
 trigger:
   - main
 
@@ -23,13 +21,9 @@ variables:
     ${{ else }}:
       value: false
 
-
 stages:
   - stage: Publishing
-    #dependsOn: Building
     jobs:
-    
-    
       - job: Pushing
         steps:
           - script: echo "Publishing image with build number $(Build.BuildNumber) and name $(docker.image.userprofile)."
@@ -42,7 +36,7 @@ stages:
           
           # Building the user profile service and pushing to the ghcr.io
           - task: Docker@2
-            displayName: Build UserProfileService Image.
+            displayName: Build UserProfileService Image
             inputs:
               command: build
               Dockerfile: src/UserProfileService/Dockerfile
@@ -52,7 +46,7 @@ stages:
               arguments: --label "org.opencontainers.image.source"="https://github.com/bechtleav360/Maverick.UserProfileService"  
             
           - task: Docker@2
-            displayName: Push UserProfileService image.
+            displayName: Push UserProfileService Image
             inputs:
               command: push
               repository: $(docker.image.userprofile)
@@ -63,7 +57,7 @@ stages:
           - script: echo "Publishing image with build number $(Build.BuildNumber) and name $(docker.image.userprofile.saga.worker)."
           
           - task: Docker@2
-            displayName: Build UserProfileService.Saga.Worker Image.
+            displayName: Build UserProfileService.Saga.Worker Image
             inputs:
               command: build
               Dockerfile: src/UserProfileService.Saga.Worker/Dockerfile
@@ -80,28 +74,23 @@ stages:
               containerRegistry: GitHub
               tags: latest
 
-        # Building the user profile sync and pushing to the ghcr.io
+          # Building the user profile sync and pushing to the ghcr.io
           - script: echo "Publishing image with build number $(Build.BuildNumber) and name $(docker.image.userprofile.sync)."
           
           - task: Docker@2
-            displayName: Build UserProfileService.Sync Image.
+            displayName: Build UserProfileService.Sync Image
             inputs:
               command: build
-              Dockerfile: src/UserProfileService.Saga.Worker/Dockerfile
+              Dockerfile: src/UserProfileService.Sync/Dockerfile
               repository: $(docker.image.userprofile.sync)
               buildContext: '$(Build.SourcesDirectory)'
               tags: latest
               arguments: --label "org.opencontainers.image.source"="https://github.com/bechtleav360/Maverick.UserProfileService"  
             
           - task: Docker@2
-            displayName: Push UserProfileService.Saga.Worker image.
+            displayName: Push UserProfileService.Sync Image
             inputs:
               command: push
               repository: $(docker.image.userprofile.sync)
               containerRegistry: GitHub
-              tags: latest
-            
-            
-              
-            
-            
+              tags: latest     
