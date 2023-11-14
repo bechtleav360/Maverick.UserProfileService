@@ -20,7 +20,7 @@ namespace UserProfileService.Adapter.Marten.Implementations;
 /// <summary>
 ///     It represents the implementation of <see cref="IVolatileUserSettingsStore" /> that uses Marten with PostgreSQL.
 /// </summary>
-internal class MartenVolatileUserSettingsStore : IVolatileUserSettingsStore, IVolatileDataReadStore
+internal class MartenVolatileUserSettingsStore : IVolatileUserSettingsStore, IVolatileDataReadStore, IDisposable
 {
     private readonly IDocumentSession _documentSession;
     private readonly IVolatileDataStore _documentStore;
@@ -625,5 +625,12 @@ internal class MartenVolatileUserSettingsStore : IVolatileUserSettingsStore, IVo
                 cancellationToken);
 
         return _logger.ExitMethod(objectExists);
+    }
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        _documentSession.Connection?.Close();
+        _documentSession.Dispose();
     }
 }
