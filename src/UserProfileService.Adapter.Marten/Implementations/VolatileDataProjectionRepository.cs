@@ -17,7 +17,7 @@ namespace UserProfileService.Adapter.Marten.Implementations;
 ///     Represents the default repository of volatile data projections that used Marten as backend
 ///     implementation.
 /// </summary>
-public class MartenVolatileDataProjectionRepository : ISecondLevelVolatileDataRepository
+public class MartenVolatileDataProjectionRepository : ISecondLevelVolatileDataRepository, IDisposable
 {
     private readonly IDocumentSession _documentSession;
     private readonly IVolatileDataStore _documentStore;
@@ -242,5 +242,12 @@ public class MartenVolatileDataProjectionRepository : ISecondLevelVolatileDataRe
         await specificTransaction.DisposeAsync();
 
         _logger.ExitMethod();
+    }
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        _documentSession.Connection?.Close();
+        _documentSession.Dispose();
     }
 }
