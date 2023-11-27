@@ -27,57 +27,21 @@ public class DefaultModelConstellation
 
     private const string ProfileAssignmentsCollection = "assignments";
 
-    private static IList<Action<IModelBuilder>> ModelCustomizer =
+    private readonly IList<Action<IModelBuilder>> ModelCustomizer =
         new List<Action<IModelBuilder>>();
 
 
-    private static Dictionary<string, Action<IModelBuilder>> CustomModels =
+    private static readonly Dictionary<string, Action<IModelBuilder>> CustomModels =
         new Dictionary<string, Action<IModelBuilder>>();
 
-    public ModelBuilderOptions ModelsInfo { get; }
+    public ModelBuilderOptions ModelsInfo { get; private set; }
 
-    private DefaultModelConstellation(IModelBuilder modelBuilder, string prefix, string queryPrefix = null)
+    public DefaultModelConstellation(IModelBuilder modelBuilder, string prefix, string queryPrefix = null)
     {
         ModelsInfo = modelBuilder.BuildOptions(prefix, queryPrefix ?? prefix);
     }
 
-    /// <summary>
-    ///     Register further database collection.
-    /// </summary>
-    /// <param name="addModelFunction"> action used to register further database collections.</param>
-    public static void AddModelToUserProfileStorage(
-        Action<IModelBuilder> addModelFunction)
-    {
-        if (addModelFunction == null)
-        {
-            return;
-        }
-
-        ModelCustomizer.Add(addModelFunction);
-    }
-
-    public static void AddCustomStorage(
-        string storageName,
-        Action<IModelBuilder> storageAction)
-    {
-        if (storageAction == null)
-        {
-            throw new ArgumentNullException(nameof(storageName));
-        }
-
-        if (string.IsNullOrWhiteSpace(storageName))
-        {
-            throw new ArgumentException($"{nameof(storageName)} can not be null or empty!");
-        }
-
-        if (storageAction == null)
-        {
-            throw new ArgumentNullException(nameof(storageAction));
-        }
-        
-        CustomModels.TryAdd(storageName, storageAction);
-    }
-
+    
     public static DefaultModelConstellation CreateCustomStorage(string storageName, string prefix, string queryPrefix)
     {
         CustomModels.TryGetValue(storageName, out var customStorage);
@@ -91,16 +55,11 @@ public class DefaultModelConstellation
     
     private static DefaultModelConstellation NewUserProfileStorage(
         string prefix,
-        string queryCollectionPrefix = null)
+        string queryCollectionPrefix = null,
+        Action<IModelBuilder> modelSetUp = null)
     {
         IModelBuilder modelBuilder = ModelBuilder.NewOne;
-
-
-        foreach (Action<IModelBuilder> act in ModelCustomizer)
-        {
-            act.Invoke(modelBuilder);
-        }
-
+        
         modelBuilder.Entity<IProfileEntityModel>()
             .HasKeyIdentifier(g => g.Id)
             .HasAlias<IProfile>()
@@ -196,7 +155,9 @@ public class DefaultModelConstellation
             .QueryCollection(ProfileAssignmentsCollection);
 
         modelBuilder.Entity<ProjectionState>().Collection(ProjectionStateCollection);
-
+        
+        modelSetUp?.Invoke(modelBuilder);
+        
         return new DefaultModelConstellation(modelBuilder, prefix, queryCollectionPrefix);
     }
 
@@ -381,7 +342,16 @@ public class DefaultModelConstellation
         string prefix = WellKnownDatabaseKeys.CollectionPrefixUserProfileService,
         string queryPrefix = null)
     {
-        return NewUserProfileStorage(prefix, queryPrefix);
+       return NewUserProfileStorage(prefix, queryPrefix);
+
+    }
+    
+    public static DefaultModelConstellation CreateNew(
+        Action<IModelBuilder> modeSetUp,
+        string prefix = WellKnownDatabaseKeys.CollectionPrefixUserProfileService,
+        string queryPrefix = null)
+    {
+        return  NewUserProfileStorage(prefix, queryPrefix, modeSetUp);
     }
 
     internal static DefaultModelConstellation CreateNewTicketStore(string prefix)

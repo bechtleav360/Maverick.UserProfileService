@@ -16,6 +16,8 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Text.Json.Nodes;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using UserProfileService.Abstractions;
 using UserProfileService.Adapter.Arango.V2.Extensions;
 using UserProfileService.Adapter.Arango.V2.Helpers;
@@ -41,6 +43,7 @@ using UserProfileService.Messaging.DependencyInjection;
 using UserProfileService.OpenApiSpec.Examples;
 using UserProfileService.Saga.Validation.DependencyInjection;
 using UserProfileService.Services;
+using UserProfileService.Swagger;
 using UserProfileService.Utilities;
 
 namespace UserProfileService
@@ -60,7 +63,6 @@ namespace UserProfileService
 
         }
 
-        protected virtual Action<SwaggerUIOptions> swaggerCustomization => (options => { });
 
         /// <inheritdoc />
         protected override void AddLateConfiguration(IApplicationBuilder app, IWebHostEnvironment env)
@@ -77,20 +79,11 @@ namespace UserProfileService
 
             app.UseProblemDetails();
 
-           
-                app.UseSwagger();
-
-                app.UseSwaggerUI(
-                    c =>
-                    {
-                       // swaggerCustomization.Invoke(c);
-                        c.SwaggerEndpoint("v2/swagger.json", "UserProfileService v2");
-                        c.SwaggerEndpoint("v1/swagger.json", "UserProfileService Bridge v1");
-                        c.DocExpansion(DocExpansion.None);
-                    });
-                
+            if (env.IsDevelopment())
+            {
                 _logger.LogInformation("Support for SwaggerUI activated");
-            
+                app.UseMaverickSwaggerWithVersions();
+            }
 
             app.UseCors(
                 options => options.SetIsOriginAllowed(x => _ = true)
@@ -186,76 +179,8 @@ namespace UserProfileService
             services.AddSwaggerGenNewtonsoftSupport();
 
             // Register the Swagger generator, defining 1 or more Swagger documents
-            services.AddSwaggerGen(
-                c =>
-                {
-                    c.SwaggerDoc(
-                        "v2",
-                        new OpenApiInfo
-                        {
-                            Version = "v2",
-                            Title = "UserProfileService v2 API",
-                            Description =
-                                "Maverick user profile service that will manage user and security related information.",
-                            Contact = new OpenApiContact
-                            {
-                                Name = @"A/V 360° Solutions",
-                                Email = string.Empty
-                            }
-                        });
-
-                    c.OperationFilter<QueryFilterOperationFilter>();
-                    c.OperationFilter<CustomHeaderOperationFilter>();
-                    c.OperationFilter<AddDefaultValues>();
-                    c.OperationFilter<RequestBodyExampleGeneratorFilter>();
-                    // Set the comments path for the Swagger JSON and UI.
-                    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                    string xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                    c.IncludeXmlComments(xmlPath, true);
-
-                    var jwtSecurityScheme = new OpenApiSecurityScheme
-                    {
-                        Name = "JWT access token authentication",
-                        Description = "Enter bearer token **_only_**",
-                        In = ParameterLocation.Header,
-                        Type = SecuritySchemeType.Http,
-                        Scheme = "bearer",
-                        BearerFormat = "JWT",
-                        Reference = new OpenApiReference
-                        {
-                            Id = JwtBearerDefaults.AuthenticationScheme,
-                            Type = ReferenceType.SecurityScheme
-                        }
-                    };
-
-                    c.AddSecurityDefinition(
-                        jwtSecurityScheme.Reference.Id,
-                        jwtSecurityScheme);
-
-                    c.AddSecurityRequirement(
-                        new OpenApiSecurityRequirement
-                        {
-                        { jwtSecurityScheme, new List<string>() }
-                        });
-
-                    c.MapType<JsonArray>(
-                        () => new OpenApiSchema
-                        {
-                            Type = "array",
-                            Default = new OpenApiArray(),
-                            Description = "Array as JSON text (wrapped by '[', ']')",
-                            Items = new OpenApiSchema
-                            {
-                                Type = "object",
-                                Default = new OpenApiObject
-                                {
-                                { "prop1", new OpenApiString("value1") },
-                                { "prop2", new OpenApiInteger(4711) }
-                                }
-                            }
-                        });
-                });
-
+            services.AddMaverickSwaggerWithVersions<MaverickSwagger>();
+            
             services.AddPayloadValidation();
 
             _logger.LogInformation("Payload validation registered");

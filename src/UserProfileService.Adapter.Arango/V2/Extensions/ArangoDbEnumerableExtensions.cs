@@ -1151,11 +1151,6 @@ public static class ArangoDbEnumerableExtensions
             yield return GetSearchableExpression<Organization>(filterString);
         }
 
-        if (typeof(TEntity) == typeof(SecO) || typeof(SecO).IsAssignableFrom(typeof(TEntity)))
-        {
-            yield return GetSearchableExpression<SecO>(filterString);
-        }
-
         if (typeof(TEntity) == typeof(FunctionBasic) || typeof(FunctionBasic).IsAssignableFrom(typeof(TEntity)))
         {
             yield return GetSearchableExpression<FunctionView>(filterString);

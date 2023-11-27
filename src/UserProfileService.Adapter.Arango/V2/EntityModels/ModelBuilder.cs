@@ -3,9 +3,9 @@ using System.Linq.Expressions;
 
 namespace UserProfileService.Adapter.Arango.V2.EntityModels;
 
-internal class ModelBuilder : IModelBuilder
+public class ModelBuilder : IModelBuilder
 {
-    internal static IModelBuilder NewOne => new ModelBuilder();
+    public static IModelBuilder NewOne => new ModelBuilder();
     public ModelBuilderOptions Options { get; } = new ModelBuilderOptions();
 
     private ModelBuilder()

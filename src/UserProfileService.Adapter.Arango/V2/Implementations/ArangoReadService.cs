@@ -35,7 +35,7 @@ namespace UserProfileService.Adapter.Arango.V2.Implementations;
 
 public class ArangoReadService : ArangoRepositoryBase, IReadService
 {
-    private readonly string _collectionPrefix;
+    protected readonly string _collectionPrefix;
     private readonly IDbInitializer _dbInitializer;
 
     /// <inheritdoc />
@@ -51,8 +51,13 @@ public class ArangoReadService : ArangoRepositoryBase, IReadService
     {
         ArangoDbClientName = arangoDbClientName;
         _collectionPrefix = collectionPrefix;
-    }
 
+        ModelBuilderOptions = DefaultModelConstellation
+                              .CreateNew(_collectionPrefix)
+                              .ModelsInfo;
+    }
+    
+    
     /// <summary>
     ///     Initializes a new instance of <see cref="ArangoReadService" />.
     /// </summary>
@@ -74,6 +79,9 @@ public class ArangoReadService : ArangoRepositoryBase, IReadService
         _dbInitializer = dbInitializer;
         _collectionPrefix = WellKnownDatabaseKeys.CollectionPrefixUserProfileService;
         ArangoDbClientName = ArangoConstants.DatabaseClientNameUserProfileStorage;
+        ModelBuilderOptions = DefaultModelConstellation
+                              .CreateNew(_collectionPrefix)
+                              .ModelsInfo;
     }
 
     /// <inheritdoc />
@@ -1398,7 +1406,10 @@ public class ArangoReadService : ArangoRepositoryBase, IReadService
             caller);
     }
 
-    public async Task<PaginationApiResponse<TOutput>> ExecuteCountingQueriesAsync<TEntity, TOutput>(
+    
+    protected virtual ModelBuilderOptions ModelBuilderOptions { get; }
+    
+    protected async Task<PaginationApiResponse<TOutput>> ExecuteCountingQueriesAsync<TEntity, TOutput>(
         Func<IArangoDbEnumerable<TEntity>, IArangoDbQueryResult> selectionQuery,
         CancellationToken cancellationToken = default,
         bool throwException = true,
@@ -1410,9 +1421,7 @@ public class ArangoReadService : ArangoRepositoryBase, IReadService
         Logger.EnterMethod();
 
         IArangoDbQueryResult queryBuilderResult = selectionQuery.Invoke(
-            DefaultModelConstellation
-                .CreateNew(_collectionPrefix)
-                .ModelsInfo
+                ModelBuilderOptions
                 .Entity<TEntity>());
 
         string countQueryString = queryBuilderResult.GetCountQueryString();
