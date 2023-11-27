@@ -1,4 +1,4 @@
-﻿﻿using Asp.Versioning;
+﻿using Asp.Versioning;
 using Hellang.Middleware.ProblemDetails;
 using Maverick.UserProfileService.FilterUtility.Abstraction;
 using Maverick.UserProfileService.FilterUtility.Implementations;
@@ -60,6 +60,8 @@ namespace UserProfileService
 
         }
 
+        protected virtual Action<SwaggerUIOptions> swaggerCustomization => (options => { });
+
         /// <inheritdoc />
         protected override void AddLateConfiguration(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -81,10 +83,12 @@ namespace UserProfileService
                 app.UseSwaggerUI(
                     c =>
                     {
+                       // swaggerCustomization.Invoke(c);
                         c.SwaggerEndpoint("v2/swagger.json", "UserProfileService v2");
+                        c.SwaggerEndpoint("v1/swagger.json", "UserProfileService Bridge v1");
                         c.DocExpansion(DocExpansion.None);
                     });
-
+                
                 _logger.LogInformation("Support for SwaggerUI activated");
             
 

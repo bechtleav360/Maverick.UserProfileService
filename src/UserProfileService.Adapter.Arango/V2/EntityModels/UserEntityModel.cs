@@ -8,7 +8,7 @@ using UserProfileService.Adapter.Arango.V2.Annotations;
 
 namespace UserProfileService.Adapter.Arango.V2.EntityModels;
 
-internal class UserEntityModel : User, IProfileEntityModel
+public class UserEntityModel : User, IProfileEntityModel
 {
     /// <summary>
     ///     A list of range-condition settings valid for this <see cref="Member" />. If it is empty or <c>null</c>, the

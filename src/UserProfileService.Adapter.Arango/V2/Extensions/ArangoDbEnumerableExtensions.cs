@@ -21,7 +21,7 @@ using UserProfileService.Common.V2.Extensions;
 
 namespace UserProfileService.Adapter.Arango.V2.Extensions;
 
-internal static class ArangoDbEnumerableExtensions
+public static class ArangoDbEnumerableExtensions
 {
     private static bool TryGenerateOrderExpression<TEntity>(
         string orderBy,
@@ -1256,7 +1256,7 @@ internal static class ArangoDbEnumerableExtensions
         return Entity<TEntity>(constellation.ModelsInfo);
     }
 
-    internal static IArangoDbSingleEnumerable<TEntity> First<TEntity>(
+    public static IArangoDbSingleEnumerable<TEntity> First<TEntity>(
         this IArangoDbEnumerable<TEntity> enumerable,
         Expression<Func<TEntity, bool>> filter)
     {
@@ -1337,7 +1337,7 @@ internal static class ArangoDbEnumerableExtensions
         return new ArangoNestedQueryEnumerable<TOutput>(outerQuery, enumerable);
     }
 
-    internal static IArangoDbEnumerable<TEntity> Select<TEntity, TResult>(
+    public static IArangoDbEnumerable<TEntity> Select<TEntity, TResult>(
         this IArangoDbSingleEnumerable<TEntity> enumerable,
         Expression<Func<TEntity, TResult>> selector)
     {
@@ -1437,7 +1437,7 @@ internal static class ArangoDbEnumerableExtensions
         return next;
     }
 
-    internal static IArangoDbEnumerable<TEntity> Where<TEntity>(
+    public static IArangoDbEnumerable<TEntity> Where<TEntity>(
         this IArangoDbEnumerable<TEntity> enumerable,
         Expression<Func<TEntity, bool>> filter)
     {
@@ -1447,7 +1447,7 @@ internal static class ArangoDbEnumerableExtensions
         return next;
     }
 
-    internal static IArangoDbEnumerable<TEntity> UsingOptions<TEntity>(
+    public static IArangoDbEnumerable<TEntity> UsingOptions<TEntity>(
         this IArangoDbEnumerable<TEntity> enumerable,
         IQueryObject options,
         object argument = null)
@@ -1530,7 +1530,7 @@ internal static class ArangoDbEnumerableExtensions
         return enumerable.Compile<TEntity>(collectionScope).GetQueryString();
     }
 
-    internal static IArangoDbEnumerable<TEntity> DistinctByKey<TEntity, TProp>(
+    public static IArangoDbEnumerable<TEntity> DistinctByKey<TEntity, TProp>(
         this IArangoDbEnumerable<TEntity> enumerable,
         Expression<Func<TEntity, TProp>> propertySelector)
     {

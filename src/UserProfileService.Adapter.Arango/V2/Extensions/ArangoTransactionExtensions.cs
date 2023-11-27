@@ -5,7 +5,7 @@ using UserProfileService.Adapter.Arango.V2.Helpers;
 
 namespace UserProfileService.Adapter.Arango.V2.Extensions;
 
-internal static class ArangoTransactionExtensions
+public static class ArangoTransactionExtensions
 {
     private static async Task<TResult> WithLock<TResult>(
         SemaphoreSlim lockObject,
@@ -57,7 +57,7 @@ internal static class ArangoTransactionExtensions
     ///     <paramref name="action" />.
     /// </returns>
     /// <exception cref="ArgumentNullException">Will be thrown if the given action is null.</exception>
-    internal static Task<TResult> ExecuteWithLock<TResult>(
+    public static Task<TResult> ExecuteWithLock<TResult>(
         this ArangoTransaction transaction,
         Func<Task<TResult>> action,
         CancellationToken cancellationToken)
@@ -84,7 +84,7 @@ internal static class ArangoTransactionExtensions
     /// </param>
     /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
     /// <exception cref="ArgumentNullException">Will be thrown if the given action is null.</exception>
-    internal static Task ExecuteWithLock(
+    public static Task ExecuteWithLock(
         this ArangoTransaction transaction,
         Func<Task> action,
         CancellationToken cancellationToken)

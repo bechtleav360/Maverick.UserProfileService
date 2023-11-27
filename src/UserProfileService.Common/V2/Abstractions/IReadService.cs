@@ -312,82 +312,7 @@ public interface IReadService
         where TUser : UserBasic
         where TGroup : GroupBasic
         where TOrgUnit : OrganizationBasic;
-
-    /// <summary>
-    ///     Gets the image for a specified profile.
-    /// </summary>
-    /// <param name="profileId">The id of the profile those image to be returned.</param>
-    /// <param name="cancellationToken">
-    ///     The token to monitor for cancellation requests. The default value is
-    ///     <see cref="CancellationToken.None" />.
-    /// </param>
-    /// <returns>
-    ///     A task representing the asynchronous read operation. It wraps a byte array containing the image of the
-    ///     profile.
-    /// </returns>
-    /// <exception cref="ArgumentException"><paramref name="profileId" /> is empty or contains only whitespace characters.</exception>
-    /// <exception cref="ArgumentNullException"><paramref name="profileId" /> is <c>null</c>.</exception>
-    /// <exception cref="InstanceNotFoundException">No profile can be found considering its <paramref name="profileId" />.</exception>
-    Task<byte[]> GetImageProfileAsync(
-        string profileId,
-        CancellationToken cancellationToken = default);
-
-    /// <summary>
-    ///     Get all custom properties for a profile.
-    /// </summary>
-    /// <param name="profileId">The id of the profile whose custom properties are to be returned.</param>
-    /// <param name="options">
-    ///     Options to set up pagination and sorting. If <c>null</c>, the default values of pagination will
-    ///     be used.
-    /// </param>
-    /// <param name="cancellationToken">
-    ///     The token to monitor for cancellation requests. The default value is
-    ///     <see cref="CancellationToken.None" />.
-    /// </param>
-    /// <returns>
-    ///     A task representing the asynchronous read operation. It wraps a list of <see cref="CustomProperty" /> that
-    ///     belongs to the profile.
-    /// </returns>
-    /// <exception cref="ValidationException"><paramref name="options" /> is not valid.</exception>
-    /// <exception cref="ArgumentException"><paramref name="profileId" /> is empty or contains only whitespace characters.</exception>
-    /// <exception cref="ArgumentNullException"><paramref name="profileId" /> is <c>null</c>.</exception>
-    /// <exception cref="InstanceNotFoundException">No profile can be found considering its <paramref name="profileId" />.</exception>
-    Task<IPaginatedList<CustomProperty>> GetCustomPropertiesOfProfileAsync(
-        string profileId,
-        QueryObjectBase options = null,
-        CancellationToken cancellationToken =
-            default);
-
-    /// <summary>
-    ///     Gets a single custom property for a specified profile.
-    /// </summary>
-    /// <param name="profileId">The id of the profile whose custom property to be returned.</param>
-    /// <param name="customPropertyKey">The key of the custom property</param>
-    /// <param name="cancellationToken">
-    ///     The token to monitor for cancellation requests. The default value is
-    ///     <see cref="CancellationToken.None" />.
-    /// </param>
-    /// <returns>
-    ///     A task representing the asynchronous read operation. It wraps a single <see cref="CustomProperty" /> that is
-    ///     related to the profile.
-    /// </returns>
-    /// <exception cref="ArgumentException">
-    ///     <paramref name="profileId" /> is empty or contains only whitespace characters.<br />-or-<br />
-    ///     <paramref name="customPropertyKey" /> is empty or contains only whitespace characters.
-    /// </exception>
-    /// <exception cref="ArgumentNullException">
-    ///     <paramref name="profileId" /> is <c>null</c>.<br />-or-<br />
-    ///     <paramref name="customPropertyKey" /> is <c>null</c>.
-    /// </exception>
-    /// <exception cref="InstanceNotFoundException">
-    ///     No profile can be found considering its <paramref name="profileId" />.<br />-or-<br />
-    ///     No custom property can be found with key equals the specified <paramref name="customPropertyKey" />.
-    /// </exception>
-    Task<string> GetCustomPropertyOfProfileAsync(
-        string profileId,
-        string customPropertyKey,
-        CancellationToken cancellationToken = default);
-
+    
     /// <summary>
     ///     Get all functional rights of a specified profile.
     /// </summary>
@@ -830,33 +755,7 @@ public interface IReadService
         string sortingPropertyName = "id",
         SortOrder sortOrder = SortOrder.Asc,
         CancellationToken cancellationToken = default);
-
-    /// <summary>
-    ///     Returns all Activity-Logs regarding the specified <paramref name="entityType" /> and <paramref name="objectIds" />.
-    /// </summary>
-    /// <param name="entityType">Specifies the type of the entity.</param>
-    /// <param name="objectIds">
-    ///     Optionally filters the <see cref="ActivityLogEntry" /> for the specified profile-ids. If set to
-    ///     <c>null</c> it won't filter based on the id.
-    /// </param>
-    /// <param name="options">
-    ///     Options to refine the search request and to set up pagination and sorting. If <c>null</c>, the
-    ///     default values of pagination will be used.
-    /// </param>
-    /// <param name="cancellationToken">
-    ///     The token to monitor for cancellation requests. The default value is
-    ///     <see cref="CancellationToken.None" />.
-    /// </param>
-    /// <returns>
-    ///     A task representing the asynchronous read operation. It wraps a list of found <see cref="ActivityLogEntry" />
-    ///     s.
-    /// </returns>
-    Task<IPaginatedList<ActivityLogEntry>> GetActivityLogsAsync(
-        ObjectType entityType,
-        IEnumerable<string> objectIds = null,
-        QueryObject options = null,
-        CancellationToken cancellationToken = default);
-
+    
     /// <summary>
     ///     Returns an  <see cref="IProfile" />  regarding the specified <paramref name="profileId" /> and the
     ///     optional parameter <paramref name="allowExternalIds" /> and <paramref name="source" />.

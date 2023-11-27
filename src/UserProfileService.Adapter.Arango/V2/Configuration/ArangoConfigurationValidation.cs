@@ -7,7 +7,7 @@ using Microsoft.Extensions.Options;
 
 namespace UserProfileService.Adapter.Arango.V2.Configuration;
 
-internal class ArangoConfigurationValidation : IValidateOptions<ArangoConfiguration>
+public class ArangoConfigurationValidation : IValidateOptions<ArangoConfiguration>
 {
     private static IEnumerable<string> ValidateConnectionString(string value)
     {

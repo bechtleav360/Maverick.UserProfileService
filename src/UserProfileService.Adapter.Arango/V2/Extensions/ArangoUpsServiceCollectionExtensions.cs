@@ -110,7 +110,7 @@ public static class ArangoUpsServiceCollectionExtensions
     // TODO: It is somehow hacky and against our coding guidelines, but to refactor the hole
     // TODO: registration arango methods are just not enough time. Will be done, when there will be more time.
     // TODO: The class has to be refactored.
-    internal static void AddCommonDependenciesForArangoProfileRepositories(
+    public static void AddCommonDependenciesForArangoProfileRepositories(
         this IServiceCollection services,
         IConfigurationSection configurationSection,
         ILogger logger = null,

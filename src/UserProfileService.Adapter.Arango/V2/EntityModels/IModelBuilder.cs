@@ -2,7 +2,7 @@
 
 namespace UserProfileService.Adapter.Arango.V2.EntityModels;
 
-internal interface IModelBuilder
+public interface IModelBuilder
 {
     IModelBuilderEntityOptions<TEntity> Entity<TEntity>();
 

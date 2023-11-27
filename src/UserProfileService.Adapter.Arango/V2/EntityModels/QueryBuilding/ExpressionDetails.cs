@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace UserProfileService.Adapter.Arango.V2.EntityModels.QueryBuilding;
 
-internal class ExpressionDetails
+public class ExpressionDetails
 {
     internal string ExpressionId { get; }
     internal bool IsGeneric { get; }

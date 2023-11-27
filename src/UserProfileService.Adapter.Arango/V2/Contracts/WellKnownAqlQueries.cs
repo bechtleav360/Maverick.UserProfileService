@@ -17,7 +17,7 @@ namespace UserProfileService.Adapter.Arango.V2.Contracts;
 /// <summary>
 ///     Contains all hard-coded aql statements.
 /// </summary>
-internal sealed class WellKnownAqlQueries
+public sealed class WellKnownAqlQueries
 {
     /// <summary>
     ///     Defines the maximal traversal depth for aql queries.
@@ -27,7 +27,7 @@ internal sealed class WellKnownAqlQueries
     /// <summary>
     ///     Defines the name of property containing the revision.
     /// </summary>
-    internal const string RevisionProperty = "Revision";
+    public const string RevisionProperty = "Revision";
 
     /// <summary>
     ///     Returns a query which will be removed all outbound beginning at first traversal depth.

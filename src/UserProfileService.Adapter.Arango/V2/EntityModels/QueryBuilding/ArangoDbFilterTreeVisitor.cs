@@ -17,7 +17,7 @@ using UserProfileService.Adapter.Arango.V2.Helpers;
 
 namespace UserProfileService.Adapter.Arango.V2.EntityModels.QueryBuilding;
 
-internal sealed class ArangoDbFilterTreeVisitor : ArangoDbTreeVisitorBase
+public sealed class ArangoDbFilterTreeVisitor : ArangoDbTreeVisitorBase
 {
     private List<string> _filterStrings;
     private ModelBuilderOptions _options;

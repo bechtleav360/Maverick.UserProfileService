@@ -5,6 +5,7 @@ using Maverick.UserProfileService.Models.BasicModels;
 using Maverick.UserProfileService.Models.EnumModels;
 using Maverick.UserProfileService.Models.Models;
 using Maverick.UserProfileService.Models.RequestModels;
+using Microsoft.AspNetCore.Components;
 using UserProfileService.Adapter.Arango.V2.Contracts;
 using UserProfileService.Adapter.Arango.V2.EntityModels.FirstLevel;
 using UserProfileService.Common.V2.Models;
@@ -20,7 +21,7 @@ using SyncProfileKind = UserProfileService.Sync.Abstraction.Models.ProfileKind;
 
 namespace UserProfileService.Adapter.Arango.V2.EntityModels;
 
-internal class DefaultModelConstellation
+public class DefaultModelConstellation
 {
     internal const string ProjectionStateCollection = "projectionState";
 
@@ -29,12 +30,15 @@ internal class DefaultModelConstellation
     private static IList<Action<IModelBuilder>> ModelCustomizer =
         new List<Action<IModelBuilder>>();
 
-    internal ModelBuilderOptions ModelsInfo { get; }
+
+    private static Dictionary<string, Action<IModelBuilder>> CustomModels =
+        new Dictionary<string, Action<IModelBuilder>>();
+
+    public ModelBuilderOptions ModelsInfo { get; }
 
     private DefaultModelConstellation(IModelBuilder modelBuilder, string prefix, string queryPrefix = null)
     {
         ModelsInfo = modelBuilder.BuildOptions(prefix, queryPrefix ?? prefix);
-
     }
 
     /// <summary>
@@ -52,6 +56,39 @@ internal class DefaultModelConstellation
         ModelCustomizer.Add(addModelFunction);
     }
 
+    public static void AddCustomStorage(
+        string storageName,
+        Action<IModelBuilder> storageAction)
+    {
+        if (storageAction == null)
+        {
+            throw new ArgumentNullException(nameof(storageName));
+        }
+
+        if (string.IsNullOrWhiteSpace(storageName))
+        {
+            throw new ArgumentException($"{nameof(storageName)} can not be null or empty!");
+        }
+
+        if (storageAction == null)
+        {
+            throw new ArgumentNullException(nameof(storageAction));
+        }
+        
+        CustomModels.TryAdd(storageName, storageAction);
+    }
+
+    public static DefaultModelConstellation CreateCustomStorage(string storageName, string prefix, string queryPrefix)
+    {
+        CustomModels.TryGetValue(storageName, out var customStorage);
+
+        IModelBuilder modelBuilder = ModelBuilder.NewOne;
+        
+        customStorage.Invoke(modelBuilder);
+
+        return new DefaultModelConstellation(modelBuilder, prefix, queryPrefix);
+    }
+    
     private static DefaultModelConstellation NewUserProfileStorage(
         string prefix,
         string queryCollectionPrefix = null)
@@ -340,7 +377,7 @@ internal class DefaultModelConstellation
         return new DefaultModelConstellation(modelBuilder, prefix);
     }
 
-    internal static DefaultModelConstellation CreateNew(
+    public static DefaultModelConstellation CreateNew(
         string prefix = WellKnownDatabaseKeys.CollectionPrefixUserProfileService,
         string queryPrefix = null)
     {

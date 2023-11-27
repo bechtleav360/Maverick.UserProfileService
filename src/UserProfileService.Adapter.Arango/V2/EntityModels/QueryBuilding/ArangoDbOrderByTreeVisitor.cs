@@ -7,7 +7,7 @@ using UserProfileService.Adapter.Arango.V2.Contracts;
 
 namespace UserProfileService.Adapter.Arango.V2.EntityModels.QueryBuilding;
 
-internal sealed class ArangoDbOrderByTreeVisitor : ArangoDbTreeVisitorBase
+public sealed class ArangoDbOrderByTreeVisitor : ArangoDbTreeVisitorBase
 {
     private ModelBuilderOptions _options;
 

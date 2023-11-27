@@ -5,7 +5,7 @@ using UserProfileService.Adapter.Arango.V2.EntityModels;
 
 namespace UserProfileService.Adapter.Arango.V2.Helpers;
 
-internal class PaginationApiResponse : IApiResponse
+public class PaginationApiResponse : IApiResponse
 {
     public long ExecutionTime { get; }
 
@@ -26,7 +26,7 @@ internal class PaginationApiResponse : IApiResponse
     }
 }
 
-internal class PaginationApiResponse<TResult> : PaginationApiResponse
+public class PaginationApiResponse<TResult> : PaginationApiResponse
 {
     public new MultiApiResponse<TResult> OriginalSelectionResponse { get; }
     public IReadOnlyList<TResult> QueryResult { get; }

@@ -7,7 +7,7 @@ namespace UserProfileService.Adapter.Arango.V2.Helpers;
 /// <summary>
 ///     Contains methods that will check, if objects are valid or not.
 /// </summary>
-internal static class ValidationHelper
+public static class ValidationHelper
 {
     /// <summary>
     ///     Return <c>true</c>, if the collection is either null or empty.
@@ -28,7 +28,7 @@ internal static class ValidationHelper
     /// <param name="parameterName">Name of parameter.</param>
     /// <exception cref="ArgumentException">If parameter value is invalid.</exception>
     /// <exception cref="ArgumentNullException">If parameter value is null.</exception>
-    internal static void CheckParameter(
+    public static void CheckParameter(
         string parameterValue,
         string parameterName)
     {
@@ -50,7 +50,7 @@ internal static class ValidationHelper
     /// <param name="parameterName">Name of parameter.</param>
     /// <exception cref="ArgumentException">If parameter value is empty.</exception>
     /// <exception cref="ArgumentNullException">If parameter value is null.</exception>
-    internal static void CheckIfParameterIsNullOrEmpty<T>(
+    public static void CheckIfParameterIsNullOrEmpty<T>(
         IEnumerable<T> parameterValue,
         string parameterName)
     {

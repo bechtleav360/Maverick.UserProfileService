@@ -1,6 +1,6 @@
 ﻿namespace UserProfileService.Adapter.Arango.V2.Contracts;
 
-internal enum CollectionScope
+public enum CollectionScope
 {
     Query,
     Command

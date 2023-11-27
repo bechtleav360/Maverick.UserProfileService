@@ -84,6 +84,11 @@ namespace UserProfileService.Hosting.Abstraction
         public virtual void ConfigureServices(IServiceCollection services)
         {
             AdditionalAssemblies = LoadAssemblies();
+            AddLateConfigureServices(services);
+        }
+
+        protected virtual void AddLateConfigureServices(IServiceCollection services)
+        {
         }
 
         /// <summary>
@@ -243,6 +248,8 @@ namespace UserProfileService.Hosting.Abstraction
                                               IWebHostEnvironment env,
                                               IApiVersionDescriptionProvider provider)
         {
+            options.SwaggerEndpoint("v1/B", "fasdf");
+            
         }
 
         /// <summary>

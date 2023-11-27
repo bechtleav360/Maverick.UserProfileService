@@ -7,7 +7,7 @@ using UserProfileService.Adapter.Arango.V2.EntityModels;
 
 namespace UserProfileService.Adapter.Arango.V2.Implementations;
 
-internal class UserProfileStoreCollectionsProvider : ICollectionDetailsProvider
+public class UserProfileStoreCollectionsProvider : ICollectionDetailsProvider
 {
     private readonly string _prefix;
     
