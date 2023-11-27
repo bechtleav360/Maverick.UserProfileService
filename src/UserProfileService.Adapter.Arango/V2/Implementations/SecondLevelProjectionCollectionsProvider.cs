@@ -25,7 +25,7 @@ internal class SecondLevelProjectionCollectionsProvider : ICollectionDetailsProv
     {
         ModelBuilderOptions modelInfo =
             DefaultModelConstellation.CreateNewSecondLevelProjection(_prefix).ModelsInfo;
-
+        
         return modelInfo.GetDocumentCollections()
             .Union(modelInfo.GetQueryDocumentCollections())
             .Select(

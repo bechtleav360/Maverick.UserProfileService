@@ -663,13 +663,6 @@ namespace UserProfileService.Arango.IntegrationTests.V2.Fixtures
             return GetServiceProvider().GetRequiredService<IReadService>();
         }
 
-        public async Task<IProjectionWriteService> GetWriteServiceAsync()
-        {
-            await PrepareAsync();
-
-            return GetServiceProvider().GetRequiredService<IProjectionWriteService>();
-        }
-
         public async Task<ITicketStore> GetTicketStoreAsync()
         {
             await PrepareAsync();

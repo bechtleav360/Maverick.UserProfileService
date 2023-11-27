@@ -1,14 +1,16 @@
 ﻿using System.ServiceModel;
+using UserProfileService.Abstractions;
 using UserProfileService.Common.V2.TicketStore.Models;
 using UserProfileService.Controllers.V2;
 
 namespace UserProfileService.Utilities;
 
-internal static class OperationRedirectionMapper
+public static class OperationRedirectionMapper
 {
     private static readonly List<OperationMap> _maps;
-
-    static OperationRedirectionMapper()
+    
+    
+     static OperationRedirectionMapper()
     {
         _maps = new List<OperationMap>
         {

@@ -1,6 +1,6 @@
 ﻿namespace UserProfileService.Utilities;
 
-internal class OperationMap
+public class OperationMap
 {
     internal string ActionName { get; set; }
     internal Type Controller { get; set; }
