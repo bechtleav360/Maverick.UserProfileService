@@ -37,7 +37,7 @@ public class ArangoTransaction : IDatabaseTransaction
     /// <summary>
     ///     Invalidates the current transaction.
     /// </summary>
-    internal void MarkAsInactive()
+    public void MarkAsInactive()
     {
         IsActive = false;
     }

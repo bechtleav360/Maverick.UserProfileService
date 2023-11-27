@@ -25,7 +25,7 @@ namespace UserProfileService.Adapter.Arango.V2.Implementations;
 /// <summary>
 ///     An implementation of <see cref="IProjectionStateRepository" /> utilizing ArangoDB to store data.
 /// </summary>
-internal class ArangoProjectionStateRepository : ArangoRepositoryBase, IProjectionStateRepository
+public class ArangoProjectionStateRepository : ArangoRepositoryBase, IProjectionStateRepository
 {
     //TODO change
     /// <inheritdoc />

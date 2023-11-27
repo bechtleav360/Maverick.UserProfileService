@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace UserProfileService.Adapter.Arango.V2.EntityModels;
 
-internal class ModelBuilderOptions
+public class ModelBuilderOptions
 {
     // keys: alias types, values reference types (i.e. interface)
     private Dictionary<Type, List<Type>> RegisteredAliasToMainTypes { get; } = new Dictionary<Type, List<Type>>();
@@ -175,7 +175,7 @@ internal class ModelBuilderOptions
         return false;
     }
 
-    internal IList<string> GetQueryDocumentCollections()
+    public IList<string> GetQueryDocumentCollections()
     {
         return SavedInfos
             .Values
@@ -185,7 +185,7 @@ internal class ModelBuilderOptions
             .ToList();
     }
 
-    internal IList<string> GetDocumentCollections()
+    public IList<string> GetDocumentCollections()
     {
         return SavedInfos
             .Values
@@ -195,7 +195,7 @@ internal class ModelBuilderOptions
             .ToList();
     }
 
-    internal IList<string> GetEdgeCollections()
+    public IList<string> GetEdgeCollections()
     {
         return SavedInfos
             .Values
@@ -206,24 +206,24 @@ internal class ModelBuilderOptions
             .ToList();
     }
 
-    internal string GetCollectionName(Type type)
+    public string GetCollectionName(Type type)
     {
         return GetValue(type)?.GetCollectionName(type);
     }
 
-    internal string GetCollectionName<TEntity>()
+    public string GetCollectionName<TEntity>()
     {
         return GetCollectionName(typeof(TEntity));
     }
 
-    internal string GetQueryCollectionName(Type type)
+    public string GetQueryCollectionName(Type type)
     {
         return GetValue(type)?.QueryCollectionName
             ?? throw new Exception(
                 $"No query collection name has been mapped to type '{type?.Name ?? "unknown"}' (regarding model builder).");
     }
 
-    internal string GetQueryCollectionName<TEntity>()
+    public string GetQueryCollectionName<TEntity>()
     {
         return GetQueryCollectionName(typeof(TEntity));
     }
@@ -233,7 +233,7 @@ internal class ModelBuilderOptions
         return GetValue(type)?.KeyPropertyName;
     }
 
-    internal string GetKeyIdentifier<TEntity>()
+    public string GetKeyIdentifier<TEntity>()
     {
         return GetKeyIdentifier(typeof(TEntity));
     }
@@ -274,12 +274,12 @@ internal class ModelBuilderOptions
         return GetValue(type)?.GetToRelations(type, m => m.EdgeCollection).ToArray() ?? Array.Empty<string>();
     }
 
-    internal ModelBuilderOptionsTypeRelation GetRelation<TFrom, TTo>()
+    public ModelBuilderOptionsTypeRelation GetRelation<TFrom, TTo>()
     {
         return GetRelation(typeof(TFrom), typeof(TTo));
     }
 
-    internal ModelBuilderOptionsTypeRelation GetRelation(Type fromType, Type toType)
+    public ModelBuilderOptionsTypeRelation GetRelation(Type fromType, Type toType)
     {
         ModelBuilderOptionsType value = GetValue(fromType);
 

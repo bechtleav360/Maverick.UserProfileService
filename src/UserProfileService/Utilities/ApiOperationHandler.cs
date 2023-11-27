@@ -37,12 +37,12 @@ namespace UserProfileService.Utilities;
 /// </summary>
 public class ApiOperationHandler : IOperationHandler, IVolatileDataOperationHandler
 {
-    private readonly ILogger<ApiOperationHandler> _logger;
-    private readonly IMapper _mapper;
-    private readonly IBus _messageBus;
-    private readonly IPayloadValidationService _payloadValidator;
-    private readonly ITicketStore _ticketStore;
-    private readonly IUserContextStore _userContext;
+    protected readonly ILogger<ApiOperationHandler> _logger;
+    protected readonly IMapper _mapper;
+    protected readonly IBus _messageBus;
+    protected readonly IPayloadValidationService _payloadValidator;
+    protected readonly ITicketStore _ticketStore;
+    protected readonly IUserContextStore _userContext;
 
     public ApiOperationHandler(
         ITicketStore ticketStore,
@@ -75,7 +75,7 @@ public class ApiOperationHandler : IOperationHandler, IVolatileDataOperationHand
     /// <param name="objectIds">The related objects.</param>
     /// <param name="additionalQueryParameter">An additional query string to filter for information.</param>
     /// <returns>The id of the created ticket.</returns>
-    private async Task<string> PublishMessageWithTicket<TMessage, TPayload>(
+    protected async Task<string> PublishMessageWithTicket<TMessage, TPayload>(
         TMessage payload,
         string operation,
         CancellationToken cancellationToken = default,

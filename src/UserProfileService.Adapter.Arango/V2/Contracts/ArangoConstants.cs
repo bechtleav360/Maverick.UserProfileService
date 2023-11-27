@@ -1,6 +1,6 @@
 ﻿namespace UserProfileService.Adapter.Arango.V2.Contracts;
 
-internal static class ArangoConstants
+public static class ArangoConstants
 {
     /// <summary>
     ///     The regular expression pattern to check if a string is a valid ArangoDb key.

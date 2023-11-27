@@ -1,6 +1,6 @@
 ﻿namespace UserProfileService.Adapter.Arango.V2.EntityModels;
 
-internal class CustomPropertyEntityModel
+public class CustomPropertyEntityModel
 {
     public string Key { get; set; }
 

@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace UserProfileService.Adapter.Arango.V2.EntityModels;
 
-internal class RoleObjectEntityModel : RoleView, IAssignmentObjectEntity
+public class RoleObjectEntityModel : RoleView, IAssignmentObjectEntity
 {
     ///<inheritdoc />
     public IList<RangeCondition> Conditions { get; set; }

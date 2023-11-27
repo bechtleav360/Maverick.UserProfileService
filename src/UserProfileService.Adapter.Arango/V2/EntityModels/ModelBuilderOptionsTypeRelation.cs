@@ -5,12 +5,12 @@ using UserProfileService.Adapter.Arango.V2.Extensions;
 
 namespace UserProfileService.Adapter.Arango.V2.EntityModels;
 
-internal class ModelBuilderOptionsTypeRelation : IModelBuilderSubclass
+public class ModelBuilderOptionsTypeRelation : IModelBuilderSubclass
 {
-    internal string EdgeCollection { get; private set; }
-    internal string[] FromProperties { get; }
-    internal Type FromType { get; }
-    internal string[] ToProperties { get; }
+    public string EdgeCollection { get; private set; }
+    public string[] FromProperties { get; }
+    public Type FromType { get; }
+    public string[] ToProperties { get; }
     internal Type ToType { get; }
 
     /// <inheritdoc />

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace UserProfileService.Adapter.Arango.V2.EntityModels.QueryBuilding;
 
-internal class VisitorMethodArgument
+public class VisitorMethodArgument
 {
     public Type CastTo { get; set; }
     public string ExpressionId { get; set; }

@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace UserProfileService.Adapter.Arango.V2.EntityModels;
 
-internal interface IAssignmentObjectEntity : IAssignmentObject
+public interface IAssignmentObjectEntity : IAssignmentObject
 {
     /// <summary>
     ///     A list of range-condition settings valid for this Conditional. If it is empty or <c>null</c>, the membership is

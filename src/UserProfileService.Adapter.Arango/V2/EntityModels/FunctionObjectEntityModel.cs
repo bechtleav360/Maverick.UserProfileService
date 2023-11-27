@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace UserProfileService.Adapter.Arango.V2.EntityModels;
 
-internal class FunctionObjectEntityModel : FunctionView, IAssignmentObjectEntity
+public class FunctionObjectEntityModel : FunctionView, IAssignmentObjectEntity
 {
     ///<inheritdoc />
     public IList<RangeCondition> Conditions { get; set; }

@@ -1,6 +1,6 @@
 namespace UserProfileService.Adapter.Arango.V2.EntityModels.QueryBuilding;
 
-internal interface IArangoDbSingleEnumerable<TEntity>
+public interface IArangoDbSingleEnumerable<TEntity>
 {
     ArangoDbEnumerable<TEntity> GetTypedEnumerable();
 }

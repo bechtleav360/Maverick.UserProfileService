@@ -2,7 +2,7 @@
 
 namespace UserProfileService.Adapter.Arango.V2.EntityModels;
 
-internal interface IModelBuilderSubclass
+public interface IModelBuilderSubclass
 {
     List<IModelBuilderSubclass> Children { get; }
     ModelBuilderOptions Options { get; }

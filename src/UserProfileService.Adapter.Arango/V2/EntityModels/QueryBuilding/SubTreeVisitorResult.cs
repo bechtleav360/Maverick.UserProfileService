@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace UserProfileService.Adapter.Arango.V2.EntityModels.QueryBuilding;
 
-internal class SubTreeVisitorResult : Expression
+public class SubTreeVisitorResult : Expression
 {
     internal Dictionary<string, string> CollectionToIterationVarMapping { get; set; } =
         new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);

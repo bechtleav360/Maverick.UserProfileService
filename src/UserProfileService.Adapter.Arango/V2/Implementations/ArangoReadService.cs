@@ -33,7 +33,7 @@ using UserProfileService.Projection.Abstractions.Models;
 
 namespace UserProfileService.Adapter.Arango.V2.Implementations;
 
-internal class ArangoReadService : ArangoRepositoryBase, IReadService
+public class ArangoReadService : ArangoRepositoryBase, IReadService
 {
     private readonly string _collectionPrefix;
     private readonly IDbInitializer _dbInitializer;
@@ -42,7 +42,7 @@ internal class ArangoReadService : ArangoRepositoryBase, IReadService
     protected override string ArangoDbClientName { get; }
 
     // useful in tests
-    internal ArangoReadService(
+    public ArangoReadService(
         IServiceProvider serviceProvider,
         IDbInitializer dbInitializer,
         ILogger<ArangoReadService> logger,
@@ -193,6 +193,7 @@ internal class ArangoReadService : ArangoRepositoryBase, IReadService
                 .ToPaginatedList(response.TotalAmount));
     }
 
+    /// <inheritdoc />
     public async Task<IPaginatedList<IProfile>> GetProfilesAsync<TUser, TGroup, TOrgUnit>(
         IEnumerable<string> profileIds,
         RequestedProfileKind expectedKind = RequestedProfileKind.All,
@@ -540,107 +541,7 @@ internal class ArangoReadService : ArangoRepositoryBase, IReadService
                 .ToSpecifiedProfileModels<TUser, TGroup, TOrgUnit>(includeInactiveAssignments)
                 .ToPaginatedList(response.TotalAmount));
     }
-
-    /// <inheritdoc />
-    public Task<byte[]> GetImageProfileAsync(
-        string profileId,
-        CancellationToken cancellationToken = default)
-    {
-        throw new NotSupportedException(
-            $"{nameof(GetImageProfileAsync)}(): This method is not supported by {nameof(ArangoReadService)}.");
-    }
-
-    /// <inheritdoc />
-    public async Task<IPaginatedList<CustomProperty>> GetCustomPropertiesOfProfileAsync(
-        string profileId,
-        QueryObjectBase options = null,
-        CancellationToken cancellationToken = default)
-    {
-        Logger.EnterMethod();
-
-        ValidationHelper.CheckParameter(profileId, nameof(profileId));
-
-        List<string> existing = await ExecuteQueryAsync<IProfileEntityModel, string>(
-            query => query
-                .First(g => g.Id == profileId)
-                .Select(g => g.SystemId)
-                .Compile(CollectionScope.Query),
-            true,
-            true,
-            cancellationToken);
-
-        string profileSystemId = existing?.FirstOrDefault(item => !string.IsNullOrWhiteSpace(item));
-
-        if (string.IsNullOrWhiteSpace(profileSystemId))
-        {
-            throw new InstanceNotFoundException(
-                ArangoRepoErrorCodes.ProfileNotFoundString,
-                $"No profile found with id '{profileId}'.");
-        }
-
-        PaginationApiResponse<CustomProperty> response =
-            await ExecuteCountingQueriesAsync<CustomPropertyEntityModel, CustomProperty>(
-                query => query
-                    .Where(p => p.Related == profileSystemId)
-                    .UsingOptions(options)
-                    .Compile(CollectionScope.Query),
-                cancellationToken);
-
-        return Logger.ExitMethod(
-            response.QueryResult
-                .ToPaginatedList(response.TotalAmount));
-    }
-
-    /// <inheritdoc />
-    public async Task<string> GetCustomPropertyOfProfileAsync(
-        string profileId,
-        string customPropertyKey,
-        CancellationToken cancellationToken = default)
-    {
-        Logger.EnterMethod();
-
-        ValidationHelper.CheckParameter(profileId, nameof(profileId));
-
-        List<string> existing = await ExecuteQueryAsync<IProfileEntityModel, string>(
-            query => query
-                .First(g => g.Id == profileId)
-                .Select(g => g.SystemId)
-                .Compile(CollectionScope.Query),
-            true,
-            true,
-            cancellationToken);
-
-        string profileSystemId = existing?.FirstOrDefault(item => !string.IsNullOrWhiteSpace(item));
-
-        if (string.IsNullOrWhiteSpace(profileSystemId))
-        {
-            throw new InstanceNotFoundException(
-                ArangoRepoErrorCodes.ProfileNotFoundString,
-                $"No profile found with id '{profileId}'.");
-        }
-
-        PaginationApiResponse<string> response =
-            await ExecuteCountingQueriesAsync<CustomPropertyEntityModel, string>(
-                query => query
-                    .First(p => p.Related == profileSystemId && p.Key == customPropertyKey)
-                    .Select(cp => cp.Value)
-                    .Compile(CollectionScope.Query),
-                cancellationToken);
-
-        if (!response.QueryResult.Any())
-        {
-            throw new InstanceNotFoundException(
-                ArangoRepoErrorCodes.CustomPropertyKeyNotFoundString,
-                $"No custom property found (profile: {profileId}; key: {customPropertyKey})!");
-        }
-
-        string firstQueryResult = response.QueryResult?.FirstOrDefault();
-
-        return Logger.ExitMethod(
-            resultingObject:
-            TrimQuotationMarkOnce(firstQueryResult));
-    }
-
+    
     /// <inheritdoc />
     public Task<IPaginatedList<string>> GetFunctionalAccessRightsOfProfileAsync(
         string profileId,
@@ -1295,44 +1196,6 @@ internal class ArangoReadService : ArangoRepositoryBase, IReadService
                 .ToPaginatedList(tags.TotalAmount));
     }
 
-    /// <inheritdoc />
-    public async Task<IPaginatedList<ActivityLogEntry>> GetActivityLogsAsync(
-        ObjectType entityType,
-        IEnumerable<string> objectIds = null,
-        QueryObject options = null,
-        CancellationToken cancellationToken = default)
-    {
-        Logger.EnterMethod();
-
-        List<string> objectIdsToBeUsed = objectIds?
-                .Where(id => !string.IsNullOrWhiteSpace(id))
-                .ToList()
-            ?? new List<string>();
-
-        bool skipEntryFiltering = objectIdsToBeUsed.Count == 0;
-
-        PaginationApiResponse<ActivityLogEntry> logEntries =
-            await ExecuteCountingQueriesAsync<ActivityLogEntry>(
-                query => query
-                    .Where(a => a.Scope == entityType)
-                    .Where(a => skipEntryFiltering || objectIdsToBeUsed.Contains(a.ReferenceId))
-                    .UsingOptions(options)
-                    .DistinctByKey(a => a.EventId)
-                    .Compile(CollectionScope.Query),
-                cancellationToken,
-                false,
-                false);
-
-        Logger.LogDebugMessage(
-            "Found {count} activity logs (total amount: {totalAmount}).",
-            Arguments(logEntries.QueryResult.Count, logEntries.TotalAmount));
-
-        return Logger.ExitMethod(
-            logEntries
-                .QueryResult
-                .ToPaginatedList(logEntries.TotalAmount));
-    }
-
     public async Task<List<IProfile>> GetProfileByExternalOrInternalIdAsync<TUser, TGroup, TOrgUnit>(
         string profileId,
         bool allowExternalIds = true,
@@ -1519,7 +1382,7 @@ internal class ArangoReadService : ArangoRepositoryBase, IReadService
                 .ToPaginatedList(calculatedTags.Count));
     }
 
-    private Task<PaginationApiResponse<TEntity>> ExecuteCountingQueriesAsync<TEntity>(
+    public Task<PaginationApiResponse<TEntity>> ExecuteCountingQueriesAsync<TEntity>(
         Func<IArangoDbEnumerable<TEntity>, IArangoDbQueryResult> selectionQuery,
         CancellationToken cancellationToken = default,
         bool throwException = true,
@@ -1535,7 +1398,7 @@ internal class ArangoReadService : ArangoRepositoryBase, IReadService
             caller);
     }
 
-    private async Task<PaginationApiResponse<TOutput>> ExecuteCountingQueriesAsync<TEntity, TOutput>(
+    public async Task<PaginationApiResponse<TOutput>> ExecuteCountingQueriesAsync<TEntity, TOutput>(
         Func<IArangoDbEnumerable<TEntity>, IArangoDbQueryResult> selectionQuery,
         CancellationToken cancellationToken = default,
         bool throwException = true,
@@ -1648,7 +1511,7 @@ internal class ArangoReadService : ArangoRepositoryBase, IReadService
             caller);
     }
 
-    private async Task<List<TOutput>> ExecuteQueryAsync<TEntity, TOutput>(
+    public async Task<List<TOutput>> ExecuteQueryAsync<TEntity, TOutput>(
         Func<IArangoDbEnumerable<TEntity>, IArangoDbQueryResult> selectionQuery,
         bool throwException,
         bool throwExceptionIfNotFound,

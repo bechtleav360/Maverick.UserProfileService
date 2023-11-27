@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace UserProfileService.Adapter.Arango.V2.EntityModels;
 
-internal class OrganizationEntityModel : Organization, IContainerProfileEntityModel
+public class OrganizationEntityModel : Organization, IContainerProfileEntityModel
 {
     /// <summary>
     ///     A list of range-condition settings valid for this <see cref="Member" />. If it is empty or <c>null</c>, the

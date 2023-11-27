@@ -7,7 +7,7 @@ using UserProfileService.Adapter.Arango.V2.Contracts;
 
 namespace UserProfileService.Adapter.Arango.V2.EntityModels.QueryBuilding;
 
-internal class ArangoDbEnumerable : IArangoDbEnumerable
+public class ArangoDbEnumerable : IArangoDbEnumerable
 {
     internal MemberExpression DistinctionKey { get; set; }
     internal string LastRequestId { get; }
@@ -242,7 +242,7 @@ internal class ArangoDbEnumerable : IArangoDbEnumerable
     }
 }
 
-internal class ArangoDbEnumerable<TEntity> : ArangoDbEnumerable, IArangoDbEnumerable<TEntity>
+public class ArangoDbEnumerable<TEntity> : ArangoDbEnumerable, IArangoDbEnumerable<TEntity>
 {
     protected ArangoDbEnumerable(ModelBuilderOptions modelSettings, string lastRequestId) : base(
         modelSettings,

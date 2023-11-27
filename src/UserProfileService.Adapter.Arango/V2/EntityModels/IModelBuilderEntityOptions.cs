@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 
 namespace UserProfileService.Adapter.Arango.V2.EntityModels;
 
-internal interface IModelBuilderEntityOptions<TEntity> : IModelBuilderEntityOptions
+public interface IModelBuilderEntityOptions<TEntity> : IModelBuilderEntityOptions
 {
     IModelBuilderEntityOptions<TEntity> HasKeyIdentifier<TProp>(Expression<Func<TEntity, TProp>> propertySelector);
     IModelBuilderEntityOptions<TEntity> AddChildRelation<TChild>();
@@ -33,10 +33,12 @@ internal interface IModelBuilderEntityOptions<TEntity> : IModelBuilderEntityOpti
         object discriminatorTypeValue,
         params Type[] types);
 
+    IModelBuilderEntityOptions<TEntity> HasAlias(params Type[] types);
+    
     IModelBuilderEntityOptions<TEntity> HasAlias<TAlias>();
 }
 
-internal interface IModelBuilderEntityOptions
+public interface IModelBuilderEntityOptions
 {
     IModelBuilderEntityQueryOptions NoCollection();
     IModelBuilderEntityQueryOptions Collection(string collectionName);

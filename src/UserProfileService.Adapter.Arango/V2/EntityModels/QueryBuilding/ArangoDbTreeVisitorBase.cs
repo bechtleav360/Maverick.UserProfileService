@@ -9,7 +9,7 @@ using UserProfileService.Adapter.Arango.V2.Contracts;
 
 namespace UserProfileService.Adapter.Arango.V2.EntityModels.QueryBuilding;
 
-internal abstract class ArangoDbTreeVisitorBase : ExpressionVisitor, IDisposable
+public abstract class ArangoDbTreeVisitorBase : ExpressionVisitor, IDisposable
 {
     private readonly Dictionary<Type, Func<Expression, VisitorMethodArgument, Expression>> _methodMapping
         = new Dictionary<Type, Func<Expression, VisitorMethodArgument, Expression>>();

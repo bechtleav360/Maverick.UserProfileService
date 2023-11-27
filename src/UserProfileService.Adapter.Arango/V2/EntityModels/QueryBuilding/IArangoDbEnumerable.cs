@@ -3,14 +3,14 @@ using UserProfileService.Adapter.Arango.V2.Contracts;
 
 namespace UserProfileService.Adapter.Arango.V2.EntityModels.QueryBuilding;
 
-internal interface IArangoDbEnumerable
+public interface IArangoDbEnumerable
 {
     ArangoDbEnumerable GetEnumerable();
     IArangoDbQueryResult Compile<TEntity>(CollectionScope scope);
     Type GetInnerType();
 }
 
-internal interface IArangoDbEnumerable<TEntity> : IArangoDbEnumerable
+public interface IArangoDbEnumerable<TEntity> : IArangoDbEnumerable
 {
     ArangoDbEnumerable<TEntity> GetTypedEnumerable();
     IArangoDbQueryResult Compile(CollectionScope scope);

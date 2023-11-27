@@ -7,7 +7,7 @@ using UserProfileService.Adapter.Arango.V2.Annotations;
 
 namespace UserProfileService.Adapter.Arango.V2.EntityModels;
 
-internal class GroupEntityModel : Group, IContainerProfileEntityModel
+public class GroupEntityModel : Group, IContainerProfileEntityModel
 {
     [VirtualProperty(
         typeof(GroupEntityModel),
