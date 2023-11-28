@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Net.Http.Headers;
+using UserProfileService.Abstractions;
 using UserProfileService.Common.Logging;
 using UserProfileService.Common.Logging.Extensions;
 using UserProfileService.Common.V2.Exceptions;
@@ -23,6 +24,7 @@ public class StatusController : ControllerBase
     private readonly ILogger _logger;
     private readonly ITicketStore _ticketStore;
     private readonly IUrlHelperFactory _urlHelperFactory;
+    private readonly IOperationRedirectionMapper _operationRedirection;
 
     public StatusController(
         ITicketStore ticketStore,
@@ -95,8 +97,9 @@ public class StatusController : ControllerBase
         if (ticket.Status == TicketStatus.Complete)
         {
             return _logger.ExitMethod(
-                await ActionResultHelper.GetFinalResult(
+                await GetFinalResult(
                     _urlHelperFactory.GetUrlHelper(ControllerContext),
+                    _operationRedirection,
                     ticket as UserProfileOperationTicket,
                     _logger));
         }
@@ -187,5 +190,39 @@ public class StatusController : ControllerBase
             {
                 StatusCode = problemDetails.Status
             });
+    }
+
+    private Task<IActionResult> GetFinalResult(
+        IUrlHelper urlHelper,
+        IOperationRedirectionMapper operationRedirectionMapper,
+        UserProfileOperationTicket ticket,
+        ILogger logger)
+    {
+        logger.EnterMethod();
+
+        OperationMap map = operationRedirectionMapper.MapTicket(ticket);
+
+        if (map.Controller == null)
+        {
+            return Task.FromResult<IActionResult>(new OkObjectResult(ticket));
+        }
+
+        if (!(ticket.ObjectIds?.Any() ?? false))
+        {
+            logger.LogErrorMessage(
+                null,
+                "Unable to map route. Ticket does not contain matching object ids for map {operation}.",
+                LogHelpers.Arguments(map.Operation));
+
+            return Task.FromResult<IActionResult>(new OkObjectResult(ticket));
+        }
+
+        string routeUrl = map.GenerateRouteUrl(ticket, urlHelper, logger);
+
+        logger.LogInfoMessage("The created route: {routeUrl}. ", LogHelpers.Arguments(routeUrl));
+
+        logger.ExitMethod();
+
+        return Task.FromResult<IActionResult>(new RedirectResult(routeUrl));
     }
 }

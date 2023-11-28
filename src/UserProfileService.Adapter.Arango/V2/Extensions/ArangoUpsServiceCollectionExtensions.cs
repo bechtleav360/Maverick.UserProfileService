@@ -216,6 +216,7 @@ public static class ArangoUpsServiceCollectionExtensions
                     p.GetRequiredService<ILogger<ArangoReadService>>(),
                     ArangoConstants.DatabaseClientNameUserProfileStorage,
                     prefix));
+        
 
         logger.LogInfoMessage("Registered ArangoDB read service.", LogHelpers.Arguments());
 
