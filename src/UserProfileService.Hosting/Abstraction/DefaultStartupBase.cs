@@ -77,6 +77,12 @@ namespace UserProfileService.Hosting.Abstraction
             AddLateConfiguration(app, env);
         }
 
+        public virtual void RegisterMessaging(IServiceCollection serviceCollection, IConfiguration configuration)
+        {}
+
+        public virtual void RegisterTracing(IServiceCollection services, IConfiguration configuration)
+        {}
+
         /// <summary>
         ///     This method gets called by the runtime. Use this method to add services to the container.
         /// </summary>

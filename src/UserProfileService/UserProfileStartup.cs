@@ -4,20 +4,12 @@ using Maverick.UserProfileService.FilterUtility.Abstraction;
 using Maverick.UserProfileService.FilterUtility.Implementations;
 using Maverick.UserProfileService.Models.Abstraction;
 using Maverick.UserProfileService.Models.RequestModels;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.OpenApi.Any;
-using Microsoft.OpenApi.Models;
 using Prometheus;
-using Swashbuckle.AspNetCore.SwaggerUI;
 using System.Diagnostics;
-using System.Reflection;
-using System.Text.Json.Nodes;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
-using Swashbuckle.AspNetCore.SwaggerGen;
 using UserProfileService.Abstractions;
 using UserProfileService.Adapter.Arango.V2.Extensions;
 using UserProfileService.Adapter.Arango.V2.Helpers;
@@ -40,7 +32,6 @@ using UserProfileService.FilterHelper;
 using UserProfileService.Hosting.Abstraction;
 using UserProfileService.Hosting.Tracing;
 using UserProfileService.Messaging.DependencyInjection;
-using UserProfileService.OpenApiSpec.Examples;
 using UserProfileService.Saga.Validation.DependencyInjection;
 using UserProfileService.Services;
 using UserProfileService.Swagger;
@@ -292,23 +283,8 @@ namespace UserProfileService
 
             _logger.LogInformation("Dependencies of health store registered");
 
-            services.AddMessaging(
-                MessageSourceBuilder.GroupedApp("api", Constants.Messaging.ServiceGroup),
-                Configuration,
-                new[] { typeof(Program).Assembly },
-                cfg =>
-                {
-                    cfg.AddConsumer<HealthCheckMessageConsumer>()
-                        .Endpoint(
-                            e =>
-                            {
-                                // If the name is not changed here, e.Temporary cannot be set to true
-                                // because MassTransit throws an exception stating that the state does
-                                // not match some other definition.
-                                e.Name = Constants.Messaging.HealthCheckApiConsumerEndpoint;
-                                e.Temporary = true;
-                            });
-                });
+            // Register messaging
+            RegisterMessaging(services,Configuration);
 
             _logger.LogInformation("Message handlers registered");
 
@@ -316,6 +292,13 @@ namespace UserProfileService
             services.AddForwardedHeaders();
 
             // Add Tracing via OpenTelemetry
+            RegisterTracing(services, Configuration);
+            
+            services.TryAddSingleton<IOperationRedirectionMapper,OperationRedirectionMapper>();
+        }
+
+        public override void RegisterTracing(IServiceCollection services, IConfiguration configuration)
+        {
             var tracingOptions = Configuration.GetSection("Tracing").Get<TracingOptions>();
 
             services.AddUserProfileServiceTracing(
@@ -323,6 +306,27 @@ namespace UserProfileService
                 {
                     options.ServiceName = tracingOptions.ServiceName;
                     options.OtlpEndpoint = tracingOptions.OtlpEndpoint;
+                });
+        }
+
+        public override void RegisterMessaging(IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddMessaging(
+                MessageSourceBuilder.GroupedApp("api", Constants.Messaging.ServiceGroup),
+                Configuration,
+                new[] { typeof(Program).Assembly },
+                cfg =>
+                {
+                    cfg.AddConsumer<HealthCheckMessageConsumer>()
+                       .Endpoint(
+                           e =>
+                           {
+                               // If the name is not changed here, e.Temporary cannot be set to true
+                               // because MassTransit throws an exception stating that the state does
+                               // not match some other definition.
+                               e.Name = Constants.Messaging.HealthCheckApiConsumerEndpoint;
+                               e.Temporary = true;
+                           });
                 });
         }
 
