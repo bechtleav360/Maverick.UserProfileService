@@ -33,7 +33,7 @@ public static class MessageSourceBuilder
         return new ServiceMessagingMetadata(
             name,
             group,
-            new Uri($"{group}/{name}", UriKind.Relative));
+            new Uri($"maverick/{group}/{name}", UriKind.Relative));
     }
 
     /// <summary>
