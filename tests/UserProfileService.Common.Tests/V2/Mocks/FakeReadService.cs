@@ -131,14 +131,6 @@ namespace UserProfileService.Common.Tests.V2.Mocks
             throw new NotImplementedException();
         }
 
-        public Task<IPaginatedList<CustomProperty>> GetCustomPropertiesOfProfileAsync(
-            string profileId,
-            QueryObjectBase options = null,
-            CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task<string> GetCustomPropertyOfProfileAsync(
             string profileId,
             string customPropertyKey,

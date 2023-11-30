@@ -563,20 +563,7 @@ namespace UserProfileService.Common.Tests.Utilities.MockDataBuilder
                 .RuleFor(t => t.Type, faker => faker.Random.Enum<TagType>())
                 .Generate(number);
         }
-
-        /// <summary>
-        ///     A Method to generate fake <see cref="CustomProperty" />
-        /// </summary>
-        /// <param name="number">the number of fake <see cref="CustomProperty" /> that should be generated</param>
-        /// <returns>A list containing the generated fake <see cref="CustomProperty" /></returns>
-        public static IList<CustomProperty> GenerateCustomProperties(int number = 1)
-        {
-            return new Faker<CustomProperty>()
-                .RuleFor(cp => cp.Key, f => f.Commerce.ProductName())
-                .RuleFor(cp => cp.Value, f => f.Commerce.Price())
-                .Generate(number);
-        }
-
+        
         /// <summary>
         ///     A method to generate fake <see cref="FunctionBasic" />
         /// </summary>
@@ -1423,38 +1410,6 @@ namespace UserProfileService.Common.Tests.Utilities.MockDataBuilder
                 .RuleFor(
                     r => r.LinkedProfiles,
                     faker => GenerateMembers(faker.Random.Int(0, 20), ProfileKind.Group, ProfileKind.User))
-                .Generate(number);
-        }
-
-        /// <summary>
-        ///     A method used to generate fake <see cref="SecO" />
-        /// </summary>
-        /// <param name="number">The number of fake security objects that should be generated</param>
-        /// <returns>
-        ///     <see cref="List{SecO}" />
-        /// </returns>
-        public static List<SecO> GenerateSecurityObjects(int number = 1)
-        {
-            return new Faker<SecO>()
-                .RuleFor(o => o.Name, faker => faker.Finance.Account())
-                .RuleFor(o => o.Id, faker => $"SecO_{faker.Random.Guid()}")
-                .RuleFor(o => o.BreakInheritance, faker => faker.Random.Bool(0.2f))
-                .RuleFor(
-                    o => o.CustomPropertyUrl,
-                    (
-                            _,
-                            secO) =>
-                        $"https://upsbase.org:9123/api/v2/secos/{secO.Id}/customproperties")
-                .RuleFor(
-                    o => o.Tags,
-                    faker => faker.Random.WordsArray(0, 1)
-                        .Select(
-                            word => new Tag
-                            {
-                                Name = word,
-                                Type = faker.Random.Enum(TagType.Security, TagType.Custom)
-                            })
-                        .ToList())
                 .Generate(number);
         }
 
