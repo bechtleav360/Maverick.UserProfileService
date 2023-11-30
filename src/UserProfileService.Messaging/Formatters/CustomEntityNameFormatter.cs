@@ -99,12 +99,10 @@ public class CustomEntityNameFormatter : IEndpointNameFormatter, IEntityNameForm
 
         return prefix;
     }
-
-    private string GetPrefix(string group, string name)
-    {
-        return string.Join('.', new[] { group, name }.Where(s => !string.IsNullOrWhiteSpace(s)))
-            .Trim('.');
-    }
+    
+    private string GetPrefix(string group, string name) =>
+        string.Join('.', new[] { "maverick", group, name }.Where(s => !string.IsNullOrWhiteSpace(s)))
+              .Trim('.');
 
     private string GetVersionPostfixFor<T>()
     {
