@@ -124,14 +124,5 @@ namespace UserProfileService.Arango.IntegrationTests.V2.Helpers
                 .RuleFor(f => f.Organization, _ => organization)
                 .Generate();
         }
-
-        internal static SecOBasic GenerateObject(string id = null)
-        {
-            return new Faker<SecOBasic>()
-                .RuleFor(o => o.Id, id ?? Guid.NewGuid().ToString("D"))
-                .RuleFor(o => o.Name, faker => faker.Name.JobTitle())
-                .RuleFor(o => o.BreakInheritance, faker => faker.Random.Bool(0.1F))
-                .Generate();
-        }
     }
 }

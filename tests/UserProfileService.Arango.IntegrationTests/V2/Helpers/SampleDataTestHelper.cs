@@ -143,7 +143,6 @@ namespace UserProfileService.Arango.IntegrationTests.V2.Helpers
                         cfg.CreateMap<RoleObjectEntityModel, RoleBasic>();
                         cfg.CreateMap<RoleObjectEntityModel, LinkedRoleObject>();
                         cfg.CreateMap<RoleObjectEntityModel, RoleView>();
-                        cfg.CreateMap<CustomPropertyEntityModel, CustomProperty>();
 
                         cfg.CreateMap<UserEntityModel, Member>()
                            .ForMember(
@@ -176,9 +175,7 @@ namespace UserProfileService.Arango.IntegrationTests.V2.Helpers
                             .Include<UserEntityModel, UserBasic>()
                             .Include<GroupEntityModel, GroupBasic>()
                             .Include<OrganizationEntityModel, OrganizationBasic>();
-
-                        cfg.CreateMap<SecOEntityModel, SecOBasic>();
-                        cfg.CreateMap<SecOEntityModel, SecOBasic>();
+                        
                         cfg.CreateMap<TagTestEntity, Tag>().ReverseMap();
                         cfg.CreateMap<Tag, CalculatedTag>();
                     }));
@@ -767,7 +764,6 @@ namespace UserProfileService.Arango.IntegrationTests.V2.Helpers
                         cfg.CreateMap<UserEntityModel, UserBasic>();
                         cfg.CreateMap<RoleObjectEntityModel, RoleBasic>();
                         cfg.CreateMap<FunctionObjectEntityModel, FunctionBasic>();
-                        cfg.CreateMap<CustomPropertyEntityModel, CustomProperty>();
                     });
 
             return new Mapper(config);
