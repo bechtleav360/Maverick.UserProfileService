@@ -29,9 +29,11 @@ public class StatusController : ControllerBase
     public StatusController(
         ITicketStore ticketStore,
         ILogger<StatusController> logger,
-        IUrlHelperFactory urlHelperFactory)
+        IUrlHelperFactory urlHelperFactory,
+        IOperationRedirectionMapper operationRedirection)
     {
         _urlHelperFactory = urlHelperFactory;
+        _operationRedirection = operationRedirection;
         _ticketStore = ticketStore;
         _logger = logger;
     }
