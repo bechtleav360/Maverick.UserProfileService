@@ -27,6 +27,7 @@ using UserProfileService.EventCollector.DependencyInjection;
 using UserProfileService.Events.Implementation.V3;
 using UserProfileService.EventSourcing.Abstractions.DependencyInjection;
 using UserProfileService.Hosting.Abstraction;
+using UserProfileService.Hosting.Tracing;
 using UserProfileService.Informer.DependencyInjection;
 using UserProfileService.Marten.EventStore.DependencyInjection;
 using UserProfileService.Marten.EventStore.Implementations;
@@ -79,6 +80,51 @@ public class SagaWorkerStartUp : DefaultStartupBase
             GetAssemblyVersion());
     }
 
+    /// <inheritdoc/>
+    public override void RegisterMessaging(IServiceCollection serviceCollection, IConfiguration configuration)
+    {
+        serviceCollection.AddMessaging(
+                             MessageSourceBuilder.GroupedApp("saga-worker", Constants.Messaging.ServiceGroup),
+                             Configuration,
+                             new[]
+                             {
+                                 typeof(Program).Assembly,
+                                 typeof(IValidationService).Assembly,
+                                 typeof(EventCollectorAgent).Assembly
+                             },
+                             bus =>
+                             {
+                                 bus.AddSagaStateMachine<CommandProcessStateMachine, CommandProcessState>()
+                                    .ArangoRepository(
+                                        r =>
+                                        {
+                                            var arangoConfiguration = configuration.Get<ArangoConfiguration>();
+
+                                            r.DatabaseConfiguration("saga-state-client", arangoConfiguration);
+
+                                            // Default is Optimistic
+                                            r.ConcurrencyMode = ConcurrencyMode.Pessimistic;
+
+                                            // Optional, default is "saga_state_{typeof(TSaga).Name}"
+                                            r.CollectionName = "SagaWorker_Command_StateMachine";
+                                        });
+                             })
+                         .AddTransient<ICommandServiceFactory, CommandServiceFactory>();
+    }
+
+    /// <inheritdoc/>
+    public override void RegisterTracing(IServiceCollection services, IConfiguration configuration)
+    {
+        var tracingOptions = Configuration.GetSection("Tracing").Get<TracingOptions>();
+
+        services.AddUserProfileServiceTracing(
+            options =>
+            {
+                options.ServiceName = tracingOptions.ServiceName;
+                options.OtlpEndpoint = tracingOptions.OtlpEndpoint;
+            });
+    }
+
     /// <inheritdoc />
     protected override void AddLateConfiguration(
         IApplicationBuilder app,
@@ -127,7 +173,7 @@ public class SagaWorkerStartUp : DefaultStartupBase
     {
         IConfigurationSection arangoConfigurationSection =
             Configuration.GetSection(WellKnownConfigurationKeys.ProfileStorage);
-
+        
         services
             .AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies())
             .AddArangoRepositoriesToReadFromProfileStorage(
@@ -138,6 +184,9 @@ public class SagaWorkerStartUp : DefaultStartupBase
         services.AddTransient<IProjectionReadService, ProjectionReadService>();
         services.AddSingleton<IJsonSerializerSettingsProvider, DefaultJsonSettingsProvider>();
         services.AddProjectionResponseService();
+        
+        RegisterMessaging(services, arangoConfigurationSection);
+        RegisterTracing(services, Configuration);
 
         // first level projection
         services.AddFirstLevelProjectionService(
@@ -310,37 +359,6 @@ public class SagaWorkerStartUp : DefaultStartupBase
                 builder.SetWorkerName(WellKnownWorkerNames.SagaWorker)
                     .SetFilterPredicate(h => h.Tags.Contains(HealthCheckTags.Readiness))
                     .SetDelay(Configuration[WellKnownConfigKeys.HealthPushDelay]));
-
-        services.AddMessaging(
-                MessageSourceBuilder.GroupedApp(
-                    "saga-worker",
-                    Constants.Messaging.ServiceGroup),
-                Configuration,
-                new[]
-                {
-                    typeof(Program).Assembly,
-                    typeof(IValidationService).Assembly,
-                    typeof(EventCollectorAgent).Assembly
-                },
-                bus =>
-                {
-                    bus.AddSagaStateMachine<CommandProcessStateMachine, CommandProcessState>()
-                        .ArangoRepository(
-                            r =>
-                            {
-                                var arangoConfiguration =
-                                    arangoConfigurationSection.Get<ArangoConfiguration>();
-
-                                r.DatabaseConfiguration("saga-state-client", arangoConfiguration);
-
-                                // Default is Optimistic
-                                r.ConcurrencyMode = ConcurrencyMode.Pessimistic;
-
-                                // Optional, default is "saga_state_{typeof(TSaga).Name}"
-                                r.CollectionName = "SagaWorker_Command_StateMachine";
-                            });
-                })
-            .AddTransient<ICommandServiceFactory, CommandServiceFactory>();
 
         services.AddNoneMessageInformer();
     }

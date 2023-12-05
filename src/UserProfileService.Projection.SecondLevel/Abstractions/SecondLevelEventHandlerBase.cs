@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Maverick.UserProfileService.AggregateEvents.Common;
+using Maverick.UserProfileService.AggregateEvents.V1;
 using Maverick.UserProfileService.Models.EnumModels;
 using Maverick.UserProfileService.Models.Models;
 using Microsoft.Extensions.DependencyInjection;
@@ -219,7 +221,7 @@ public abstract class SecondLevelEventHandlerBase<TEvent> : ISecondLevelEventHan
         
         try
         {
-            INotifyContext contextData = await GetAdditionalMessageContextAsync(domainEvent);
+            INotifyContext contextData = await GetAdditionalMessageContextAsync(domainEvent, relatedObjectIdent);
 
             Logger.LogDebugMessage(
                 "The additional context information: {additionalInformation}.",
@@ -250,14 +252,23 @@ public abstract class SecondLevelEventHandlerBase<TEvent> : ISecondLevelEventHan
     ///     this method can be overwritten and the information can be added.
     /// </summary>
     /// <param name="serviceEvent">The event for which the additional data are needed.</param>
+    /// <param name="relatedObject">Get the related object information.</param>
     /// <returns>
     ///     A task representing the asynchronous operation that wraps an <see cref="INotifyContext" />
     ///     that contains the additional data for a notification.
     /// </returns>
     protected virtual async Task<INotifyContext> GetAdditionalMessageContextAsync(
-        IUserProfileServiceEvent serviceEvent)
+        IUserProfileServiceEvent serviceEvent,
+        ObjectIdent relatedObject)
     {
         var defaultNotifyContext = new DefaultNotifyContext();
+
+        if (serviceEvent is EntityDeleted entityDeleted && relatedObject.Type == ObjectType.User)
+        {
+            ISecondLevelProjectionProfile profile = await Repository.GetProfileAsync(entityDeleted.Id);
+            defaultNotifyContext.ExternalIdentifier = profile?.ExternalIds.FirstOrDefault().Id;
+            defaultNotifyContext.ContextType = relatedObject;
+        }
 
         return defaultNotifyContext;
     }

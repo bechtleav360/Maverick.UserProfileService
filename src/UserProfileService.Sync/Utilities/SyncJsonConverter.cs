@@ -13,8 +13,8 @@ internal static class SyncJsonConverter
         return new List<JsonConverter>
         {
             WellKnownSecondLevelConverter.GetSecondLevelDefaultConverters(),
-            WellKnownJsonConverters.DefaultFunctionConverter,
-            WellKnownJsonConverters.DefaultProfileConverter,
+            WellKnownProjectionJsonConverters.DefaultFunctionConverter,
+            WellKnownProjectionJsonConverters.DefaultProfileConverter,
             new StringEnumConverter()
         };
     }

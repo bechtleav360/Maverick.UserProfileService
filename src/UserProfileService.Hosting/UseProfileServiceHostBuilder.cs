@@ -58,26 +58,6 @@ public static class UseProfileServiceHostBuilder
                 })
             .ConfigureLogging(
                 (context, loggingBuilder) => { loggingBuilder.UseSpecificLogging(context.Configuration); })
-            .ConfigureServices(
-                (hostBuilderContext, serviceCollection) =>
-                {
-                    // Add Tracing via OpenTelemetry
-                    var tracingOptions = hostBuilderContext.Configuration?.GetSection("Tracing")?.Get<TracingOptions>();
-
-                    if (tracingOptions == null)
-                    {
-                        return;
-                    }
-
-                    serviceCollection.AddUserProfileServiceTracing(
-                        options =>
-                        {
-                            options.ServiceName = tracingOptions.ServiceName;
-                            options.OtlpEndpoint = tracingOptions.OtlpEndpoint;
-                        });
-
-                    serviceCollection.AddForwardedHeaders();
-                })
             .ConfigureWebHostDefaults(host => host.UseStartup<TStartUp>());
 
         return hostBuilder;

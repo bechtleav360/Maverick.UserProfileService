@@ -6,15 +6,15 @@ using UserProfileService.Projection.Common.Converters;
 
 namespace UserProfileService.Saga.Worker.Utilities;
 
-internal static class SagaWorkerConverter
+public static class SagaWorkerConverter
 {
-    internal static IList<JsonConverter> GetAllConvertersForMartenProjections()
+    public static IList<JsonConverter> GetAllConvertersForMartenProjections()
     {
         return new List<JsonConverter>
         {
             WellKnownSecondLevelConverter.GetSecondLevelDefaultConverters(),
-            WellKnownJsonConverters.DefaultFunctionConverter,
-            WellKnownJsonConverters.DefaultProfileConverter,
+            WellKnownProjectionJsonConverters.DefaultFunctionConverter,
+            WellKnownProjectionJsonConverters.DefaultProfileConverter,
             new StringEnumConverter()
         };
     }

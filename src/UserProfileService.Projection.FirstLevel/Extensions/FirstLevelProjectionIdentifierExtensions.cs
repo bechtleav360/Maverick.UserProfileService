@@ -7,9 +7,9 @@ using UserProfileService.Projection.Abstractions.Models;
 
 namespace UserProfileService.Projection.FirstLevel.Extensions;
 
-internal static class FirstLevelProjectionIdentifierExtensions
+public static class FirstLevelProjectionIdentifierExtensions
 {
-    internal static ObjectIdent ToObjectIdent(this IFirstLevelProjectionSimplifier o)
+    public static ObjectIdent ToObjectIdent(this IFirstLevelProjectionSimplifier o)
     {
         return o switch
         {

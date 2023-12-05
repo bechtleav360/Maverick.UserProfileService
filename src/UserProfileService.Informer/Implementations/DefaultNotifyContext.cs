@@ -1,4 +1,6 @@
-﻿using Maverick.UserProfileService.Models.Models;
+﻿
+
+using Maverick.UserProfileService.Models.Models;
 using UserProfileService.Informer.Abstraction;
 
 namespace UserProfileService.Informer.Implementations;

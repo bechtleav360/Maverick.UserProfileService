@@ -28,41 +28,7 @@ public interface ISecondLevelProjectionRepository : IProjectionStateRepository
     Task AbortTransactionAsync(
         IDatabaseTransaction transaction,
         CancellationToken cancellationToken = default);
-
-    /// <summary>
-    ///     Adds the specified custom properties to the profile corresponding to the given id.
-    /// </summary>
-    /// <param name="profileId">The id of the profile which becomes new custom properties.</param>
-    /// <param name="customProperties">The custom properties that should be added to the specified profile.</param>
-    /// <param name="transaction">The object including information about the transaction to aborted.</param>
-    /// <param name="cancellationToken">
-    ///     The token to monitor for cancellation requests. The default value is
-    ///     <see cref="CancellationToken.None" />
-    /// </param>
-    /// <returns>A task representing the asynchronous write operation.</returns>
-    Task AddCustomPropertiesToProfile(
-        string profileId,
-        Dictionary<string, string> customProperties,
-        IDatabaseTransaction transaction = default,
-        CancellationToken cancellationToken = default);
-
-    /// <summary>
-    ///     Remove the specified custom properties to the profile corresponding to the given id.
-    /// </summary>
-    /// <param name="profileId">The id of the profile which becomes new custom properties.</param>
-    /// <param name="customPropertiesKeys">The keys of custom properties that should be removed from the specified profile.</param>
-    /// <param name="transaction">The object including information about the transaction to aborted.</param>
-    /// <param name="cancellationToken">
-    ///     The token to monitor for cancellation requests. The default value is
-    ///     <see cref="CancellationToken.None" />
-    /// </param>
-    /// <returns>A task representing the asynchronous write operation.</returns>
-    public Task RemoveCustomPropertiesFromProfile(
-        string profileId,
-        IEnumerable<string> customPropertiesKeys,
-        IDatabaseTransaction transaction = default,
-        CancellationToken cancellationToken = default);
-
+    
     /// <summary>
     ///     Adds a new <paramref name="member" /> to a container of type <paramref name="containerType" /> and with the
     ///     specified <paramref name="containerId" />.
