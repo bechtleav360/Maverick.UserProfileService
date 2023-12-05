@@ -40,7 +40,7 @@ namespace UserProfileService.Adapter.Arango.V2.Implementations;
 /// <summary>
 ///     An Implementation of <see cref="ISecondLevelProjectionRepository" /> for the Arango DB.
 /// </summary>
-public sealed class ArangoSecondLevelProjectionRepository : ArangoRepositoryBase, ISecondLevelProjectionRepository
+public class ArangoSecondLevelProjectionRepository : ArangoRepositoryBase, ISecondLevelProjectionRepository
 {
     /// <summary>
     ///     A <see cref="IMapper" /> used to map Aggregate models to AV360 models and vice versa.
@@ -279,7 +279,7 @@ public sealed class ArangoSecondLevelProjectionRepository : ArangoRepositoryBase
         return Logger.ExitMethod(response);
     }
 
-    private string GetCollectionName<T>()
+    protected string GetCollectionName<T>()
     {
         return _modelsInfo.GetCollectionName<T>();
     }
@@ -384,7 +384,7 @@ public sealed class ArangoSecondLevelProjectionRepository : ArangoRepositoryBase
     /// <param name="transaction">The transaction to validate.</param>
     /// <returns>The <see cref="ArangoTransaction" /> which was passed.</returns>
     /// <exception cref="ArgumentException">Will be yielded if the transaction is not suitable for this repository.</exception>
-    private ArangoTransaction ValidateTransaction(IDatabaseTransaction transaction)
+    protected ArangoTransaction ValidateTransaction(IDatabaseTransaction transaction)
     {
         Logger.EnterMethod();
 
@@ -426,7 +426,7 @@ public sealed class ArangoSecondLevelProjectionRepository : ArangoRepositoryBase
         return Logger.ExitMethod(arangoTransaction);
     }
 
-    private async Task<CreateDocumentResponse> CreateEntityInternalAsync<TEntity>(
+    protected async Task<CreateDocumentResponse> CreateEntityInternalAsync<TEntity>(
         TEntity entity,
         string entityId = null,
         bool withResponseCheck = true,
@@ -1251,133 +1251,7 @@ public sealed class ArangoSecondLevelProjectionRepository : ArangoRepositoryBase
 
         Logger.ExitMethod();
     }
-
-    /// <inheritdoc />
-    public async Task AddCustomPropertiesToProfile(
-        string profileId,
-        Dictionary<string, string> customProperties,
-        IDatabaseTransaction transaction = default,
-        CancellationToken cancellationToken = default)
-    {
-        Logger.EnterMethod();
-
-        if (profileId == null)
-        {
-            throw new ArgumentNullException(nameof(profileId));
-        }
-
-        if (customProperties == null || !customProperties.Any())
-        {
-            throw new ArgumentNullException(nameof(customProperties));
-        }
-
-        await RemoveCustomPropertiesFromProfile(
-            profileId,
-            customProperties.Keys.ToList(),
-            transaction,
-            cancellationToken);
-
-        foreach (KeyValuePair<string, string> entry in customProperties)
-        {
-            if (entry.Key == null || entry.Value == null)
-            {
-                Logger.LogWarnMessage("Can not add invalid custom property", LogHelpers.Arguments());
-
-                throw new ArgumentNullException(nameof(entry));
-            }
-
-            await CreateEntityInternalAsync(
-                new CustomPropertyEntityModel
-                {
-                    Key = entry.Key,
-                    Value = entry.Value,
-                    Related = $"{GetCollectionName<IProfileEntityModel>()}/{profileId}"
-                },
-                withResponseCheck: true,
-                transaction: transaction,
-                cancellationToken: cancellationToken);
-        }
-
-        Logger.ExitMethod();
-    }
-
-    /// <inheritdoc />
-    public async Task RemoveCustomPropertiesFromProfile(
-        string profileId,
-        IEnumerable<string> customPropertiesKeys,
-        IDatabaseTransaction transaction = default,
-        CancellationToken cancellationToken = default)
-    {
-        Logger.EnterMethod();
-
-        string transactionId = ValidateTransaction(transaction)?.TransactionId;
-
-        if (profileId == null)
-        {
-            throw new ArgumentNullException(nameof(profileId));
-        }
-
-        if (customPropertiesKeys == null)
-        {
-            throw new ArgumentNullException(nameof(customPropertiesKeys));
-        }
-
-        List<string> propertiesKeys = customPropertiesKeys as List<string>
-            ?? customPropertiesKeys.ToList();
-
-        if (!propertiesKeys.Any())
-        {
-            throw new ArgumentException(
-                "The list of custom properties keys should not be empty",
-                nameof(customPropertiesKeys));
-        }
-
-        string collectionName = GetCollectionName<CustomPropertyEntityModel>();
-
-        foreach (string key in propertiesKeys)
-        {
-            if (string.IsNullOrWhiteSpace(key))
-            {
-                Logger.LogWarnMessage(
-                    "Can not unset custom property: key is empty or null",
-                    LogHelpers.Arguments());
-
-                throw new ArgumentNullException(nameof(key));
-            }
-
-            var deleteQuery = @$" FOR x in {
-                collectionName
-            }                    
-                     FILTER x.Related == ""{
-                         GetCollectionName<IProfileEntityModel>()
-                     }/{
-                         profileId
-                     }""
-                     AND x.Key == ""{
-                         key
-                     }""
-                     REMOVE x IN {
-                         collectionName
-                     } RETURN OLD";
-
-            MultiApiResponse<CustomPropertyEntityModel> response =
-                await GetArangoDbClient()
-                    .ExecuteQueryAsync<CustomPropertyEntityModel>(
-                        deleteQuery,
-                        transactionId,
-                        cancellationToken: cancellationToken);
-
-            if (response == null || response.Error)
-            {
-                Logger.LogWarnMessage(
-                    "Error by deleting custom property: key: {key} from the profile {profileId} ",
-                    LogHelpers.Arguments(key, profileId));
-            }
-        }
-
-        Logger.ExitMethod();
-    }
-
+    
     /// <inheritdoc />
     public async Task<ISecondLevelProjectionProfile> GetProfileAsync(
         string profileId,

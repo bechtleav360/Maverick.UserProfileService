@@ -37,6 +37,8 @@ public static class ArangoConstants
     public const string DatabaseClientNameUserProfileStorage = "UpsStorage";
 
     public const string SecondLevelArangoClientName = "Arango_Second_Level_Client";
+    
+    
     public const string SecondLevelAssignmentsArangoClientName = "Arango_Second_Level_Assignment_Client";
 
 }

@@ -307,8 +307,10 @@ namespace UserProfileService
                     options.ServiceName = tracingOptions.ServiceName;
                     options.OtlpEndpoint = tracingOptions.OtlpEndpoint;
                 });
+            
+            services.AddForwardedHeaders();
         }
-
+        
         public override void RegisterMessaging(IServiceCollection services, IConfiguration configuration)
         {
             services.AddMessaging(

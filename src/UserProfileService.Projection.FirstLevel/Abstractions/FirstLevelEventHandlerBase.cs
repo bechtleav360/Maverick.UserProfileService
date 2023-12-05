@@ -103,7 +103,7 @@ public abstract class FirstLevelEventHandlerBase<TEventType> : IFirstLevelProjec
             throw;
         }
     }
-
+    
     /// <summary>
     ///     Handles the eventObject with eventObject specific processes.
     /// </summary>

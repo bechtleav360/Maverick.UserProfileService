@@ -11,7 +11,7 @@ namespace UserProfileService.Projection.Common.Converters;
 /// <summary>
 ///     Contains some well-known converters used by entity (de)-serialization
 /// </summary>
-public static class WellKnownJsonConverters
+public static class WellKnownProjectionJsonConverters
 {
     /// <summary>
     ///     The default profile converters for the interface <see cref="IAssignmentObject" />
