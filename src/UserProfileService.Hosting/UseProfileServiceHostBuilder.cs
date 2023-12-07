@@ -46,7 +46,7 @@ public static class UseProfileServiceHostBuilder
                     builder.AddEnvironmentVariables("DOTNET_");
                     builder.AddEnvironmentVariables("ASPNETCORE_");
                     builder.AddJsonFile("appsettings.json", true, true);
-                    builder.AddJsonFile($"appsettings.{context.HostingEnvironment.EnvironmentName}.json");
+                    builder.AddJsonFile($"appsettings.{context.HostingEnvironment.EnvironmentName}.json", true, true);
                     builder.AddCommandLine(args);
                 })
             .UseDefaultServiceProvider(
