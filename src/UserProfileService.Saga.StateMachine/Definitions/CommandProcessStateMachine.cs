@@ -113,12 +113,12 @@ public class CommandProcessStateMachine : MassTransitStateMachine<CommandProcess
     {
         InstanceState(
             x => x.CurrentState,
-            Submitted,
-            InternalValidated,
-            Executed,
-            Success,
-            Rejected,
-            ValidationSucceeded);
+            Submitted, // 3
+            InternalValidated,     // 4
+            Executed,              // 5
+            Success,               // 6
+            Rejected,              // 7
+            ValidationSucceeded);  // 8
     }
 
     /// <summary>
@@ -172,7 +172,7 @@ public class CommandProcessStateMachine : MassTransitStateMachine<CommandProcess
 
     
     /// <summary>
-    ///     Defines the process of the state machine. Currently the state machine has seven states that behaved
+    ///     Defines the process of the state machine. Currently, the state machine has seven states that behaved
     ///     like this:
     ///                                 (Rejected)
     ///                                     |
@@ -185,7 +185,7 @@ public class CommandProcessStateMachine : MassTransitStateMachine<CommandProcess
     /// 
     ///   Nearly from every state you can transition to the rejected state, except in the success or the current
     ///   state. The rejected state defines the end of a saga. It specifies that a command failed and the error has to
-    ///   be analyzed. The reason can have multiple reasons and depends from which state the rejected state was reached.
+    ///   be analyzed. The reason can have multiple reasons and depends on from which state the rejected state was reached.
     ///
     ///   The submit states that a command was triggered and the data has been prepared (for example the command is persisted)
     ///   for the next steps. From the submit state there are two states that can be reached: the internal validation
@@ -193,7 +193,7 @@ public class CommandProcessStateMachine : MassTransitStateMachine<CommandProcess
     ///
     ///    The internal validation states that the payload of an entity will validated. The validation can contain an
     ///    internal validation if for example the right properties are set, or if the entity has a correct id. It can
-    ///    also include an validation from an external system that can validate entity with there own rules.
+    ///    also include a validation from an external system that can validate entity with their own rules.
     ///
     ///   From the internal validation you can transition to the state validation succeeded state. The states only
     ///   states, that the validation was done successfully. From that state you transition to the execution state that is a
@@ -241,8 +241,7 @@ public class CommandProcessStateMachine : MassTransitStateMachine<CommandProcess
                                             "Validation failed.",
                                             c.Saga.ValidationResult.Errors))
                                 .TransitionTo(Rejected)
-                                .Finalize())
-                        .TransitionTo(ValidationSucceeded))
+                                .Finalize()))
                 .CatchException(
                     Rejected,
                     context => new SubmitCommandFailure(
@@ -279,7 +278,7 @@ public class CommandProcessStateMachine : MassTransitStateMachine<CommandProcess
             f =>
                 f.ThenAsync(ExecuteCommandEventAsync)
                     .TransitionTo(Executed)
-                    .CatchException(Rejected, GenerateFailureMessage));
+                  .CatchException(Rejected, GenerateFailureMessage));
 
         During(
             InternalValidated,
@@ -338,7 +337,7 @@ public class CommandProcessStateMachine : MassTransitStateMachine<CommandProcess
                 .IfElse(
                     IsValidValidationResult,
                     ifBinder => ifBinder.ThenAsync(ExecuteCommandEventAsync)
-                        .TransitionTo(Executed),
+                        .TransitionTo(Executed), // Todo Wtf?!?! Executed -> Executed ???
                     elseBinder => elseBinder
                         .Then(ParseMessage)
                         .Publish(
