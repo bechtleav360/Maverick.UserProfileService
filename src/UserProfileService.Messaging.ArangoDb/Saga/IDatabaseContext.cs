@@ -80,4 +80,15 @@ public interface IDatabaseContext<TSaga> :
     /// <param name="context">Context to delete.</param>
     /// <returns>Represents the async operation of deleting saga context.</returns>
     Task DeleteAsync(SagaConsumeContext<TSaga> context);
+
+    /// <summary>
+    ///     Attempts to delete the given saga context.
+    /// </summary>
+    /// <param name="context">Context to delete.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous write operation of deleting saga context. It wraps a boolean flag
+    ///     indicating the success of the delete operation. It will be <c>true</c> if the deletion was successfully, otherwise,
+    ///     <c>false</c>.
+    /// </returns>
+    Task<bool> TryDeleteAsync(SagaConsumeContext<TSaga> context);
 }

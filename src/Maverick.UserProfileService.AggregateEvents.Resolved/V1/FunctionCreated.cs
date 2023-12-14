@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Maverick.UserProfileService.AggregateEvents.Common;
+using Maverick.UserProfileService.AggregateEvents.Common.Annotations;
 using Maverick.UserProfileService.AggregateEvents.Common.Models;
 using Maverick.UserProfileService.AggregateEvents.Resolved.V1.Models;
 
@@ -10,6 +11,7 @@ namespace Maverick.UserProfileService.AggregateEvents.Resolved.V1
     ///     Defines a model wrapping all properties required for creating function.<br />
     ///     Be aware! The version of this event does not correlate with the UPS API version.
     /// </summary>
+    [AggregateEventDetails(true)]
     public class FunctionCreated : IUserProfileServiceEvent
     {
         /// <summary>

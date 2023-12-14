@@ -24,8 +24,8 @@ public class AssignmentPayloadValidator : AbstractValidator<AssignmentPayload>
             .NotNull()
             .SetValidator(new ObjectIdentValidator());
 
-        ValidateObjectList(t => t.Added, DateTime.UtcNow);
-        ValidateObjectList(t => t.Removed, DateTime.MinValue);
+        ValidateObjectList(t => t.Added, DateTime.UtcNow, true);
+        ValidateObjectList(t => t.Removed, DateTime.MinValue, false);
 
         // Checks that at least one assignment is added or removed.
         RuleFor(x => x.Added)
@@ -50,7 +50,8 @@ public class AssignmentPayloadValidator : AbstractValidator<AssignmentPayload>
 
     private void ValidateObjectList(
         Expression<Func<AssignmentPayload, ConditionObjectIdent[]>> selector,
-        DateTime conditionDateTime)
+        DateTime conditionDateTime,
+        bool checkOverlappingConditions)
     {
         // Checks that lists are not empty and validates elements in the list .
         RuleFor(selector)
@@ -100,30 +101,33 @@ public class AssignmentPayloadValidator : AbstractValidator<AssignmentPayload>
                     .WithMessage("Assignments with the same conditions were defined."));
 
         // Checks whether assignments have been defined with overlapping conditions. 
-        RuleFor(selector)
-            .ForEach(
-                x => x
-                    .Must(
-                        (n, m) =>
-                        {
-                            List<RangeCondition> conditions = n
-                                .Where(c => c.Id == m.Id)
-                                .SelectMany(c => c.Conditions)
-                                .ToList();
-
-                            if (conditions.Count <= 1)
+        if (checkOverlappingConditions)
+        {
+            RuleFor(selector)
+                .ForEach(
+                    x => x
+                        .Must(
+                            (n, m) =>
                             {
-                                return true;
-                            }
+                                List<RangeCondition> conditions = n
+                                    .Where(c => c.Id == m.Id)
+                                    .SelectMany(c => c.Conditions)
+                                    .ToList();
 
-                            return !conditions.Any(
-                                c => conditions.Count(
-                                        c2 =>
-                                            GetDateTime(c.Start, true) < GetDateTime(c2.End)
-                                            && GetDateTime(c.End) >= GetDateTime(c2.End))
-                                    > 1);
-                        })
-                    .WithMessage("Assignments with overlapping constraints have been created."));
+                                if (conditions.Count <= 1)
+                                {
+                                    return true;
+                                }
+
+                                return !conditions.Any(
+                                    c => conditions.Count(
+                                            c2 =>
+                                                GetDateTime(c.Start, true) < GetDateTime(c2.End)
+                                                && GetDateTime(c.End) >= GetDateTime(c2.End))
+                                        > 1);
+                            })
+                        .WithMessage("Assignments with overlapping constraints have been created."));
+        }
 
         //Checks that the assignment is not done between the same object.
         RuleFor(selector)

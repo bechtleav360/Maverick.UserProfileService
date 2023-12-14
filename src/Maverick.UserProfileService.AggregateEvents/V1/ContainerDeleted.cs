@@ -1,4 +1,5 @@
 ﻿using Maverick.UserProfileService.AggregateEvents.Common;
+using Maverick.UserProfileService.AggregateEvents.Common.Annotations;
 using Maverick.UserProfileService.AggregateEvents.Common.Enums;
 
 namespace Maverick.UserProfileService.AggregateEvents.V1
@@ -7,6 +8,7 @@ namespace Maverick.UserProfileService.AggregateEvents.V1
     ///     Defines the event emitted when a container (or parent of an object) has been deleted.<br />
     ///     Be aware! The version of this event does not correlate with the UPS API version.
     /// </summary>
+    [AggregateEventDetails]
     public class ContainerDeleted : IUserProfileServiceEvent
     {
         /// <summary>

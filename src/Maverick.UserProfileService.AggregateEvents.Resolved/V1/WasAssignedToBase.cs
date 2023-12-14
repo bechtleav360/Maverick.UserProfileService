@@ -1,5 +1,6 @@
 ﻿using System;
 using Maverick.UserProfileService.AggregateEvents.Common;
+using Maverick.UserProfileService.AggregateEvents.Common.Annotations;
 using Maverick.UserProfileService.AggregateEvents.Common.Models;
 
 namespace Maverick.UserProfileService.AggregateEvents.Resolved.V1
@@ -10,6 +11,7 @@ namespace Maverick.UserProfileService.AggregateEvents.Resolved.V1
     ///     Be aware! The version of this event does not correlate with the UPS API version.
     /// </summary>
     /// <typeparam name="TContainer">Type of the target object.</typeparam>
+    [AggregateEventDetails(true)]
     public abstract class WasAssignedToBase<TContainer> : IUserProfileServiceEvent
         where TContainer : class
     {

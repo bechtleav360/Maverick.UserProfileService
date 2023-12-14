@@ -1,4 +1,5 @@
 ﻿using Maverick.UserProfileService.AggregateEvents.Common;
+using Maverick.UserProfileService.AggregateEvents.Common.Annotations;
 
 namespace Maverick.UserProfileService.AggregateEvents.Resolved.V1
 {
@@ -6,6 +7,7 @@ namespace Maverick.UserProfileService.AggregateEvents.Resolved.V1
     ///     Defines the event emitted when the entity itself has been deleted.<br />
     ///     Be aware! The version of this event does not correlate with the UPS API version.
     /// </summary>
+    [AggregateEventDetails(true)]
     public class EntityDeleted : IUserProfileServiceEvent
     {
         ///<inheridoc />

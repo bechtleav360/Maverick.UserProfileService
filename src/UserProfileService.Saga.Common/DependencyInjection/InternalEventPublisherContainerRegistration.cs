@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using UserProfileService.Common.V2.Abstractions;
 using UserProfileService.Common.V2.DependencyInjection;
 
@@ -24,6 +25,16 @@ internal class InternalEventPublisherContainerRegistration : IEventPublisherCont
         {
             _services.AddTransient(resolver);
         }
+
+        return this;
+    }
+
+    public IEventPublisherContainerRegistration UseEventProcessorSetup<TSetup>()
+        where TSetup : EventProcessingSetup
+    {
+        ServiceDescriptor registration = ServiceDescriptor.Singleton<EventProcessingSetup>(p => ActivatorUtilities.CreateInstance<TSetup>(p));
+
+        _services.Replace(registration);
 
         return this;
     }

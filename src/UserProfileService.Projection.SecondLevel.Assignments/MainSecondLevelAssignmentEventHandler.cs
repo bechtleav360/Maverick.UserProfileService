@@ -46,15 +46,21 @@ internal class MainSecondLevelAssignmentEventHandler : ISecondLevelAssignmentEve
         CancellationToken cancellationToken)
     {
         Type handlerType = typeof(ISecondLevelAssignmentEventHandler<>).MakeGenericType(domainEvent.GetType());
-        ISecondLevelAssignmentEventHandler handlerToTrigger = null;
 
         try
         {
-            handlerToTrigger = (ISecondLevelAssignmentEventHandler)serviceProvider.GetRequiredService(handlerType);
-        }
-        catch (InvalidOperationException invalidException)
-        {
-            LogNotSupportedMethod(domainEvent);
+            if (serviceProvider.GetService(handlerType)
+                is not ISecondLevelAssignmentEventHandler handlerToTrigger)
+            {
+                _Logger.LogDebugMessage(
+                    "The event (full type: {domainEventType}) is not supported by the event handler for SecondLevelVolatileDataEventHandler - execution will be skipped",
+                    domainEvent.GetType().FullName.AsArgumentList());
+
+                return Task.CompletedTask;
+            }
+
+            // call the HandleEventAsync Method if possible
+            return handlerToTrigger.HandleEventAsync(domainEvent, eventHeader, cancellationToken);
         }
         catch (Exception ex)
         {
@@ -62,23 +68,6 @@ internal class MainSecondLevelAssignmentEventHandler : ISecondLevelAssignmentEve
 
             throw;
         }
-
-        // call the HandleEventAsync Method
-        handlerToTrigger?.HandleEventAsync(domainEvent, eventHeader, cancellationToken);
-
-        return Task.CompletedTask;
-    }
-
-    private Task LogNotSupportedMethod(
-        IUserProfileServiceEvent domainEvent,
-        [CallerMemberName] string caller = null)
-    {
-        _Logger.LogInfoMessage(
-            "The domain event (full type: {domainEventType}) is not supported by the event handler for SecondLevelAssignments - execution will be skipped",
-            domainEvent?.GetType().FullName.AsArgumentList(),
-            caller);
-
-        return Task.CompletedTask;
     }
 
     /// <inheritdoc />

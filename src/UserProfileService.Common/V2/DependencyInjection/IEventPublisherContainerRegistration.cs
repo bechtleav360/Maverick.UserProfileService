@@ -17,4 +17,15 @@ public interface IEventPublisherContainerRegistration
     IEventPublisherContainerRegistration AddEventPublisher<TEventPublisher>(
         Func<IServiceProvider, IEventPublisherTypeResolver> resolver = null)
         where TEventPublisher : class, IEventPublisher;
+
+    /// <summary>
+    ///     Uses the provided event processing setup.
+    /// </summary>
+    /// <typeparam name="TSetup">
+    ///     The type inherited from <see cref="EventProcessingSetup" /> that contains options about event
+    ///     processing.
+    /// </typeparam>
+    /// <returns>A modified registration to be used in the setup process.</returns>
+    IEventPublisherContainerRegistration UseEventProcessorSetup<TSetup>()
+        where TSetup : EventProcessingSetup;
 }

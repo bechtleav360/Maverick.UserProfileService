@@ -1,4 +1,5 @@
 ﻿using Maverick.UserProfileService.AggregateEvents.Common;
+using Maverick.UserProfileService.AggregateEvents.Common.Annotations;
 
 namespace Maverick.UserProfileService.AggregateEvents.V1
 {
@@ -6,6 +7,7 @@ namespace Maverick.UserProfileService.AggregateEvents.V1
     ///     This event is emitted when a new user is created.<br />
     ///     Be aware! The version of this event does not correlate with the UPS API version.
     /// </summary>
+    [AggregateEventDetails]
     public class UserCreated : IUserProfileServiceEvent
     {
         /// <summary>

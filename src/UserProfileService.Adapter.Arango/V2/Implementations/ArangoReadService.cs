@@ -455,7 +455,7 @@ public class ArangoReadService : ArangoRepositoryBase, IReadService
                 queryString.Parameter,
                 true,
                 true,
-                cancellationToken);
+                cancellationToken: cancellationToken);
 
         Logger.LogDebugMessage(
             "Found {profilesCount} parents for profile with id {profileId}.",
@@ -576,6 +576,51 @@ public class ArangoReadService : ArangoRepositoryBase, IReadService
         CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
+    }
+
+    /// <inheritdoc />
+    public async Task<IList<ConditionAssignment>> GetDirectMembersOfContainerProfileAsync(
+        string parentId,
+        ProfileKind parentProfileKind,
+        IEnumerable<string> memberIdFilter = null,
+        CancellationToken cancellationToken = default)
+    {
+        Logger.EnterMethod();
+
+        ValidationHelper.CheckParameter(parentId, nameof(parentId));
+        ValidationHelper.CheckIfProfileIsContainer(parentProfileKind, nameof(parentProfileKind));
+
+        string profileCollection = DefaultModelConstellation.CreateNew(_collectionPrefix)
+            .ModelsInfo
+            .GetCollectionName<IContainerProfile>();
+
+        ParameterizedAql queryString = WellKnownAqlQueries.GetMembersOfProfileFilteredByMemberIds(
+            profileCollection,
+            parentId,
+            parentProfileKind,
+            memberIdFilter?.ToArray());
+
+        var parentMissing = false;
+
+        List<ConditionAssignment> members =
+            await ExecuteRawQueriesAsync<ConditionAssignment>(
+                queryString.Query,
+                queryString.Parameter,
+                true,
+                true,
+                warning => parentMissing = warning.Any(w => 
+                    w.Contains($"[{ArangoRepoErrorCodes.ProfileNotFound}]")),
+                cancellationToken);
+
+        if (parentMissing)
+        {
+            throw new InstanceNotFoundException(
+                ArangoRepoErrorCodes.ProfileNotFoundString,
+                $"Parent entity missing (id: {parentId}; kind {parentProfileKind:G})",
+                parentId);
+        }
+
+        return members;
     }
 
     /// <inheritdoc />
@@ -1242,7 +1287,7 @@ public class ArangoReadService : ArangoRepositoryBase, IReadService
             retrieveProfileAql.Parameter,
             true,
             true,
-            cancellationToken);
+            cancellationToken: cancellationToken);
 
         Logger.LogInfoMessage(
             "Found {profilesFound} {profile} for profileId: {profileId} ",
@@ -1476,6 +1521,7 @@ public class ArangoReadService : ArangoRepositoryBase, IReadService
         Dictionary<string, object> bindVariables,
         bool throwException,
         bool throwExceptionIfNotFound,
+        Action<List<string>> warningsListener = null,
         CancellationToken cancellationToken = default,
         [CallerMemberName] string caller = null)
         where TResult : class
@@ -1497,6 +1543,15 @@ public class ArangoReadService : ArangoRepositoryBase, IReadService
             throwExceptionIfNotFound,
             cancellationToken,
             caller);
+
+        if (warningsListener != null 
+            && response.Warnings is
+            {
+                Count: > 0
+            })
+        {
+            warningsListener.Invoke(response.Warnings);
+        }
 
         Logger.LogTraceMessage(
             "Executing query {query} in behalf of {caller}",

@@ -596,6 +596,23 @@ public class ArangoDatabaseContext<TSaga> :
     }
 
     /// <inheritdoc />
+    public async Task<bool> TryDeleteAsync(SagaConsumeContext<TSaga> context)
+    {
+        _logger.EnterMethod();
+
+        string systemId = BuildSystemKey(context.Saga.CorrelationId);
+
+        DeleteDocumentResponse response = await _arangoClient.DeleteDocumentAsync(systemId);
+
+        await CheckAResponseAsync(response,
+            throwConverterException: true,
+            ignoreNotFoundError: true,
+            cancellationToken: context.CancellationToken);
+
+        return _logger.ExitMethod((int)response.Code >= 200 && (int)response.Code < 300);
+    }
+
+    /// <inheritdoc />
     public ValueTask DisposeAsync()
     {
         _logger.EnterMethod();

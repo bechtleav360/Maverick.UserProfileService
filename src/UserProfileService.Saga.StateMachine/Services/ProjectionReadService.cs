@@ -454,6 +454,31 @@ public class ProjectionReadService : IProjectionReadService, IValidationReadServ
         return _logger.ExitMethod(functionIds);
     }
 
+    public async Task<IList<ConditionAssignment>> CheckExistingProfileAssignmentsAsync(
+        string parentProfileId,
+        ProfileKind profileKind,
+        IList<ConditionObjectIdent> assignmentsToCheck,
+        CancellationToken cancellationToken = default)
+    {
+        _logger.EnterMethod();
+        
+        IList<ConditionAssignment> foundProfileAssignments = await _readService
+            .GetDirectMembersOfContainerProfileAsync(
+                parentProfileId,
+                profileKind,
+                assignmentsToCheck.Select(a => a.Id),
+                cancellationToken)
+            ?? new List<ConditionAssignment>();
+
+        List<ConditionAssignment> flatListMissingItems = assignmentsToCheck
+            .AsFlatAssignmentList()
+            .Except(foundProfileAssignments.AsFlatList(),
+                new OnlyFirstInSecondConditionAssignmentEqualityComparer())
+            .ToList();
+
+        return _logger.ExitMethod(flatListMissingItems);
+    }
+
     /// <inheritdoc />
     public Task<string[]> GetAllParentsOfProfile(string id)
     {

@@ -76,7 +76,7 @@ public static class InitiatorExtension
     /// </summary>
     /// <param name="initiator">Saga initiator to be converted.</param>
     /// <returns>Converted initiator.</returns>
-    public static Initiator ToInitiator(this CommandInitiator initiator)
+    public static Initiator ToInitiator(this CommandInitiator? initiator)
     {
         if (initiator == null)
         {

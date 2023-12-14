@@ -10,25 +10,25 @@ namespace UserProfileService.Projection.VolatileData;
 
 internal class VolatileDataStorePublisherResolver : IEventPublisherTypeResolver
 {
-    private readonly IServiceProvider _ServiceProvider;
-    private readonly HashSet<Type> _SupportedTypes;
+    private readonly IServiceProvider _serviceProvider;
+    private readonly HashSet<Type> _supportedTypes;
 
     public VolatileDataStorePublisherResolver(
         IServiceProvider serviceProvider,
         IList<Type> supportedTypes)
     {
-        _ServiceProvider = serviceProvider;
-        _SupportedTypes = supportedTypes.ToHashSet();
+        _serviceProvider = serviceProvider;
+        _supportedTypes = supportedTypes.ToHashSet();
     }
 
-    public IEventPublisher? GetPublisher(IUserProfileServiceEvent eventData)
+    public IEventPublisher GetPublisher(IUserProfileServiceEvent eventData)
     {
-        if (!_SupportedTypes.Contains(eventData.GetType()))
+        if (!_supportedTypes.Contains(eventData.GetType()))
         {
             return null;
         }
 
-        return _ServiceProvider.CreateScope()
+        return _serviceProvider.CreateScope()
             .ServiceProvider
             .GetRequiredService<VolatileDataDefaultEventPublisher>();
     }

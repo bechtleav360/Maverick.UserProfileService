@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using Maverick.UserProfileService.Models.Abstraction;
 using Maverick.UserProfileService.Models.BasicModels;
 using Maverick.UserProfileService.Models.EnumModels;
@@ -447,5 +448,71 @@ internal class RepoValidationService : IRepoValidationService
                 addInfo);
 
         return _logger.ExitMethod(new ValidationResult(validationResult));
+    }
+
+    /// <inheritdoc />
+    public async Task<ValidationResult> ValidateAssignmentsExistAsync(
+        IObjectIdent objectIdent,
+        IList<ConditionObjectIdent> assignments,
+        CancellationToken cancellationToken = default)
+    {
+        _logger.EnterMethod();
+        
+        Guard.IsNotNull(objectIdent, nameof(objectIdent));
+        Guard.IsNotNull(assignments, nameof(assignments));
+
+        if (!objectIdent.Type.IsContainerProfileType())
+        {
+            return _logger.ExitMethod(new ValidationResult());
+        }
+
+        IList<ConditionAssignment> missing = await _readService.CheckExistingProfileAssignmentsAsync(
+            objectIdent.Id,
+            GetProfileKind(objectIdent.Type),
+            assignments,
+            cancellationToken);
+
+        return new ValidationResult
+        {
+            Errors = missing.Select(
+                    a =>
+                        new ValidationAttribute(
+                            "Members",
+                            "Member assignment missing",
+                            new Dictionary<string, object>
+                            {
+                                {
+                                    $"{objectIdent.Type:G} with id equals {objectIdent.Id} misses member assignment",
+                                    GenerateDetailedMessage(a)
+                                }
+                            }))
+                .ToArray()
+        };
+
+        static string GenerateDetailedMessage(ConditionAssignment a)
+        {
+            RangeCondition firstCondition = a.Conditions?.FirstOrDefault();
+
+            if (firstCondition == null)
+            {
+                return $"child '{a.Id}' not assigned on condition = NULL";
+            }
+
+            string start = firstCondition.Start?.ToString("u") ?? "NULL";
+            string end = firstCondition.End?.ToString("u") ?? "NULL";
+
+            return $"child '{a.Id}' not assigned on condition = [start: {start}, end: {end}]";
+        }
+    }
+
+    private static ProfileKind GetProfileKind(ObjectType type)
+    {
+        return type switch
+        {
+            ObjectType.Group => ProfileKind.Group,
+            ObjectType.User => ProfileKind.User,
+            ObjectType.Organization => ProfileKind.Organization,
+            _ => ProfileKind.Unknown
+        };
     }
 }

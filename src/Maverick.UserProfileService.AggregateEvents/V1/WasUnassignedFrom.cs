@@ -1,5 +1,6 @@
 ﻿using System;
 using Maverick.UserProfileService.AggregateEvents.Common;
+using Maverick.UserProfileService.AggregateEvents.Common.Annotations;
 using Maverick.UserProfileService.AggregateEvents.Common.Enums;
 using Maverick.UserProfileService.AggregateEvents.Common.Models;
 
@@ -9,6 +10,7 @@ namespace Maverick.UserProfileService.AggregateEvents.V1
     ///     Defines an event emitted when a child profile has been unassigned from a parent (i.e. function, group,...).<br />
     ///     Be aware! The version of this event does not correlate with the UPS API version.
     /// </summary>
+    [AggregateEventDetails]
     public class WasUnassignedFrom : IUserProfileServiceEvent
     {
         /// <summary>

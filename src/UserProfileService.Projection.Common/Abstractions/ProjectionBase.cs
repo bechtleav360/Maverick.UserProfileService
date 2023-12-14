@@ -307,6 +307,18 @@ public abstract class ProjectionBase : IProjection
 
             SetHealthStatus(HealthStatus.Healthy);
         }
+        // this kind of exception indicates there are issues in data sets or wrong queries
+        // these problems are not related to network issues or problems with the database cluster/server
+        // therefore the health status should not been changed
+        catch (InstanceNotFoundException instanceNotFound)
+        {
+            Logger.LogDebugMessage(instanceNotFound,
+                "InstanceNotFoundException occurred: {errorMessage} [code: {errorCode}, related id: {relatedId}]",
+                LogHelpers.Arguments(
+                    instanceNotFound.Message,
+                    instanceNotFound.Code,
+                    instanceNotFound.RelatedId));
+        }
         catch (Exception ex)
         {
             Logger.LogErrorMessage(

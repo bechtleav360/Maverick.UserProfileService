@@ -1,4 +1,5 @@
 ﻿using Maverick.UserProfileService.AggregateEvents.Common;
+using Maverick.UserProfileService.AggregateEvents.Common.Annotations;
 
 namespace Maverick.UserProfileService.AggregateEvents.Resolved.V1
 {
@@ -6,6 +7,7 @@ namespace Maverick.UserProfileService.AggregateEvents.Resolved.V1
     ///     Defines an event emitted when client settings are set for profiles (user,group or organization).
     ///     Be aware! The version of this event does not correlate with the UPS API version.
     /// </summary>
+    [AggregateEventDetails(true)]
     public class ProfileClientSettingsSet : IUserProfileServiceEvent
     {
         /// <summary>

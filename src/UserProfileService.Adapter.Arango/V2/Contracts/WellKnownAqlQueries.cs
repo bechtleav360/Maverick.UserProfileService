@@ -67,6 +67,39 @@ public sealed class WellKnownAqlQueries
         };
     }
 
+    internal static ParameterizedAql GetMembersOfProfileFilteredByMemberIds(
+        string profileCollection,
+        string profileId,
+        ProfileKind profileKind,
+        IList<string> memberIdFilter = null)
+    {
+        return new ParameterizedAql
+        {
+            Query = @$"
+                       WITH @@collection
+                       LET parent = FIRST(
+                         FOR profile IN @@collection 
+                           FILTER profile.Id==@profileId
+                           AND profile.Kind == @kind
+                           LIMIT 0,1
+                         RETURN profile
+                       )
+                       LET check = (
+                         WARN(parent != null, ""Parent entity not found [{ArangoRepoErrorCodes.ProfileNotFound}]"")
+                       )
+                       FOR m IN NOT_NULL(parent.Members, [])
+                       FILTER COUNT(NOT_NULL(@memberIdFilter, [])) == 0 || m.Id IN @memberIdFilter
+                       RETURN m",
+            Parameter = new Dictionary<string, object>
+            {
+                { "@collection", profileCollection },
+                { "profileId", profileId },
+                { "kind", profileKind.ToString("G") },
+                { "memberIdFilter", memberIdFilter ?? Array.Empty<string>() }
+            }
+        };
+    }
+
     /// <summary>
     ///     Return a <see cref="IProfile" /> by using the external id property. The profile can be an
     ///     <see cref="Organization" />,

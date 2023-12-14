@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Maverick.UserProfileService.AggregateEvents.Common;
+using Maverick.UserProfileService.AggregateEvents.Common.Annotations;
 using Maverick.UserProfileService.AggregateEvents.Common.Enums;
 
 namespace Maverick.UserProfileService.AggregateEvents.V1
@@ -8,6 +9,7 @@ namespace Maverick.UserProfileService.AggregateEvents.V1
     ///     This event is emitted when properties of an object (i.e. profile, function, etc.) has been updated.<br />
     ///     Be aware! The version of this event does not correlate with the UPS API version.
     /// </summary>
+    [AggregateEventDetails]
     public class PropertiesChanged : IUserProfileServiceEvent
     {
         /// <summary>

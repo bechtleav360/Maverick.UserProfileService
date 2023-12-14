@@ -1,4 +1,5 @@
 ﻿using Maverick.UserProfileService.AggregateEvents.Common;
+using Maverick.UserProfileService.AggregateEvents.Common.Annotations;
 
 namespace Maverick.UserProfileService.AggregateEvents.Resolved.V1
 {
@@ -6,6 +7,7 @@ namespace Maverick.UserProfileService.AggregateEvents.Resolved.V1
     ///     Defines an event emitted when the client settings have been recalculated.
     ///     It states the all keys that are not part of the event should be deleted.
     /// </summary>
+    [AggregateEventDetails(true)]
     public class ClientSettingsInvalidated : IUserProfileServiceEvent
     {
         ///<inheridoc />

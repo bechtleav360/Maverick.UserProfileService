@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Maverick.UserProfileService.Models.EnumModels;
 
 namespace UserProfileService.Adapter.Arango.V2.Helpers;
 
@@ -63,5 +64,34 @@ public static class ValidationHelper
         {
             throw new ArgumentException($"'{parameterName}' cannot be empty.", parameterName);
         }
+    }
+
+    /// <summary>
+    ///     Checks if <paramref name="parameterValue" /> of <paramref name="parameterName" /> is a container profile. These
+    ///     profiles can be parents of other profiles.
+    /// </summary>
+    /// <param name="parameterValue">The value of the parameter that should represent a container <see cref="ProfileKind" />.</param>
+    /// <param name="parameterName">Name of parameter.</param>
+    /// <exception cref="ArgumentException">If the parameter value does not indicate a container profile.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">If the parameter value is not defined as <see cref="ProfileKind" />.</exception>
+    public static void CheckIfProfileIsContainer(
+        ProfileKind parameterValue,
+        string parameterName)
+    {
+        bool isContainerProfile = parameterValue switch
+        {
+            ProfileKind.Unknown => false,
+            ProfileKind.User => false,
+            ProfileKind.Group => true,
+            ProfileKind.Organization => true,
+            _ => throw new ArgumentOutOfRangeException(nameof(parameterValue), parameterValue, null)
+        };
+
+        if (isContainerProfile)
+        {
+            return;
+        }
+
+        throw new ArgumentException($"'{parameterValue:G}' is not a container profile.", parameterName);
     }
 }

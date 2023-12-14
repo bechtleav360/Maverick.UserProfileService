@@ -28,7 +28,7 @@ public static class CommandUtilities
     /// <exception cref="InvalidOperationException">Will be thrown, if multiple command messages found for the given command.</exception>
     public static object? DeserializeCData(string command, string data, ILogger? logger = null)
     {
-        logger?.EnterMethod();
+        logger.EnterMethod();
 
         Guard.IsNotNullOrEmpty(command, nameof(command));
         Guard.IsNotNullOrEmpty(data, nameof(data));
@@ -42,7 +42,7 @@ public static class CommandUtilities
                     && t.GetCustomAttribute<CommandAttribute>()?.Value == command)
             .ToList();
 
-        if (logger?.IsEnabledForTrace() == true)
+        if (logger.IsEnabledForTrace())
         {
             logger.LogTraceMessage(
                 "Found the following types for command '{command}', which implements the attribute '{attribute}': {types}",
@@ -60,13 +60,13 @@ public static class CommandUtilities
 
         Type exactType = GetCommandMessageType(command, logger);
 
-        logger?.LogDebugMessage(
+        logger.LogDebugMessage(
             "Found type '{type}' for command '{command}' with attribute '{attribute}'",
             LogHelpers.Arguments(exactType.Name, command, nameof(CommandAttribute)));
 
         object? deserializedData = JsonConvert.DeserializeObject(data, exactType);
 
-        return logger == null ? deserializedData : logger.ExitMethod(deserializedData);
+        return logger.ExitMethod(deserializedData);
     }
 
     /// <summary>
@@ -105,7 +105,7 @@ public static class CommandUtilities
     /// <exception cref="ArgumentException">Will be thrown, if multiple command services found for the given command.</exception>
     public static Type GetCommandServiceType(string command, ILogger? logger = null)
     {
-        logger?.EnterMethod();
+        logger.EnterMethod();
 
         Guard.IsNotNullOrEmpty(command, nameof(command));
 
@@ -130,7 +130,7 @@ public static class CommandUtilities
                 })
             .ToList();
 
-        logger?.LogDebugMessage(
+        logger.LogDebugMessage(
             "Found {count} types for command {command}",
             LogHelpers.Arguments(types.Count(), command));
 
@@ -142,11 +142,11 @@ public static class CommandUtilities
 
         Type type = types.First();
 
-        logger?.LogDebugMessage(
+        logger.LogDebugMessage(
             "Found one type {type} for command '{command}' with implementation of '{commandService}'.",
             LogHelpers.Arguments(type.Name, command, genericCommandService.Name));
 
-        return logger == null ? type : logger.ExitMethod(type);
+        return logger.ExitMethod(type);
     }
 
     /// <summary>
@@ -158,7 +158,7 @@ public static class CommandUtilities
     /// <param name="logger">The logger.</param>
     /// <returns>Type of related message type.</returns>
     /// <exception cref="InvalidOperationException">Will be thrown, if multiple command messages found for the given command.</exception>
-    private static Type GetCommandMessageType(string command, ILogger? logger = null)
+    internal static Type GetCommandMessageType(string command, ILogger? logger = null)
     {
         logger?.EnterMethod();
 

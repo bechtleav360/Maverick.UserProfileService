@@ -219,7 +219,16 @@ public class ArangoSagaRepositoryContext<TSaga, TMessage> :
             throw new ArgumentNullException(nameof(context));
         }
 
-        await _dbContext.DeleteAsync(context);
+        // sometimes the sage will deleted twice
+        // we don't know why
+        // to avoid too much warning/error logging we decided to do it this way
+        bool deleted = await _dbContext.TryDeleteAsync(context);
+
+        if (!deleted)
+        {
+            _logger.LogDebugMessage("Could not delete saga instance [id = {correlationId}], because it does not exist any more.",
+                LogHelpers.Arguments(context.CorrelationId));
+        }
 
         _logger.EnterMethod();
     }

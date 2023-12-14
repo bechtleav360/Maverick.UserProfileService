@@ -1,5 +1,6 @@
 ﻿using System;
 using Maverick.UserProfileService.AggregateEvents.Common;
+using Maverick.UserProfileService.AggregateEvents.Common.Annotations;
 
 namespace Maverick.UserProfileService.AggregateEvents.V1
 {
@@ -7,6 +8,7 @@ namespace Maverick.UserProfileService.AggregateEvents.V1
     ///     Defines an event emitted when tags of an object (i.e. profile, function, etc.) have ben removed.<br />
     ///     Be aware! The version of this event does not correlate with the UPS API version.
     /// </summary>
+    [AggregateEventDetails]
     public class TagsRemoved : IUserProfileServiceEvent
     {
         ///<inheridoc />

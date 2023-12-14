@@ -1,5 +1,6 @@
 ﻿using System;
 using Maverick.UserProfileService.AggregateEvents.Common;
+using Maverick.UserProfileService.AggregateEvents.Common.Annotations;
 using Maverick.UserProfileService.AggregateEvents.Common.Models;
 
 namespace Maverick.UserProfileService.AggregateEvents.V1
@@ -8,6 +9,7 @@ namespace Maverick.UserProfileService.AggregateEvents.V1
     ///     Defines an event emitted when a child profile has been added to a target (i.e. function, group, ...).<br />
     ///     Be aware! The version of this event does not correlate with the UPS API version.
     /// </summary>
+    [AggregateEventDetails]
     public class WasAssignedTo : IUserProfileServiceEvent
     {
         /// <summary>
