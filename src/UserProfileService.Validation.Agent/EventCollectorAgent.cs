@@ -83,7 +83,7 @@ public class EventCollectorAgent :
         var successResponses = new List<SubmitCommandSuccess>();
         var failureResponses = new List<SubmitCommandFailure>();
 
-        Logger.LogWarnMessage(
+        Logger.LogDebugMessage(
             $"Getting external process id from collecting process with id {collectingId}.",
             LogHelpers.Arguments(collectingId));
 

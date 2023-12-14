@@ -5,6 +5,7 @@ using Marten.Events.Daemon.Resiliency;
 using Marten.Services;
 using Marten.Services.Json;
 using Maverick.UserProfileService.AggregateEvents.Common;
+using Maverick.UserProfileService.AggregateEvents.Common.Annotations;
 using Maverick.UserProfileService.Models.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -44,11 +45,38 @@ public static class ServiceCollectionExtensions
 
     private static string GetEventTypeName(Type type)
     {
-        long version = type.GetCustomAttribute<EventVersionAttribute>()?.VersionInformation ?? 1;
+        long version;
+        var unresolvedEventSuffix = string.Empty;
+
+        if (type.TryGetCustomAttribute(out AggregateEventDetails? aggregateEventDetails))
+        {
+            version = aggregateEventDetails?.VersionInformation ?? 1;
+
+            unresolvedEventSuffix = aggregateEventDetails is
+            {
+                IsResolved: true
+            }
+                ? unresolvedEventSuffix
+                : "_unresolved";
+        }
+        else
+        {
+            version = type.GetCustomAttribute<EventVersionAttribute>()?.VersionInformation ?? 1;
+        }
 
         return version > 2
-            ? $"{EventMappingExtensions.GetEventTypeName(type)}_v{version}"
-            : EventMappingExtensions.GetEventTypeName(type);
+            ? $"{EventMappingExtensions.GetEventTypeName(type)}_v{version}{unresolvedEventSuffix}"
+            : $"{EventMappingExtensions.GetEventTypeName(type)}{unresolvedEventSuffix}";
+    }
+
+    private static bool TryGetCustomAttribute<TAttribute>(
+        this Type type,
+        out TAttribute? attribute)
+        where TAttribute : Attribute
+    {
+        attribute = type.GetCustomAttribute<TAttribute>();
+
+        return attribute != null;
     }
 
     /// <summary>
@@ -122,7 +150,9 @@ public static class ServiceCollectionExtensions
 
                     if (eventInterfaceType != null)
                     {
-                        foreach ((Type? eventType, string? typeName) in GetAllEventTypes(eventInterfaceType))
+                        List<(Type type, string suffix)> allEventTypes = GetAllEventTypes(eventInterfaceType).ToList();
+
+                        foreach ((Type? eventType, string? typeName) in allEventTypes)
                         {
                             option.Events.MapEventType(eventType, typeName);
                         }

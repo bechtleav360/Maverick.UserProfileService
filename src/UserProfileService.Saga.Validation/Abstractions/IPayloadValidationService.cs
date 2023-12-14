@@ -39,10 +39,15 @@ public interface IPayloadValidationService
     /// </summary>
     /// <param name="propertyName">Property name the validation result belongs to.</param>
     /// <param name="assignmentPayload">Payload to validate.</param>
-    /// <param name="assSelector">Selector to get the assignments from payload.</param>
+    /// <param name="assignmentsSelector">Selector to get the assignments from payload.</param>
+    /// <typeparam name="TObjectIdent">
+    ///     The type of the <see cref="IObjectIdent" /> that will be used in the
+    ///     <paramref name="assignmentsSelector" />
+    /// </typeparam>
     /// <returns>Results of validation.</returns>
-    public ValidationResult ValidateAssignment(
+    public ValidationResult ValidateAssignment<TObjectIdent>(
         string propertyName,
         AssignmentPayload assignmentPayload,
-        Func<AssignmentPayload, IObjectIdent[]> assSelector);
+        Func<AssignmentPayload, TObjectIdent[]> assignmentsSelector)
+        where TObjectIdent : IObjectIdent;
 }

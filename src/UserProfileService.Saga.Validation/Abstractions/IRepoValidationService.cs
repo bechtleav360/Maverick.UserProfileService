@@ -202,4 +202,19 @@ internal interface IRepoValidationService
         string id,
         string member = null,
         CancellationToken cancellationToken = default);
+
+    /// <summary>
+    ///     Asynchronously validates the existence of assignments for a specified object.
+    /// </summary>
+    /// <param name="objectIdent">The object identifier for which assignments are being validated.</param>
+    /// <param name="assignments">The list of assignment references to validate for existence.</param>
+    /// <param name="cancellationToken">A cancellation token that can be used to cancel the asynchronous operation (optional).</param>
+    /// <returns>
+    ///     A task representing the asynchronous operation. The task result is a <see cref="ValidationResult" /> indicating
+    ///     whether the assignments exist for the specified object.
+    /// </returns>
+    Task<ValidationResult> ValidateAssignmentsExistAsync(
+        IObjectIdent objectIdent,
+        IList<ConditionObjectIdent> assignments,
+        CancellationToken cancellationToken = default);
 }

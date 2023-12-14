@@ -1,4 +1,5 @@
 ﻿using Maverick.UserProfileService.AggregateEvents.Common;
+using Maverick.UserProfileService.AggregateEvents.Common.Annotations;
 using Maverick.UserProfileService.AggregateEvents.Resolved.V1.Models;
 
 namespace Maverick.UserProfileService.AggregateEvents.Resolved.V1
@@ -7,6 +8,7 @@ namespace Maverick.UserProfileService.AggregateEvents.Resolved.V1
     ///     Defines the event emitted when the function has been changed.<br />
     ///     Be aware! The version of this event does not correlate with the UPS API version.
     /// </summary>
+    [AggregateEventDetails(true)]
     public class FunctionChanged : IUserProfileServiceEvent
     {
         /// <summary>

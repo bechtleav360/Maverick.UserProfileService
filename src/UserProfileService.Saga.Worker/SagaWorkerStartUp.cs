@@ -251,7 +251,8 @@ public class SagaWorkerStartUp : DefaultStartupBase
                         .SupportEvent<UserSettingObjectUpdatedEvent>()
                         .SupportEvent<UserSettingSectionDeletedEvent>()
                         .SupportEvent<UserSettingObjectDeletedEvent>())
-                .AddDefaultEventPublisher());
+                .AddDefaultEventPublisher()
+                .UseEventProcessorSetup<InternalEventProcessingSetup>());
 
         services.AddArangoDatabaseCleanupProvider(
             (_, setup) =>

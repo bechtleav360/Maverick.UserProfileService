@@ -22,7 +22,7 @@ public interface ICommandService
         object message,
         string correlationId,
         string processId,
-        CommandInitiator initiator,
+        CommandInitiator? initiator,
         CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -32,7 +32,7 @@ public interface ICommandService
     /// <param name="message">The command message to modify.</param>
     /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
     /// <returns>The modified data.</returns>
-    public Task<object> ModifyAsync(object message, CancellationToken cancellationToken = default);
+    public Task<object?> ModifyAsync(object? message, CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     Validates the command data using internal validation algorithm.
@@ -42,7 +42,7 @@ public interface ICommandService
     /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
     /// <returns>Validation result of process.</returns>
     public Task<ValidationResult> ValidateAsync(
-        object data,
-        CommandInitiator initiator,
+        object? data,
+        CommandInitiator? initiator,
         CancellationToken cancellationToken = default);
 }

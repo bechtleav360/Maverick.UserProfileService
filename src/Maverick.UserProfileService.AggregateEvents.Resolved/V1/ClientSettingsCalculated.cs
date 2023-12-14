@@ -1,10 +1,12 @@
 ﻿using Maverick.UserProfileService.AggregateEvents.Common;
+using Maverick.UserProfileService.AggregateEvents.Common.Annotations;
 
 namespace Maverick.UserProfileService.AggregateEvents.Resolved.V1
 {
     /// <summary>
     ///     Defines an event emitted when the client settings have been recalculated.
     /// </summary>
+    [AggregateEventDetails(true)]
     public class ClientSettingsCalculated : IUserProfileServiceEvent
     {
         /// <summary>

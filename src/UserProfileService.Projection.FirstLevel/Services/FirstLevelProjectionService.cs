@@ -116,14 +116,12 @@ public class FirstLevelProjectionService : ProjectionBase, IFirstLevelProjection
         Logger.ExitMethod();
     }
 
+    /// <inheritdoc />
     protected override void OnExceptionOccurred(HealthStatus newStatus, Exception exception)
     {
-        Logger.LogWarnMessage(
-            exception,
-            "The health has changed to {newStatus}",
-            newStatus.ToLogString().AsArgumentList());
     }
 
+    /// <inheritdoc />
     protected override void SetHealthStatus(HealthStatus status, string message = null)
     {
         _HealthStore.Status = status;

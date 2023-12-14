@@ -228,13 +228,14 @@ public class PayloadValidationService : IPayloadValidationService
     }
 
     /// <inheritdoc />
-    public ValidationResult ValidateAssignment(
+    public ValidationResult ValidateAssignment<TObjectIdent>(
         string propertyName,
         AssignmentPayload assignmentPayload,
-        Func<AssignmentPayload, IObjectIdent[]> assSelector)
+        Func<AssignmentPayload, TObjectIdent[]> assignmentsSelector)
+        where TObjectIdent: IObjectIdent
     {
         ObjectIdent objectIdent = assignmentPayload.Resource;
-        IObjectIdent[] assignments = assSelector.Invoke(assignmentPayload);
+        TObjectIdent[] assignments = assignmentsSelector.Invoke(assignmentPayload);
 
         if (WellKnownAssignments.Dict.TryGetValue(
                 objectIdent.Type,

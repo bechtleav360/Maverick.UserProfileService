@@ -74,7 +74,7 @@ internal class OutboxWorkerProcess : BackgroundService
             Activity activity = _ActivitySourceWrapper.ActivitySource.StartActivity(
                 $"{GetType().Name}: Check and process outbox");
 
-            _Logger.LogInfoMessage("Start checking outbox to execute batches,", LogHelpers.Arguments());
+            _Logger.LogDebugMessage("Start checking outbox to execute batches,", LogHelpers.Arguments());
 
             await _OutboxProcessor.CheckAndProcessEvents(_CancellationTokenSource.Token);
 

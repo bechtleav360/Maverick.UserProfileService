@@ -164,6 +164,15 @@ namespace UserProfileService.Common.Tests.V2.Mocks
             throw new NotImplementedException();
         }
 
+        public Task<IList<ConditionAssignment>> GetDirectMembersOfContainerProfileAsync(
+            string parentId,
+            ProfileKind parentProfileKind,
+            IEnumerable<string> memberIdFilter = null,
+            CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<IPaginatedList<Member>> GetAssignedProfiles(
             string roleOrFunctionId,
             QueryObject options = null,

@@ -42,15 +42,15 @@ public abstract class BaseCommandService<TMessage> : ICommandService<TMessage>
     }
 
     /// <inheritdoc cref="ICommandService.ModifyAsync"/>
-    public virtual Task<TMessage> ModifyAsync(TMessage message, CancellationToken cancellationToken = default)
+    public virtual Task<TMessage?> ModifyAsync(TMessage? message, CancellationToken cancellationToken = default)
     {
         return Task.FromResult(message);
     }
 
     /// <inheritdoc />
-    public async Task<object> ModifyAsync(object message, CancellationToken cancellationToken = default)
+    public async Task<object?> ModifyAsync(object? message, CancellationToken cancellationToken = default)
     {
-        TMessage modifiedData = await ModifyAsync((TMessage)message, cancellationToken);
+        TMessage? modifiedData = await ModifyAsync((TMessage?)message, cancellationToken);
 
         return modifiedData;
     }
@@ -60,7 +60,7 @@ public abstract class BaseCommandService<TMessage> : ICommandService<TMessage>
         TMessage message,
         string correlationId,
         string processId,
-        CommandInitiator initiator,
+        CommandInitiator? initiator,
         CancellationToken cancellationToken = default);
 
     /// <inheritdoc />
@@ -68,7 +68,7 @@ public abstract class BaseCommandService<TMessage> : ICommandService<TMessage>
         object message,
         string correlationId,
         string processId,
-        CommandInitiator initiator,
+        CommandInitiator? initiator,
         CancellationToken cancellationToken = default)
     {
         IUserProfileServiceEvent @event = await CreateAsync(
@@ -84,12 +84,12 @@ public abstract class BaseCommandService<TMessage> : ICommandService<TMessage>
     /// <inheritdoc cref="ICommandService.ValidateAsync"/>
     public async Task<ValidationResult> ValidateAsync(
         TMessage message,
-        CommandInitiator initiator,
+        CommandInitiator? initiator,
         CancellationToken cancellationToken = default)
     {
         try
         {
-            await _validationService.ValidatePayloadAsync(message, initiator?.ToInitiator(), cancellationToken);
+            await _validationService.ValidatePayloadAsync(message, initiator.ToInitiator(), cancellationToken);
 
             return new ValidationResult();
         }
@@ -101,11 +101,13 @@ public abstract class BaseCommandService<TMessage> : ICommandService<TMessage>
 
     /// <inheritdoc />
     public async Task<ValidationResult> ValidateAsync(
-        object data,
-        CommandInitiator initiator,
+        object? data,
+        CommandInitiator? initiator,
         CancellationToken cancellationToken = default)
     {
-        ValidationResult result = await ValidateAsync((TMessage)data, initiator, cancellationToken);
+        ValidationResult result = data != null
+            ? await ValidateAsync((TMessage)data, initiator, cancellationToken)
+            : new ValidationResult(new ValidationAttribute(nameof(data), "data cannot be null"));
 
         return result;
     }
@@ -115,7 +117,7 @@ public abstract class BaseCommandService<TMessage> : ICommandService<TMessage>
         string correlationId,
         string processId,
         CommandInitiator initiator,
-        Func<TPayload, string> idSelector = null)
+        Func<TPayload, string>? idSelector = null)
         where TEvent : DomainEvent<TPayload>, new()
         where TPayload : class, IPayload
     {

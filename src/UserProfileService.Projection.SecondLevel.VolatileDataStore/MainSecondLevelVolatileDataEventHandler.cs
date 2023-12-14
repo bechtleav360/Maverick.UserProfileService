@@ -42,15 +42,21 @@ internal class MainSecondLevelVolatileDataEventHandler : ISecondLevelVolatileDat
         CancellationToken cancellationToken)
     {
         Type handlerType = typeof(ISecondLevelVolatileDataEventHandler<>).MakeGenericType(domainEvent.GetType());
-        ISecondLevelVolatileDataEventHandler? handlerToTrigger = null;
 
         try
         {
-            handlerToTrigger = (ISecondLevelVolatileDataEventHandler)serviceProvider.GetRequiredService(handlerType);
-        }
-        catch (InvalidOperationException inEx)
-        {
-            LogNotSupportedMethod(domainEvent);
+            if (serviceProvider.GetService(handlerType)
+                is not ISecondLevelVolatileDataEventHandler handlerToTrigger)
+            {
+                _Logger.LogDebugMessage(
+                    "The event (full type: {domainEventType}) is not supported by the event handler for SecondLevelVolatileDataEventHandler - execution will be skipped",
+                    domainEvent.GetType().FullName.AsArgumentList());
+
+                return Task.CompletedTask;
+            }
+
+            // call the HandleEventAsync Method if possible
+            return handlerToTrigger.HandleEventAsync(domainEvent, eventHeader, cancellationToken);
         }
         catch (Exception ex)
         {
@@ -58,23 +64,6 @@ internal class MainSecondLevelVolatileDataEventHandler : ISecondLevelVolatileDat
 
             throw;
         }
-
-        // call the HandleEventAsync Method if possible
-        handlerToTrigger?.HandleEventAsync(domainEvent, eventHeader, cancellationToken);
-
-        return Task.CompletedTask;
-    }
-
-    private Task LogNotSupportedMethod(
-        IUserProfileServiceEvent? domainEvent,
-        [CallerMemberName] string? caller = null)
-    {
-        _Logger.LogInfoMessage(
-            "The event (full type: {domainEventType}) is not supported by the event handler for SecondLevelVolatileDataEventHandler - execution will be skipped",
-            domainEvent?.GetType().FullName.AsArgumentList(),
-            caller);
-
-        return Task.CompletedTask;
     }
 
     /// <inheritdoc />

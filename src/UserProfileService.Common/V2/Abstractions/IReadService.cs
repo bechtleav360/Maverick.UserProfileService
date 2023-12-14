@@ -383,6 +383,43 @@ public interface IReadService
         CancellationToken cancellationToken = default);
 
     /// <summary>
+    ///     Retrieves the direct members (children) of a container profile asynchronously and returns them as a list of
+    ///     <see cref="ConditionAssignment" />s.
+    /// </summary>
+    /// <param name="parentId">The unique identifier of the parent profile.</param>
+    /// <param name="parentProfileKind">The kind of the parent profile (e.g., group).</param>
+    /// <param name="memberIdFilter">Optional filter - only member ids including in this set will be returned, if it is not null or empty</param>
+    /// <param name="cancellationToken">Optional cancellation token to cancel the operation.</param>
+    /// <returns>
+    ///     A task representing the asynchronous operation. The task result is a list of <see cref="ConditionAssignment" />.
+    /// </returns>
+    /// <remarks>
+    ///     This method queries the data store to retrieve the direct members of the specified container profile.
+    /// </remarks>
+    /// <example>
+    ///     <code>
+    /// var members = await GetDirectMembersOfProfileAsync(parentId, ProfileKind.Group, cancellationToken);
+    /// foreach (var member in members)
+    /// {
+    ///     // Process each member...
+    /// }
+    /// </code>
+    /// </example>
+    /// <exception cref="ArgumentNullException">If <paramref name="parentId" /> is <c>null</c></exception>
+    /// <exception cref="ArgumentException">
+    ///     <paramref name="parentId" /> is empty or contains only whitespaces <br />-or-<br />
+    /// </exception>
+    /// if
+    /// <paramref name="parentProfileKind" />
+    /// is not a container profile kind.
+    /// <exception cref="InstanceNotFoundException">If parent entity could not be found.</exception>
+    Task<IList<ConditionAssignment>> GetDirectMembersOfContainerProfileAsync(
+        string parentId,
+        ProfileKind parentProfileKind,
+        IEnumerable<string> memberIdFilter = null,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
     ///     Gets the assigned profiles dependent on a specified role or function.
     /// </summary>
     /// <param name="roleOrFunctionId">The id of the role or function that should restrict the result set.</param>

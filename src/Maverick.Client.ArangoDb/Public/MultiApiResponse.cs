@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Maverick.Client.ArangoDb.Public.Models.Query;
 
 // Implementation based on C# driver implementation from https://github.com/yojimbo87/ArangoDB-NET 
 // with some bug fixes and extensions to support asynchronous operations 
@@ -34,6 +35,11 @@ public class MultiApiResponse : IApiResponse
     public bool Error { get; }
 
     /// <summary>
+    /// A collection of warning messages occurred during executing a cursor request.
+    /// </summary>
+    public List<string> Warnings { get; }
+
+    /// <summary>
     ///     Requests execution time
     /// </summary>
     public long ExecutionTime { get; }
@@ -49,16 +55,29 @@ public class MultiApiResponse : IApiResponse
 
         long execTime = 0;
         var errorHappened = false;
+        var warningSet = new List<CursorResponseWarning>();
 
         responses.ToList()
             .ForEach(
                 res =>
                 {
+                    if (res is ICursorResponse
+                        {
+                            CursorDetails.Extra.Warnings: not null
+                        } cursorResponse)
+                    {
+                        warningSet.AddRange(cursorResponse.CursorDetails.Extra.Warnings);
+                    }
                     execTime += res?.DebugInfos?.ExecutionTime ?? 0;
                     errorHappened &= res?.Error ?? true;
                 });
 
         ExecutionTime = execTime;
         Error = errorHappened;
+
+        Warnings = warningSet
+            .Select(w => $"{w.Message} (internal code: {w.Code})")
+            .Distinct()
+            .ToList();
     }
 }

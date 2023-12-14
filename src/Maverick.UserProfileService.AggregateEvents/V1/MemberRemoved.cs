@@ -1,4 +1,5 @@
 ﻿using Maverick.UserProfileService.AggregateEvents.Common;
+using Maverick.UserProfileService.AggregateEvents.Common.Annotations;
 using Maverick.UserProfileService.AggregateEvents.Common.Enums;
 
 namespace Maverick.UserProfileService.AggregateEvents.V1
@@ -7,6 +8,7 @@ namespace Maverick.UserProfileService.AggregateEvents.V1
     ///     Defines the event emitted when a child has been
     ///     unassigned from the parent.
     /// </summary>
+    [AggregateEventDetails]
     public class MemberRemoved : IUserProfileServiceEvent
     {
         ///<inheridoc />

@@ -1,5 +1,6 @@
 ﻿using System;
 using Maverick.UserProfileService.AggregateEvents.Common;
+using Maverick.UserProfileService.AggregateEvents.Common.Annotations;
 using Maverick.UserProfileService.AggregateEvents.Common.Models;
 
 namespace Maverick.UserProfileService.AggregateEvents.V1
@@ -8,6 +9,7 @@ namespace Maverick.UserProfileService.AggregateEvents.V1
     ///     Defines all properties required for creating a group.<br />
     ///     Be aware! The version of this event does not correlate with the UPS API version.
     /// </summary>
+    [AggregateEventDetails]
     public class OrganizationCreated : IUserProfileServiceEvent
     {
         /// <summary>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Maverick.UserProfileService.Models.Abstraction;
 using Maverick.UserProfileService.Models.BasicModels;
@@ -139,4 +140,22 @@ public interface IValidationReadService
     /// </exception>
     /// <exception cref="InstanceNotFoundException">No profile can be found considering its <paramref name="profileId" />.</exception>
     public Task<JObject> GetSettingsOfProfileAsync(string profileId, ProfileKind profileKind, string settingsKey);
+
+    /// <summary>
+    ///     Checks existing member assignments to a set of assignment references provided by <paramref name="assignmentsToCheck"/>.
+    /// </summary>
+    /// <param name="parentProfileId">The ID of the parent profile to check assignments for.</param>
+    /// <param name="profileKind">The kind of profile to check assignments for.</param>
+    /// <param name="assignmentsToCheck">The list of assignment references to check for existing assignments.</param>
+    /// <param name="cancellationToken">A cancellation token that can be used to cancel the asynchronous operation (optional).</param>
+    /// <returns>
+    ///     A task representing the asynchronous operation. The task result is a list of <see cref="ConditionAssignment" />
+    ///     representing
+    ///     missing assignments, or an empty list if no assignments are missing.
+    /// </returns>
+    Task<IList<ConditionAssignment>> CheckExistingProfileAssignmentsAsync(
+        string parentProfileId,
+        ProfileKind profileKind,
+        IList<ConditionObjectIdent> assignmentsToCheck,
+        CancellationToken cancellationToken = default);
 }

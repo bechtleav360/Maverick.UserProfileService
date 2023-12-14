@@ -264,6 +264,19 @@ internal class ValidationService : IValidationService
 
         assignmentValidationResult.CheckAndThrowException();
 
+        if (message.Removed is
+            {
+                Length: > 0
+            })
+        {
+            assignmentValidationResult = await _repoValidationService.ValidateAssignmentsExistAsync(
+                message.Resource,
+                message.Removed,
+                cancellationToken);
+        }
+
+        assignmentValidationResult.CheckAndThrowException();
+
         // TODO: Check organization assignment business logic.
 
         _logger.ExitMethod();
@@ -940,14 +953,19 @@ internal class ValidationService : IValidationService
     /// </summary>
     /// <param name="propertyName">Name of property to use for validation result.</param>
     /// <param name="assignmentPayload">Payload to validate.</param>
-    /// <param name="assSelector">Selector of assignment to validate.</param>
+    /// <param name="assignmentsSelector">Selector of assignment to validate.</param>
+    /// <typeparam name="TObjectIdent">
+    ///     The type of the <see cref="IObjectIdent" /> that will be used in the
+    ///     <paramref name="assignmentsSelector" />
+    /// </typeparam>
     /// <returns>Result of validation.</returns>
-    private ValidationResult ValidateAssignment(
+    private ValidationResult ValidateAssignment<TObjectIdent>(
         string propertyName,
         AssignmentPayload assignmentPayload,
-        Func<AssignmentPayload, IObjectIdent[]> assSelector)
+        Func<AssignmentPayload, TObjectIdent[]> assignmentsSelector)
+        where TObjectIdent : IObjectIdent
     {
-        return _payloadValidationService.ValidateAssignment(propertyName, assignmentPayload, assSelector);
+        return _payloadValidationService.ValidateAssignment(propertyName, assignmentPayload, assignmentsSelector);
     }
 
     /// <inheritdoc />

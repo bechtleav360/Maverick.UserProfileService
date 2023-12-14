@@ -1,10 +1,12 @@
 ﻿using Maverick.UserProfileService.AggregateEvents.Common;
+using Maverick.UserProfileService.AggregateEvents.Common.Annotations;
 
 namespace Maverick.UserProfileService.AggregateEvents.V1
 {
     /// <summary>
     ///     Defines an event emitted when the client settings with specified key of a profile has been deleted.
     /// </summary>
+    [AggregateEventDetails]
     public class ProfileClientSettingsUnset : IUserProfileServiceEvent
     {
         ///<inheridoc />

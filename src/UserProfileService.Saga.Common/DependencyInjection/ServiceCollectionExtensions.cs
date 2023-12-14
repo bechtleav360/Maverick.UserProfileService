@@ -26,5 +26,6 @@ public static class ServiceCollectionExtensions
         setup.Invoke(options);
 
         services.TryAddSingleton<IEventPublisherFactory, DefaultEventPublisherFactory>();
+        services.TryAddSingleton<EventProcessingSetup>(); // fallback
     }
 }

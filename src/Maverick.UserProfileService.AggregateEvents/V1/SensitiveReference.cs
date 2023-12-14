@@ -1,10 +1,12 @@
 ﻿using Maverick.UserProfileService.AggregateEvents.Common;
+using Maverick.UserProfileService.AggregateEvents.Common.Annotations;
 
 namespace Maverick.UserProfileService.AggregateEvents.V1
 {
     /// <summary>
     ///     Contains properties to identify the reference to a specified version of sensitive data.
     /// </summary>
+    [AggregateEventDetails]
     public class SensitiveReference : IUserProfileServiceEvent
     {
         ///<inheridoc />

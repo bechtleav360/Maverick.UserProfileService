@@ -1,5 +1,6 @@
 ﻿using MassTransit;
 using UserProfileService.Commands;
+using UserProfileService.Commands.Models;
 using ValidationResult = UserProfileService.Validation.Abstractions.ValidationResult;
 
 namespace UserProfileService.StateMachine.Definitions;
@@ -15,18 +16,18 @@ public class CommandProcessState :
     ///     Command of state.
     /// </summary>
     // ReSharper disable once PropertyCanBeMadeInitOnly.Global => Masstransit is using this class modifier won't be change.
-    public string Command { get; set; }
+    public string Command { get; set; } = string.Empty;
 
     /// <summary>
     ///     Identifier of related command.
     /// </summary>
     // ReSharper disable once PropertyCanBeMadeInitOnly.Global => Masstransit is using this class modifier won't be change.
-    public CommandIdentifier CommandIdentifier { get; set; }
+    public CommandIdentifier CommandIdentifier { get; set; } = new CommandIdentifier();
 
     /// <summary>
     ///     Internal correlation id of saga.
     /// </summary>
-    public Guid CorrelationId { get; set; }
+    public Guid CorrelationId { get; set; } = Guid.Empty;
 
     /// <summary>
     ///     Index of current state defined in method <see cref="CommandProcessStateMachine.DeclareStates" />.
@@ -37,31 +38,41 @@ public class CommandProcessState :
     /// <summary>
     ///     Data for related <see cref="Command" />.
     /// </summary>
-    public string Data { get; set; }
+    public string Data { get; set; } = string.Empty;
 
     /// <summary>
     ///     The id of the corresponding entity of the operation,
     ///     such as the newly generated id when creating a group.
     /// </summary>
-    public string EntityId { get; set; }
+    public string EntityId { get; set; } = string.Empty;
 
     /// <summary>
     ///     Exception if error occurred.
     /// </summary>
     // ReSharper disable once UnusedAutoPropertyAccessor.Global => Masstransit is using this class modifier won't be change.
-    public Exception Exception { get; set; }
+    public ExceptionInformation? Exception { get; set; }
 
     /// <summary>
     ///     Initiator of command.
     /// </summary>
     // ReSharper disable once PropertyCanBeMadeInitOnly.Global => Masstransit is using this class modifier won't be change.
-    public CommandInitiator Initiator { get; set; }
+    public CommandInitiator? Initiator { get; set; }
+
+    /// <summary>
+    ///     Information about errors occurred during projecting of the command by an external source (like first-level
+    ///     projection, second-level projection).
+    /// </summary>
+    /// <remarks>
+    ///     This will be <c>null</c>, if the command has been projected directly (i.e. if volatile data changes) even if an
+    ///     error occurs there.
+    /// </remarks>
+    //public ExceptionInformation? ProjectionError { get; set; }
 
     /// <summary>
     ///     indicates whether the command is valid.
     ///     If no validation has been performed yet, the property is null.
     /// </summary>
-    public ValidationResult ValidationResult { get; set; }
+    public ValidationResult ValidationResult { get; set; } = new ValidationResult();
 
     /// <summary>
     ///     Version of state context.

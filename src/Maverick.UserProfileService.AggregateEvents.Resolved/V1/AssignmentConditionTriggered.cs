@@ -1,4 +1,5 @@
 ﻿using Maverick.UserProfileService.AggregateEvents.Common;
+using Maverick.UserProfileService.AggregateEvents.Common.Annotations;
 using Maverick.UserProfileService.AggregateEvents.Common.Enums;
 
 namespace Maverick.UserProfileService.AggregateEvents.Resolved.V1
@@ -6,6 +7,7 @@ namespace Maverick.UserProfileService.AggregateEvents.Resolved.V1
     /// <summary>
     ///     Defines an event emitted when the assignment state has been changed (cause of conditional assignment).
     /// </summary>
+    [AggregateEventDetails(true)]
     public class AssignmentConditionTriggered : IUserProfileServiceEvent
     {
         ///<inheridoc />
