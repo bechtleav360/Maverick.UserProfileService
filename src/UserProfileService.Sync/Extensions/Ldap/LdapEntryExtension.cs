@@ -27,7 +27,7 @@ internal static class LdapEntryExtension
             throw new ArgumentNullException(nameof(entry));
         }
 
-        string domain = entry.GetAttribute("DistinguishedName")?.StringValue;
+        string domain = entry.GetAttributeOrDefault("DistinguishedName")?.StringValue;
 
         if (string.IsNullOrWhiteSpace(domain))
         {
