@@ -386,6 +386,39 @@ internal class ValidationService : IValidationService
 
         _logger.ExitMethod();
     }
+
+    private async Task ValidateMessageAsync(
+        ProfileDeletedMessage message,
+        Initiator initiator = null,
+        CancellationToken cancellationToken = default)
+    {
+        _logger.EnterMethod();
+
+        ValidateObject<ProfileIdentifierPayload>(message);
+
+        ValidationResult<IProfile> validationResultProfileExists =
+            await _repoValidationService.ValidateProfileExistsAsync(
+                new ProfileIdent(message.Id, message.ProfileKind),
+                nameof(message.Id),
+                cancellationToken);
+
+        validationResultProfileExists.CheckAndThrowException();
+
+        IProfile repoProfile = validationResultProfileExists.Facade;
+
+        message.ExternalIds = repoProfile.ExternalIds;
+
+        if (repoProfile is IContainerProfile containerProfile)
+        {
+            ValidationResult validationResult = Validator.Profile.ValidateOperationAllowed(
+                containerProfile.IsSystem,
+                initiator?.Type);
+
+            validationResult.CheckAndThrowException();
+        }
+
+        _logger.ExitMethod();
+    }
     
     private async Task ValidateMessageAsync(
         ProfilePropertiesChangedMessage message,
@@ -1039,6 +1072,10 @@ internal class ValidationService : IValidationService
                 await ValidateMessageAsync(message, cancellationToken);
 
                 break;
+            case ProfileDeletedMessage message:
+                await ValidateMessageAsync(message, initiator, cancellationToken);
+
+                break;
             case RoleCreatedMessage message:
                 await ValidateMessageAsync(message, cancellationToken);
 
@@ -1091,7 +1128,7 @@ internal class ValidationService : IValidationService
 
                 break;
             default:
-                throw new ArgumentOutOfRangeException(nameof(payload), "No processor defined.");
+                throw new ArgumentOutOfRangeException(nameof(payload), payload, "No processor defined.");
         }
 
         _logger.ExitMethod();
