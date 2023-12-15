@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Maverick.UserProfileService.Models.Models;
 using Maverick.UserProfileService.AggregateEvents.Common.Enums;
 using Maverick.UserProfileService.AggregateEvents.Resolved.V1;
+using Maverick.UserProfileService.Models.BasicModels;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using UserProfileService.Common.Tests.Utilities.Extensions;
@@ -93,7 +94,31 @@ public class MemberRemovedTests
                     t =>
                         ((MockDatabaseTransaction)t).Id == transaction.Id),
                 It.IsAny<CancellationToken>()),
-            Times.Exactly(1));
+            Times.Exactly(_memberRemovedEvent.ParentType is ContainerType.Group or ContainerType.Organization ? 1 : 0));
+
+        repoMock.Verify(
+            repo => repo.UpdateRolePropertiesAsync(
+                It.Is(
+                    _memberRemovedEvent.ParentId,
+                    StringComparer.OrdinalIgnoreCase),
+                It.Is<IDictionary<string, object>>(i => i.ContainsKey(nameof(RoleBasic.UpdatedAt))),
+                It.Is<IDatabaseTransaction>(
+                    t =>
+                        ((MockDatabaseTransaction)t).Id == transaction.Id),
+                It.IsAny<CancellationToken>()),
+            Times.Exactly(_memberRemovedEvent.ParentType is ContainerType.Role ? 1 : 0));
+
+        repoMock.Verify(
+            repo => repo.UpdateFunctionPropertiesAsync(
+                It.Is(
+                    _memberRemovedEvent.ParentId,
+                    StringComparer.OrdinalIgnoreCase),
+                It.Is<IDictionary<string, object>>(i => i.ContainsKey(nameof(FunctionBasic.UpdatedAt))),
+                It.Is<IDatabaseTransaction>(
+                    t =>
+                        ((MockDatabaseTransaction)t).Id == transaction.Id),
+                It.IsAny<CancellationToken>()),
+            Times.Exactly(_memberRemovedEvent.ParentType is ContainerType.Function ? 1 : 0));
 
         repoMock.VerifyWorkingTransactionMethods(transaction);
     }
