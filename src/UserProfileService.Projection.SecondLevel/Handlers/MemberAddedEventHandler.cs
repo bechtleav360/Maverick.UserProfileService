@@ -77,13 +77,22 @@ internal class MemberAddedEventHandler : SecondLevelEventHandlerBase<MemberAdded
         }
 
         await ExecuteInsideTransactionAsync(
-            (repo, t, ct)
-                => repo.AddMemberAsync(
+            async (repo, t, ct) =>
+            {
+                await repo.AddMemberAsync(
                     containerId,
                     containerType,
                     member,
                     t,
-                    ct),
+                    ct);
+
+                await UpdateProfileTimestampAsync(
+                    containerId,
+                    domainEvent.MetaData.Timestamp,
+                    repo,
+                    t,
+                    ct);
+            },
             eventHeader,
             cancellationToken);
 

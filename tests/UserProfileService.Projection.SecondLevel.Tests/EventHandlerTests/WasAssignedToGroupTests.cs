@@ -58,7 +58,7 @@ public class WasAssignedToGroupTests
     }
 
     [Fact]
-    public async Task Handle_should_word_with_group_to_group_assignment()
+    public async Task Handle_should_work_with_group_to_group_assignment()
     {
         //arrange
         var transaction = new MockDatabaseTransaction();
@@ -116,6 +116,18 @@ public class WasAssignedToGroupTests
                     t =>
                         ((MockDatabaseTransaction)t).Id == transaction.Id),
                 CancellationToken.None),
+            Times.Once);
+
+        repoMock.Verify(
+            repo => repo.UpdateProfilePropertiesAsync(
+                It.Is(
+                    _memberToAdded.Id,
+                    StringComparer.OrdinalIgnoreCase),
+                It.Is<IDictionary<string, object>>(i => i.ContainsKey(nameof(ISecondLevelProjectionProfile.UpdatedAt))),
+                It.Is<IDatabaseTransaction>(
+                    t =>
+                        ((MockDatabaseTransaction)t).Id == transaction.Id),
+                It.IsAny<CancellationToken>()),
             Times.Once);
 
         repoMock.VerifyWorkingTransactionMethods(transaction);

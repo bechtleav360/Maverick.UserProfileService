@@ -2582,6 +2582,53 @@ public class ArangoSecondLevelProjectionRepository : ArangoRepositoryBase, ISeco
     }
 
     /// <inheritdoc />
+    public async Task UpdateFunctionPropertiesAsync(
+        string functionId,
+        IDictionary<string, object> properties,
+        IDatabaseTransaction transaction = default,
+        CancellationToken cancellationToken = default)
+    {
+        Logger.EnterMethod();
+
+        if (functionId == null)
+        {
+            throw new ArgumentNullException(nameof(functionId));
+        }
+
+        string collectionName = GetCollectionName<FunctionObjectEntityModel>();
+        string transactionId = ValidateTransaction(transaction)?.TransactionId;
+
+        if (transactionId == null)
+        {
+            Logger.LogDebugMessage(
+                "Updating function: {functionId} in the collection: {collectionName}.",
+                LogHelpers.Arguments(functionId, collectionName));
+        }
+        else
+        {
+            Logger.LogDebugMessage(
+                "Updating function: {functionId} in the collection:{collectionName} inside the transaction: {transactionId}.",
+                LogHelpers.Arguments(functionId, collectionName, transactionId));
+        }
+
+
+        UpdateDocumentResponse<JToken> response = await GetArangoDbClient()
+            .UpdateDocumentAsync(
+                GetDocumentId(collectionName, functionId),
+                properties.GetJsonDocument(),
+                transactionId: transactionId);
+
+        await CheckAResponseAsync(
+                response,
+                true,
+                context: transaction?.CallingService,
+                cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
+
+        Logger.ExitMethod(response);
+    }
+
+    /// <inheritdoc />
     public async Task UpdateProfileAsync(
         ISecondLevelProjectionProfile profile,
         IDatabaseTransaction transaction = default,
@@ -2620,6 +2667,57 @@ public class ArangoSecondLevelProjectionRepository : ArangoRepositoryBase, ISeco
             .UpdateDocumentAsync(
                 GetDocumentId(collectionName, profileId),
                 profile.GetJsonDocument(new ReadOnlyPropertyJsonConverter()),
+                transactionId: transactionId);
+
+        await CheckAResponseAsync(
+                response,
+                true,
+                context: transaction?.CallingService,
+                cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
+
+        Logger.ExitMethod(response);
+    }
+
+    /// <inheritdoc />
+    public async Task UpdateProfilePropertiesAsync(
+        string profileId,
+        IDictionary<string, object> properties,
+        IDatabaseTransaction transaction = default,
+        CancellationToken cancellationToken = default)
+    {
+        Logger.EnterMethod();
+
+        if (properties == null)
+        {
+            throw new ArgumentNullException(nameof(properties));
+        }
+
+        if (profileId == null)
+        {
+            throw new ArgumentNullException(nameof(profileId));
+        } 
+
+        string collectionName = GetCollectionName<IProfileEntityModel>();
+        string transactionId = ValidateTransaction(transaction)?.TransactionId;
+
+        if (transactionId == null)
+        {
+            Logger.LogDebugMessage(
+                "Updating profile: {profileId} in the collection: {collectionName}.",
+                LogHelpers.Arguments(profileId, collectionName));
+        }
+        else
+        {
+            Logger.LogDebugMessage(
+                "Updating profile: {profileId} in the collection:{collectionName} inside the transaction: {transactionId}.",
+                LogHelpers.Arguments(profileId, collectionName, transactionId));
+        }
+
+        UpdateDocumentResponse<JToken> response = await GetArangoDbClient()
+            .UpdateDocumentAsync(
+                GetDocumentId(collectionName, profileId),
+                properties.GetJsonDocument(new ReadOnlyPropertyJsonConverter()),
                 transactionId: transactionId);
 
         await CheckAResponseAsync(
@@ -2728,6 +2826,52 @@ public class ArangoSecondLevelProjectionRepository : ArangoRepositoryBase, ISeco
             .UpdateDocumentAsync(
                 GetDocumentId(collectionName, roleId),
                 role.GetJsonDocument(new ReadOnlyPropertyJsonConverter()),
+                transactionId: transactionId);
+
+        await CheckAResponseAsync(
+                response,
+                true,
+                context: transaction?.CallingService,
+                cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
+
+        Logger.ExitMethod();
+    }
+
+    /// <inheritdoc />
+    public async Task UpdateRolePropertiesAsync(
+        string roleId,
+        IDictionary<string, object> properties,
+        IDatabaseTransaction transaction = default,
+        CancellationToken cancellationToken = default)
+    {
+        Logger.EnterMethod();
+
+        if (roleId == null)
+        {
+            throw new ArgumentNullException(nameof(roleId));
+        }
+
+        string collectionName = GetCollectionName<RoleObjectEntityModel>();
+        string transactionId = ValidateTransaction(transaction)?.TransactionId;
+
+        if (transactionId == null)
+        {
+            Logger.LogDebugMessage(
+                "Updating role: {roleId} in the collection: {collectionName}.",
+                LogHelpers.Arguments(roleId, collectionName));
+        }
+        else
+        {
+            Logger.LogDebugMessage(
+                "Updating role: {roleId} in the collection:{collectionName} inside the transaction: {transactionId}.",
+                LogHelpers.Arguments(roleId, collectionName, transactionId));
+        }
+
+        UpdateDocumentResponse<JToken> response = await GetArangoDbClient()
+            .UpdateDocumentAsync(
+                GetDocumentId(collectionName, roleId),
+                properties.GetJsonDocument(new ReadOnlyPropertyJsonConverter()),
                 transactionId: transactionId);
 
         await CheckAResponseAsync(

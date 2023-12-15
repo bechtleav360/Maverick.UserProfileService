@@ -78,12 +78,21 @@ internal class ProfileClientSettingsUnsetEventHandler : SecondLevelEventHandlerB
             LogHelpers.Arguments(domainEvent.Key.ToLogString(), domainEvent.ProfileId.ToLogString()));
 
         await ExecuteInsideTransactionAsync(
-            (repo, t, ct)
-                => repo.UnsetClientSettingFromProfileAsync(
+            async (repo, t, ct) =>
+            {
+                await repo.UnsetClientSettingFromProfileAsync(
                     domainEvent.ProfileId,
                     domainEvent.Key,
                     t,
-                    ct),
+                    ct);
+
+                await UpdateProfileTimestampAsync(
+                    domainEvent.ProfileId,
+                    domainEvent.MetaData.Timestamp,
+                    repo,
+                    t,
+                    ct);
+            },
             eventHeader,
             cancellationToken);
 

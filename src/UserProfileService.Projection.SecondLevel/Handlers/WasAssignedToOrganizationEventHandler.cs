@@ -73,14 +73,24 @@ internal class WasAssignedToOrganizationEventHandler : SecondLevelEventHandlerBa
         }
 
         await ExecuteInsideTransactionAsync(
-            (repo, t, ct)
-                => repo.AddMemberOfAsync(
+            async (repo, t, ct)
+                =>
+            {
+                await repo.AddMemberOfAsync(
                     relatedEntityIdent.Id,
                     domainEvent.ProfileId,
                     domainEvent.Conditions,
                     organizationAssignedTo,
                     t,
-                    ct),
+                    ct);
+
+                await UpdateProfileTimestampAsync(
+                    domainEvent.ProfileId,
+                    domainEvent.MetaData.Timestamp,
+                    repo,
+                    t,
+                    ct);
+            },
             eventHeader,
             cancellationToken);
 

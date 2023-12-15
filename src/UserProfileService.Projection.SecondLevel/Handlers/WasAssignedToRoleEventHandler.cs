@@ -67,14 +67,24 @@ internal class WasAssignedToRoleEventHandler : SecondLevelEventHandlerBase<WasAs
         }
 
         await ExecuteInsideTransactionAsync(
-            (repo, t, ct)
-                => repo.AddMemberOfAsync(
+            async (repo, t, ct)
+                =>
+            {
+                await repo.AddMemberOfAsync(
                     relatedEntityIdent.Id,
                     domainEvent.ProfileId,
                     domainEvent.Conditions,
                     roleAssignedTo,
                     t,
-                    ct),
+                    ct);
+
+                await UpdateProfileTimestampAsync(
+                    domainEvent.ProfileId,
+                    domainEvent.MetaData.Timestamp,
+                    repo,
+                    t,
+                    ct);
+            },
             eventHeader,
             cancellationToken);
 

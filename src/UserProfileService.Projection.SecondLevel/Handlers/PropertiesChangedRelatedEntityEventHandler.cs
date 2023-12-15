@@ -254,9 +254,12 @@ internal sealed class PropertiesChangedRelatedEntityEventHandler
                 "Further handling must be done, because of relations that shall be modified as well.",
                 LogHelpers.Arguments());
 
+            var changes = new Dictionary<string, object>(_DomainEvent.Properties);
+            changes[nameof(ISecondLevelProjectionProfile.UpdatedAt)] = _DomainEvent.MetaData.Timestamp;
+
             await UpdateLinkedProfileInsideFunctionOrRoleEntityAsync(
                 _RelatedObjectIdent,
-                _DomainEvent.Properties,
+                changes,
                 cancellationToken);
 
             _Logger.ExitMethod();

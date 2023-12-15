@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Maverick.UserProfileService.Models.EnumModels;
@@ -143,6 +144,18 @@ public class ProfileClientSettingsUnsetHandlerTest
                         ((MockDatabaseTransaction)t).Id == transaction.Id),
                 CancellationToken.None),
             Times.Once);
+
+        repoMock.Verify(
+            repo => repo.UpdateProfilePropertiesAsync(
+                It.Is(
+                    _clientSettingsUnsetDevOpsPermission.ProfileId,
+                    StringComparer.OrdinalIgnoreCase),
+                It.Is<IDictionary<string, object>>(i => i.ContainsKey(nameof(ISecondLevelProjectionProfile.UpdatedAt))),
+                It.Is<IDatabaseTransaction>(
+                    t =>
+                        ((MockDatabaseTransaction)t).Id == transaction.Id),
+                It.IsAny<CancellationToken>()),
+            Times.Exactly(1));
 
         repoMock.VerifyWorkingTransactionMethods(transaction);
     }

@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Maverick.UserProfileService.Models.Models;
 using Maverick.UserProfileService.AggregateEvents.Common.Enums;
 using Maverick.UserProfileService.AggregateEvents.Resolved.V1;
+using Maverick.UserProfileService.Models.BasicModels;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using UserProfileService.Common.Tests.Utilities.Extensions;
@@ -54,6 +56,14 @@ public class TagsRemovedTests
         return mock;
     }
 
+    private static bool IsObjectTypeProfileEntity(ObjectType objectType)
+    {
+        return objectType == ObjectType.User
+            || objectType == ObjectType.Profile
+            || objectType == ObjectType.Group
+            || objectType == ObjectType.Organization;
+    }
+
     [Fact]
     public async Task HandleEventAsync_Success()
     {
@@ -85,6 +95,42 @@ public class TagsRemovedTests
                         ((MockDatabaseTransaction)t).Id == transaction.Id),
                 CancellationToken.None),
             Times.Exactly(1));
+
+        repoMock.Verify(
+            repo => repo.UpdateProfilePropertiesAsync(
+                It.Is(
+                    removedEvent.Id,
+                    StringComparer.OrdinalIgnoreCase),
+                It.Is<IDictionary<string, object>>(i => i.ContainsKey(nameof(ISecondLevelProjectionProfile.UpdatedAt))),
+                It.Is<IDatabaseTransaction>(
+                    t =>
+                        ((MockDatabaseTransaction)t).Id == transaction.Id),
+                It.IsAny<CancellationToken>()),
+            Times.Exactly(IsObjectTypeProfileEntity(removedEvent.ObjectType) ? 1 : 0));
+
+        repoMock.Verify(
+            repo => repo.UpdateRolePropertiesAsync(
+                It.Is(
+                    removedEvent.Id,
+                    StringComparer.OrdinalIgnoreCase),
+                It.Is<IDictionary<string, object>>(i => i.ContainsKey(nameof(RoleBasic.UpdatedAt))),
+                It.Is<IDatabaseTransaction>(
+                    t =>
+                        ((MockDatabaseTransaction)t).Id == transaction.Id),
+                It.IsAny<CancellationToken>()),
+            Times.Exactly(removedEvent.ObjectType is ObjectType.Role ? 1 : 0));
+
+        repoMock.Verify(
+            repo => repo.UpdateFunctionPropertiesAsync(
+                It.Is(
+                    removedEvent.Id,
+                    StringComparer.OrdinalIgnoreCase),
+                It.Is<IDictionary<string, object>>(i => i.ContainsKey(nameof(FunctionBasic.UpdatedAt))),
+                It.Is<IDatabaseTransaction>(
+                    t =>
+                        ((MockDatabaseTransaction)t).Id == transaction.Id),
+                It.IsAny<CancellationToken>()),
+            Times.Exactly(removedEvent.ObjectType is ObjectType.Function ? 1 : 0));
 
         repoMock.VerifyWorkingTransactionMethods(transaction);
     }

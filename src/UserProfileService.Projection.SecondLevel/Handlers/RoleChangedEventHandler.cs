@@ -96,13 +96,24 @@ public class RoleChangedEventHandler : SecondLevelEventHandlerBase<RoleChanged>
                 domainEvent.Role.Name.ToLogString().AsArgumentList());
 
             await ExecuteInsideTransactionAsync(
-                (repo, t, ct)
-                    => repo.TryUpdateLinkedObjectAsync(
+                async (repo, t, ct)
+                    =>
+                {
+                    await repo.TryUpdateLinkedObjectAsync(
                         relatedEntityIdent.Id,
                         domainEvent.Role.Id,
                         propertiesToChange,
                         t,
-                        ct),
+                        ct);
+
+                    // set new UpdatedAt date
+                    await UpdateRoleTimestampAsync(
+                        domainEvent.Role.Id,
+                        domainEvent.MetaData.Timestamp,
+                        repo,
+                        t,
+                        ct);
+                },
                 eventHeader,
                 cancellationToken);
         }

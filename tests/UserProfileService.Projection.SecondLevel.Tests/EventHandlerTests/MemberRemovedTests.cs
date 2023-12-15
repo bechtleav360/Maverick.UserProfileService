@@ -83,6 +83,18 @@ public class MemberRemovedTests
                 CancellationToken.None),
             Times.Exactly(1));
 
+        repoMock.Verify(
+            repo => repo.UpdateProfilePropertiesAsync(
+                It.Is(
+                    _memberRemovedEvent.ParentId,
+                    StringComparer.OrdinalIgnoreCase),
+                It.Is<IDictionary<string, object>>(i => i.ContainsKey(nameof(ISecondLevelProjectionProfile.UpdatedAt))),
+                It.Is<IDatabaseTransaction>(
+                    t =>
+                        ((MockDatabaseTransaction)t).Id == transaction.Id),
+                It.IsAny<CancellationToken>()),
+            Times.Exactly(1));
+
         repoMock.VerifyWorkingTransactionMethods(transaction);
     }
 

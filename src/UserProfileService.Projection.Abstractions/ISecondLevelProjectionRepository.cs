@@ -526,6 +526,26 @@ public interface ISecondLevelProjectionRepository : IProjectionStateRepository
         CancellationToken cancellationToken = default);
 
     /// <summary>
+    ///     Updates an existing function and overwrite its properties with the specified <paramref name="properties" /> data.
+    /// </summary>
+    /// <param name="functionId">The id of the function to be modified.</param>
+    /// <param name="properties">Key-Value pairs of properties and their new values.</param>
+    /// <param name="transaction">
+    ///     An optional <see cref="IDatabaseTransaction" /> instance to execute the underlying method
+    ///     inside a transaction.
+    /// </param>
+    /// <param name="cancellationToken">
+    ///     The token to monitor for cancellation requests. The default value is
+    ///     <see cref="CancellationToken.None" />
+    /// </param>
+    /// <returns>A task that represent the asynchronous write operation.</returns>
+    Task UpdateFunctionPropertiesAsync(
+        string functionId,
+        IDictionary<string, object> properties,
+        IDatabaseTransaction transaction = default,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
     ///     Updates an existing profile and overwrite it all primitive properties with the specified
     ///     <paramref name="profile" /> data.
     /// </summary>
@@ -549,6 +569,31 @@ public interface ISecondLevelProjectionRepository : IProjectionStateRepository
         CancellationToken cancellationToken = default);
 
     /// <summary>
+    ///     Updates an existing profile and overwrites all its primitive properties with the specified
+    ///     <paramref name="properties" /> data.
+    /// </summary>
+    /// <remarks>
+    ///     Path, Members, MemberOf, etc. are calculated properties, that will be ignored. There are suitable methods to update
+    ///     these properties.
+    /// </remarks>
+    /// <param name="profileId">The id of the profile to be modified.</param>
+    /// <param name="properties">Key-Value pairs of properties and their new values.</param>
+    /// <param name="transaction">
+    ///     An optional <see cref="IDatabaseTransaction" /> instance to execute the underlying method
+    ///     inside a transaction.
+    /// </param>
+    /// <param name="cancellationToken">
+    ///     The token to monitor for cancellation requests. The default value is
+    ///     <see cref="CancellationToken.None" />
+    /// </param>
+    /// <returns>A task that represent the asynchronous write operation.</returns>
+    Task UpdateProfilePropertiesAsync(
+        string profileId,
+        IDictionary<string, object> properties,
+        IDatabaseTransaction transaction = default,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
     ///     Updates an existing role and overwrite it's properties with the specified <paramref name="role" /> data.
     /// </summary>
     /// <param name="role">The new state of the role to be modified.</param>
@@ -563,6 +608,26 @@ public interface ISecondLevelProjectionRepository : IProjectionStateRepository
     /// <returns>A task that represent the asynchronous write operation.</returns>
     Task UpdateRoleAsync(
         SecondLevelProjectionRole role,
+        IDatabaseTransaction transaction = default,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
+    ///     Updates an existing role and overwrite its properties with the specified <paramref name="properties" /> data.
+    /// </summary>
+    /// <param name="roleId">The id of the role to be modified.</param>
+    /// <param name="properties">Key-Value pairs of properties and their new values.</param>
+    /// <param name="transaction">
+    ///     An optional <see cref="IDatabaseTransaction" /> instance to execute the underlying method
+    ///     inside a transaction.
+    /// </param>
+    /// <param name="cancellationToken">
+    ///     The token to monitor for cancellation requests. The default value is
+    ///     <see cref="CancellationToken.None" />
+    /// </param>
+    /// <returns>A task that represent the asynchronous write operation.</returns>
+    Task UpdateRolePropertiesAsync(
+        string roleId,
+        IDictionary<string, object> properties,
         IDatabaseTransaction transaction = default,
         CancellationToken cancellationToken = default);
 

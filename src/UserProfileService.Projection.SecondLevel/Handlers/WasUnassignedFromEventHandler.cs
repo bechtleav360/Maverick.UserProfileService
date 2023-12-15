@@ -110,15 +110,25 @@ internal class WasUnassignedFromEventHandler : SecondLevelEventHandlerBase<WasUn
         }
 
         await ExecuteInsideTransactionAsync(
-            (repo, t, ct)
-                => repo.RemoveMemberOfAsync(
+            async (repo, t, ct)
+                =>
+            {
+                await repo.RemoveMemberOfAsync(
                     relatedProfileId,
                     memberId,
                     containerType,
                     containerId,
                     conditions,
                     t,
-                    ct),
+                    ct);
+
+                await UpdateProfileTimestampAsync(
+                    memberId,
+                    domainEvent.MetaData.Timestamp,
+                    repo,
+                    t,
+                    ct);
+            },
             eventHeader,
             cancellationToken);
 

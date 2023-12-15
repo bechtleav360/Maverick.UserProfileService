@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using Maverick.UserProfileService.AggregateEvents.Common;
 using Maverick.UserProfileService.AggregateEvents.Common.Enums;
 using Maverick.UserProfileService.AggregateEvents.Resolved.V1;
 using Maverick.UserProfileService.AggregateEvents.Resolved.V1.Models;
@@ -168,7 +169,12 @@ internal class PropertiesChangedEventHandler : SecondLevelEventHandlerBase<Prope
             "Storing updated {entityTypeName} in database",
             GetLogName(updatedSecondLevelModel).AsArgumentList());
 
-        await UpdateObjectAsync(updatedSecondLevelModel, repository, transaction, cancellationToken);
+        await UpdateObjectAsync(
+            updatedSecondLevelModel,
+            repository,
+            transaction,
+            domainEvent.MetaData,
+            cancellationToken);
 
         Logger.ExitMethod();
     }
@@ -301,23 +307,26 @@ internal class PropertiesChangedEventHandler : SecondLevelEventHandlerBase<Prope
         object updatedState,
         ISecondLevelProjectionRepository repository,
         IDatabaseTransaction transaction,
+        EventMetaData eventMetadata,
         CancellationToken cancellationToken)
     {
-        return updatedState switch
+        DateTime updateDate = eventMetadata.Timestamp;
+
+        switch (updatedState)
         {
-            SecondLevelProjectionRole role => repository.UpdateRoleAsync(
-                role,
-                transaction,
-                cancellationToken),
-            SecondLevelProjectionFunction function => repository.UpdateFunctionAsync(
-                function,
-                transaction,
-                cancellationToken),
-            ISecondLevelProjectionProfile profile
-                => repository.UpdateProfileAsync(profile, transaction, cancellationToken),
-            _ => throw new NotSupportedException(
-                $"Updating requested object type '{updatedState.GetType().Name}' is not supported by event handler for 'PropertiesChanged'.")
-        };
+            case SecondLevelProjectionRole role:
+                role.UpdatedAt = updateDate;
+                return repository.UpdateRoleAsync(role, transaction, cancellationToken);
+            case SecondLevelProjectionFunction function:
+                function.UpdatedAt = updateDate;
+                return repository.UpdateFunctionAsync(function, transaction, cancellationToken);
+            case ISecondLevelProjectionProfile profile:
+                profile.UpdatedAt = updateDate;
+                return repository.UpdateProfileAsync(profile, transaction, cancellationToken);
+            default:
+                throw new NotSupportedException(
+                    $"Updating requested object type '{updatedState.GetType().Name}' is not supported by event handler for 'PropertiesChanged'.");
+        }
     }
 
     /// <inheritdoc />

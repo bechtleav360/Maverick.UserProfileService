@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Maverick.UserProfileService.AggregateEvents.Common;
 using Maverick.UserProfileService.AggregateEvents.V1;
+using Maverick.UserProfileService.Models.BasicModels;
 using Maverick.UserProfileService.Models.EnumModels;
 using Maverick.UserProfileService.Models.Models;
 using Microsoft.Extensions.DependencyInjection;
@@ -280,5 +282,86 @@ public abstract class SecondLevelEventHandlerBase<TEvent> : ISecondLevelEventHan
         CancellationToken cancellationToken = default)
     {
         return HandleEventAsync((TEvent)domainEvent, eventHeader, cancellationToken);
+    }
+
+    /// <summary>
+    ///     Updates the 'UpdatedAt' field of the profile with the id <paramref name="profileId" /> with the value of
+    ///     <paramref name="timestamp" />.
+    /// </summary>
+    /// <param name="profileId">The id of the profile to be updated.</param>
+    /// <param name="timestamp">New value for the 'UpdatedAt' field.</param>
+    /// <param name="repo">Second level projection repository.</param>
+    /// <param name="transaction">Transaction for this action.</param>
+    /// <param name="cancellationToken">The token to monitor and propagate cancellation requests.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    protected static Task UpdateProfileTimestampAsync(
+        string profileId,
+        DateTime timestamp,
+        ISecondLevelProjectionRepository repo,
+        IDatabaseTransaction transaction,
+        CancellationToken cancellationToken)
+    {
+        return repo.UpdateProfilePropertiesAsync(
+            profileId,
+            new Dictionary<string, object>
+            {
+                { nameof(ISecondLevelProjectionProfile.UpdatedAt), timestamp }
+            },
+            transaction,
+            cancellationToken);
+    }
+
+    /// <summary>
+    ///     Updates the 'UpdatedAt' field of the role with the id <paramref name="roleId" /> with the value of
+    ///     <paramref name="timestamp" />.
+    /// </summary>
+    /// <param name="roleId">The id of the profile to be updated.</param>
+    /// <param name="timestamp">New value for the 'UpdatedAt' field.</param>
+    /// <param name="repo">Second level projection repository.</param>
+    /// <param name="transaction">Transaction for this action.</param>
+    /// <param name="cancellationToken">The token to monitor and propagate cancellation requests.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    protected static Task UpdateRoleTimestampAsync(
+        string roleId,
+        DateTime timestamp,
+        ISecondLevelProjectionRepository repo,
+        IDatabaseTransaction transaction,
+        CancellationToken cancellationToken)
+    {
+        return repo.UpdateRolePropertiesAsync(
+            roleId,
+            new Dictionary<string, object>
+            {
+                { nameof(RoleBasic.UpdatedAt), timestamp }
+            },
+            transaction,
+            cancellationToken);
+    }
+
+    /// <summary>
+    ///     Updates the 'UpdatedAt' field of the function with the id <paramref name="functionId" /> with the value of
+    ///     <paramref name="timestamp" />.
+    /// </summary>
+    /// <param name="functionId">The id of the profile to be updated.</param>
+    /// <param name="timestamp">New value for the 'UpdatedAt' field.</param>
+    /// <param name="repo">Second level projection repository.</param>
+    /// <param name="transaction">Transaction for this action.</param>
+    /// <param name="cancellationToken">The token to monitor and propagate cancellation requests.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    protected static Task UpdateFunctionTimestampAsync(
+        string functionId,
+        DateTime timestamp,
+        ISecondLevelProjectionRepository repo,
+        IDatabaseTransaction transaction,
+        CancellationToken cancellationToken)
+    {
+        return repo.UpdateFunctionPropertiesAsync(
+            functionId,
+            new Dictionary<string, object>
+            {
+                { nameof(FunctionBasic.UpdatedAt), timestamp }
+            },
+            transaction,
+            cancellationToken);
     }
 }

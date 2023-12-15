@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using UserProfileService.Projection.Abstractions;
@@ -22,6 +23,33 @@ public static class MockExtensions
 
         mock.Setup(
                 r => r.CommitTransactionAsync(
+                    It.Is<IDatabaseTransaction>(t => ((MockDatabaseTransaction)t).Id == transaction.Id),
+                    It.IsAny<CancellationToken>()))
+            .Returns(Task.CompletedTask)
+            .Verifiable();
+
+        mock.Setup(
+                r => r.UpdateProfilePropertiesAsync(
+                    It.IsAny<string>(),
+                    It.IsNotNull<IDictionary<string, object>>(),
+                    It.Is<IDatabaseTransaction>(t => ((MockDatabaseTransaction)t).Id == transaction.Id),
+                    It.IsAny<CancellationToken>()))
+            .Returns(Task.CompletedTask)
+            .Verifiable();
+
+        mock.Setup(
+                r => r.UpdateFunctionPropertiesAsync(
+                    It.IsAny<string>(),
+                    It.IsNotNull<IDictionary<string, object>>(),
+                    It.Is<IDatabaseTransaction>(t => ((MockDatabaseTransaction)t).Id == transaction.Id),
+                    It.IsAny<CancellationToken>()))
+            .Returns(Task.CompletedTask)
+            .Verifiable();
+
+        mock.Setup(
+                r => r.UpdateRolePropertiesAsync(
+                    It.IsAny<string>(),
+                    It.IsNotNull<IDictionary<string, object>>(),
                     It.Is<IDatabaseTransaction>(t => ((MockDatabaseTransaction)t).Id == transaction.Id),
                     It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask)
