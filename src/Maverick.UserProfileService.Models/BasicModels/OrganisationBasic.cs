@@ -148,7 +148,7 @@ namespace Maverick.UserProfileService.Models.BasicModels
                 hashCode = (hashCode * 397) ^ Weight.GetHashCode();
                 hashCode = (hashCode * 397) ^ (ImageUrl != null ? ImageUrl.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ IsSystem.GetHashCode();
-                hashCode = (hashCode * 397) ^ Source.GetHashCode();
+                hashCode = (hashCode * 397) ^ (Source != null ? Source.GetHashCode() : 0);
 
                 return hashCode;
             }
