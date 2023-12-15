@@ -7,6 +7,7 @@ using Maverick.UserProfileService.Models.Models;
 using FluentAssertions;
 using Maverick.UserProfileService.AggregateEvents.Common.Enums;
 using Maverick.UserProfileService.AggregateEvents.Resolved.V1;
+using Maverick.UserProfileService.Models.BasicModels;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using UserProfileService.Common.Tests.Utilities.Extensions;
@@ -99,14 +100,38 @@ public class MemberAddedTests
         repoMock.Verify(
             repo => repo.UpdateProfilePropertiesAsync(
                 It.Is(
-                    _group.Id,
+                    _addedEvent.ParentId,
                     StringComparer.OrdinalIgnoreCase),
                 It.Is<IDictionary<string, object>>(i => i.ContainsKey(nameof(ISecondLevelProjectionProfile.UpdatedAt))),
                 It.Is<IDatabaseTransaction>(
                     t =>
                         ((MockDatabaseTransaction)t).Id == transaction.Id),
                 It.IsAny<CancellationToken>()),
-            Times.Exactly(1));
+            Times.Exactly(_addedEvent.ParentType is ContainerType.Group or ContainerType.Organization ? 1 : 0));
+
+        repoMock.Verify(
+            repo => repo.UpdateRolePropertiesAsync(
+                It.Is(
+                    _addedEvent.ParentId,
+                    StringComparer.OrdinalIgnoreCase),
+                It.Is<IDictionary<string, object>>(i => i.ContainsKey(nameof(RoleBasic.UpdatedAt))),
+                It.Is<IDatabaseTransaction>(
+                    t =>
+                        ((MockDatabaseTransaction)t).Id == transaction.Id),
+                It.IsAny<CancellationToken>()),
+            Times.Exactly(_addedEvent.ParentType is ContainerType.Role ? 1 : 0));
+
+        repoMock.Verify(
+            repo => repo.UpdateFunctionPropertiesAsync(
+                It.Is(
+                    _addedEvent.ParentId,
+                    StringComparer.OrdinalIgnoreCase),
+                It.Is<IDictionary<string, object>>(i => i.ContainsKey(nameof(FunctionBasic.UpdatedAt))),
+                It.Is<IDatabaseTransaction>(
+                    t =>
+                        ((MockDatabaseTransaction)t).Id == transaction.Id),
+                It.IsAny<CancellationToken>()),
+            Times.Exactly(_addedEvent.ParentType is ContainerType.Function ? 1 : 0));
 
         repoMock.VerifyWorkingTransactionMethods(transaction);
     }

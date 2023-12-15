@@ -79,12 +79,41 @@ internal class MemberDeletedEventHandler : SecondLevelEventHandlerBase<MemberDel
                     t,
                     ct);
 
-                await UpdateProfileTimestampAsync(
-                    containerId,
-                    domainEvent.MetaData.Timestamp,
-                    repo,
-                    t,
-                    ct);
+                // set new UpdateAt date depending on object type
+                switch (containerType)
+                {
+                    case ContainerType.Group:
+                    case ContainerType.Organization:
+
+                        await UpdateProfileTimestampAsync(
+                            containerId,
+                            domainEvent.MetaData.Timestamp,
+                            repo,
+                            t,
+                            ct);
+
+                        break;
+                    case ContainerType.Role:
+
+                        await UpdateRoleTimestampAsync(
+                            containerId,
+                            domainEvent.MetaData.Timestamp,
+                            repo,
+                            t,
+                            ct);
+
+                        break;
+                    case ContainerType.Function:
+
+                        await UpdateFunctionTimestampAsync(
+                            containerId,
+                            domainEvent.MetaData.Timestamp,
+                            repo,
+                            t,
+                            ct);
+
+                        break;
+                }
             },
             eventHeader,
             cancellationToken);
