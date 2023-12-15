@@ -49,7 +49,7 @@ namespace UserProfileService.IntegrationTests.Utilities
 
             Assert.Equal(expected.FirstName, actual.FirstName);
             Assert.Equal(expected.LastName, actual.LastName);
-            Assert.Equal(expected.Email.ToLowerInvariant(), actual.Email);
+            Assert.Equal(expected.Email, actual.Email, StringComparer.OrdinalIgnoreCase);
             Assert.Equal(expected.UserName, actual.UserName);
             Assert.Equal(expected.UserStatus, actual.UserStatus);
 

@@ -97,13 +97,23 @@ public class FunctionChangedEventHandler : SecondLevelEventHandlerBase<FunctionC
                 domainEvent.Function.GenerateFunctionName().ToLogString().AsArgumentList());
 
             await ExecuteInsideTransactionAsync(
-                (repo, t, ct)
-                    => repo.TryUpdateLinkedObjectAsync(
+                async (repo, t, ct)
+                    =>
+                {
+                    await repo.TryUpdateLinkedObjectAsync(
                         relatedEntityIdent.Id,
                         domainEvent.Function.Id,
                         propertiesToChange,
                         t,
-                        ct),
+                        ct);
+
+                    await UpdateFunctionTimestampAsync(
+                        domainEvent.Function.Id,
+                        domainEvent.MetaData.Timestamp,
+                        repo,
+                        t,
+                        ct);
+                },
                 eventHeader,
                 cancellationToken);
         }

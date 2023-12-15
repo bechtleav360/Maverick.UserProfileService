@@ -69,14 +69,23 @@ internal class MemberDeletedEventHandler : SecondLevelEventHandlerBase<MemberDel
             LogHelpers.Arguments(memberId, containerType.ToString(), containerId));
 
         await ExecuteInsideTransactionAsync(
-            (repo, t, ct)
-                => repo.RemoveMemberAsync(
+            async (repo, t, ct) =>
+            {
+                await repo.RemoveMemberAsync(
                     containerId,
                     containerType,
                     memberId,
                     null,
                     t,
-                    ct),
+                    ct);
+
+                await UpdateProfileTimestampAsync(
+                    containerId,
+                    domainEvent.MetaData.Timestamp,
+                    repo,
+                    t,
+                    ct);
+            },
             eventHeader,
             cancellationToken);
 

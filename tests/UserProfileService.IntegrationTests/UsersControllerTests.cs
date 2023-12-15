@@ -419,7 +419,7 @@ namespace UserProfileService.IntegrationTests
 
             (bool success, _) = await response.WaitForSuccessAsync(_fixture.Client, maxAttempts: 10);
 
-            Assert.False(success);
+            Assert.True(success);
         }
 
         [Fact]

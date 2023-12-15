@@ -58,7 +58,7 @@ internal class WasAssignedToFunctionEventHandler : SecondLevelEventHandlerBase<W
         }
 
         await ExecuteInsideTransactionAsync(
-            (repo, t, ct) =>
+            async (repo, t, ct) =>
             {
                 var functionAssignedTo = Mapper.Map<SecondLevelProjectionFunction>(domainEvent.Target);
 
@@ -69,11 +69,18 @@ internal class WasAssignedToFunctionEventHandler : SecondLevelEventHandlerBase<W
                         functionAssignedTo.ToLogString().AsArgumentList());
                 }
 
-                return repo.AddMemberOfAsync(
+                await repo.AddMemberOfAsync(
                     relatedEntityIdent.Id,
                     domainEvent.ProfileId,
                     domainEvent.Conditions,
                     functionAssignedTo,
+                    t,
+                    ct);
+
+                await UpdateProfileTimestampAsync(
+                    domainEvent.ProfileId,
+                    domainEvent.MetaData.Timestamp,
+                    repo,
                     t,
                     ct);
             },

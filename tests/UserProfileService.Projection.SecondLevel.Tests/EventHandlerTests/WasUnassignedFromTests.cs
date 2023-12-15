@@ -75,6 +75,18 @@ public class WasUnassignedFromTests
                         ((MockDatabaseTransaction)t).Id == transaction.Id),
                 CancellationToken.None),
             Times.Exactly(1));
+
+        repoMock.Verify(
+            repo => repo.UpdateProfilePropertiesAsync(
+                It.Is(
+                    _event.ChildId,
+                    StringComparer.OrdinalIgnoreCase),
+                It.Is<IDictionary<string, object>>(i => i.ContainsKey(nameof(ISecondLevelProjectionProfile.UpdatedAt))),
+                It.Is<IDatabaseTransaction>(
+                    t =>
+                        ((MockDatabaseTransaction)t).Id == transaction.Id),
+                It.IsAny<CancellationToken>()),
+            Times.Once);
     }
 
     [Fact]

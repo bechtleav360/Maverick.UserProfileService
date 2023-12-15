@@ -194,6 +194,8 @@ public class PropertiesChangedTests
 
         modifiedProfile.Name = changedEvent.Properties["name"] as string;
 
+        modifiedProfile.UpdatedAt = changedEvent.MetaData.Timestamp;
+
         // act
         await sut.HandleEventAsync(changedEvent, header);
 

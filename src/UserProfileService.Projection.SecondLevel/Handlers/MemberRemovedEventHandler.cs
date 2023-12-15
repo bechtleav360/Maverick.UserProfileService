@@ -80,14 +80,23 @@ internal class MemberRemovedEventHandler : SecondLevelEventHandlerBase<MemberRem
         }
 
         await ExecuteInsideTransactionAsync(
-            (repo, t, ct)
-                => repo.RemoveMemberAsync(
+            async (repo, t, ct) =>
+            {
+                await repo.RemoveMemberAsync(
                     containerId,
                     containerType,
                     memberId,
                     conditions,
                     t,
-                    ct),
+                    ct);
+
+                await UpdateProfileTimestampAsync(
+                    containerId,
+                    domainEvent.MetaData.Timestamp,
+                    repo,
+                    t,
+                    ct);
+            },
             eventHeader,
             cancellationToken);
 

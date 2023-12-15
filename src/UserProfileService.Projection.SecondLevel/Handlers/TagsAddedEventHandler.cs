@@ -82,14 +82,55 @@ internal class TagsAddedEventHandler : SecondLevelEventHandlerBase<TagsAdded>
         }
 
         await ExecuteInsideTransactionAsync(
-            (repo, t, ct)
-                => repo.AddTagToObjectAsync(
+            async (repo, t, ct)
+                =>
+            {
+                await repo.AddTagToObjectAsync(
                     relatedEntityIdent.Id ?? domainEvent.Id,
                     domainEvent.Id,
                     domainEvent.ObjectType,
                     domainEvent.Tags,
                     t,
-                    ct),
+                    ct);
+
+                // set new UpdateAt date depending on object type
+                switch (domainEvent.ObjectType)
+                {
+                    case ObjectType.Profile:
+                    case ObjectType.Group:
+                    case ObjectType.User:
+                    case ObjectType.Organization:
+
+                        await UpdateProfileTimestampAsync(
+                            domainEvent.Id,
+                            domainEvent.MetaData.Timestamp,
+                            repo,
+                            t,
+                            ct);
+
+                        break;
+                    case ObjectType.Role:
+
+                        await UpdateRoleTimestampAsync(
+                            domainEvent.Id,
+                            domainEvent.MetaData.Timestamp,
+                            repo,
+                            t,
+                            ct);
+
+                        break;
+                    case ObjectType.Function:
+
+                        await UpdateFunctionTimestampAsync(
+                            domainEvent.Id,
+                            domainEvent.MetaData.Timestamp,
+                            repo,
+                            t,
+                            ct);
+
+                        break;
+                }
+            },
             eventHeader,
             cancellationToken);
 
