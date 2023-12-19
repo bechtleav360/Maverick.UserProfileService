@@ -2,6 +2,8 @@
 using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using UserProfileService.Events.Payloads;
 using UserProfileService.Saga.Validation.Abstractions;
 using UserProfileService.Validation.Abstractions.Configuration;
 using FunctionCreatedPayloadValidatorV2 =
@@ -44,6 +46,10 @@ public static class ServiceCollectionExtension
 
         services.Configure<ValidationConfiguration>(configuration);
 
+        services.RegisterCustomSagaMessageValidation(_ => {});
+        
+        services.TryAddTransient<ICustomValidationServiceFactory, DefaultCustomValidationServiceFactory>();
+
         services
             .AddTransient<IRepoValidationService, RepoValidationService>()
             .AddTransient<IVolatileRepoValidationService, TVolatileRepoValidationService>()
@@ -76,7 +82,11 @@ public static class ServiceCollectionExtension
             throw new ArgumentNullException(nameof(configuration));
         }
 
+        services.RegisterCustomSagaMessageValidation(_ => {});
+
         services.Configure<ValidationConfiguration>(configuration);
+
+        services.TryAddTransient<ICustomValidationServiceFactory, DefaultCustomValidationServiceFactory>();
 
         services
             .AddTransient<IRepoValidationService, RepoValidationService>()
@@ -109,5 +119,81 @@ public static class ServiceCollectionExtension
             .AddTransient<IPayloadValidationService, PayloadValidationService>();
 
         return services;
+    }
+
+    /// <summary>
+    ///     Registers custom validation services with the specified <see cref="IServiceCollection" />.
+    /// </summary>
+    /// <param name="services">The <see cref="IServiceCollection" /> to which custom validation services will be registered.</param>
+    /// <param name="modifier">
+    ///     An action that allows customization of the <see cref="CustomValidationServiceFactoryOptions" /> before
+    ///     registration.
+    ///     This action can be used to configure mappings between message types and custom validation service types.
+    /// </param>
+    /// <returns>The updated <see cref="IServiceCollection" /> with the custom validation services registered.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="services" /> is <c>null</c>.</exception>
+    public static IServiceCollection RegisterCustomSagaMessageValidation(
+        this IServiceCollection services,
+        Action<CustomValidationServiceFactoryOptions> modifier)
+    {
+        if (services == null)
+        {
+            throw new ArgumentNullException(nameof(services));
+        }
+
+        if (modifier == null)
+        {
+            throw new ArgumentNullException(nameof(modifier));
+        }
+
+        var options = new CustomValidationServiceFactoryOptions();
+        modifier.Invoke(options);
+
+        services.TryAddTransient(_ => options);
+
+        return services;
+    }
+
+    /// <summary>
+    ///     Adds a mapping between a message type and a custom validation service type to the
+    ///     <see cref="CustomValidationServiceFactoryOptions" />.
+    /// </summary>
+    /// <typeparam name="TMessage">The type of the message to be validated. It must be a class.</typeparam>
+    /// <typeparam name="TValidator">
+    ///     The type of the custom validation service implementing
+    ///     <see cref="ICustomValidationService" />.
+    /// </typeparam>
+    /// <param name="source">
+    ///     The <see cref="CustomValidationServiceFactoryOptions" /> instance to which the mapping will be
+    ///     added.
+    /// </param>
+    /// <returns>The updated <see cref="CustomValidationServiceFactoryOptions" /> instance.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="source" /> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentException">
+    ///     Thrown when <paramref name="source" /> has a <c>null</c>
+    ///     <see cref="CustomValidationServiceFactoryOptions.MessageTypeToValidationServiceMap" />.
+    /// </exception>
+    public static CustomValidationServiceFactoryOptions AddCustomValidator<TMessage, TValidator>(
+        this CustomValidationServiceFactoryOptions source)
+        where TMessage : IPayload
+        where TValidator : ICustomValidationService
+    {
+        if (source == null)
+        {
+            throw new ArgumentNullException(nameof(source));
+        }
+
+        if (source.MessageTypeToValidationServiceMap == null)
+        {
+            throw new ArgumentException(
+                $"Options.{nameof(CustomValidationServiceFactoryOptions.MessageTypeToValidationServiceMap)} must not be null",
+                nameof(source));
+        }
+
+        source.MessageTypeToValidationServiceMap.TryAdd(
+            typeof(TMessage),
+            typeof(TValidator));
+
+        return source;
     }
 }

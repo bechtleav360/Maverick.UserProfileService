@@ -59,16 +59,6 @@ public class CommandProcessState :
     public CommandInitiator? Initiator { get; set; }
 
     /// <summary>
-    ///     Information about errors occurred during projecting of the command by an external source (like first-level
-    ///     projection, second-level projection).
-    /// </summary>
-    /// <remarks>
-    ///     This will be <c>null</c>, if the command has been projected directly (i.e. if volatile data changes) even if an
-    ///     error occurs there.
-    /// </remarks>
-    //public ExceptionInformation? ProjectionError { get; set; }
-
-    /// <summary>
     ///     indicates whether the command is valid.
     ///     If no validation has been performed yet, the property is null.
     /// </summary>

@@ -20,7 +20,7 @@ public interface IDomainEvent
     /// <summary>
     ///     Some user or service that initiates the event.
     /// </summary>
-    EventInitiator Initiator { get; set; }
+    EventInitiator? Initiator { get; set; }
 
     /// <summary>
     ///     The meta data of the current event.

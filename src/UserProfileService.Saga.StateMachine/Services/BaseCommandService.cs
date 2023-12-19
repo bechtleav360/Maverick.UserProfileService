@@ -41,7 +41,68 @@ public abstract class BaseCommandService<TMessage> : ICommandService<TMessage>
         Logger = logger;
     }
 
-    /// <inheritdoc cref="ICommandService.ModifyAsync"/>
+    /// <summary>
+    ///     Creates and initializes an instance of a domain event of type <typeparamref name="TEvent" /> with the specified
+    ///     payload.
+    /// </summary>
+    /// <typeparam name="TEvent">The type of domain event to be created.</typeparam>
+    /// <typeparam name="TPayload">The type of payload associated with the domain event.</typeparam>
+    /// <param name="payload">The payload for the domain event.</param>
+    /// <param name="correlationId">The correlation ID associated with the domain event.</param>
+    /// <param name="processId">The process ID associated with the domain event.</param>
+    /// <param name="initiator">The initiator of the domain event.</param>
+    /// <param name="idSelector">
+    ///     (Optional) A function that selects an ID from the payload. If not provided, the ID will be determined by the
+    ///     default logic.
+    /// </param>
+    /// <returns>
+    ///     An initialized instance of the specified domain event type (<typeparamref name="TEvent" />).
+    /// </returns>
+    /// <remarks>
+    ///     This method creates a domain event instance with the provided payload and initializes its properties such as
+    ///     EventId, CorrelationId,
+    ///     RequestSagaId, Timestamp, Initiator, Payload, Type, and MetaData.
+    /// </remarks>
+    protected TEvent CreateEvent<TEvent, TPayload>(
+        TPayload payload,
+        string correlationId,
+        string processId,
+        CommandInitiator? initiator,
+        Func<TPayload, string>? idSelector = null)
+        where TEvent : DomainEvent<TPayload>, new()
+        where TPayload : class, IPayload
+    {
+        Logger.EnterMethod();
+
+        // Version comes from attribute from Domain Event
+        long? version = typeof(TEvent).GetCustomAttribute<EventVersionAttribute>()?.VersionInformation;
+
+        var @event = new TEvent
+                     {
+                         EventId = Guid.NewGuid().ToString(),
+                         CorrelationId = correlationId,
+                         RequestSagaId = processId,
+                         Timestamp = DateTime.UtcNow,
+                         Initiator = initiator.ToEventInitiator(),
+                         Payload = payload,
+                         Type = typeof(TEvent).Name,
+                         MetaData =
+                         {
+                             ProcessId = processId,
+                             Batch = null,
+                             CorrelationId = correlationId,
+                             Initiator = initiator.ToAggregateEventInitiator(),
+                             RelatedEntityId = idSelector?.Invoke(payload),
+                             HasToBeInverted = false,
+                             Timestamp = DateTime.UtcNow,
+                             VersionInformation = version ?? 2
+                         }
+                     };
+
+        return Logger.ExitMethod(@event);
+    }
+
+    /// <inheritdoc cref="ICommandService.ModifyAsync" />
     public virtual Task<TMessage?> ModifyAsync(TMessage? message, CancellationToken cancellationToken = default)
     {
         return Task.FromResult(message);
@@ -55,7 +116,7 @@ public abstract class BaseCommandService<TMessage> : ICommandService<TMessage>
         return modifiedData;
     }
 
-    /// <inheritdoc cref="ICommandService.CreateAsync"/>
+    /// <inheritdoc cref="ICommandService.CreateAsync" />
     public abstract Task<IUserProfileServiceEvent> CreateAsync(
         TMessage message,
         string correlationId,
@@ -81,7 +142,7 @@ public abstract class BaseCommandService<TMessage> : ICommandService<TMessage>
         return @event;
     }
 
-    /// <inheritdoc cref="ICommandService.ValidateAsync"/>
+    /// <inheritdoc cref="ICommandService.ValidateAsync" />
     public async Task<ValidationResult> ValidateAsync(
         TMessage message,
         CommandInitiator? initiator,
@@ -110,43 +171,5 @@ public abstract class BaseCommandService<TMessage> : ICommandService<TMessage>
             : new ValidationResult(new ValidationAttribute(nameof(data), "data cannot be null"));
 
         return result;
-    }
-
-    private protected TEvent CreateEvent<TEvent, TPayload>(
-        TPayload payload,
-        string correlationId,
-        string processId,
-        CommandInitiator initiator,
-        Func<TPayload, string>? idSelector = null)
-        where TEvent : DomainEvent<TPayload>, new()
-        where TPayload : class, IPayload
-    {
-        Logger.EnterMethod();
-
-        // Version comes from attribute from Domain Event
-        long? version = typeof(TEvent).GetCustomAttribute<EventVersionAttribute>()?.VersionInformation;
-
-        var @event = new TEvent
-        {
-            EventId = Guid.NewGuid().ToString(),
-            CorrelationId = correlationId,
-            RequestSagaId = processId,
-            Timestamp = DateTime.UtcNow,
-            Initiator = initiator.ToEventInitiator(),
-            Payload = payload,
-            Type = typeof(TEvent).Name,
-            MetaData =
-            {
-                ProcessId = processId,
-                Batch = null,
-                CorrelationId = correlationId,
-                Initiator = initiator.ToAggregateEventInitiator(),
-                RelatedEntityId = idSelector?.Invoke(payload),
-                HasToBeInverted = false,
-                Timestamp = DateTime.UtcNow,
-                VersionInformation = version ?? 2
-            }
-        };
-        return Logger.ExitMethod(@event);
     }
 }

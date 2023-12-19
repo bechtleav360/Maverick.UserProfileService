@@ -13,7 +13,7 @@ namespace UserProfileService.Saga.Validation.Abstractions;
 /// <summary>
 ///     Describes a service that validates the given entities with information from the database.
 /// </summary>
-internal interface IRepoValidationService
+public interface IRepoValidationService
 {
     /// <summary>
     ///     Checks if a function with the same organization and role exists.

@@ -24,7 +24,7 @@ public abstract class DomainEvent<TPayload> : IDomainEvent
     /// <summary>
     ///     Some user or service that initiates the event.
     /// </summary>
-    public EventInitiator Initiator { get; set; }
+    public EventInitiator? Initiator { get; set; }
 
     /// <summary>
     ///     The meta data of the current event.

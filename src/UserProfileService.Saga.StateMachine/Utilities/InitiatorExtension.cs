@@ -17,7 +17,7 @@ public static class InitiatorExtension
     /// </summary>
     /// <param name="initiator">Saga initiator to be converted.</param>
     /// <returns>Converted event initiator.</returns>
-    public static EventInitiator ToEventInitiator(this CommandInitiator initiator)
+    public static EventInitiator? ToEventInitiator(this CommandInitiator? initiator)
     {
         if (initiator == null)
         {
@@ -46,8 +46,8 @@ public static class InitiatorExtension
     /// </summary>
     /// <param name="initiator">Saga initiator to be converted.</param>
     /// <returns>Converted event initiator.</returns>
-    public static Maverick.UserProfileService.AggregateEvents.Common.EventInitiator ToAggregateEventInitiator(
-        this CommandInitiator initiator)
+    public static Maverick.UserProfileService.AggregateEvents.Common.EventInitiator? ToAggregateEventInitiator(
+        this CommandInitiator? initiator)
     {
         if (initiator == null)
         {

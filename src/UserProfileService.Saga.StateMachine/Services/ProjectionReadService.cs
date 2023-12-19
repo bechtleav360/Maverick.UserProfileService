@@ -22,7 +22,15 @@ namespace UserProfileService.StateMachine.Services;
 /// </summary>
 public class ProjectionReadService : IProjectionReadService, IValidationReadService
 {
-    private readonly ILogger<ProjectionReadService> _logger;
+    /// <summary>
+    ///     Gets the logger instance for this instance.
+    /// </summary>
+    /// <remarks>
+    ///     The logger is used to record and handle log messages related to the projection read service.
+    ///     Use this logger to log events, errors, and other relevant information during the execution of the service.
+    /// </remarks>
+    protected ILogger Logger { get; }
+
     private readonly IReadService _readService;
 
     /// <summary>
@@ -33,24 +41,24 @@ public class ProjectionReadService : IProjectionReadService, IValidationReadServ
     public ProjectionReadService(IReadService readService, ILogger<ProjectionReadService> logger)
     {
         _readService = readService;
-        _logger = logger;
+        Logger = logger;
     }
 
     /// <inheritdoc />
     public async Task<bool> CheckProfileExistsAsync(string id, ProfileKind profileKind)
     {
-        _logger.EnterMethod();
+        Logger.EnterMethod();
 
         try
         {
             await _readService.GetProfileAsync<IProfile>(id, profileKind.ConvertToRequestedProfileKind());
-            _logger.LogDebugMessage("Found function with id '{id}'.", LogHelpers.Arguments(id));
+            Logger.LogDebugMessage("Found function with id '{id}'.", LogHelpers.Arguments(id));
 
-            return _logger.ExitMethod(true);
+            return Logger.ExitMethod(true);
         }
         catch (InstanceNotFoundException)
         {
-            return _logger.ExitMethod(false);
+            return Logger.ExitMethod(false);
         }
     }
 
@@ -64,7 +72,7 @@ public class ProjectionReadService : IProjectionReadService, IValidationReadServ
     /// <returns>True if the objects already exists, otherwise false.</returns>
     public async Task<bool> CheckObjectExistsAsync(IObjectIdent objectIdent)
     {
-        _logger.EnterMethod();
+        Logger.EnterMethod();
 
         try
         {
@@ -105,7 +113,7 @@ public class ProjectionReadService : IProjectionReadService, IValidationReadServ
 
                     break;
                 default:
-                    _logger.LogErrorMessage(
+                    Logger.LogErrorMessage(
                         null,
                         "The following object type '{type}' is not implemented to retrieve object infos.",
                         LogHelpers.Arguments(objectIdent.Type));
@@ -115,24 +123,24 @@ public class ProjectionReadService : IProjectionReadService, IValidationReadServ
                     break;
             }
 
-            return _logger.ExitMethod(result);
+            return Logger.ExitMethod(result);
         }
         catch (InstanceNotFoundException)
         {
-            _logger.LogTraceMessage(
+            Logger.LogTraceMessage(
                 "Object with id '{id}' and type '{type}' could not be found.",
                 LogHelpers.Arguments(
                     objectIdent.Id,
                     objectIdent.Type));
 
-            return _logger.ExitMethod(false);
+            return Logger.ExitMethod(false);
         }
     }
 
     /// <inheritdoc />
     public async Task<IDictionary<string, bool>> CheckTagsExistAsync(params string[] ids)
     {
-        _logger.EnterMethod();
+        Logger.EnterMethod();
 
         if (ids == null || !ids.Any())
         {
@@ -143,13 +151,13 @@ public class ProjectionReadService : IProjectionReadService, IValidationReadServ
 
         IDictionary<string, bool> dictExists = ids.ToDictionary(t => t, t => tags.Contains(t));
 
-        return _logger.ExitMethod(dictExists);
+        return Logger.ExitMethod(dictExists);
     }
 
     /// <inheritdoc />
     public async Task<bool> CheckUserEmailExistsAsync(string email, string userId = "")
     {
-        _logger.EnterMethod();
+        Logger.EnterMethod();
 
         var query = new AssignmentQueryObject
         {
@@ -178,14 +186,14 @@ public class ProjectionReadService : IProjectionReadService, IValidationReadServ
         {
             bool duplicate = result.All(r => r.Id != userId);
 
-            _logger.LogDebugMessage("Found user with email '{email}'", LogHelpers.Arguments(email));
+            Logger.LogDebugMessage("Found user with email '{email}'", LogHelpers.Arguments(email));
 
-            return _logger.ExitMethod(duplicate);
+            return Logger.ExitMethod(duplicate);
         }
 
-        _logger.LogDebugMessage("No user found with email '{email}'´.", LogHelpers.Arguments(email));
+        Logger.LogDebugMessage("No user found with email '{email}'´.", LogHelpers.Arguments(email));
 
-        return _logger.ExitMethod(false);
+        return Logger.ExitMethod(false);
     }
 
     /// <inheritdoc />
@@ -195,7 +203,7 @@ public class ProjectionReadService : IProjectionReadService, IValidationReadServ
         bool ignoreCase,
         string groupId = "")
     {
-        _logger.EnterMethod();
+        Logger.EnterMethod();
 
         var query = new AssignmentQueryObject
         {
@@ -248,20 +256,20 @@ public class ProjectionReadService : IProjectionReadService, IValidationReadServ
 
             bool duplicate = sameNameList.Any() && sameNameList.All(s => s.Id != groupId);
 
-            _logger.LogDebugMessage("Found group with name '{name}'", LogHelpers.Arguments(name));
+            Logger.LogDebugMessage("Found group with name '{name}'", LogHelpers.Arguments(name));
 
-            return _logger.ExitMethod(duplicate);
+            return Logger.ExitMethod(duplicate);
         }
 
-        _logger.LogDebugMessage("No group found with name '{name}'.", LogHelpers.Arguments(name));
+        Logger.LogDebugMessage("No group found with name '{name}'.", LogHelpers.Arguments(name));
 
-        return _logger.ExitMethod(false);
+        return Logger.ExitMethod(false);
     }
 
     /// <inheritdoc cref="IProjectionReadService.GetProfileAsync" />
     public async Task<IProfile> GetProfileAsync(string id, ProfileKind profileKind)
     {
-        _logger.EnterMethod();
+        Logger.EnterMethod();
 
         try
         {
@@ -269,7 +277,7 @@ public class ProjectionReadService : IProjectionReadService, IValidationReadServ
                 id,
                 profileKind.ConvertToRequestedProfileKind());
 
-            _logger.LogDebugMessage(
+            Logger.LogDebugMessage(
                 "Found profile with id '{id}' and kind {profile.Kind}.",
                 LogHelpers.Arguments(id, profile.Kind));
 
@@ -284,30 +292,30 @@ public class ProjectionReadService : IProjectionReadService, IValidationReadServ
     /// <inheritdoc cref="IProjectionReadService.GetProfilesAsync"/>
     public async Task<ICollection<IProfile>> GetProfilesAsync(ICollection<string> ids, ProfileKind profileKind)
     {
-        _logger.EnterMethod();
+        Logger.EnterMethod();
 
         IPaginatedList<IProfile> profiles =
             await _readService.GetProfilesAsync<UserBasic, GroupBasic, OrganizationBasic>(
                 ids,
                 profileKind.ConvertToRequestedProfileKind());
 
-        return _logger.ExitMethod(profiles);
+        return Logger.ExitMethod(profiles);
     }
 
     /// <inheritdoc cref= "IProjectionReadService.GetProfilesAsync"/>
     public async Task<Tag> GetTagAsync(string id)
     {
-        _logger.EnterMethod();
+        Logger.EnterMethod();
 
         try
         {
             Tag tag = await _readService.GetTagAsync(id);
 
-            return _logger.ExitMethod(tag);
+            return Logger.ExitMethod(tag);
         }
         catch (InstanceNotFoundException)
         {
-            return _logger.ExitMethod<Tag>(null);
+            return Logger.ExitMethod<Tag>(null);
         }
     }
 
@@ -335,34 +343,34 @@ public class ProjectionReadService : IProjectionReadService, IValidationReadServ
         ProfileKind profileKind,
         string settingsKey)
     {
-        _logger.EnterMethod();
+        Logger.EnterMethod();
 
         JObject settings = await _readService.GetSettingsOfProfileAsync(profileId, profileKind, settingsKey);
 
-        return _logger.ExitMethod(settings);
+        return Logger.ExitMethod(settings);
     }
 
     /// <inheritdoc cref="IProjectionReadService.GetFunctionAsync"/>
     public async Task<FunctionView> GetFunctionAsync(string id)
     {
-        _logger.EnterMethod();
+        Logger.EnterMethod();
 
         try
         {
             var function = await _readService.GetFunctionAsync<FunctionView>(id);
 
-            return _logger.ExitMethod(function);
+            return Logger.ExitMethod(function);
         }
         catch (InstanceNotFoundException)
         {
-            return _logger.ExitMethod<FunctionView>(null);
+            return Logger.ExitMethod<FunctionView>(null);
         }
     }
 
     /// <inheritdoc />
     public async Task<ICollection<FunctionBasic>> GetFunctionsAsync(string roleId, string organizationId)
     {
-        _logger.EnterMethod();
+        Logger.EnterMethod();
 
         try
         {
@@ -395,35 +403,35 @@ public class ProjectionReadService : IProjectionReadService, IValidationReadServ
 
             IPaginatedList<FunctionBasic> functions = await _readService.GetFunctionsAsync<FunctionBasic>(query);
 
-            return _logger.ExitMethod(functions);
+            return Logger.ExitMethod(functions);
         }
         catch (InstanceNotFoundException)
         {
-            return _logger.ExitMethod<ICollection<FunctionBasic>>(new List<FunctionBasic>());
+            return Logger.ExitMethod<ICollection<FunctionBasic>>(new List<FunctionBasic>());
         }
     }
 
     /// <inheritdoc cref="IProjectionReadService.GetRoleAsync"/>
     public async Task<RoleBasic> GetRoleAsync(string id)
     {
-        _logger.EnterMethod();
+        Logger.EnterMethod();
 
         try
         {
             RoleView role = await _readService.GetRoleAsync(id);
 
-            return _logger.ExitMethod(role);
+            return Logger.ExitMethod(role);
         }
         catch (InstanceNotFoundException)
         {
-            return _logger.ExitMethod<RoleBasic>(null);
+            return Logger.ExitMethod<RoleBasic>(null);
         }
     }
 
     /// <inheritdoc />
     public async Task<string[]> GetRoleFunctionAssignmentsAsync(string roleId)
     {
-        _logger.EnterMethod();
+        Logger.EnterMethod();
 
         var query = new AssignmentQueryObject
         {
@@ -451,7 +459,7 @@ public class ProjectionReadService : IProjectionReadService, IValidationReadServ
             .Select(p => p.Id)
             .ToArray();
 
-        return _logger.ExitMethod(functionIds);
+        return Logger.ExitMethod(functionIds);
     }
 
     public async Task<IList<ConditionAssignment>> CheckExistingProfileAssignmentsAsync(
@@ -460,7 +468,7 @@ public class ProjectionReadService : IProjectionReadService, IValidationReadServ
         IList<ConditionObjectIdent> assignmentsToCheck,
         CancellationToken cancellationToken = default)
     {
-        _logger.EnterMethod();
+        Logger.EnterMethod();
         
         IList<ConditionAssignment> foundProfileAssignments = await _readService
             .GetDirectMembersOfContainerProfileAsync(
@@ -476,22 +484,22 @@ public class ProjectionReadService : IProjectionReadService, IValidationReadServ
                 new OnlyFirstInSecondConditionAssignmentEqualityComparer())
             .ToList();
 
-        return _logger.ExitMethod(flatListMissingItems);
+        return Logger.ExitMethod(flatListMissingItems);
     }
 
     /// <inheritdoc />
     public Task<string[]> GetAllParentsOfProfile(string id)
     {
         // Todo: Valid implementation missing - due of read service changes this method was not working any more
-        _logger.EnterMethod();
+        Logger.EnterMethod();
 
-        return _logger.ExitMethod(Task.FromResult(Array.Empty<string>()));
+        return Logger.ExitMethod(Task.FromResult(Array.Empty<string>()));
     }
 
     /// <inheritdoc />
     public async Task<ICollection<ProfileIdent>> GetParentsOfProfileAsync(string id)
     {
-        _logger.EnterMethod();
+        Logger.EnterMethod();
 
         try
         {
@@ -502,23 +510,23 @@ public class ProjectionReadService : IProjectionReadService, IValidationReadServ
 
             if (!parentIds.Any())
             {
-                _logger.LogDebugMessage("No parents found for profile with id '{id}'", LogHelpers.Arguments(id));
+                Logger.LogDebugMessage("No parents found for profile with id '{id}'", LogHelpers.Arguments(id));
             }
 
-            return _logger.ExitMethod(parentIds);
+            return Logger.ExitMethod(parentIds);
         }
         catch (Exception e)
         {
-            _logger.LogErrorMessage(e, e.Message, LogHelpers.Arguments(id));
+            Logger.LogErrorMessage(e, e.Message, LogHelpers.Arguments(id));
 
-            return _logger.ExitMethod(new List<ProfileIdent>());
+            return Logger.ExitMethod(new List<ProfileIdent>());
         }
     }
 
     /// <inheritdoc />
     public async Task<ICollection<ProfileIdent>> GetChildrenOfProfileAsync(string id, ProfileKind profileKind)
     {
-        _logger.EnterMethod();
+        Logger.EnterMethod();
 
         try
         {
@@ -531,26 +539,26 @@ public class ProjectionReadService : IProjectionReadService, IValidationReadServ
 
             if (!parentIds.Any())
             {
-                _logger.LogDebugMessage("No children found for profile with id '{id}'", LogHelpers.Arguments(id));
+                Logger.LogDebugMessage("No children found for profile with id '{id}'", LogHelpers.Arguments(id));
             }
 
-            return _logger.ExitMethod(parentIds);
+            return Logger.ExitMethod(parentIds);
         }
         catch (Exception e)
         {
-            _logger.LogErrorMessage(e, e.Message, LogHelpers.Arguments(id));
+            Logger.LogErrorMessage(e, e.Message, LogHelpers.Arguments(id));
 
-            return _logger.ExitMethod(new List<ProfileIdent>());
+            return Logger.ExitMethod(new List<ProfileIdent>());
         }
     }
 
     /// <inheritdoc />
     public async Task<ICollection<Member>> GetAssignedProfilesAsync(string roleOrFunctionId)
     {
-        _logger.EnterMethod();
+        Logger.EnterMethod();
 
         IPaginatedList<Member> assignedMembers = await _readService.GetAssignedProfiles(roleOrFunctionId);
 
-        return _logger.ExitMethod(assignedMembers);
+        return Logger.ExitMethod(assignedMembers);
     }
 }
