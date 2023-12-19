@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Prometheus;
 using UserProfileService.Adapter.Arango.V2.Extensions;
@@ -44,6 +45,7 @@ using UserProfileService.Projection.SecondLevel.Extensions;
 using UserProfileService.Projection.SecondLevel.VolatileDataStore;
 using UserProfileService.Projection.SecondLevel.VolatileDataStore.DependencyInjection;
 using UserProfileService.Projection.VolatileData.DependencyInjection;
+using UserProfileService.Saga.Common;
 using UserProfileService.Saga.Common.DependencyInjection;
 using UserProfileService.Saga.Common.Implementations;
 using UserProfileService.Saga.Validation.Abstractions;
@@ -55,6 +57,7 @@ using UserProfileService.Saga.Worker.Utilities;
 using UserProfileService.StateMachine.Abstraction;
 using UserProfileService.StateMachine.Definitions;
 using UserProfileService.StateMachine.Factories;
+using UserProfileService.StateMachine.Implementations;
 using UserProfileService.StateMachine.Services;
 
 namespace UserProfileService.Saga.Worker;
@@ -110,6 +113,8 @@ public class SagaWorkerStartUp : DefaultStartupBase
                                         });
                              })
                          .AddTransient<ICommandServiceFactory, CommandServiceFactory>();
+
+        serviceCollection.TryAddSingleton<ISagaCommandFactory, DefaultSagaCommandFactory>();
     }
 
     /// <inheritdoc/>
