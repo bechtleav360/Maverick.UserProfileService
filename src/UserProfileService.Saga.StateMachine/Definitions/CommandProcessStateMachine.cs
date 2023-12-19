@@ -1,4 +1,5 @@
 ﻿// ReSharper disable UnassignedGetOnlyAutoProperty -> Properties will be used by MassTransit
+
 using MassTransit;
 using Maverick.UserProfileService.AggregateEvents.Common;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +14,7 @@ using UserProfileService.Common.V2.Contracts;
 using UserProfileService.Common.V2.DependencyInjection;
 using UserProfileService.Common.V2.Exceptions;
 using UserProfileService.Events.Payloads;
+using UserProfileService.Saga.Common;
 using UserProfileService.StateMachine.Abstraction;
 using UserProfileService.StateMachine.Exceptions;
 using UserProfileService.StateMachine.Extension;
@@ -399,10 +401,12 @@ public class CommandProcessStateMachine : MassTransitStateMachine<CommandProcess
             "Handle '{message}' with saga id '{id}'",
             LogHelpers.Arguments(nameof(SubmitCommandReceived), context.CorrelationId));
 
-        var commandDataModifierFactory = _serviceProvider.CreateScope()
-            .ServiceProvider
-            .GetRequiredService<
-                ICommandServiceFactory>();
+        var serviceScope = _serviceProvider.CreateScope();
+
+        var commandDataModifierFactory = serviceScope
+                                         .ServiceProvider
+                                         .GetRequiredService<
+                                             ICommandServiceFactory>();
 
         ICommandService commandService =
             commandDataModifierFactory.CreateCommandService(context.Message.Command);
@@ -411,7 +415,10 @@ public class CommandProcessStateMachine : MassTransitStateMachine<CommandProcess
             "Found modifier '{modifier}' for command '{command}'",
             LogHelpers.Arguments(commandService.GetType().Name, context.Saga.Command));
 
-        object? data = CommandUtilities.DeserializeCData(context.Message.Command, context.Message.Data, _logger);
+        var commandFactory = serviceScope.ServiceProvider.GetRequiredService<ISagaCommandFactory>();
+
+        var data = CommandUtilities.DeserializeCData(commandFactory.ConstructSagaCommand(context.Message.Command),
+                                                     context.Message.Data, _logger);
 
         object? modifiedData = await commandService.ModifyAsync(data, context.CancellationToken);
 
@@ -491,16 +498,21 @@ public class CommandProcessStateMachine : MassTransitStateMachine<CommandProcess
 
         object? data;
 
+        using var serviceScope = _serviceProvider.CreateScope();
+
+        var commandFactory = serviceScope.ServiceProvider.GetRequiredService<ISagaCommandFactory>();
+
         try
         {
-            data = CommandUtilities.DeserializeCData(context.Saga.Command, context.Saga.Data, _logger);
+            data = CommandUtilities.DeserializeCData(commandFactory.ConstructSagaCommand(context.Saga.Command),
+                                                     context.Saga.Data, _logger);
         }
         catch (Exception e)
         {
             _logger.LogErrorMessage(
-                e,
-                "An error occurred while deserializing data for '{message}' with saga id '{id}'.",
-                LogHelpers.Arguments(nameof(ExternalValidationComplete), context.CorrelationId));
+                                    e,
+                                    "An error occurred while deserializing data for '{message}' with saga id '{id}'.",
+                                    LogHelpers.Arguments(nameof(ExternalValidationComplete), context.CorrelationId));
 
             throw;
         }
@@ -516,12 +528,10 @@ public class CommandProcessStateMachine : MassTransitStateMachine<CommandProcess
             return;
         }
 
-        using IServiceScope serviceScope = _serviceProvider.CreateScope();
-
         var commandServiceFactory = serviceScope
-            .ServiceProvider
-            .GetRequiredService<
-                ICommandServiceFactory>();
+                                    .ServiceProvider
+                                    .GetRequiredService<
+                                        ICommandServiceFactory>();
 
         _logger.LogDebugMessage(
             "Created event factory and try to create event creator for '{message}' with saga id '{id}'.",
@@ -613,15 +623,17 @@ public class CommandProcessStateMachine : MassTransitStateMachine<CommandProcess
     {
         _logger.EnterMethod();
 
-        var validatorFactory = _serviceProvider.CreateScope()
-            .ServiceProvider.GetRequiredService<ICommandServiceFactory>();
+        var serviceScope = _serviceProvider.CreateScope();
+        var validatorFactory = serviceScope
+                               .ServiceProvider.GetRequiredService<ICommandServiceFactory>();
 
         ICommandService commandService = validatorFactory.CreateCommandService(context.Saga.Command);
-        
-        object? deserializedData = CommandUtilities.DeserializeCData(
-            context.Saga.Command,
-            context.Saga.Data,
-            _logger);
+        var commandFactory = serviceScope.ServiceProvider.GetRequiredService<ISagaCommandFactory>();
+
+        var deserializedData =
+            CommandUtilities.DeserializeCData(commandFactory.ConstructSagaCommand(context.Saga.Command),
+                                              context.Saga.Data,
+                                              _logger);
 
         ValidationResult result = await commandService.ValidateAsync(
             deserializedData,
