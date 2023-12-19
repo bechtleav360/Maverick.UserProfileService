@@ -401,7 +401,7 @@ public class CommandProcessStateMachine : MassTransitStateMachine<CommandProcess
             "Handle '{message}' with saga id '{id}'",
             LogHelpers.Arguments(nameof(SubmitCommandReceived), context.CorrelationId));
 
-        var serviceScope = _serviceProvider.CreateScope();
+        IServiceScope serviceScope = _serviceProvider.CreateScope();
 
         var commandDataModifierFactory = serviceScope
                                          .ServiceProvider
@@ -417,8 +417,8 @@ public class CommandProcessStateMachine : MassTransitStateMachine<CommandProcess
 
         var commandFactory = serviceScope.ServiceProvider.GetRequiredService<ISagaCommandFactory>();
 
-        var data = CommandUtilities.DeserializeCData(commandFactory.ConstructSagaCommand(context.Message.Command),
-                                                     context.Message.Data, _logger);
+        object? data = CommandUtilities.DeserializeCData(commandFactory.ConstructSagaCommand(context.Message.Command),
+                                                         context.Message.Data, _logger);
 
         object? modifiedData = await commandService.ModifyAsync(data, context.CancellationToken);
 

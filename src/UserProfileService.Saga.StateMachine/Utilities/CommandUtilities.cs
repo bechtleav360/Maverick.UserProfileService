@@ -37,7 +37,7 @@ public static class CommandUtilities
                                   nameof(command));
         }
 
-        var deserializedData = JsonConvert.DeserializeObject(data, command.ExactType);
+        object? deserializedData = JsonConvert.DeserializeObject(data, command.ExactType);
 
         return logger.ExitMethod(deserializedData);
     }
@@ -50,7 +50,7 @@ public static class CommandUtilities
     /// <returns>Serialized message as string.</returns>
     public static string SerializeCData(object message, ILogger? logger = null)
     {
-        logger?.EnterMethod();
+        logger.EnterMethod();
 
         Guard.IsNotNull(message, nameof(message));
 
@@ -61,6 +61,6 @@ public static class CommandUtilities
             logger.LogTraceMessage("Serialized data for saga as: {data}", data.AsArgumentList());
         }
 
-        return logger == null ? data : logger.ExitMethod<string>(data);
+        return logger.ExitMethod<string>(data);
     }
 }

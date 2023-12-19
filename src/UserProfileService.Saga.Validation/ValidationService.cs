@@ -31,18 +31,21 @@ internal class ValidationService : IValidationService
     private readonly IRepoValidationService _repoValidationService;
     private readonly ValidationConfiguration _validationConfiguration;
     private readonly IVolatileRepoValidationService _volatileRepoValidationService;
+    private readonly ICustomValidationServiceFactory _customValidationServiceFactory;
 
     public ValidationService(
         ILogger<ValidationService> logger,
         IPayloadValidationService payloadValidationService,
         IRepoValidationService repoValidationService,
         IOptions<ValidationConfiguration> validationOptions,
-        IVolatileRepoValidationService volatileRepoValidationService)
+        IVolatileRepoValidationService volatileRepoValidationService,
+        ICustomValidationServiceFactory customValidationServiceFactory)
     {
         _logger = logger;
         _payloadValidationService = payloadValidationService;
         _repoValidationService = repoValidationService;
         _volatileRepoValidationService = volatileRepoValidationService;
+        _customValidationServiceFactory = customValidationServiceFactory;
         _validationConfiguration = validationOptions.Value;
     }
 
@@ -1128,7 +1131,16 @@ internal class ValidationService : IValidationService
 
                 break;
             default:
-                throw new ArgumentOutOfRangeException(nameof(payload), payload, "No processor defined.");
+                ICustomValidationService customValidator = _customValidationServiceFactory.CreateCustomValidationService(payload);
+
+                if (customValidator == null)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(payload), payload, "No processor defined.");
+                }
+
+                await customValidator.ValidatePayloadAsync(payload, initiator, cancellationToken);
+
+                break;
         }
 
         _logger.ExitMethod();
