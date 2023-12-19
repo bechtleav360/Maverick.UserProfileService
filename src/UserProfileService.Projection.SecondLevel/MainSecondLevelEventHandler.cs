@@ -62,9 +62,7 @@ internal class MainSecondLevelEventHandler : ISecondLevelEventHandler
             throw;
         }
 
-        handlerToTrigger.HandleEventAsync(domainEvent, eventHeader, cancellationToken);
-
-        return Task.CompletedTask;
+        return handlerToTrigger.HandleEventAsync(domainEvent, eventHeader, cancellationToken);
     }
 
     /// <inheritdoc />
