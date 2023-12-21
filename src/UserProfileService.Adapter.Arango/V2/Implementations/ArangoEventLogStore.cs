@@ -222,7 +222,7 @@ public class ArangoEventLogStore : ArangoRepositoryBase, IFirstProjectionEventLo
         }
     }
 
-    private async Task ExecuteAsync<TResult>(
+    private async Task<TResult> ExecuteAsync<TResult>(
         Func<IArangoDbClient, Task<TResult>> method,
         bool throwException,
         bool throwExceptionIfNotFound,
@@ -242,7 +242,7 @@ public class ArangoEventLogStore : ArangoRepositoryBase, IFirstProjectionEventLo
             cancellationToken,
             caller);
 
-        Logger.ExitMethod(response);
+        return Logger.ExitMethod(response);
     }
 
     /// <inheritdoc />
@@ -387,7 +387,32 @@ public class ArangoEventLogStore : ArangoRepositoryBase, IFirstProjectionEventLo
             cursorBody,
             cancellationToken: cancellationToken);
 
-        return Logger.ExitMethod(results.QueryResult);
+        if (!results.Error
+            && (results.ParsingExceptions == null
+                || results.ParsingExceptions.Count == 0
+            ))
+        {
+            return Logger.ExitMethod(results.QueryResult);
+        }
+
+        if (results.ParsingExceptions.Count == 1)
+        {
+            throw new DatabaseException(
+                $"Could not get batch events of transaction/batch id equals '{transactionId}' because of a parsing error while fetching data from database. {results.ParsingExceptions.Single().Message}",
+                results.ParsingExceptions.Single(),
+                ExceptionSeverity.Error);
+        }
+        
+        if (results.ParsingExceptions.Count > 0)
+        {
+            throw new AggregateException(
+                $"Could not get batch events of transaction/batch id equals '{transactionId}' because of several parsing errors while fetching data from database.",
+                results.ParsingExceptions);
+        }
+
+        throw new DatabaseException(
+            $"Could not get batch events of transaction/batch id equals '{transactionId}' because at least one error occurred while fetching data from database.",
+            ExceptionSeverity.Error);
     }
 
     /// <inheritdoc />

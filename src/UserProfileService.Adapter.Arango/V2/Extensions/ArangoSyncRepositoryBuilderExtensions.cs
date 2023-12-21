@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using UserProfileService.Adapter.Arango.V2.Abstractions;
+using UserProfileService.Adapter.Arango.V2.Configuration;
 using UserProfileService.Adapter.Arango.V2.Contracts;
 using UserProfileService.Adapter.Arango.V2.Helpers;
 using UserProfileService.Adapter.Arango.V2.Implementations;
@@ -98,13 +99,7 @@ public static class ArangoSyncRepositoryBuilderExtensions
         services.AddCommonDependenciesForArangoProfileRepositories(
             configurationSection,
             arangoClientName: ArangoConstants.DatabaseClientNameSync,
-            serializerSettings: new JsonSerializerSettings
-            {
-                Converters = WellKnownJsonConverters.GetDefaultProfileConverters()
-                    .Append(new StringEnumConverter())
-                    .ToList(),
-                ContractResolver = new DefaultContractResolver()
-            },
+            arangoJsonSettings: new SyncRepositoryArangoClientJsonSettings(),
             logger: logger);
 
         logger.LogInfoMessage("Register the SyncProjectionCollectionsProvider.", LogHelpers.Arguments());

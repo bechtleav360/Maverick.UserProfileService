@@ -111,14 +111,7 @@ public class ArangoSagaRepositoryConfigurator<TSaga> :
             .AddArangoClient(
                 _clientName,
                 _arangoConfiguration,
-                defaultSerializerSettings: new JsonSerializerSettings
-                {
-                    Converters = new List<JsonConverter>
-                    {
-                        new StringEnumConverter()
-                    },
-                    ContractResolver = new DefaultContractResolver()
-                });
+                defaultSerializerSettings: new SagaRepositoryArangoClientJsonSettings());
 
         // Custom query context factory to be used to get saga states in controller.
         configurator

@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using UserProfileService.Projection.Common.Abstractions;
 using UserProfileService.Projection.SecondLevel.Abstractions;
 using UserProfileService.Projection.SecondLevel.Services;
@@ -37,8 +38,8 @@ public static class ServiceCollectionExtension
 
         options.Invoke(builder);
 
-        services.AddSingleton<ISecondLevelEventHandler, MainSecondLevelEventHandler>();
-        services.AddSingleton<ISecondLevelProjection, ApiSecondLevelProjectionService>();
+        services.TryAddSingleton<ISecondLevelEventHandler, MainSecondLevelEventHandler>();
+        services.TryAddSingleton<ISecondLevelProjection, ApiSecondLevelProjectionService>();
 
         return services;
     }

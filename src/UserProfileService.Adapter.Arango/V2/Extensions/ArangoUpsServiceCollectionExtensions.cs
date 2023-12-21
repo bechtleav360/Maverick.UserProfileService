@@ -95,8 +95,7 @@ public static class ArangoUpsServiceCollectionExtensions
     }
 
     /// <summary>
-    ///     Adds all dependent services regarding user profile storage excluding <see cref="IReadService" /> and
-    ///     <see cref="IProjectionWriteService" /> to the specified service collection.
+    ///     Adds all dependent services regarding user profile storage that are commonly used by many stores.
     /// </summary>
     /// <param name="services">The <see cref="IServiceCollection" /> where the services will be registered. </param>
     /// <param name="configurationSection">
@@ -105,20 +104,13 @@ public static class ArangoUpsServiceCollectionExtensions
     /// </param>
     /// <param name="logger">Logger instance that will be used to log incoming messages of the registration process.</param>
     /// <param name="arangoClientName">The name of the arangoClient that is used to create request to the database.</param>
-    /// <param name="serializerSettings">The serializer settings that are used to modify the json converters.</param>
     /// <returns>The original service object.</returns>
-    // TODO: It is somehow hacky and against our coding guidelines, but to refactor the hole
-    // TODO: registration arango methods are just not enough time. Will be done, when there will be more time.
-    // TODO: The class has to be refactored.
     public static void AddCommonDependenciesForArangoProfileRepositories(
         this IServiceCollection services,
         IConfigurationSection configurationSection,
         ILogger logger = null,
-        string arangoClientName = null,
-        JsonSerializerSettings serializerSettings = null)
+        string arangoClientName = null)
     {
-        logger.EnterMethod();
-
         if (services == null)
         {
             throw new ArgumentNullException(nameof(services));
@@ -129,6 +121,50 @@ public static class ArangoUpsServiceCollectionExtensions
             throw new ArgumentNullException(nameof(configurationSection));
         }
 
+        AddCommonDependenciesForArangoProfileRepositories(
+            services,
+            configurationSection,
+            new ProfileStoreArangoClientJsonSettings(),
+            logger,
+            arangoClientName);
+    }
+
+    /// <summary>
+    ///     Adds all dependent services regarding user profile storage that are commonly used by many stores.
+    /// </summary>
+    /// <param name="services">The <see cref="IServiceCollection" /> where the services will be registered. </param>
+    /// <param name="configurationSection">
+    ///     The <inheritdoc cref="IConfigurationSection" /> where the configuration for the
+    ///     event id store can be found.
+    /// </param>
+    /// <param name="logger">Logger instance that will be used to log incoming messages of the registration process.</param>
+    /// <param name="arangoClientName">The name of the arangoClient that is used to create request to the database.</param>
+    /// <param name="arangoJsonSettings">
+    ///     Overrides the default <see cref="ProfileStoreArangoClientJsonSettings" /> to configure
+    ///     JSON serializer settings.
+    /// </param>
+    /// <returns>The original service object.</returns>
+    public static void AddCommonDependenciesForArangoProfileRepositories<TJsonSettings>(
+        this IServiceCollection services,
+        IConfigurationSection configurationSection,
+        TJsonSettings arangoJsonSettings,
+        ILogger logger = null,
+        string arangoClientName = null) where TJsonSettings : class, IArangoClientJsonSettings
+    {
+        if (services == null)
+        {
+            throw new ArgumentNullException(nameof(services));
+        }
+
+        if (configurationSection == null)
+        {
+            throw new ArgumentNullException(nameof(configurationSection));
+        }
+
+        if (arangoJsonSettings == null)
+        {
+            throw new ArgumentNullException(nameof(arangoJsonSettings));
+        }
 
         logger.LogInfoMessage(
             "Starting to register all ArangoDB dependencies for profile storage.",
@@ -144,17 +180,11 @@ public static class ArangoUpsServiceCollectionExtensions
                 arangoClientName
                 ?? ArangoConstants.DatabaseClientNameUserProfileStorage,
                 GetConfiguration,
-                defaultSerializerSettings: serializerSettings
-                ?? new JsonSerializerSettings
-                {
-                    Converters = WellKnownJsonConverters
-                        .GetDefaultProfileConverters()
-                        .ToList(),
-                    ContractResolver = new DefaultContractResolver()
-                })
+                defaultSerializerSettings: arangoJsonSettings)
             .AddArangoClient(
                 "HealthCheck",
-                GetConfiguration);
+                GetConfiguration,
+                defaultSerializerSettings: new DefaultArangoClientJsonSettings());
 
         logger.LogInfoMessage("Registered client for ArangoDB rest calls.", LogHelpers.Arguments());
 
@@ -198,7 +228,8 @@ public static class ArangoUpsServiceCollectionExtensions
         }
 
         // common dependencies that will be shared from read AND projection write service.
-        services.AddCommonDependenciesForArangoProfileRepositories(configurationSection, logger);
+        services.AddCommonDependenciesForArangoProfileRepositories(configurationSection,
+                                                                   logger);
 
         services.AddScoped<IAdminReadService, ArangoDbAdminReadService>(
             p => new ArangoDbAdminReadService(
@@ -291,16 +322,10 @@ public static class ArangoUpsServiceCollectionExtensions
         logger.LogInfoMessage("Registered ArangoDB configuration.", LogHelpers.Arguments());
 
         services.AddArangoClientFactory()
-            .AddArangoClient(
-                ArangoConstants.DatabaseClientNameTicketStore,
-                GetConfiguration,
-                defaultSerializerSettings: new JsonSerializerSettings
-                {
-                    Converters = WellKnownJsonConverters
-                        .GetDefaultTicketStoreConverters()
-                        .ToList(),
-                    ContractResolver = new DefaultContractResolver()
-                });
+                .AddArangoClient(
+                    ArangoConstants.DatabaseClientNameTicketStore,
+                    GetConfiguration,
+                    defaultSerializerSettings: new TicketsStoreArangoClientJsonSettings());
 
         services.AddSingleton<ICollectionDetailsProvider>(new TicketStoreCollectionsProvider(prefix));
 
@@ -373,9 +398,10 @@ public static class ArangoUpsServiceCollectionExtensions
         logger.LogInfoMessage("Registered ArangoDB configuration.", LogHelpers.Arguments());
 
         services.AddArangoClientFactory()
-            .AddArangoClient(
-                ArangoConstants.DatabaseClientNameEventCollector,
-                GetConfiguration);
+                .AddArangoClient(
+                    ArangoConstants.DatabaseClientNameEventCollector,
+                    GetConfiguration,
+                    defaultSerializerSettings: new EventCollectorArangoClientJsonSettings());
 
         services.AddSingleton<ICollectionDetailsProvider>(new EventCollectorCollectionsProvider(prefix));
 
@@ -425,24 +451,25 @@ public static class ArangoUpsServiceCollectionExtensions
         string arangoDbClientName = ArangoConstants.ArangoClientName)
     {
         serviceCollection.AddOptions<ArangoDbCleanupConfiguration>()
-            .PostConfigure<IServiceProvider>(
-                (o, p) =>
-                {
-                    setupCleanupTimeSpans?.Invoke(p, o);
-                    var prefixSettings = new ArangoPrefixSettings();
-                    setupPrefixTerms?.Invoke(p, prefixSettings);
+                         .PostConfigure<IServiceProvider>(
+                             (o, p) =>
+                             {
+                                 setupCleanupTimeSpans?.Invoke(p, o);
+                                 var prefixSettings = new ArangoPrefixSettings();
+                                 setupPrefixTerms?.Invoke(p, prefixSettings);
 
-                    o.ArangoDbClientName = arangoDbClientName;
-                    o.AssignmentCollectionPrefix = prefixSettings.AssignmentsCollectionPrefix;
-                    o.EventCollectorCollectionPrefix = prefixSettings.EventCollectorCollectionPrefix;
-                    o.FirstLevelCollectionPrefix = prefixSettings.FirstLevelCollectionPrefix;
-                    o.ServiceCollectionPrefix = prefixSettings.ServiceCollectionPrefix;
-                });
+                                 o.ArangoDbClientName = arangoDbClientName;
+                                 o.AssignmentCollectionPrefix = prefixSettings.AssignmentsCollectionPrefix;
+                                 o.EventCollectorCollectionPrefix = prefixSettings.EventCollectorCollectionPrefix;
+                                 o.FirstLevelCollectionPrefix = prefixSettings.FirstLevelCollectionPrefix;
+                                 o.ServiceCollectionPrefix = prefixSettings.ServiceCollectionPrefix;
+                             });
 
         serviceCollection.AddArangoClientFactory()
-            .AddArangoClient(
-                arangoDbClientName,
-                GetConfiguration);
+                         .AddArangoClient(
+                             arangoDbClientName,
+                             GetConfiguration,
+                             defaultSerializerSettings: new DefaultArangoClientJsonSettings());
 
         serviceCollection.AddScoped<IDatabaseCleanupProvider, ArangoDatabaseCleanupProvider>();
     }

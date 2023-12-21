@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Maverick.UserProfileService.AggregateEvents.Common;
+using Newtonsoft.Json.Linq;
 using UserProfileService.Common.V2.Models;
 
 namespace UserProfileService.Common.V2.Abstractions;

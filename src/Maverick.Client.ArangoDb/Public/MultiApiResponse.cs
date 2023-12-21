@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Maverick.Client.ArangoDb.Public.Exceptions;
 using Maverick.Client.ArangoDb.Public.Models.Query;
 
 // Implementation based on C# driver implementation from https://github.com/yojimbo87/ArangoDB-NET 
@@ -14,13 +15,25 @@ namespace Maverick.Client.ArangoDb.Public;
 public sealed class MultiApiResponse<T> : MultiApiResponse
 {
     /// <summary>
+    ///     Gets or sets a list of exceptions that occurred during parsing or deserialization.
+    ///     This property provides detailed information about any issues encountered
+    ///     while processing and interpreting data.
+    /// </summary>
+    public IReadOnlyCollection<JsonDeserializationException> ParsingExceptions { get; }
+
+    /// <summary>
     ///     A list contains the result of executed query.
     /// </summary>
     public IReadOnlyList<T> QueryResult { get; }
 
-    internal MultiApiResponse(IEnumerable<BaseApiResponse> responses, IEnumerable<T> queryResult) : base(responses)
+    internal MultiApiResponse(IList<BaseApiResponse> responses, IEnumerable<T> queryResult): base(responses)
     {
         QueryResult = queryResult.ToList();
+
+        ParsingExceptions = responses.OfType<IResponseWithParsingException>()
+                 .Where(r => r.ParsingException != null)
+                 .Select(r => r.ParsingException)
+                 .ToList();
     }
 }
 
