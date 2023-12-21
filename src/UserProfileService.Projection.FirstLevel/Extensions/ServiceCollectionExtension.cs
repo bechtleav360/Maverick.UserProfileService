@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using UserProfileService.Common.V2.Abstractions;
 using UserProfileService.Common.V2.Services;
 using UserProfileService.Projection.Common.Abstractions;
@@ -41,12 +42,12 @@ public static class ServiceCollectionExtension
 
         options.Invoke(builder);
 
-        services.AddSingleton<IFirstLevelProjectionEventHandler, MainFirstEventHandler>();
+        services.TryAddSingleton<IFirstLevelProjectionEventHandler, MainFirstEventHandler>();
 
-        services.AddScoped<ITemporaryAssignmentsExecutor, TemporaryAssignmentsExecutor>();
-        services.AddScoped<ICronJobService, FirstLevelProjectionCronJobService>();
+        services.TryAddScoped<ITemporaryAssignmentsExecutor, TemporaryAssignmentsExecutor>();
+        services.TryAddScoped<ICronJobService, FirstLevelProjectionCronJobService>();
 
-        services.AddSingleton<IFirstLevelProjection, FirstLevelProjectionService>();
+        services.TryAddSingleton<IFirstLevelProjection, FirstLevelProjectionService>();
         services.AddHostedService<CronJobServiceManager>();
 
         return services;

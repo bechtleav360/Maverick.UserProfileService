@@ -2,13 +2,13 @@
 using Maverick.Client.ArangoDb.Public.Configuration;
 using Maverick.Client.ArangoDb.Public.Extensions;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
 namespace Maverick.Client.ArangoDb.Public.Helpers;
 
 /// <summary>
-///     The factory is used to build a arango client via
+///     The factory is used to build an arango client via
 ///     a factory.
 /// </summary>
 public class DefaultClientFactoryBuilder : IClientFactoryBuilder
@@ -42,11 +42,12 @@ public class DefaultClientFactoryBuilder : IClientFactoryBuilder
     }
 
     /// <inheritdoc />
-    public IClientFactoryBuilder AddArangoClient(
+    public IClientFactoryBuilder AddArangoClient<TJsonSettings>(
         string name,
         Func<IServiceProvider, ArangoConfiguration> connectionFactory,
         ServiceLifetime lifetime = ServiceLifetime.Scoped,
-        JsonSerializerSettings defaultSerializerSettings = null)
+        TJsonSettings defaultSerializerSettings = null)
+        where TJsonSettings : class, IArangoClientJsonSettings
     {
         if (name == null)
         {
@@ -58,33 +59,51 @@ public class DefaultClientFactoryBuilder : IClientFactoryBuilder
             throw new ArgumentException($"Parameter {nameof(name)} cannot be empty or whitespace.", nameof(name));
         }
 
+        if (defaultSerializerSettings != null)
+        {
+            _services.TryAddSingleton(defaultSerializerSettings);
+        }
+
         if (_loggerCreation != null)
         {
             _services.AddArangoClient(
                 connectionFactory,
                 _loggerCreation,
                 lifetime,
-                defaultSerializerSettings,
+                p => (p.GetService<TJsonSettings>() as IArangoClientJsonSettings ?? new DefaultArangoClientJsonSettings())
+                    .SerializerSettings,
                 name);
 
             return this;
         }
 
-        _services.AddArangoClient(connectionFactory, _logger, lifetime, defaultSerializerSettings, name);
+        _services.AddArangoClient(
+            connectionFactory,
+            _logger,
+            lifetime,
+            p => (p.GetService<TJsonSettings>() as IArangoClientJsonSettings ?? new DefaultArangoClientJsonSettings())
+                .SerializerSettings,
+            name);
 
         return this;
     }
 
     /// <inheritdoc />
-    public IClientFactoryBuilder AddArangoClient(
+    public IClientFactoryBuilder AddArangoClient<TJsonSettings>(
         string name,
         ArangoConfiguration arangoConfiguration,
         ServiceLifetime lifetime = ServiceLifetime.Scoped,
-        JsonSerializerSettings defaultSerializerSettings = null)
+        TJsonSettings defaultSerializerSettings = null)
+        where TJsonSettings : class, IArangoClientJsonSettings
     {
         if (arangoConfiguration == null)
         {
             throw new ArgumentNullException(nameof(arangoConfiguration));
+        }
+
+        if (defaultSerializerSettings != null)
+        {
+            _services.TryAddSingleton(defaultSerializerSettings);
         }
 
         if (_loggerCreation != null)
@@ -93,13 +112,20 @@ public class DefaultClientFactoryBuilder : IClientFactoryBuilder
                 _ => arangoConfiguration,
                 _loggerCreation,
                 lifetime,
-                defaultSerializerSettings,
+                p => (p.GetService<TJsonSettings>() as IArangoClientJsonSettings ?? new DefaultArangoClientJsonSettings())
+                    .SerializerSettings,
                 name);
 
             return this;
         }
 
-        _services.AddArangoClient(_ => arangoConfiguration, _logger, lifetime, defaultSerializerSettings, name);
+        _services.AddArangoClient(
+            _ => arangoConfiguration,
+            _logger,
+            lifetime,
+            p => (p.GetService<TJsonSettings>() as IArangoClientJsonSettings ?? new DefaultArangoClientJsonSettings())
+                .SerializerSettings,
+            name);
 
         return this;
     }

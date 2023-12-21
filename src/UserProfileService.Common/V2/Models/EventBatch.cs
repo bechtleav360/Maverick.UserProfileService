@@ -27,4 +27,9 @@ public class EventBatch
     ///     Datetime when the batch was updated.
     /// </summary>
     public DateTime UpdatedAt { get; set; }
+
+    /// <summary>
+    ///     A descriptive message about the last occurred error.
+    /// </summary>
+    public string LastErrorMessage { get; set; }
 }

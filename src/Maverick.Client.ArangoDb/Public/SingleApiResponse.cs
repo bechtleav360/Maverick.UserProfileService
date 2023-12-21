@@ -1,5 +1,6 @@
 ﻿using System;
 using Maverick.Client.ArangoDb.Protocol;
+using Maverick.Client.ArangoDb.Public.Exceptions;
 
 // Implementation based on C# driver implementation from https://github.com/yojimbo87/ArangoDB-NET 
 // with some bug fixes and extensions to support asynchronous operations 
@@ -10,13 +11,15 @@ namespace Maverick.Client.ArangoDb.Public;
 ///     (Result)
 /// </summary>
 /// <typeparam name="T"></typeparam>
-/// <inheritdoc />
-public class SingleApiResponse<T> : SingleApiResponse
+public class SingleApiResponse<T> : SingleApiResponse, IResponseWithParsingException
 {
     /// <summary>
     ///     Value contains in the API Response,
     /// </summary>
     public T Result { get; }
+
+    /// <inheritdoc cref="IResponseWithParsingException.ParsingException"/>
+    public JsonDeserializationException ParsingException { get; }
 
     internal SingleApiResponse(Response clientResponse, T originalResponse, Exception exception = null) : base(
         clientResponse,
@@ -27,6 +30,11 @@ public class SingleApiResponse<T> : SingleApiResponse
 
     internal SingleApiResponse(Response clientResponse, Exception exception) : base(clientResponse, exception)
     {
+    }
+
+    internal SingleApiResponse(Response clientResponse, JsonDeserializationException exception) : base(clientResponse)
+    {
+        ParsingException = exception;
     }
 }
 

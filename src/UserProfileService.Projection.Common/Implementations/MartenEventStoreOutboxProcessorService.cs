@@ -5,11 +5,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UserProfileService.Common.Logging;
 using UserProfileService.Common.Logging.Extensions;
 using UserProfileService.Common.V2.Abstractions;
 using UserProfileService.Common.V2.Enums;
+using UserProfileService.Common.V2.Exceptions;
 using UserProfileService.Common.V2.Models;
+using UserProfileService.Common.V2.Utilities;
 using UserProfileService.EventSourcing.Abstractions.Stores;
 using UserProfileService.Projection.Common.Abstractions;
 
@@ -45,12 +48,20 @@ internal class MartenEventStoreOutboxProcessorService : IOutboxProcessorService
         _DatabaseClient = databaseClient;
     }
 
-    private async Task UpdateBatch(EventBatch batch, EventStatus status, CancellationToken cancellationToken)
+    private async Task UpdateBatch(EventBatch batch,
+                                   EventStatus status,
+                                   string errorMessage = null,
+                                   CancellationToken cancellationToken = default)
     {
         _Logger.EnterMethod();
 
         batch.Status = status;
         batch.UpdatedAt = DateTime.UtcNow;
+
+        if (!string.IsNullOrWhiteSpace(errorMessage))
+        {
+            batch.LastErrorMessage = errorMessage;
+        }
 
         if (_Logger.IsEnabledForTrace())
         {
@@ -64,6 +75,22 @@ internal class MartenEventStoreOutboxProcessorService : IOutboxProcessorService
         _Logger.ExitMethod();
     }
 
+    private Task UpdateEvent(
+        EventStatus newStatus,
+        EventLogTuple eventTuple,
+        CancellationToken cancellationToken = default)
+    {
+        eventTuple.Status = newStatus;
+        eventTuple.UpdatedAt = DateTime.UtcNow;
+
+        _Logger.LogTraceMessage(
+            "Try to update event with id {id} in database.",
+            eventTuple.Id.AsArgumentList());
+
+        // TODO: How to handle error with event store -> one operation failed?
+        return _DatabaseClient.UpdateEventAsync(eventTuple.Id, eventTuple, cancellationToken);
+    }
+
     private async Task ExecuteBatchForceAsync(string batchId, CancellationToken cancellationToken = default)
     {
         _Logger.EnterMethod();
@@ -73,7 +100,7 @@ internal class MartenEventStoreOutboxProcessorService : IOutboxProcessorService
             batchId.AsArgumentList());
 
         IEnumerable<EventLogTuple> results = await _DatabaseClient.GetEventsAsync(
-            batchId,
+                    batchId,
             cancellationToken);
 
         int totalEvents = results.Count();
@@ -128,15 +155,7 @@ internal class MartenEventStoreOutboxProcessorService : IOutboxProcessorService
                     "Event was written to event store with id {id}, type {type} and stream {stream}.",
                     LogHelpers.Arguments(eventTuple.Id, eventTuple.Type, eventTuple.TargetStream));
 
-                eventTuple.Status = EventStatus.Executed;
-                eventTuple.UpdatedAt = DateTime.UtcNow;
-
-                _Logger.LogTraceMessage(
-                    "Try to update event with id {id} in database.",
-                    eventTuple.Id.AsArgumentList());
-
-                // TODO: How to handle error with event store -> one operation failed?
-                await _DatabaseClient.UpdateEventAsync(eventTuple.Id, eventTuple, cancellationToken);
+                await UpdateEvent(EventStatus.Executed, eventTuple, cancellationToken);
             }
             catch (Exception ex)
             {
@@ -199,11 +218,34 @@ internal class MartenEventStoreOutboxProcessorService : IOutboxProcessorService
                         LogHelpers.Arguments(nextBatch.Id, JsonConvert.SerializeObject(nextBatch)));
                 }
 
-                await UpdateBatch(nextBatch, EventStatus.Processing, cancellationToken);
+                await UpdateBatch(nextBatch, EventStatus.Processing, cancellationToken: cancellationToken);
 
-                await ExecuteBatchForceAsync(nextBatch.Id, cancellationToken);
+                try
+                {
+                    await ExecuteBatchForceAsync(nextBatch.Id, cancellationToken);
+                }
+                catch (DatabaseException exception) when(exception.Severity != ExceptionSeverity.Fatal)
+                {
+                    string errorMessage = exception.Message;
 
-                await UpdateBatch(nextBatch, EventStatus.Executed, cancellationToken);
+                    await ExecutionHelpers<Exception>
+                        .RunSafelyAsync(
+                            ct =>
+                                UpdateBatch(nextBatch, EventStatus.Error, errorMessage, ct),
+                            _Logger,
+                            (logger, exc) => logger
+                                .LogError(exc, "{caller}(): Error occurred during cleanup a failed batch of events with the id equals {batchId}: {errorMessage}",
+                                    nameof(CheckAndProcessEvents), nextBatch.Id, exc.Message),
+                            cancellationToken);
+
+
+                    _Logger.LogErrorMessage(exception,
+                                            "Error occurred during executing event batch with id equals {batchId}",
+                                            LogHelpers.Arguments(nextBatch.Id));
+                    continue;
+                }
+
+                await UpdateBatch(nextBatch, EventStatus.Executed, cancellationToken: cancellationToken);
             }
         }
         finally

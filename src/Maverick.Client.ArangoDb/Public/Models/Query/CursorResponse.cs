@@ -1,5 +1,6 @@
 ﻿using System;
 using Maverick.Client.ArangoDb.Protocol;
+using Maverick.Client.ArangoDb.Public.Exceptions;
 using Newtonsoft.Json;
 
 namespace Maverick.Client.ArangoDb.Public.Models.Query;
@@ -20,6 +21,10 @@ public class CursorResponse<T> : SingleApiResponse<CreateCursorResponseEntity<T>
     }
 
     internal CursorResponse(Response response, Exception exception) : base(response, exception)
+    {
+    }
+
+    internal CursorResponse(Response response, JsonDeserializationException exception) : base(response, exception)
     {
     }
 }

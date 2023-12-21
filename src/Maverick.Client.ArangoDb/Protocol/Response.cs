@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Maverick.Client.ArangoDb.Public;
+using Maverick.Client.ArangoDb.Public.Exceptions;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -38,9 +39,29 @@ internal class Response
             return default;
         }
 
-        if (typeof(T) == typeof(string))
+        (T parsed, JsonDeserializationException exception) = ParseBodyIncludingErrors<T>();
+        
+        if (exception != null)
         {
-            return (T)(object)ResponseBodyAsString;
+            logger?.LogError(exception, "Error occurred while parsing response body: {errorMessage}",
+                             exception.Message);
+            return default;
+        }
+
+        return parsed;
+    }
+
+    internal (TBody parsed, JsonDeserializationException exception)  ParseBodyIncludingErrors<TBody>()
+    {
+        if (string.IsNullOrEmpty(ResponseBodyAsString))
+        {
+            return (default,
+                    new JsonDeserializationException("The response body is null or empty and can't be parsed"));
+        }
+
+        if (typeof(TBody) == typeof(string))
+        {
+            return ((TBody)(object)ResponseBodyAsString, null);
         }
 
         // just to be on the safe side -> a json converter will be added, that should not change the original instance of the default json serializer settings class
@@ -83,16 +104,21 @@ internal class Response
 
         try
         {
-            return newSettings == null
-                ? JsonConvert.DeserializeObject<T>(ResponseBodyAsString, new CursorResponseToStringJsonConverter())
-                : JsonConvert.DeserializeObject<T>(ResponseBodyAsString, newSettings);
+            return (newSettings == null
+                        ? JsonConvert.DeserializeObject<TBody>(
+                            ResponseBodyAsString,
+                            new CursorResponseToStringJsonConverter())
+                        : JsonConvert.DeserializeObject<TBody>(ResponseBodyAsString, newSettings),
+                    null);
         }
         catch (Exception ex)
         {
-            logger?.LogError(ex, "Error by deserializing JSON to {type}", typeof(T));
+            return (default,
+                    new JsonDeserializationException(
+                        $"Error by deserializing JSON to {typeof(TBody).FullName}: {ex.Message}",
+                        ResponseBodyAsString,
+                        ex));
         }
-
-        return default;
     }
 
     private class CursorResponseToStringJsonConverter : JsonConverter

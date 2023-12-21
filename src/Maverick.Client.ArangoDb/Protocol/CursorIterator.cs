@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Maverick.Client.ArangoDb.PerformanceLogging.Implementations;
 using Maverick.Client.ArangoDb.Public;
+using Maverick.Client.ArangoDb.Public.Exceptions;
 using Maverick.Client.ArangoDb.Public.Models.Query;
 
 namespace Maverick.Client.ArangoDb.Protocol;
@@ -16,6 +17,7 @@ internal class CursorIterator<T>
     public bool Failed { get; set; }
     public bool HasNext { get; set; } = true;
     public IEnumerable<T> Value { get; private set; }
+    public JsonDeserializationException ParsingException { get; private set; }
 
     public CursorIterator(AQuery cursorClient, CreateCursorBody cursorBody, string transactionId = null)
     {
@@ -39,6 +41,7 @@ internal class CursorIterator<T>
             CursorId = response?.Result?.Id;
             Failed = response?.Error ?? true;
             HasNext = !Failed && (response?.Result?.HasMore ?? false);
+            ParsingException = response?.ParsingException;
 
             return this;
         }
@@ -53,6 +56,7 @@ internal class CursorIterator<T>
 
             CursorResponse = response;
             Value = response?.Result?.Result;
+            ParsingException = response?.ParsingException;
             HasNext = response?.Result?.HasMore ?? false;
         }
 

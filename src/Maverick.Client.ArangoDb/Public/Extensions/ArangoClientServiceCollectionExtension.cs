@@ -84,20 +84,79 @@ public static class ArangoClientServiceCollectionExtension
             nameof(JsonSerializerSettings),
             defaultSerializerSettings == null ? "not " : "");
 
+        return AddArangoClient(
+            services,
+            connectionFactory,
+            logger,
+            lifetime,
+            _ => defaultSerializerSettings,
+            clientName);
+    }
+
+    /// <summary>
+    ///     Registers an ArangoDB client in the specified <paramref name="services" /> collection.
+    /// </summary>
+    /// <param name="services">The <see cref="IServiceCollection" /> to register the ArangoDB client.</param>
+    /// <param name="connectionFactory">A delegate that provides the connection string for the ArangoDB client.</param>
+    /// <param name="logger">An optional logger.</param>
+    /// <param name="lifetime">The lifetime of the ArangoDB client.</param>
+    /// <param name="defaultSerializerSettingsFactory">
+    ///     A method that acts as a factory to create <see cref="JsonSerializerSettings" />
+    ///     using the specified <see cref="IServiceProvider" />.
+    /// </param>
+    /// <param name="clientName">
+    ///     The name of <see cref="IArangoDbClient" /> and the <see cref="HttpClient" /> in the
+    ///     <see cref="IHttpClientFactory" />.
+    /// </param>
+    /// <returns>The <see cref="IServiceCollection" /> with the ArangoDB client services added.</returns>
+    /// <exception cref="DuplicateNameException">An arango client with the same name is already registered.</exception>
+    /// <exception cref="ArgumentNullException">
+    ///     <paramref name="services" /> is <c>null</c>.<br />
+    ///     <paramref name="connectionFactory" /> is <c>null</c>.
+    ///     <paramref name="defaultSerializerSettingsFactory" /> is <c>null</c>.
+    /// </exception>
+    public static IServiceCollection AddArangoClient(
+        this IServiceCollection services,
+        Func<IServiceProvider, ArangoConfiguration> connectionFactory,
+        ILogger logger,
+        ServiceLifetime lifetime,
+        Func<IServiceProvider, JsonSerializerSettings> defaultSerializerSettingsFactory,
+        string clientName)
+    {
+        if (services == null)
+        {
+            throw new ArgumentNullException($"The variable {nameof(services)} was null!");
+        }
+
+        if (connectionFactory == null)
+        {
+            throw new ArgumentNullException($"The parameter {nameof(connectionFactory)} was null.");
+        }
+
+        if (defaultSerializerSettingsFactory == null)
+        {
+            throw new ArgumentNullException(nameof(defaultSerializerSettingsFactory));
+        }
+
+        logger?.LogInformation(
+            "Registers a named client with a lifetime: {lifetime}. The name of the client is: {clientName}.",
+            nameof(lifetime),
+            clientName);
+
         services.TryAddTransient<TimeoutHttpHandler>();
 
         services.AddHttpClient(clientName)
-            .AddHttpMessageHandler<TimeoutHttpHandler>()
-            .SetHandlerLifetime(Timeout.InfiniteTimeSpan)
-            // Note that we need to disable the HttpClient’s timeout by setting it to an infinite value,
-            // otherwise the default behavior will interfere with the timeout handler.
-            .ConfigureHttpClient(c => c.Timeout = Timeout.InfiniteTimeSpan);
+                .AddHttpMessageHandler<TimeoutHttpHandler>()
+                .SetHandlerLifetime(Timeout.InfiniteTimeSpan)
+                // Note that we need to disable the HttpClient’s timeout by setting it to an infinite value,
+                // otherwise the default behavior will interfere with the timeout handler.
+                .ConfigureHttpClient(c => c.Timeout = Timeout.InfiniteTimeSpan);
 
         logger?.LogInformation(
             "Try to register the arango db client of type {IArangoDbClient}.",
             nameof(IArangoDbClient));
 
-        // remove this handler to prevent the client to log to much BS
+        // remove this handler to prevent the client to log too much BS
         services.RemoveAll<IHttpMessageHandlerBuilderFilter>();
 
         services.Add(
@@ -108,7 +167,7 @@ public static class ArangoClientServiceCollectionExtension
                     connectionFactory.Invoke(p)?.ConnectionString,
                     p.GetRequiredService<IHttpClientFactory>(),
                     MapToExceptionOptions(p, connectionFactory),
-                    defaultSerializerSettings),
+                    defaultSerializerSettingsFactory.Invoke(p)),
                 lifetime));
 
         return services;
@@ -155,6 +214,66 @@ public static class ArangoClientServiceCollectionExtension
         {
             throw new ArgumentNullException(nameof(loggerCreation));
         }
+        
+        return AddArangoClient(
+            services,
+            connectionFactory,
+            loggerCreation,
+            lifetime,
+            _ => defaultSerializerSettings,
+            clientName);
+    }
+
+    /// <summary>
+    ///     Registers an ArangoDB client in the specified <paramref name="services" /> collection.
+    /// </summary>
+    /// <param name="services">The <see cref="IServiceCollection" /> to register the ArangoDB client.</param>
+    /// <param name="connectionFactory">A delegate that provides the connection string for the ArangoDB client.</param>
+    /// <param name="loggerCreation">A function to retrieve an instance of a logger for the ArangoDB client.</param>
+    /// <param name="lifetime">The lifetime of the ArangoDB client.</param>
+    /// <param name="defaultSerializerSettingsFactory">
+    ///     A method that acts as a factory to create <see cref="JsonSerializerSettings" />
+    ///     using the specified <see cref="IServiceProvider" />.
+    /// </param>
+    /// <param name="clientName">
+    ///     The name of <see cref="IArangoDbClient" /> and the <see cref="HttpClient" /> in the
+    ///     <see cref="IHttpClientFactory" />.
+    /// </param>
+    /// <returns>The <see cref="IServiceCollection" /> with the ArangoDB client services added.</returns>
+    /// <exception cref="DuplicateNameException">An arango client with the same name is already registered.</exception>
+    /// <exception cref="ArgumentNullException">
+    ///     <paramref name="services" /> is <c>null</c>.<br />
+    ///     <paramref name="connectionFactory" /> is <c>null</c>.
+    ///     <paramref name="loggerCreation" /> is <c>null</c>.
+    ///     <paramref name="defaultSerializerSettingsFactory" /> is <c>null</c>.
+    /// </exception>
+    public static IServiceCollection AddArangoClient(
+        this IServiceCollection services,
+        Func<IServiceProvider, ArangoConfiguration> connectionFactory,
+        Func<IServiceProvider, ILogger> loggerCreation,
+        ServiceLifetime lifetime,
+        Func<IServiceProvider, JsonSerializerSettings> defaultSerializerSettingsFactory,
+        string clientName)
+    {
+        if (services == null)
+        {
+            throw new ArgumentNullException($"The variable {nameof(services)} was null!");
+        }
+
+        if (connectionFactory == null)
+        {
+            throw new ArgumentNullException($"The parameter {nameof(connectionFactory)} was null.");
+        }
+
+        if (loggerCreation == null)
+        {
+            throw new ArgumentNullException(nameof(loggerCreation));
+        }
+
+        if (defaultSerializerSettingsFactory == null)
+        {
+            throw new ArgumentNullException(nameof(defaultSerializerSettingsFactory));
+        }
 
         services.TryAddTransient<TimeoutHttpHandler>();
         // The client is logging too much BS, so we turned logging of.
@@ -178,7 +297,7 @@ public static class ArangoClientServiceCollectionExtension
                     loggerCreation.Invoke(p),
                     p.GetRequiredService<IHttpClientFactory>(),
                     MapToExceptionOptions(p, connectionFactory),
-                    defaultSerializerSettings),
+                    defaultSerializerSettingsFactory.Invoke(p)),
                 lifetime));
 
         return services;

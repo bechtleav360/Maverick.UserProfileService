@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using UserProfileService.Adapter.Arango.V2.Abstractions;
+using UserProfileService.Adapter.Arango.V2.Configuration;
 using UserProfileService.Adapter.Arango.V2.Contracts;
 using UserProfileService.Adapter.Arango.V2.Helpers;
 using UserProfileService.Adapter.Arango.V2.Implementations;
@@ -72,13 +73,7 @@ public static class ArangoFirstLevelRepositoryBuilderExtensions
         services.AddCommonDependenciesForArangoProfileRepositories(
             configurationSection,
             arangoClientName: ArangoConstants.ArangoFirstLevelProjectionName,
-            serializerSettings: new JsonSerializerSettings
-            {
-                Converters = WellKnownJsonConverters
-                    .GetDefaultFirstLevelProjectionConverters()
-                    .ToList(),
-                ContractResolver = new DefaultContractResolver()
-            },
+            arangoJsonSettings: new FirstLevelProjectionArangoClientJsonSettings(),
             logger: logger);
 
         logger.LogInfoMessage("Register the firstLevelProjectionCollectionsProvider.", LogHelpers.Arguments());
@@ -141,22 +136,11 @@ public static class ArangoFirstLevelRepositoryBuilderExtensions
         // common dependencies that will be shared from read AND projection write service. - Seems save
         logger.LogInfoMessage("Register all needed arango dependencies.", LogHelpers.Arguments());
 
-        var serializerSettings = new JsonSerializerSettings
-        {
-            Converters = new List<JsonConverter>
-            {
-                new StringEnumConverter(),
-                WellKnownSecondLevelConverter.GetSecondLevelDefaultConverters()
-            },
-            ContractResolver = new DefaultContractResolver(),
-            NullValueHandling = NullValueHandling.Ignore
-        };
-
         services.AddCommonDependenciesForArangoProfileRepositories(
             configurationSection,
             arangoClientName: arangoClientName,
-            serializerSettings: serializerSettings,
-            logger: logger);
+            logger: logger,
+            arangoJsonSettings: new EventLogWriterArangoClientJsonSettings());
 
         logger.LogInfoMessage("Register the firstLevelProjectionCollectionsProvider.", LogHelpers.Arguments());
 

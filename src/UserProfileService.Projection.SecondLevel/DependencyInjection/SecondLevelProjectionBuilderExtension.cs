@@ -140,17 +140,25 @@ public static class SecondLevelProjectionBuilderExtension
     }
 
     /// <summary>
-    ///     Adds the second level projection handlers to service collection, so that
-    ///     it can be used to handle events of the second level projection.
+    ///     Adds second level projection event handlers to the specified <see cref="ISecondLevelProjectionBuilder" />.
+    ///     These handlers can be used to process events related to the second level projection.
     /// </summary>
-    /// <param name="builder">The builder that is used to configure the second level projection.</param>
-    /// <param name="serviceLifetime">
-    ///     Specifies the lifetime of a service in an
-    ///     <see cref="IServiceCollection" />.
+    /// <param name="builder">The builder used to configure the second level projection.</param>
+    /// <param name="assembly">
+    ///     An optional assembly to scan for second level projection event handler types.
+    ///     If not provided, the assembly of the generic base handler, <see cref="SecondLevelEventHandlerBase{T}" />,
+    ///     will be used by default.
     /// </param>
-    /// <returns>The <see cref="IServiceCollection" /> itself.</returns>
+    /// <param name="serviceLifetime">
+    ///     Specifies the lifetime of the added services in the <see cref="IServiceCollection" />.
+    /// </param>
+    /// <returns>
+    ///     The <see cref="ISecondLevelProjectionBuilder" /> itself after adding the event handler services
+    ///     to the service collection.
+    /// </returns>
     public static ISecondLevelProjectionBuilder AddSecondLevelEventHandlers(
         this ISecondLevelProjectionBuilder builder,
+        Assembly assembly = null,
         ServiceLifetime serviceLifetime = ServiceLifetime.Transient)
     {
         if (builder == null)
@@ -160,10 +168,11 @@ public static class SecondLevelProjectionBuilderExtension
 
         foreach ((Type instanceType, Type serviceType) in
                  typeof(ISecondLevelEventHandler<>).GetInstanceTypesForDependencyInjection(
-                     typeof(SecondLevelEventHandlerBase<>)
+                     assembly
+                     ?? typeof(SecondLevelEventHandlerBase<>)
                          .Assembly))
         {
-            builder.ServiceCollection.Add(ServiceDescriptor.Describe(serviceType, instanceType, serviceLifetime));
+            builder.ServiceCollection.TryAdd(ServiceDescriptor.Describe(serviceType, instanceType, serviceLifetime));
         }
 
         return builder;

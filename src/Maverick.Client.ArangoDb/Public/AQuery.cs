@@ -48,16 +48,19 @@ public class AQuery : IAQuery
 
         var request = new Request(HttpMethod.Put, ApiBaseUri.Cursor, $"/{cursorId}");
         request.BodyAsString = string.Empty;
-        Response response = await RequestHandler.ExecuteAsync(_connection, request);
+        Response response = await RequestHandler.ExecuteAsync(_connection, request, cancellationToken: cancellationToken);
         _parameters.Clear();
         _bindVars.Clear();
         _query.Clear();
 
         if (response.IsSuccessStatusCode)
         {
-            var result = response.ParseBody<PutCursorResponseEntity<T>>();
+            (PutCursorResponseEntity<T> result, JsonDeserializationException parserException) =
+                response.ParseBodyIncludingErrors<PutCursorResponseEntity<T>>();
 
-            return new PutCursorResponse<T>(response, result);
+            return parserException == null
+                ? new PutCursorResponse<T>(response, result)
+                : new PutCursorResponse<T>(response, parserException);
         }
 
         return new PutCursorResponse<T>(response, response.Exception);
@@ -261,12 +264,15 @@ public class AQuery : IAQuery
 
         if (response.IsSuccessStatusCode)
         {
-            var result = response.ParseBody<CreateCursorResponseEntity<T>>();
+            (CreateCursorResponseEntity<T> result, JsonDeserializationException parserException) =
+                response.ParseBodyIncludingErrors<CreateCursorResponseEntity<T>>();
 
             _bindVars.Clear();
             _query.Clear();
 
-            return new CursorResponse<T>(response, result);
+            return parserException == null
+                ? new CursorResponse<T>(response, result)
+                : new CursorResponse<T>(response, parserException);
         }
 
         return new CursorResponse<T>(response, response.Exception);

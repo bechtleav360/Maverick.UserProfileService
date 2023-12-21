@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using UserProfileService.Adapter.Arango.V2.Abstractions;
+using UserProfileService.Adapter.Arango.V2.Configuration;
 using UserProfileService.Adapter.Arango.V2.Contracts;
 using UserProfileService.Adapter.Arango.V2.Helpers;
 using UserProfileService.Adapter.Arango.V2.Implementations;
@@ -80,13 +81,7 @@ public static class ArangoSecondLevelRepositoryBuilderExtensions
         services.AddCommonDependenciesForArangoProfileRepositories(
             configurationSection,
             arangoClientName: ArangoConstants.SecondLevelArangoClientName,
-            serializerSettings: new JsonSerializerSettings
-            {
-                Converters = WellKnownJsonConverters.GetDefaultProfileConverters()
-                    .Append(new StringEnumConverter())
-                    .ToList(),
-                ContractResolver = new DefaultContractResolver()
-            },
+            arangoJsonSettings: new SecondLevelProjectionArangoClientJsonSettings(),
             logger: logger);
 
         logger.LogInfoMessage("Register the secondLevelProjectionCollectionsProvider.", LogHelpers.Arguments());

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Maverick.UserProfileService.AggregateEvents.Common;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using UserProfileService.Common;
