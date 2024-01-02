@@ -40,18 +40,6 @@ public class DefaultModelConstellation
     {
         ModelsInfo = modelBuilder.BuildOptions(prefix, queryPrefix ?? prefix);
     }
-
-    
-    public static DefaultModelConstellation CreateCustomStorage(string storageName, string prefix, string queryPrefix)
-    {
-        CustomModels.TryGetValue(storageName, out var customStorage);
-
-        IModelBuilder modelBuilder = ModelBuilder.NewOne;
-        
-        customStorage.Invoke(modelBuilder);
-
-        return new DefaultModelConstellation(modelBuilder, prefix, queryPrefix);
-    }
     
     private static DefaultModelConstellation NewUserProfileStorage(
         string prefix,

@@ -90,15 +90,17 @@ public class ArangoSecondLevelProjectionRepository : ArangoRepositoryBase, ISeco
     /// </param>
     /// <param name="mapper">A &lt;see cref="IMapper" /&gt; used to map Aggregate models to AV360 models and vice versa.</param>
     /// <param name="collectionPrefix">The second level collection prefix.</param>
+    /// <param name="modelBuilderOptions">A model builder that contains all second-level collections information.</param>
     /// <param name="arangoDbClientName">The name of the arango client to be used by the new instance.</param>
     public ArangoSecondLevelProjectionRepository(
         ILogger<ArangoSecondLevelProjectionRepository> logger,
         IServiceProvider serviceProvider,
         IMapper mapper,
         string collectionPrefix,
-        string arangoDbClientName = null) : base(logger, serviceProvider)
+        string arangoDbClientName = null,
+        ModelBuilderOptions modelBuilderOptions = null) : base(logger, serviceProvider)
     {
-        _modelsInfo = DefaultModelConstellation.CreateNewSecondLevelProjection(collectionPrefix).ModelsInfo;
+        _modelsInfo = modelBuilderOptions ?? DefaultModelConstellation.CreateNewSecondLevelProjection(collectionPrefix).ModelsInfo;
         _mapper = mapper;
 
         _projectionStateRepository = new ArangoProjectionStateRepository(
@@ -281,7 +283,9 @@ public class ArangoSecondLevelProjectionRepository : ArangoRepositoryBase, ISeco
 
     protected string GetCollectionName<T>()
     {
-        return _modelsInfo.GetCollectionName<T>();
+        var collectionName = _modelsInfo.GetCollectionName<T>();
+
+        return collectionName;
     }
 
     private static string GetDocumentId(string collectionName, string objectId)
