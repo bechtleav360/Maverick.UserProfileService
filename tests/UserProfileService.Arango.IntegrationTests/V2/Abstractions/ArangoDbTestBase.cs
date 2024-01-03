@@ -20,6 +20,7 @@ using UserProfileService.Arango.IntegrationTests.V2.Implementations;
 using UserProfileService.Arango.IntegrationTests.V2.Mocks;
 using UserProfileService.Arango.IntegrationTests.V2.SecondLevelProjectionRepository.Seeding.Abstractions;
 using UserProfileService.Arango.IntegrationTests.V2.SecondLevelProjectionRepository.Seeding.Implementations;
+using UserProfileService.Arango.IntegrationTests.V2.Serializer;
 using UserProfileService.Common.V2.Abstractions;
 using UserProfileService.Common.V2.TicketStore.Abstractions;
 using UserProfileService.EventCollector.Abstractions;
@@ -74,34 +75,11 @@ namespace UserProfileService.Arango.IntegrationTests.V2.Abstractions
                 .AddArangoClient(
                     ArangoDbClientName,
                     p => p.GetRequiredService<IOptionsSnapshot<ArangoConfiguration>>()?.Value,
-                    defaultSerializerSettings: new JsonSerializerSettings
-                    {
-                        Converters = WellKnownJsonConverters
-                            .GetDefaultProfileConverters()
-                            .Append(
-                                JsonSubtypesConverterBuilder
-                                    .Of<TicketBase>(nameof(TicketBase.Type))
-                                    .RegisterSubtype<TicketA>("TicketA")
-                                    .RegisterSubtype<TicketB>("TicketB")
-                                    .Build())
-                            .Concat(
-                                WellKnownJsonConverters
-                                    .GetDefaultFirstLevelProjectionConverters())
-                            .ToList()
-                    })
+                    defaultSerializerSettings: new FirstLevelProjectionTestArangoClientSettings())
                 .AddArangoClient(
                     ArangoDbClientEventLogStoreName,
                     p => p.GetRequiredService<IOptionsSnapshot<ArangoConfiguration>>()?.Value,
-                    defaultSerializerSettings: new JsonSerializerSettings
-                    {
-                        Converters = WellKnownJsonConverters
-                            .GetDefaultProfileConverters()
-                            .Append(new StringEnumConverter())
-                            .Append(new EventLogTupleReadOnlyMemoryJsonConverter())
-                            .Append(new EventLogIgnoreEventJsonConverter())
-                            .ToList(),
-                        NullValueHandling = NullValueHandling.Ignore
-                    });
+                    defaultSerializerSettings: new EventLogTupleArangoClientSettings());
 
             Services.AddSingleton<IDbInitializer, MockArangoDbInitializer>();
 
