@@ -1,7 +1,6 @@
-﻿
-
-using Maverick.UserProfileService.Models.Models;
+﻿using Maverick.UserProfileService.Models.Models;
 using UserProfileService.Informer.Abstraction;
+using ExternalIdentifier = Maverick.UserProfileService.AggregateEvents.Common.Models.ExternalIdentifier;
 
 namespace UserProfileService.Informer.Implementations;
 
@@ -14,5 +13,6 @@ public class DefaultNotifyContext : INotifyContext
     public ObjectIdent? ContextType { get; set; }
 
     /// <inheritdoc />
-    public string? ExternalIdentifier { get; set; }
+    public List<ExternalIdentifier> ExternalIdentifier { get; set; }
+    
 }

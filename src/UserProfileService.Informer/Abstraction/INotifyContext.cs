@@ -11,10 +11,10 @@ public interface INotifyContext
    /// <summary>
    ///     The type that the notification is related to.
    /// </summary>
-   public ObjectIdent ContextType { get; set; }
+    ObjectIdent ContextType { get; set; }
 
    /// <summary>
    ///     The external id that is needed for the notify context.
    /// </summary>
-   public string ExternalIdentifier { set; get; }
+    List<ExternalIdentifier> ExternalIdentifier { set; get; }
 }
