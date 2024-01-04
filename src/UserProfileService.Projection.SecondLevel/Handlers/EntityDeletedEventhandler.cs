@@ -38,7 +38,7 @@ internal class EntityDeletedEventHandler : SecondLevelEventHandlerBase<EntityDel
         IStreamNameResolver streamNameResolver,
         IMessageInformer messageInformer,
         // ReSharper disable once SuggestBaseTypeForParameterInConstructor
-        ILogger<ContainerDeletedEventHandler> logger) : base(repository, mapper, streamNameResolver, messageInformer, logger)
+        ILogger<EntityDeletedEventHandler> logger) : base(repository, mapper, streamNameResolver, messageInformer, logger)
     {
     }
 

@@ -40,7 +40,7 @@ internal class TagsAddedEventHandler : SecondLevelEventHandlerBase<TagsAdded>
         IStreamNameResolver streamNameResolver,
         IMessageInformer messageInformer,
         // ReSharper disable once SuggestBaseTypeForParameterInConstructor
-        ILogger<MemberAddedEventHandler> logger) : base(repository, mapper, streamNameResolver, messageInformer, logger)
+        ILogger<TagsAddedEventHandler> logger) : base(repository, mapper, streamNameResolver, messageInformer, logger)
     {
     }
 

@@ -40,7 +40,7 @@ internal class MemberDeletedEventHandler : SecondLevelEventHandlerBase<MemberDel
         IStreamNameResolver streamNameResolver,
         IMessageInformer messageInformer,
         // ReSharper disable once SuggestBaseTypeForParameterInConstructor
-        ILogger<MemberAddedEventHandler> logger) : base(repository, mapper, streamNameResolver, messageInformer, logger)
+        ILogger<MemberDeletedEventHandler> logger) : base(repository, mapper, streamNameResolver, messageInformer, logger)
     {
     }
 
