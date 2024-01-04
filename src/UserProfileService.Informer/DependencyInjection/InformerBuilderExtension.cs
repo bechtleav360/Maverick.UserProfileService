@@ -55,6 +55,6 @@ public static class InformerBuilderExtension
     /// <param name="informerBuilder">The builder that is used to register the services and notification builder.</param>
     public static void BuildMessageInformer(this IMessageInformerBuilder informerBuilder)
     {
-        informerBuilder.ServiceCollection.TryAddScoped(p => informerBuilder.NotificationDictionary);
+        informerBuilder.ServiceCollection.TryAddScoped(_ => informerBuilder.NotificationDictionary);
     }
 }

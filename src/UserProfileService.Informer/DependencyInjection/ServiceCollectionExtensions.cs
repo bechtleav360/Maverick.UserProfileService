@@ -27,7 +27,7 @@ public static class ServiceCollectionExtensions
         var dictionaryHandler = new Dictionary<Type, List<Func<IServiceProvider, IProcessNotifierExecutor>>>();
 
         // an empty dictionary will be registered, because there are no notifier handler registered.
-        serviceCollection.TryAddScoped(p => dictionaryHandler);
+        serviceCollection.TryAddScoped(_ => dictionaryHandler);
 
         return serviceCollection;
     }

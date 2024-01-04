@@ -5,11 +5,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Maverick.UserProfileService.AggregateEvents.Common;
-using Maverick.UserProfileService.AggregateEvents.V1;
+using Maverick.UserProfileService.AggregateEvents.Resolved.V1;
 using Maverick.UserProfileService.Models.BasicModels;
 using Maverick.UserProfileService.Models.EnumModels;
 using Maverick.UserProfileService.Models.Models;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using UserProfileService.Common.Logging;
 using UserProfileService.Common.Logging.Extensions;
@@ -237,13 +236,14 @@ public abstract class SecondLevelEventHandlerBase<TEvent> : ISecondLevelEventHan
             
 
             await MessageInformer.NotifyEventOccurredAsync(domainEvent, contextData);
-            
         }
         catch (Exception ex)
         {
+            // the exception will only be logged and to thrown, otherwise
+            // the operation is marked as not valid although the operation
+            // was successful.
             Logger.LogErrorMessage(ex, ex.Message, LogHelpers.Arguments());
-
-            throw;
+            
         }
         Logger.ExitMethod();
     }
@@ -265,11 +265,25 @@ public abstract class SecondLevelEventHandlerBase<TEvent> : ISecondLevelEventHan
     {
         var defaultNotifyContext = new DefaultNotifyContext();
 
-        if (serviceEvent is EntityDeleted entityDeleted && relatedObject.Type == ObjectType.User)
+        switch (serviceEvent)
         {
-            ISecondLevelProjectionProfile profile = await Repository.GetProfileAsync(entityDeleted.Id);
-            defaultNotifyContext.ExternalIdentifier = profile?.ExternalIds.FirstOrDefault().Id;
-            defaultNotifyContext.ContextType = relatedObject;
+            case EntityDeleted entityDeleted when relatedObject.Type == ObjectType.User:
+            {
+                ISecondLevelProjectionProfile profile = await Repository.GetProfileAsync(entityDeleted.Id);
+                defaultNotifyContext.ExternalIdentifier = profile?.ExternalIds.ToList();
+                defaultNotifyContext.ContextType = relatedObject;
+
+                break;
+            }
+            case ClientSettingsCalculated clientSettingsCalculated:
+            {
+                ISecondLevelProjectionProfile
+                    profile = await Repository.GetProfileAsync(clientSettingsCalculated.ProfileId);
+                defaultNotifyContext.ExternalIdentifier = profile?.ExternalIds.ToList();
+                defaultNotifyContext.ContextType = relatedObject;
+
+                break;
+            }
         }
 
         return defaultNotifyContext;
