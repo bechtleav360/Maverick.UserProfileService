@@ -43,7 +43,7 @@ internal class GroupCreatedFirstLevelEventHandler : FirstLevelEventHandlerTagsIn
     /// </param>
     /// <param name="creator">The creator is used to create <inheritdoc cref="EventTuple" /> from the given parameter.</param>
     public GroupCreatedFirstLevelEventHandler(
-        ILogger<GroupCreatedEvent> logger,
+        ILogger<GroupCreatedFirstLevelEventHandler> logger,
         IFirstLevelProjectionRepository repository,
         ISagaService sagaService,
         IFirstLevelEventTupleCreator creator,

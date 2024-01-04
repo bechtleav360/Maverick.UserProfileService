@@ -45,7 +45,7 @@ internal class RoleCreatedFirstLevelEventHandler : FirstLevelEventHandlerTagsInc
     /// </param>
     /// <param name="creator">The creator is used to create <inheritdoc cref="EventTuple" /> from the given parameter.</param>
     public RoleCreatedFirstLevelEventHandler(
-        ILogger<RoleCreatedEvent> logger,
+        ILogger<RoleCreatedFirstLevelEventHandler> logger,
         IFirstLevelProjectionRepository repository,
         ISagaService sagaService,
         IFirstLevelEventTupleCreator creator,

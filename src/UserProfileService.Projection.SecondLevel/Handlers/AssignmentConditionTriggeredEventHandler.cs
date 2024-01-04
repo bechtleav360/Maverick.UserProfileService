@@ -36,7 +36,7 @@ internal class AssignmentConditionTriggeredEventHandler : SecondLevelEventHandle
         IMapper mapper,
         IStreamNameResolver streamNameResolver,
         IMessageInformer messageInformer,
-        ILogger<ClientSettingsCalculatedEventHandler> logger) : base(
+        ILogger<AssignmentConditionTriggeredEventHandler> logger) : base(
         repository,
         mapper,
         streamNameResolver,

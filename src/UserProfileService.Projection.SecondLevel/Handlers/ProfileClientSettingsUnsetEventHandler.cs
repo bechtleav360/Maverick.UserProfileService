@@ -36,7 +36,7 @@ internal class ProfileClientSettingsUnsetEventHandler : SecondLevelEventHandlerB
         IMapper mapper,
         IStreamNameResolver streamNameResolver,
         IMessageInformer messageInformer,
-        ILogger<ProfileClientSettingsUnset> logger) : base(repository, mapper, streamNameResolver, messageInformer, logger)
+        ILogger<ProfileClientSettingsUnsetEventHandler> logger) : base(repository, mapper, streamNameResolver, messageInformer, logger)
     {
     }
 
