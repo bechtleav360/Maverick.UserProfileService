@@ -239,11 +239,10 @@ public abstract class SecondLevelEventHandlerBase<TEvent> : ISecondLevelEventHan
         }
         catch (Exception ex)
         {
-            // the exception will only be logged and to thrown, otherwise
-            // the operation is marked as not valid although the operation
-            // was successful.
             Logger.LogErrorMessage(ex, ex.Message, LogHelpers.Arguments());
-            
+
+            throw;
+
         }
         Logger.ExitMethod();
     }

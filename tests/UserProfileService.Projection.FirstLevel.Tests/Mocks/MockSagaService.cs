@@ -10,7 +10,7 @@ using Xunit.Sdk;
 
 namespace UserProfileService.Projection.FirstLevel.Tests.Mocks
 {
-    internal class MockSagaService : ISagaService
+    public class MockSagaService : ISagaService
     {
         private readonly Dictionary<Guid, List<EventTuple>> _eventTupleDictionary =
             new Dictionary<Guid, List<EventTuple>>();
