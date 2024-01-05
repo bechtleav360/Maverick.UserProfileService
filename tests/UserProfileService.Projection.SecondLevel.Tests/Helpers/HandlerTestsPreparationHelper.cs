@@ -12,7 +12,7 @@ using MappingProfiles = UserProfileService.Projection.Common.Utilities.MappingPr
 
 namespace UserProfileService.Projection.SecondLevel.Tests.Helpers;
 
-internal static class HandlerTestsPreparationHelper
+public static class HandlerTestsPreparationHelper
 {
     private static ObjectIdent GetIdent(string streamName)
     {

@@ -12,7 +12,7 @@ using UserProfileService.Projection.FirstLevel.Utilities;
 
 namespace UserProfileService.Projection.FirstLevel.Tests.Utilities
 {
-    internal class FirstLevelHandlerTestsPreparationHelper
+    public class FirstLevelHandlerTestsPreparationHelper
     {
         public static IServiceProvider Provider;
 
