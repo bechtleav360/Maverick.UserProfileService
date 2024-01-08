@@ -271,6 +271,7 @@ public abstract class SecondLevelEventHandlerBase<TEvent> : ISecondLevelEventHan
                 ISecondLevelProjectionProfile profile = await Repository.GetProfileAsync(entityDeleted.Id);
                 defaultNotifyContext.ExternalIdentifier = profile?.ExternalIds.ToList();
                 defaultNotifyContext.ContextType = relatedObject;
+                defaultNotifyContext.NotifyConsumer = true;
 
                 break;
             }
@@ -280,7 +281,8 @@ public abstract class SecondLevelEventHandlerBase<TEvent> : ISecondLevelEventHan
                     profile = await Repository.GetProfileAsync(clientSettingsCalculated.ProfileId);
                 defaultNotifyContext.ExternalIdentifier = profile?.ExternalIds.ToList();
                 defaultNotifyContext.ContextType = relatedObject;
-
+                defaultNotifyContext.NotifyConsumer = true;
+                
                 break;
             }
         }

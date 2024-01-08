@@ -17,4 +17,9 @@ public interface INotifyContext
    ///     The external id that is needed for the notify context.
    /// </summary>
     List<ExternalIdentifier> ExternalIdentifier { set; get; }
+
+   /// <summary>
+   /// Decides if the handler should be executed.
+   /// </summary>
+    public bool NotifyConsumer { get; set; }
 }

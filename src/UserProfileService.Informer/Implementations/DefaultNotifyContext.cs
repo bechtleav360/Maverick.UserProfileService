@@ -14,5 +14,7 @@ public class DefaultNotifyContext : INotifyContext
 
     /// <inheritdoc />
     public List<ExternalIdentifier> ExternalIdentifier { get; set; }
-    
+
+    /// <inheritdoc />
+    public bool NotifyConsumer { get; set; }
 }
