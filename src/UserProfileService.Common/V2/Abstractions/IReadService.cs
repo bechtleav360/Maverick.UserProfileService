@@ -164,31 +164,7 @@ public interface IReadService
         where TUser : IProfile
         where TGroup : IContainerProfile
         where TOrgUnit : IContainerProfile;
-
-    /// <summary>
-    ///     Search for profiles.
-    /// </summary>
-    /// <param name="options">
-    ///     Options to refine the search request and to set up pagination and sorting. If <c>null</c>, the
-    ///     default values of pagination will be used.
-    /// </param>
-    /// <param name="cancellationToken">
-    ///     The token to monitor for cancellation requests. The default value is
-    ///     <see cref="CancellationToken.None" />.
-    /// </param>
-    /// <typeparam name="T">
-    ///     The type of objects in the resulting list. If type is an interface, the basic type of its
-    ///     implementation will be returned (if available).
-    /// </typeparam>
-    /// <returns>
-    ///     A task representing the asynchronous read operation. It wraps a search result list of
-    ///     <typeparamref name="T" />.
-    /// </returns>
-    /// <exception cref="ValidationException"><paramref name="options" /> is not valid.</exception>
-    Task<IPaginatedList<T>> SearchAsync<T>(
-        QueryObject options = null,
-        CancellationToken cancellationToken = default) where T : class;
-
+    
     /// <summary>
     ///     Returns the root container profiles that do not have any parents (or: that are not assigned to another container
     ///     profile).
