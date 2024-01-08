@@ -39,6 +39,11 @@ public class MessageInformer : IMessageInformer
     {
         _logger.EnterMethod();
 
+        if (!context.NotifyConsumer)
+        {
+            return;
+        }
+        
         bool processNotifierExecutorExists = _notificationHandlers.TryGetValue(
             serviceEvent.GetType(),
             out List<Func<IServiceProvider, IProcessNotifierExecutor>>? notificationNotifierExecutors);
