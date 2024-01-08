@@ -283,39 +283,7 @@ public class ArangoReadService : ArangoRepositoryBase, IReadService
                 .FirstOrDefault(item => item != null)
                 .ToSpecifiedProfileModel<TProfile>(includeInactiveAssignments));
     }
-
-    /// <inheritdoc />
-    public async Task<IPaginatedList<T>> SearchAsync<T>(
-        QueryObject searchQuery,
-        CancellationToken cancellationToken = default)
-        where T : class
-    {
-        Logger.EnterMethod();
-
-        if (searchQuery == null)
-        {
-            throw new ValidationException($"The {nameof(QueryObject)} must be set!");
-        }
-
-        searchQuery.Validate();
-
-        PaginationApiResponse<T> response =
-            await ExecuteCountingQueriesAsync<T>(
-                query => query
-                    .UsingOptions(searchQuery)
-                    .Compile(CollectionScope.Query),
-                cancellationToken);
-
-        Logger.LogInfoMessage(
-            "Found {responseTotalAmount} profiles ({responseResultQuery} profiles in result collection).",
-            LogHelpers.Arguments(response.TotalAmount, response.QueryResult.Count));
-
-        return Logger.ExitMethod(
-            response
-                .QueryResult
-                .ToPaginatedList(response.TotalAmount));
-    }
-
+    
     /// <inheritdoc />
     public async Task<IPaginatedList<IContainerProfile>> GetRootProfilesAsync<TGroup, TOrgUnit>(
         RequestedProfileKind expectedKind,
