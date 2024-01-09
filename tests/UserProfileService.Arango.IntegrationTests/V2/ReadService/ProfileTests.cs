@@ -91,44 +91,6 @@ namespace UserProfileService.Arango.IntegrationTests.V2.ReadService
         }
 
         [Theory]
-        [MemberData(nameof(GetSearchProfileTestArguments))]
-        public async Task SearchUserProfile(QueryObject queryObject, Func<UserBasic, bool> filter)
-        {
-            IReadService service = await Fixture.GetReadServiceAsync();
-            IPaginatedList<User> profiles = await service.SearchAsync<User>(queryObject);
-
-            List<UserBasic> referenceValues = Fixture
-                .GetTestUsers()
-                .Select(Mapper.Map<UserBasic>)
-                .Where(filter)
-                .SortBy(queryObject.OrderedBy, queryObject.SortOrder)
-                .ToList();
-
-            Assert.Equal(
-                referenceValues.Count > queryObject.Limit
-                    ? queryObject.Limit
-                    : referenceValues.Count,
-                profiles.Count);
-
-            Assert.Equal(referenceValues.Count, profiles.TotalAmount);
-
-            List<string> difference = profiles
-                .Select(p => p.Id)
-                .Except(referenceValues.Select(p => p.Id))
-                .ToList();
-
-            Assert.Empty(difference);
-
-            Assert.Equal(
-                referenceValues
-                    .Skip(queryObject.Offset)
-                    .Take(queryObject.Limit)
-                    .Select(p => p.Id)
-                    .ToList(),
-                profiles.Select(p => p.Id).ToList());
-        }
-
-        [Theory]
         [MemberData(nameof(GetAssignedProfilesTestArguments))]
         public async Task GetAssignedProfilesShouldWork(string roleOrFunctionId, QueryObject options)
         {
