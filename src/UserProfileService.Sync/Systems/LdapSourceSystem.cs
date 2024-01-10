@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using UserProfileService.Common.Logging;
 using UserProfileService.Common.Logging.Extensions;
@@ -26,7 +27,7 @@ namespace UserProfileService.Sync.Systems;
 [System(SyncConstants.System.Ldap)]
 public class LdapSourceSystem : ISynchronizationSourceSystem<UserSync>, ISynchronizationSourceSystem<GroupSync>
 {
-    private readonly ActiveDirectory[] _activeDirectoryConfiguration;
+    private readonly List<ActiveDirectory> _activeDirectoryConfiguration;
     private readonly ILogger<LdapSourceSystem> _logger;
 
     /// <summary>
@@ -36,10 +37,10 @@ public class LdapSourceSystem : ISynchronizationSourceSystem<UserSync>, ISynchro
     /// <param name="loggerFactory">
     ///     <see cref="ILoggerFactory" />
     /// </param>
-    public LdapSourceSystem(ILdapConfiguration ldapConfiguration, ILoggerFactory loggerFactory)
+    public LdapSourceSystem(IOptionsSnapshot<List<ActiveDirectory>> ldapConfiguration, ILoggerFactory loggerFactory)
     {
         _logger = loggerFactory.CreateLogger<LdapSourceSystem>();
-        _activeDirectoryConfiguration = ldapConfiguration.LdapConfiguration;
+        _activeDirectoryConfiguration = ldapConfiguration?.Value;
     }
 
     /// <inheritdoc />

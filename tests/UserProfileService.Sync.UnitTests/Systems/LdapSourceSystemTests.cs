@@ -22,7 +22,7 @@ namespace UserProfileService.Sync.UnitTests.Systems
         public void GetBatchAsync_ShouldReturnAllUser(int total, int startPosition, int batchSize)
         {
             // Arrange
-            var sourceSystem = new LdapSourceSystem(new LdapSourceSystemConfiguration(), new LoggerFactory());
+            var sourceSystem = new LdapSourceSystem(new LdapSystemConfiguration(), new LoggerFactory());
 
             List<UserSync> users = Enumerable
                 .Range(0, total)

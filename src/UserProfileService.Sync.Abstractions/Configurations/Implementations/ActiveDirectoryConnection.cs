@@ -4,29 +4,45 @@ using Maverick.UserProfileService.Models.Abstraction;
 
 namespace UserProfileService.Sync.Abstraction.Configurations.Implementations;
 
-/// <inheritdoc />
-public class ActiveDirectoryConnection : ILdapConnection
+/// <summary>
+///     The connection object for an active directory (AD). If specifies
+///     the connection string, the service user and the password that is used to connect
+///     to the specific AD.
+/// </summary>
+public class ActiveDirectoryConnection
 {
-    /// <inheritdoc />
-    public string AuthenticationType { get; set; }
+    /// <summary>
+    ///     The authentication type that is used to connect to the AD.
+    /// </summary>
+   public string AuthenticationType { set; get; }
 
-    /// <inheritdoc />
-    public string BasePath { get; set; }
+    /// <summary>
+    ///     The base bath to the AD.
+    /// </summary>
+    public string BasePath { set; get; }
 
-    /// <inheritdoc />
-    public string ConnectionString { get; set; }
+    /// <summary>
+    ///     The specific connection string to the AD.
+    /// </summary>
+    public string ConnectionString { set; get; }
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     A small description of the active directory connection.
+    /// </summary>
     public string Description { set; get; }
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     If a certificate will be always ignored.
+    /// </summary>
     public bool IgnoreCertificate { get; set; }
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     The port for connecting to LDAP.
+    /// </summary>
     public int? Port { get; set; }
 
     /// <summary>
-    ///     Defines the mapping between the properties of ldap entries and internal <see cref="IProfile" /> objects.
+    ///     Defines the mapping between the properties of ldap entries and internal <see cref="User" /> objects.
     ///     If no mapping is specified for a property, a default mapping is used.
     ///     Non-valid properties are ignored.
     ///     <br></br><br></br>
@@ -34,16 +50,22 @@ public class ActiveDirectoryConnection : ILdapConnection
     ///     <br></br><br></br>
     ///     Key -> Target <see cref="IProfile" /> object
     ///     <br></br>
-    ///     Value -> Source <see cref="DirectoryEntry" />
+    ///     Value -> Source <see cref="Novell.Directory.Ldap.LdapEntry" /> or <see cref="DirectoryEntry" />
     /// </summary>
-    public IDictionary<string, string> ProfileMapping { get; set; } = new Dictionary<string, string>();
+    public IDictionary<string, string> ProfileMapping { get; set; }
 
-    /// <inheritdoc />
-    public string ServiceUser { get; set; }
+    /// <summary>
+    ///     The service user that is used to login to the AD.
+    /// </summary>
+    public string ServiceUser { set; get; }
 
-    /// <inheritdoc />
-    public string ServiceUserPassword { get; set; }
+    /// <summary>
+    ///     The password that is used to login to the AD.
+    /// </summary>
+    public string ServiceUserPassword { set; get; }
 
-    /// <inheritdoc />
-    public bool UseSsl { get; set; } = true;
+    /// <summary>
+    ///     Describes if a secure connection to the LDAP is used.
+    /// </summary>
+    public bool UseSsl { set; get; }
 }

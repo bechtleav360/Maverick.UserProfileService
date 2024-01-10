@@ -1,0 +1,23 @@
+﻿using UserProfileService.Sync.Abstraction.Annotations;
+using UserProfileService.Sync.Abstraction.Configurations;
+using UserProfileService.Sync.Abstraction.Configurations.Implementations;
+using UserProfileService.Sync.Abstraction.Contracts;
+
+namespace UserProfileService.Sync.Configuration;
+
+/// <summary>
+///     The hole active directory configuration is defined in this interface.
+/// </summary>
+[SynchConfigurationProvider(SyncConstants.System.Ldap)]
+public class LdapSystemConfiguration
+{
+    /// <summary>
+    ///     The active directory configuration.
+    /// </summary>
+    public ActiveDirectory[] LdapConfiguration { get; set; }
+
+    /// <summary>
+    /// The configuration defines the entities that should synced in the foreign and our "own" system.
+    /// </summary>
+    public SourceConfiguration LdapSourceConfiguration { set; get; }
+}
