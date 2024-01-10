@@ -9,7 +9,6 @@ using UserProfileService.Common.V2.Exceptions;
 using UserProfileService.Common.V2.Extensions;
 using UserProfileService.Sync.Abstraction.Annotations;
 using UserProfileService.Sync.Abstraction.Configurations;
-using UserProfileService.Sync.Abstraction.Configurations.Implementations;
 using UserProfileService.Sync.Abstraction.Factories;
 using UserProfileService.Sync.Abstraction.Models;
 using UserProfileService.Sync.Abstraction.Systems;
