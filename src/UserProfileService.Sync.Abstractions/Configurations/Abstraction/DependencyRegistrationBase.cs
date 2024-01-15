@@ -16,8 +16,6 @@ namespace UserProfileService.Sync.Abstraction.Configurations.Abstraction;
 /// </summary>
 public abstract class DependencyRegistrationBase : ISyncProviderConfigurationRegistration
 {
-    private readonly string _configurationSection;
-
     /// <summary>
     ///     Initializes a new instance of <see cref="DependencyRegistrationBase" /> with a specified key of a configuration
     ///     section.
@@ -25,25 +23,10 @@ public abstract class DependencyRegistrationBase : ISyncProviderConfigurationReg
     /// <remarks>
     ///     The constructor should be used by derived types only.
     /// </remarks>
-    /// <param name="configurationSection">
-    ///     The name of the configuration section that contains search provider configuration
-    ///     and will be used for logging.
-    /// </param>
-    protected DependencyRegistrationBase(string configurationSection)
+    protected DependencyRegistrationBase()
     {
-        _configurationSection = configurationSection;
     }
-
-    private void CheckConfigurationSectionIsEmpty(string providerName, IConfiguration configuration, ILogger logger)
-    {
-        if (!configuration.GetChildren().Any())
-        {
-            logger.LogWarning(
-                "The sync configuration provider registration: Missing configuration of provider in configuration section {configurationSection}:{providerName}",
-                _configurationSection,
-                providerName);
-        }
-    }
+    
 
     /// <summary>
     ///     Registers all provider specific dependencies in the <paramref name="serviceCollection" />.
@@ -84,8 +67,6 @@ public abstract class DependencyRegistrationBase : ISyncProviderConfigurationReg
 
             return;
         }
-
-        CheckConfigurationSectionIsEmpty(providerMetadata.SyncConfigName, searchProviderConfigurationSection, logger);
 
         RegisterSpecificDependencies(servicesCollection, logger, searchProviderConfigurationSection);
     }

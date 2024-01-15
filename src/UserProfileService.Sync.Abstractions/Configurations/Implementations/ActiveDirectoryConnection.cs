@@ -42,19 +42,6 @@ public class ActiveDirectoryConnection
     public int? Port { get; set; }
 
     /// <summary>
-    ///     Defines the mapping between the properties of ldap entries and internal <see cref="User" /> objects.
-    ///     If no mapping is specified for a property, a default mapping is used.
-    ///     Non-valid properties are ignored.
-    ///     <br></br><br></br>
-    ///     <b>Currently only the mapping for <see cref="IProfile.Id" /> is implemented.</b>
-    ///     <br></br><br></br>
-    ///     Key -> Target <see cref="IProfile" /> object
-    ///     <br></br>
-    ///     Value -> Source <see cref="Novell.Directory.Ldap.LdapEntry" /> or <see cref="DirectoryEntry" />
-    /// </summary>
-    public IDictionary<string, string> ProfileMapping { get; set; }
-
-    /// <summary>
     ///     The service user that is used to login to the AD.
     /// </summary>
     public string ServiceUser { set; get; }

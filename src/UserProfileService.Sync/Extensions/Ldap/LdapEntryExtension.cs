@@ -74,11 +74,11 @@ internal static class LdapEntryExtension
     ///     Returns the SID from the entry.
     /// </summary>
     /// <param name="entry">The entry from which the sid should be extracted.</param>
-    /// <param name="settings">The settings from the ldap.</param>
+    /// <param name="entityMapping">The entity mapping settings.</param>
     /// <returns>The SID from the given entry.</returns>
-    public static string GetSidFromEntry(this LdapEntry entry, ActiveDirectoryConnection settings)
+    public static string GetSidFromEntry(this LdapEntry entry, IDictionary<string,string> entityMapping)
     {
-        string ldapIdKey = settings.GetProfileIdLdapKey();
+        string ldapIdKey = entityMapping.GetProfileIdLdapKey();
         byte[] sidBytes = entry.GetAttribute(ldapIdKey).ByteValue;
 
         if (sidBytes == null || !sidBytes.Any())
@@ -111,14 +111,16 @@ internal static class LdapEntryExtension
     /// </summary>
     /// <param name="entry">Ldap entry to be converted.</param>
     /// <param name="settings">Settings to use while converting.</param>
+    /// <param name="entityMapping"></param>
     /// <param name="logger">The logger.</param>
     /// <returns>Converted ldap entry as <see cref="UserSync" /></returns>
     public static UserSync EntryToUser(
         this LdapEntry entry,
         ActiveDirectoryConnection settings,
+        IDictionary<string,string> entityMapping,
         ILogger logger = null)
     {
-        string sid = entry.GetSidFromEntry(settings);
+        string sid = entry.GetSidFromEntry(entityMapping);
 
         // Set default values from ldap to object
         var ret = new UserSync
@@ -143,7 +145,7 @@ internal static class LdapEntryExtension
         // Overwrite default values with custom property mapping.
         Type userType = ret.GetType();
 
-        foreach (KeyValuePair<string, string> profileMapping in settings.ProfileMapping)
+        foreach (KeyValuePair<string, string> profileMapping in entityMapping)
         {
             PropertyInfo propertyInfo = userType.GetProperty(profileMapping.Key);
 

@@ -87,7 +87,7 @@ internal class ProfileDeletedEventHandler : SyncBaseEventHandler<ProfileDeletedE
                 if (groupSynchronizationOperations.Operations.HasFlag(SynchronizationOperation.Delete))
                 {
                     ISynchronizationSourceSystem<GroupSync> groupSourceSystem =
-                        _sourceSystemFactory.Create<GroupSync>(_syncConfiguration, sourceSystemKey);
+                        _sourceSystemFactory.Create<GroupSync>(sourceSystemKey);
 
                     ExternalIdentifier externalId =
                         eventObject.Payload.ExternalIds.FirstOrDefaultUnconverted(sourceSystemKey);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Novell.Directory.Ldap;
@@ -19,6 +20,7 @@ internal static class LdapQueriesExtension
     private static UserSync EntryToProfileInternal(
         LdapEntry entry,
         ActiveDirectoryConnection settings,
+        IDictionary<string, string> entityMapping,
         ILogger logger = null)
     {
         logger?.EnterMethod();
@@ -32,7 +34,7 @@ internal static class LdapQueriesExtension
 
             if (objectClassesEnumerable.Contains("inetorgperson") || objectClassesEnumerable.Contains("user"))
             {
-                UserSync userSync = entry.EntryToUser(settings);
+                UserSync userSync = entry.EntryToUser(settings, entityMapping);
 
                 return logger.ExitMethod(userSync);
             }
@@ -60,11 +62,13 @@ internal static class LdapQueriesExtension
     /// <param name="ldapQueries">The list of ldap queries for one active directory.</param>
     /// <param name="activeDirectoryConnection">The ldap connection for the users to retrieve.</param>
     /// <param name="logger">The logger for logging purposes.</param>
+    /// <param name="entityMapping"></param>
     /// <returns>A list of <see cref="UserSync" />.</returns>
     public static IList<UserSync> GetAllUsers(
         this List<LdapQueries> ldapQueries,
         ActiveDirectoryConnection activeDirectoryConnection,
-        ILogger logger)
+        ILogger logger,
+        IDictionary<string, string > entityMapping)
     {
         logger?.EnterMethod();
 
@@ -111,7 +115,8 @@ internal static class LdapQueriesExtension
                                 activeDirectoryConnection.BasePath,
                                 entry => EntryToProfileInternal(
                                     entry,
-                                    activeDirectoryConnection),
+                                    activeDirectoryConnection,
+                                    entityMapping),
                                 logger)
                             .ToList();
 

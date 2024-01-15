@@ -1,9 +1,6 @@
-﻿﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using MassTransit;
 using Maverick.Client.ArangoDb.Public.Configuration;
@@ -17,7 +14,6 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Http;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Converters;
 using Prometheus;
@@ -43,6 +39,7 @@ using UserProfileService.Sync.Abstraction.Converters;
 using UserProfileService.Sync.Abstraction.Factories;
 using UserProfileService.Sync.Abstractions;
 using UserProfileService.Sync.Converter;
+using UserProfileService.Sync.Extensions;
 using UserProfileService.Sync.Factories;
 using UserProfileService.Sync.Handlers;
 using UserProfileService.Sync.Projection.DependencyInjection;
@@ -50,7 +47,6 @@ using UserProfileService.Sync.Projection.Extensions;
 using UserProfileService.Sync.Services;
 using UserProfileService.Sync.States;
 using UserProfileService.Sync.Utilities;
-using UserProfileService.Sync.Validation;
 
 namespace UserProfileService.Sync;
 
@@ -112,7 +108,9 @@ public class SyncStartup : DefaultStartupBase
     {
         services.RemoveAll<IHttpMessageHandlerBuilderFilter>();
 
-        services.TryAddTransient<IValidateOptions<SyncConfiguration>, SyncConfigurationValidation>();
+        //services.TryAddTransient<IValidateOptions<SyncConfiguration>, SyncConfigurationValidation>();
+        
+        services.AddSyncConfigurationProvider( new[] {GetType().Assembly}, Configuration, _logger );
         services.Configure<SyncConfiguration>(Configuration.GetSection("SyncConfiguration"));
 
         IConfigurationSection arangoConfigurationSection =

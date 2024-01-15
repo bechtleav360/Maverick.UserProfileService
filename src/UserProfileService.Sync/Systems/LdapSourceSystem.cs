@@ -9,12 +9,12 @@ using Newtonsoft.Json;
 using UserProfileService.Common.Logging;
 using UserProfileService.Common.Logging.Extensions;
 using UserProfileService.Sync.Abstraction.Annotations;
-using UserProfileService.Sync.Abstraction.Configurations;
 using UserProfileService.Sync.Abstraction.Configurations.Implementations;
 using UserProfileService.Sync.Abstraction.Contracts;
 using UserProfileService.Sync.Abstraction.Models.Entities;
 using UserProfileService.Sync.Abstraction.Models.Results;
 using UserProfileService.Sync.Abstraction.Systems;
+using UserProfileService.Sync.Configuration;
 using UserProfileService.Sync.Extensions.Ldap;
 using UserProfileService.Sync.Models;
 
@@ -27,20 +27,18 @@ namespace UserProfileService.Sync.Systems;
 [System(SyncConstants.System.Ldap)]
 public class LdapSourceSystem : ISynchronizationSourceSystem<UserSync>, ISynchronizationSourceSystem<GroupSync>
 {
-    private readonly List<ActiveDirectory> _activeDirectoryConfiguration;
+    private readonly LdapSystemConfiguration _ldapSystemConfiguration;
     private readonly ILogger<LdapSourceSystem> _logger;
 
     /// <summary>
     ///     Create an instance of <see cref="LdapSourceSystem" />
     /// </summary>
     /// <param name="ldapConfiguration">Active directory configuration to connect to target system.</param>
-    /// <param name="loggerFactory">
-    ///     <see cref="ILoggerFactory" />
-    /// </param>
-    public LdapSourceSystem(IOptionsSnapshot<List<ActiveDirectory>> ldapConfiguration, ILoggerFactory loggerFactory)
+    /// <param name="logger">The logger is used for logging purposes.</param>
+    public LdapSourceSystem(IOptionsSnapshot<LdapSystemConfiguration> ldapConfiguration, ILogger<LdapSourceSystem> logger)
     {
-        _logger = loggerFactory.CreateLogger<LdapSourceSystem>();
-        _activeDirectoryConfiguration = ldapConfiguration?.Value;
+        _logger = logger;
+        _ldapSystemConfiguration = ldapConfiguration?.Value;
     }
 
     /// <inheritdoc />
@@ -138,10 +136,10 @@ public class LdapSourceSystem : ISynchronizationSourceSystem<UserSync>, ISynchro
 
         var users = new List<UserSync>();
 
-        if (_activeDirectoryConfiguration == null || !_activeDirectoryConfiguration.Any())
+        if (_ldapSystemConfiguration.LdapConfiguration == null || !_ldapSystemConfiguration.LdapConfiguration.Any())
         {
             var errorMessage =
-                $"Cannot find any active directory configuration in {nameof(_activeDirectoryConfiguration)}.";
+                $"Cannot find any active directory configuration in {nameof(_ldapSystemConfiguration.LdapConfiguration)}.";
 
             _logger.LogWarnMessage(errorMessage, LogHelpers.Arguments());
 
@@ -153,7 +151,7 @@ public class LdapSourceSystem : ISynchronizationSourceSystem<UserSync>, ISynchro
             return _logger.ExitMethod(Task.FromResult(batchErrorResult));
         }
 
-        foreach (ActiveDirectory singleConnection in _activeDirectoryConfiguration)
+        foreach (ActiveDirectory singleConnection in _ldapSystemConfiguration.LdapConfiguration)
         {
             if (_logger.IsEnabled(LogLevel.Trace))
             {
@@ -200,9 +198,9 @@ public class LdapSourceSystem : ISynchronizationSourceSystem<UserSync>, ISynchro
                 continue;
             }
 
-            singleConnection.EntitiesMapping ??= new Dictionary<string, string>();
+            _ldapSystemConfiguration.EntitiesMapping ??= new Dictionary<string, string>();
 
-            if (!singleConnection.EntitiesMapping.Any())
+            if (!_ldapSystemConfiguration.EntitiesMapping.Any())
             {
                 _logger.LogWarnMessage(
                     "Default mapping for user will be used, because no entities mapping found for the connection {connection} and the ldap-search-base: '{ldapQueries}'.",
@@ -211,7 +209,7 @@ public class LdapSourceSystem : ISynchronizationSourceSystem<UserSync>, ISynchro
                         LdapQueriesAsString(singleConnection.LdapQueries)));
             }
 
-            IList<UserSync> foundUsers = ldapQueriesConfig.GetAllUsers(singleConnection.Connection, _logger);
+            IList<UserSync> foundUsers = ldapQueriesConfig.GetAllUsers(singleConnection.Connection, _logger, _ldapSystemConfiguration.EntitiesMapping );
 
             if (foundUsers != null && foundUsers.Any())
             {

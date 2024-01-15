@@ -506,7 +506,7 @@ public class SagaEntityProcessor<TSyncEntity> : ISagaEntityProcessor<TSyncEntity
         Logger.LogDebugMessage("Create source system for '{system}'.", LogHelpers.Arguments(syncProcess.System));
 
         ISynchronizationSourceSystem<TSyncEntity> sourceSystemHandler =
-            SourceSystemFactory.Create<TSyncEntity>(Configuration, syncProcess.System);
+            SourceSystemFactory.Create<TSyncEntity>(syncProcess.System);
 
         Logger.LogDebugMessage("Getting all entities via batch.", LogHelpers.Arguments());
 
