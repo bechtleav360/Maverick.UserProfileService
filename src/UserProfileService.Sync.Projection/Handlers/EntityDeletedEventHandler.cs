@@ -158,7 +158,7 @@ internal class EntityDeletedEventHandler : SyncBaseEventHandler<EntityDeleted>
                 if (groupSynchronizationOperations.Operations.HasFlag(SynchronizationOperation.Delete))
                 {
                     ISynchronizationSourceSystem<GroupSync> groupSourceSystem =
-                        _sourceSystemFactory.Create<GroupSync>(_syncConfiguration, sourceSystemKey);
+                        _sourceSystemFactory.Create<GroupSync>(sourceSystemKey);
 
                     Logger.LogDebugMessage(
                         "Found profile with id {profileId} in destination system.",

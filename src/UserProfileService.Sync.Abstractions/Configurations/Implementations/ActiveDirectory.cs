@@ -19,11 +19,4 @@ public class ActiveDirectory
     ///     The specific ldap queries to get the specified object.
     /// </summary>
     public LdapQueries[] LdapQueries { set; get; }
-    
-    /// <summary>
-    ///     The mapping between the ldap attributes and the model
-    ///     properties. Key: ModelMaverickObject --> Value: LdapAttribute
-    /// </summary>
-    public Dictionary<string, string> EntitiesMapping { get; set; }
-
 }

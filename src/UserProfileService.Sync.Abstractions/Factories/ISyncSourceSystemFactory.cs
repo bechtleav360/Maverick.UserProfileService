@@ -13,9 +13,8 @@ public interface ISyncSourceSystemFactory
     ///     Creates an instance of <see cref="ISynchronizationSourceSystem{T}" /> for the given type.
     /// </summary>
     /// <typeparam name="T">Type to create an instance of <see cref="ISynchronizationSourceSystem{T}" /> for.</typeparam>
-    /// <param name="configuration">Configuration that defines the instance and configures it accordingly.</param>
     /// <param name="sourceSystem"></param>
     /// <returns>Instance of <see cref="ISynchronizationSourceSystem{T}" /></returns>
-    ISynchronizationSourceSystem<T> Create<T>(SyncConfiguration configuration, string sourceSystem)
+    ISynchronizationSourceSystem<T> Create<T>(string sourceSystem)
         where T : ISyncModel;
 }

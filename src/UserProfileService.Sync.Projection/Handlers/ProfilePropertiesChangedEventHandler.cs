@@ -124,7 +124,7 @@ internal class ProfilePropertiesChangedEventHandler : SyncBaseEventHandler<Prope
                         }
 
                         ISynchronizationSourceSystem<GroupSync> groupSourceSystem =
-                            _sourceSystemFactory.Create<GroupSync>(_syncConfiguration, sourceSystemKey);
+                            _sourceSystemFactory.Create<GroupSync>(sourceSystemKey);
 
                         Logger.LogInfoMessage(
                             "Update profile with id '{payloadId}' in source system with key '{sourceSystemKey}'.",

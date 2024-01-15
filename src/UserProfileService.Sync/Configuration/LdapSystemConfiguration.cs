@@ -1,4 +1,5 @@
-﻿using UserProfileService.Sync.Abstraction.Annotations;
+﻿using System.Collections.Generic;
+using UserProfileService.Sync.Abstraction.Annotations;
 using UserProfileService.Sync.Abstraction.Configurations;
 using UserProfileService.Sync.Abstraction.Configurations.Implementations;
 using UserProfileService.Sync.Abstraction.Contracts;
@@ -19,5 +20,12 @@ public class LdapSystemConfiguration
     /// <summary>
     /// The configuration defines the entities that should synced in the foreign and our "own" system.
     /// </summary>
-    public SourceConfiguration LdapSourceConfiguration { set; get; }
+    public SourceSystemConfiguration Source { set; get; }
+    
+    
+    /// <summary>
+    ///     The mapping between the ldap attributes and the model
+    ///     properties. Key: ModelMaverickObject --> Value: LdapAttribute
+    /// </summary>
+    public Dictionary<string, string> EntitiesMapping { get; set; }
 }

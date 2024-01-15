@@ -14,7 +14,8 @@ namespace UserProfileService.Sync.Validation;
 /// <summary>
 ///     A Class used to validate the <see cref="SyncConfiguration" />
 /// </summary>
-public class SyncConfigurationValidation : IValidateOptions<SyncConfiguration>
+
+/*public class SyncConfigurationValidation : IValidateOptions<SyncConfiguration>
 {
     private static readonly LoggerFactory _loggerFactory = new LoggerFactory();
 
@@ -413,4 +414,4 @@ public class SyncConfigurationValidation : IValidateOptions<SyncConfiguration>
 
         return ValidateOptionsResult.Success;
     }
-}
+}*/

@@ -124,7 +124,7 @@ internal class GroupCreatedEventHandler : SyncBaseEventHandler<GroupCreated>
                 if (groupSynchronizationOperations.Operations.HasFlag(SynchronizationOperation.Add))
                 {
                     ISynchronizationSourceSystem<GroupSync> groupSourceSystem =
-                        _sourceSystemFactory.Create<GroupSync>(_syncConfiguration, sourceSystemKey);
+                        _sourceSystemFactory.Create<GroupSync>(sourceSystemKey);
 
                     var groupSync = _mapper.Map<GroupSync>(eventObject);
 
