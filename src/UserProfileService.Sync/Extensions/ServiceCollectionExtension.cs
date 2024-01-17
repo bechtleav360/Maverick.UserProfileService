@@ -1,7 +1,9 @@
-﻿using UserProfileService.Sync.Abstraction;
+﻿using Microsoft.Extensions.DependencyInjection.Extensions;
+using UserProfileService.Sync.Abstraction;
 using UserProfileService.Sync.Abstraction.Models.Entities;
 using UserProfileService.Sync.Abstractions;
 using UserProfileService.Sync.Factories;
+using UserProfileService.Sync.Services.Comparer;
 using UserProfileService.Sync.Systems;
 
 // ReSharper disable once CheckNamespace
@@ -58,6 +60,23 @@ public static class ServiceCollectionExtension
 
         services
             .AddScoped<ISynchronizationReadDestination<OrganizationSync>, MaverickOrganizationDestinationSystem>();
+
+        return services;
+    }
+
+    /// <summary>
+    ///     Registers the needed comparer so that the sync can compare existing entity with the
+    ///     one sync to. So the sync can decide if an entity has to be updated.
+    /// </summary>
+    /// <param name="services">The collection of services.</param>
+    /// <returns>The same service collection so that multiple calls can be chained.</returns>
+    public static IServiceCollection AddModelComparer(this IServiceCollection services)
+    {
+        services.TryAddScoped<ISyncModelComparer<FunctionSync>, FunctionSyncComparer>();
+        services.TryAddScoped<ISyncModelComparer<GroupSync>, GroupSyncComparer>();
+        services.TryAddScoped<ISyncModelComparer<OrganizationSync>, OrganizationSyncComparer>();
+        services.TryAddScoped<ISyncModelComparer<UserSync>, UserSyncComparer>();
+        services.TryAddScoped<ISyncModelComparer<RoleSync>, RoleSyncComparer>();
 
         return services;
     }

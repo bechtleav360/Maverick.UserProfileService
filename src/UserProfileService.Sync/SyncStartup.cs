@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Converters;
 using Prometheus;
@@ -38,6 +39,7 @@ using UserProfileService.Sync.Abstraction.Configurations;
 using UserProfileService.Sync.Abstraction.Converters;
 using UserProfileService.Sync.Abstraction.Factories;
 using UserProfileService.Sync.Abstractions;
+using UserProfileService.Sync.Configuration;
 using UserProfileService.Sync.Converter;
 using UserProfileService.Sync.Extensions;
 using UserProfileService.Sync.Factories;
@@ -47,6 +49,7 @@ using UserProfileService.Sync.Projection.Extensions;
 using UserProfileService.Sync.Services;
 using UserProfileService.Sync.States;
 using UserProfileService.Sync.Utilities;
+using UserProfileService.Sync.Validation;
 
 namespace UserProfileService.Sync;
 
@@ -108,7 +111,8 @@ public class SyncStartup : DefaultStartupBase
     {
         services.RemoveAll<IHttpMessageHandlerBuilderFilter>();
 
-        //services.TryAddTransient<IValidateOptions<SyncConfiguration>, SyncConfigurationValidation>();
+        services.TryAddTransient<IValidateOptions<SyncConfiguration>, SyncConfigurationValidation>();
+        services.TryAddTransient<IValidateOptions<LdapSystemConfiguration>, LdapConfigurationValidation>();
         
         services.AddSyncConfigurationProvider( new[] {GetType().Assembly}, Configuration, _logger );
         services.Configure<SyncConfiguration>(Configuration.GetSection("SyncConfiguration"));
@@ -270,6 +274,7 @@ public class SyncStartup : DefaultStartupBase
 
         services.TryAddSingleton<ISyncProcessCleaner, SyncProcessCleaner>();
         services.TryAddSingleton<ISyncProcessSynchronizer, DefaultSynchronizer>();
+        services.AddModelComparer();
 
         // Configure base services
         base.ConfigureServices(services);

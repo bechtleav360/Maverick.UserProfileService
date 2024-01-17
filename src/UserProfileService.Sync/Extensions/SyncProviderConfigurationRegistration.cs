@@ -13,19 +13,20 @@ using UserProfileService.Sync.Utilities;
 namespace UserProfileService.Sync.Extensions;
 
 /// <summary>
-/// 
+///     Registers all sync provider configuration and dependencies that are needed to sync from/to
+///     the third party systems.
 /// </summary>
-public static class SyncConfigurationExtensions
+public static class SyncProviderConfigurationRegistration
 {
 
     /// <summary>
-    /// 
+    /// Registers all sync configuration provider that implements the <see cref="ISyncProviderConfigurationRegistration"/> interface.
     /// </summary>
-    /// <param name="serviceCollection"></param>
-    /// <param name="assemblies"></param>
-    /// <param name="mainConfiguration"></param>
-    /// <param name="logger"></param>
-    /// <returns></returns>
+    /// <param name="serviceCollection">The service collection where the provider are registered.</param>
+    /// <param name="assemblies">The assemblies where the providers are situated.</param>
+    /// <param name="mainConfiguration">The main configuration where the necessary configuration is extracted.</param>
+    /// <param name="logger">The logger that is needed for logging purposes.</param>
+    /// <returns>The <see cref="IServiceCollection"/> that contains the registered configuration provider.</returns>
     /// <exception cref="ArgumentNullException"></exception>
     public static IServiceCollection AddSyncConfigurationProvider(
         this IServiceCollection serviceCollection,
