@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using UserProfileService.Common.Logging;
@@ -29,71 +30,23 @@ public class SyncModelComparerFactory : ISyncModelComparerFactory
         _serviceProvider = serviceProvider;
         _logger = logger;
     }
-
-    private TType CreateInstance<TType>(Type type)
-    {
-        _logger.EnterMethod();
-
-        TypeInfo typeInfo = type.GetTypeInfo();
-        ConstructorInfo constructor = typeInfo.GetConstructors().FirstOrDefault();
-
-        TType instance;
-
-        if (constructor != null)
-        {
-            _logger.LogDebugMessage(
-                "Found constructor for type '{typeInfo.Name}'",
-                LogHelpers.Arguments(typeInfo.Name));
-
-            object[] args = constructor
-                .GetParameters()
-                .Select(o => _serviceProvider.GetRequiredService(o.ParameterType))
-                .ToArray();
-
-            instance = (TType)Activator.CreateInstance(typeInfo, args);
-
-            return _logger.ExitMethod(instance);
-        }
-
-        _logger.LogDebugMessage(
-            "No constructors found for type '{typeInfo.Name}'.",
-            LogHelpers.Arguments(typeInfo.Name));
-
-        instance = (TType)Activator.CreateInstance(typeInfo);
-
-        return _logger.ExitMethod(instance);
-    }
-
+    
     /// <inheritdoc />
     public ISyncModelComparer<TSyncModel> CreateComparer<TSyncModel>() where TSyncModel : ISyncModel
     {
         _logger.EnterMethod();
 
-        Type type = typeof(ISyncModelComparer<>);
+        var comparerImplementation = _serviceProvider.GetService<ISyncModelComparer<TSyncModel>>();
 
-        Type comparerType = type
-            .Assembly
-            .GetTypes()
-            .FirstOrDefault(
-                p =>
-                    typeof(ISyncModelComparer<TSyncModel>).IsAssignableFrom(p)
-                    && p.ImplementsGenericInterface(type, typeof(TSyncModel)));
-
-        if (comparerType == null)
+        if (comparerImplementation == null)
         {
-            _logger.LogWarnMessage(
-                "No comparer found for the given sync model type '{type}'",
-                LogHelpers.Arguments(type.Name));
-
-            return null;
+            throw new ConfigurationException($"The comparer of type '{nameof(TSyncModel)}' is not registered!");
         }
 
-        var comparer = CreateInstance<ISyncModelComparer<TSyncModel>>(comparerType);
-
-        _logger.LogDebugMessage(
+        _logger.LogInfoMessage(
             "Found comparer for the given sync model type '{type}',",
-            LogHelpers.Arguments(type.Name));
+            LogHelpers.Arguments(nameof(TSyncModel)));
 
-        return _logger.ExitMethod(comparer);
+        return _logger.ExitMethod(comparerImplementation);
     }
 }

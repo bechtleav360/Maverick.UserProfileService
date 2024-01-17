@@ -12,22 +12,22 @@ using UserProfileService.Sync.Systems;
 namespace UserProfileService.Sync.ConfigurationProvider;
 
 /// <summary>
-/// 
+///     Registers all dependencies for the LDAP-System.
 /// </summary>
-public class LdapConfigurationDependencyRegistration: DependencyRegistrationBase
+public class LdapConfigurationDependencyRegistration : DependencyRegistrationBase
 {
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void RegisterSpecificDependencies(
         IServiceCollection serviceCollection,
         ILogger logger,
         IConfigurationSection syncProviderConfigurationSection)
     {
         serviceCollection.Configure<LdapSystemConfiguration>(syncProviderConfigurationSection);
-        serviceCollection.AddScoped<ISynchronizationSourceSystem<GroupSync>,LdapSourceSystem>();
+        serviceCollection.AddScoped<ISynchronizationSourceSystem<GroupSync>, LdapSourceSystem>();
         serviceCollection.AddScoped<ISynchronizationSourceSystem<UserSync>, LdapSourceSystem>();
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override Type GetRelevantProviderType()
     {
         return typeof(LdapSystemConfiguration);

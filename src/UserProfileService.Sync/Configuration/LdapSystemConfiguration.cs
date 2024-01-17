@@ -22,7 +22,6 @@ public class LdapSystemConfiguration
     /// </summary>
     public SourceSystemConfiguration Source { set; get; }
     
-    
     /// <summary>
     ///     The mapping between the ldap attributes and the model
     ///     properties. Key: ModelMaverickObject --> Value: LdapAttribute

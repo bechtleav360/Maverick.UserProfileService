@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using UserProfileService.Common.Logging;
-using UserProfileService.Common.Logging.Extensions;
 using UserProfileService.Sync.Abstraction.Configurations;
 using UserProfileService.Sync.Abstraction.Configurations.Implementations;
 using UserProfileService.Sync.Abstraction.Contracts;
@@ -14,70 +11,8 @@ namespace UserProfileService.Sync.Validation;
 /// <summary>
 ///     A Class used to validate the <see cref="SyncConfiguration" />
 /// </summary>
-
-/*public class SyncConfigurationValidation : IValidateOptions<SyncConfiguration>
+public class SyncConfigurationValidation : IValidateOptions<SyncConfiguration>
 {
-    private static readonly LoggerFactory _loggerFactory = new LoggerFactory();
-
-    internal static IList<string> ValidateLdapConnectionSecurityOptions(ActiveDirectory[] activeDirectories)
-    {
-        var validationErrors = new List<string>();
-
-        const int ldapSslPort = 636;
-        const int ldapStandardPort = 389;
-        ILogger logger = _loggerFactory.CreateLogger("Validation");
-
-        foreach (ActiveDirectory activeDirectory in activeDirectories)
-        {
-            // negative port validation
-            if (activeDirectory.Connection.Port < 0)
-            {
-                validationErrors.Add(
-                    $"Configuration error concerning '{nameof(ActiveDirectory.Connection.Port)} ': The port of one provided AD is negative!");
-            }
-
-            // ignore certificate option with ssl
-            switch (activeDirectory.Connection.UseSsl)
-            {
-                case true when !activeDirectory.Connection.IgnoreCertificate:
-                    validationErrors.Add(
-                        $"Configuration error concerning '{nameof(ActiveDirectory.Connection.IgnoreCertificate)}': The '{nameof(ActiveDirectory.Connection.UseSsl)}' option is set to true in one of the provided AD, but the option {nameof(ActiveDirectory.Connection.IgnoreCertificate)} is not!");
-
-                    break;
-                case false when activeDirectory.Connection.IgnoreCertificate:
-                    validationErrors.Add(
-                        $"Configuration error concerning '{nameof(ActiveDirectory.Connection.IgnoreCertificate)}': The '{nameof(ActiveDirectory.Connection.UseSsl)} option is set to false in one of the provided AD, but the option {nameof(ActiveDirectory.Connection.IgnoreCertificate)} is not!");
-
-                    break;
-            }
-
-            // port warning with ssl
-            switch (activeDirectory.Connection.UseSsl)
-            {
-                case true when activeDirectory.Connection.Port != ldapSslPort:
-                    logger.LogWarnMessage(
-                        "Configuration warning concerning '{Port}': The '{UseSsl}' option is set to true in one of the provided AD and you are not using the ssl standard port: ({ldapSslPort})",
-                        LogHelpers.Arguments(
-                            nameof(activeDirectory.Connection.Port),
-                            nameof(activeDirectory.Connection.UseSsl),
-                            ldapSslPort));
-
-                    break;
-                case false when activeDirectory.Connection.Port != ldapStandardPort:
-                    logger.LogWarnMessage(
-                        "Configuration warning concerning '{Port}'; The '{UseSsl}' option is set to false in one of the provided AD and you are not using the standard port: ({ldapStandardPort})",
-                        LogHelpers.Arguments(
-                            nameof(activeDirectory.Connection.Port),
-                            nameof(activeDirectory.Connection.UseSsl),
-                            ldapStandardPort));
-
-                    break;
-            }
-        }
-
-        return validationErrors;
-    }
-
     private IList<string> ValidateSourceSystemConfiguration(
         Dictionary<string, SourceSystemConfiguration> systems)
     {
@@ -99,94 +34,7 @@ namespace UserProfileService.Sync.Validation;
 
         return validationErrors;
     }
-
-    private static IList<string> ValidateActiveDirectoryConfiguration(ActiveDirectory[] ldapConfiguration)
-    {
-        var validationErrors = new List<string>();
-
-        foreach (ActiveDirectory activeDirectory in ldapConfiguration)
-        {
-            if (activeDirectory != null
-                && (activeDirectory.LdapQueries == null || !activeDirectory.LdapQueries.Any()))
-            {
-                validationErrors.Add(
-                    $"Configuration error concerning '{nameof(GeneralSystemConfiguration.LdapConfiguration)} for the system: {SyncConstants.System.Ldap}': One of the AD doesn't have any Ldap queries");
-            }
-            else if (activeDirectory is
-                     {
-                         LdapQueries: not null
-                     }
-                     && activeDirectory.LdapQueries.Any())
-            {
-                foreach (LdapQueries activeDirectoryLdapQuery in activeDirectory.LdapQueries)
-                {
-                    if (string.IsNullOrWhiteSpace(activeDirectoryLdapQuery.Filter))
-                    {
-                        validationErrors.Add(
-                            $"Configuration error concerning '{nameof(GeneralSystemConfiguration.LdapConfiguration)} ': The filter is not set (null or whitespace) inside one of the Ldap queries");
-                    }
-
-                    if (string.IsNullOrWhiteSpace(activeDirectoryLdapQuery.SearchBase))
-                    {
-                        validationErrors.Add(
-                            $"Configuration error concerning '{nameof(GeneralSystemConfiguration.LdapConfiguration)} ': The search base is not set (null or whitespace) inside one of the Ldap queries");
-                    }
-                }
-            }
-
-            if (activeDirectory != null && activeDirectory.Connection == null)
-            {
-                validationErrors.Add(
-                    $"Configuration error concerning '{nameof(ActiveDirectory.Connection)} ': The connection information of one provided AD are missing (null)");
-            }
-
-            if (activeDirectory is
-                {
-                    Connection: not null
-                })
-            {
-                if (string.IsNullOrWhiteSpace(activeDirectory.Connection.ConnectionString))
-                {
-                    validationErrors.Add(
-                        $"Configuration error concerning '{nameof(ActiveDirectory.Connection.ConnectionString)} ': The connection string of one provided AD is null or whitespace");
-                }
-
-                if (string.IsNullOrWhiteSpace(activeDirectory.Connection.AuthenticationType))
-                {
-                    validationErrors.Add(
-                        $"Configuration error concerning '{nameof(ActiveDirectory.Connection.AuthenticationType)} ': The authentication type of one provided AD is null or whitespace");
-                }
-
-                if (string.IsNullOrWhiteSpace(activeDirectory.Connection.ServiceUser))
-                {
-                    validationErrors.Add(
-                        $"Configuration error concerning '{nameof(ActiveDirectory.Connection.ServiceUser)} ': The service user of one provided AD is null or whitespace");
-                }
-
-                if (string.IsNullOrWhiteSpace(activeDirectory.Connection.ServiceUserPassword))
-                {
-                    validationErrors.Add(
-                        $"Configuration error concerning '{nameof(ActiveDirectory.Connection.ServiceUserPassword)} ': The service user password of one provided AD is null or whitespace");
-                }
-
-                if (string.IsNullOrWhiteSpace(activeDirectory.Connection.BasePath))
-                {
-                    validationErrors.Add(
-                        $"Configuration error concerning '{nameof(ActiveDirectory.Connection.BasePath)} ': The base path of one provided AD is null or whitespace");
-                }
-            }
-        }
-
-        IList<string> errorValidationSslOption = ValidateLdapConnectionSecurityOptions(ldapConfiguration);
-
-        if (errorValidationSslOption.Any())
-        {
-            validationErrors.AddRange(errorValidationSslOption);
-        }
-
-        return validationErrors;
-    }
-
+    
     private static IList<string> ValidateSynchronizationOperations(
         string systemName,
         Dictionary<string, SynchronizationOperations> input,
@@ -255,21 +103,7 @@ namespace UserProfileService.Sync.Validation;
             validationErrors.Add(
                 $"Configuration error concerning '{nameof(SyncConfiguration.SourceConfiguration.Systems)} for the system: {systemName}': It should not be null");
         }
-
-        if (systemConfig is { Configuration: null })
-        {
-            validationErrors.Add(
-                $"Configuration error concerning '{nameof(SourceSystemConfiguration.Configuration)}' for the system: {systemName}: It should not be null");
-        }
-        else if (systemConfig is
-                 {
-                     Configuration: not null
-                 }
-                 && !string.IsNullOrWhiteSpace(systemName))
-        {
-            validationErrors.AddRange(ValidateGeneralSystemConfiguration(systemConfig.Configuration, systemName));
-        }
-
+        
         if (systemConfig != null
             && (systemConfig.Source == null || !systemConfig.Source.Any())
             && (systemConfig.Destination == null || !systemConfig.Destination.Any()))
@@ -328,37 +162,7 @@ namespace UserProfileService.Sync.Validation;
     {
         return SyncConstants.System.All;
     }
-
-    /// <summary>
-    ///     Validates an instance of <see cref="GeneralSystemConfiguration"/> given the name of the system.
-    /// </summary>
-    /// <param name="configuration">The configuration to validate.</param>
-    /// <param name="systemName">The name of the associated system.</param>
-    /// <returns>A list of validation errors. Empty, if <paramref name="configuration"/> was valid.</returns>
-    protected virtual IList<string> ValidateGeneralSystemConfiguration(
-        GeneralSystemConfiguration configuration,
-        string systemName)
-    {
-        var validationErrors = new List<string>();
-
-        if (!systemName.Equals(SyncConstants.System.Ldap, StringComparison.OrdinalIgnoreCase))
-        {
-            return validationErrors;
-        }
-
-        if (configuration.LdapConfiguration == null || !configuration.LdapConfiguration.Any())
-        {
-            validationErrors.Add(
-                $"Configuration error concerning '{nameof(GeneralSystemConfiguration.LdapConfiguration)} for the system: {systemName}': It should not be null or empty");
-        }
-        else
-        {
-            validationErrors.AddRange(ValidateActiveDirectoryConfiguration(configuration.LdapConfiguration));
-        }
-
-        return validationErrors;
-    }
-
+    
     /// <inheritdoc />
     public ValidateOptionsResult Validate(string name, SyncConfiguration options)
     {
@@ -414,4 +218,4 @@ namespace UserProfileService.Sync.Validation;
 
         return ValidateOptionsResult.Success;
     }
-}*/
+}

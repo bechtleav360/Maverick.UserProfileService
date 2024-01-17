@@ -46,7 +46,7 @@ public class SyncSourceSystemFactory : ISyncSourceSystemFactory
                 $"No registered services for the type {typeof(ISynchronizationSourceSystem<T>).Name} could be found");
         }
 
-        var concreteSourceSystemImplementation = sourceSystemImplementations.FirstOrDefault(
+        ISynchronizationSourceSystem<T> concreteSourceSystemImplementation = sourceSystemImplementations.FirstOrDefault(
             p => string.Equals(
                 p.GetType().GetCustomAttribute<SystemAttribute>()?.System,
                 sourceSystemName,
