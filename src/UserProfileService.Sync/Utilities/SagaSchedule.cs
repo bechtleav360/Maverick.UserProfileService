@@ -121,11 +121,11 @@ public static class SagaSchedule
         logger?.EnterMethod();
 
         var process = new Process
-        {
-            Id = id,
-            StartedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
-        };
+                      {
+                          Id = id,
+                          StartedAt = DateTime.UtcNow,
+                          UpdatedAt = DateTime.UtcNow
+                      };
 
         if (logger?.IsEnabled(LogLevel.Trace) == true)
         {
@@ -142,8 +142,8 @@ public static class SagaSchedule
 
         Models.State.System lastSystem = null;
 
-        foreach ((string systemKey, SourceSystemConfiguration systemConfiguration) in configuration
-                     .SourceConfiguration.Systems)
+        foreach ((string systemKey, SourceSystemConfiguration systemConfiguration) in configuration.SourceConfiguration
+                     .Systems)
         {
             logger?.LogInfoMessage(
                 "Start building sync process for system '{system}'.",
@@ -155,9 +155,9 @@ public static class SagaSchedule
             }
 
             var system = new Models.State.System
-            {
-                Id = systemKey
-            };
+                         {
+                             Id = systemKey
+                         };
 
             process.Systems.Add(system.Id, system);
 
@@ -179,8 +179,7 @@ public static class SagaSchedule
 
             logger?.LogDebugMessage("Build saga steps for system '{system}'.", LogHelpers.Arguments(systemKey));
 
-            foreach ((string entityKey, SynchronizationOperations entitySystemOperation) in systemConfiguration
-                         .Source)
+            foreach ((string entityKey, SynchronizationOperations entitySystemOperation) in systemConfiguration.Source)
             {
                 if (lastStep != null)
                 {
@@ -188,10 +187,10 @@ public static class SagaSchedule
                 }
 
                 var step = new Step
-                {
-                    Id = entityKey,
-                    Operations = entitySystemOperation.Operations
-                };
+                           {
+                               Id = entityKey,
+                               Operations = entitySystemOperation.Operations
+                           };
 
                 system.Steps.Add(step.Id, step);
 
@@ -199,10 +198,7 @@ public static class SagaSchedule
                 {
                     logger?.LogTraceMessage(
                         "Add step '{system}' for system '{system}' and operations '{operations}'.",
-                        LogHelpers.Arguments(
-                            entityKey,
-                            systemKey,
-                            JsonConvert.SerializeObject(entitySystemOperation)));
+                        LogHelpers.Arguments(entityKey, systemKey, JsonConvert.SerializeObject(entitySystemOperation)));
                 }
                 else
                 {
@@ -232,22 +228,25 @@ public static class SagaSchedule
                 continue;
             }
 
-            lastStep.Next = SyncConstants.SagaStep.DeletedRelationStep;
-
-            var deleteRelationStep = new Step
+            if (systemConfiguration.RelationsExisting)
             {
-                Id = SyncConstants.SagaStep.DeletedRelationStep,
-                Next = SyncConstants.SagaStep.AddedRelationStep
-            };
+                lastStep.Next = SyncConstants.SagaStep.DeletedRelationStep;
 
-            system.Steps.Add(deleteRelationStep.Id, deleteRelationStep);
+                var deleteRelationStep = new Step
+                                         {
+                                             Id = SyncConstants.SagaStep.DeletedRelationStep,
+                                             Next = SyncConstants.SagaStep.AddedRelationStep
+                                         };
 
-            var addRelationStep = new Step
-            {
-                Id = SyncConstants.SagaStep.AddedRelationStep
-            };
+                system.Steps.Add(deleteRelationStep.Id, deleteRelationStep);
 
-            system.Steps.Add(addRelationStep.Id, addRelationStep);
+                var addRelationStep = new Step
+                                      {
+                                          Id = SyncConstants.SagaStep.AddedRelationStep
+                                      };
+
+                system.Steps.Add(addRelationStep.Id, addRelationStep);
+            }
 
             if (logger?.IsEnabled(LogLevel.Trace) == true)
             {
