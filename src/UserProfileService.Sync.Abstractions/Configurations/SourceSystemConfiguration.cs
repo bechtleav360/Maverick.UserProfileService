@@ -22,4 +22,9 @@ public class SourceSystemConfiguration
     /// </summary>
     public Dictionary<string, SynchronizationOperations> Source { set; get; } =
         new Dictionary<string, SynchronizationOperations>();
+
+    /// <summary>
+    ///     Should be set when the system has to add relations between the synced entities.
+    /// </summary>
+    public bool RelationsExisting { get; set; } = false;
 }

@@ -169,12 +169,12 @@ public class ProcessStateMachine :
     /// <param name="logger">The logger.</param>
     /// <param name="serviceProvider">Provider to retrieve services.</param>
     public ProcessStateMachine(
-        IOptions<SyncConfiguration> syncConfiguration,
+        IOptionsMonitor<SyncConfiguration> syncConfiguration,
         ILogger<ProcessStateMachine> logger,
         IServiceProvider serviceProvider)
     {
         _logger = logger;
-        _syncConfiguration = syncConfiguration.Value;
+        _syncConfiguration = syncConfiguration.CurrentValue;
         _serviceProvider = serviceProvider.CreateScope().ServiceProvider;
         _mapper = _serviceProvider.GetRequiredService<IMapper>();
         _profileService = _serviceProvider.GetRequiredService<IProfileService>();
@@ -297,8 +297,7 @@ public class ProcessStateMachine :
             }
             catch (Exception e)
             {
-                _logger.LogErrorMessage(
-                    e,
+                _logger.LogInfoMessage(
                     "An error occurred while getting user for id {id}. Possibly the user is not known, correlation Id: {correlationId}.",
                     LogHelpers.Arguments(initiator.Id, correlationId));
 
