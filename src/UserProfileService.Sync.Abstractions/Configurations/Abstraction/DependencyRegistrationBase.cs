@@ -33,11 +33,11 @@ public abstract class DependencyRegistrationBase : ISyncProviderConfigurationReg
     /// </summary>
     /// <param name="serviceCollection">The service collection the dependencies should be added to.</param>
     /// <param name="logger">The logger that takes log messages of this method.</param>
-    /// <param name="searchProviderConfigurationSection">The configuration section that contains provider specific settings.</param>
+    /// <param name="syncProviderConfigurationSection">The configuration section that contains provider specific settings.</param>
     protected abstract void RegisterSpecificDependencies(
         IServiceCollection serviceCollection,
         ILogger logger,
-        IConfigurationSection searchProviderConfigurationSection);
+        IConfigurationSection syncProviderConfigurationSection);
 
     /// <summary>
     ///     Returns the type of the sync provider that should be used for naming / setting up all dependencies.<br />
