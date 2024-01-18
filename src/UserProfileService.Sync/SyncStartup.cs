@@ -40,6 +40,7 @@ using UserProfileService.Sync.Abstraction.Converters;
 using UserProfileService.Sync.Abstraction.Factories;
 using UserProfileService.Sync.Abstractions;
 using UserProfileService.Sync.Configuration;
+using UserProfileService.Sync.ConfigurationProvider;
 using UserProfileService.Sync.Converter;
 using UserProfileService.Sync.Extensions;
 using UserProfileService.Sync.Factories;
@@ -111,10 +112,14 @@ public class SyncStartup : DefaultStartupBase
     {
         services.RemoveAll<IHttpMessageHandlerBuilderFilter>();
 
-        services.TryAddTransient<IValidateOptions<SyncConfiguration>, SyncConfigurationValidation>();
-        services.TryAddTransient<IValidateOptions<LdapSystemConfiguration>, LdapConfigurationValidation>();
-        
-        services.AddSyncConfigurationProvider( new[] {GetType().Assembly}, Configuration, _logger );
+       services.TryAddTransient<IValidateOptions<SyncConfiguration>, SyncConfigurationValidation>();
+       services.TryAddTransient<IValidateOptions<LdapSystemConfiguration>, LdapConfigurationValidation>();
+
+        services.AddSyncConfigurationProvider(
+            new[] { typeof(LdapConfigurationDependencyRegistration).Assembly },
+            Configuration,
+            _logger);
+
         services.Configure<SyncConfiguration>(Configuration.GetSection("SyncConfiguration"));
 
         IConfigurationSection arangoConfigurationSection =
