@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using UserProfileService.Sync.Abstraction.Configurations.Abstraction;
 using UserProfileService.Sync.Abstraction.Models.Entities;
