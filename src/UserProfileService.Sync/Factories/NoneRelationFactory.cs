@@ -32,7 +32,7 @@ public class NoneRelationFactory : IRelationFactory
 
     /// <inheritdoc />
     public IRelationHandler CreateRelationHandler(
-        string sourceSystem,
+        string sourceSystemName,
         string relationEntity)
     {
         var handler = _serviceProvider.GetService<IRelationHandler<NoneSyncModel>>();

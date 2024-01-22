@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using MassTransit;
+using Maverick.UserProfileService.AggregateEvents.Common.Enums;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Http.Logging;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using UserProfileService.Commands;
@@ -26,6 +28,7 @@ using UserProfileService.Sync.Models.State;
 using UserProfileService.Sync.Projection.Abstractions;
 using UserProfileService.Sync.States.Messages;
 using UserProfileService.Sync.Utilities;
+using ObjectType = Maverick.UserProfileService.Models.EnumModels.ObjectType;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Local
 
@@ -908,24 +911,7 @@ public class ProcessStateMachine :
 
         context.Saga.Process.SetStepStatus(StepStatus.InProgress);
 
-        foreach (string relationEntity in SyncConstants.SagaStep.AllAtomareSteps)
-        {
-            if (currentSystem.Steps.TryGetValue(relationEntity, out Step syncStep))
-            {
-                bool addedRelation = syncStep.Operations.HasFlag(SynchronizationOperation.Add)
-                    || syncStep.Operations.HasFlag(SynchronizationOperation.Update);
-
-                IRelationHandler handler = _relationFactory.CreateRelationHandler(
-                    context.Saga.Process.System,
-                    relationEntity);
-
-                if(handler  == null){
-                    continue;    
-                }
-                
-                await handler.HandleRelationsAsync(context, addedRelation, false);
-            }
-        }
+        await CreateRelationStep(context.Saga.Process, SynchronizationOperation.Add);
 
         _logger.LogInfoMessage(
             "Set sync state for add relations to {state} for system {system}",
@@ -943,29 +929,51 @@ public class ProcessStateMachine :
 
         context.Saga.Process.SetStepStatus(StepStatus.InProgress);
 
-        foreach (string relationEntity in SyncConstants.SagaStep.AllAtomareSteps)
-        {
-            if (currentSystem.Steps.TryGetValue(relationEntity, out Step syncStep))
-            {
-                bool deleteRelation = syncStep.Operations.HasFlag(SynchronizationOperation.Delete)
-                    || syncStep.Operations.HasFlag(SynchronizationOperation.Update);
+        await CreateRelationStep(context.Saga.Process, SynchronizationOperation.Delete);
 
-                IRelationHandler handler = _relationFactory.CreateRelationHandler(
-                    context.Saga.Process.System,
-                    relationEntity);
-                
-                if(handler  == null){
-                    continue;    
-                }
-
-                await handler.HandleRelationsAsync(context, false, deleteRelation);
-            }
-        }
-        
         _logger.LogInfoMessage(
             "Set sync state for delete relations to {state} for system {system}",
             LogHelpers.Arguments(nameof(StepStatus.WaitingForResponse), currentSystem.Id));
 
         context.Saga.Process.SetStepStatus(StepStatus.WaitingForResponse);
+    }
+
+    private async Task CreateRelationStep(Process process, SynchronizationOperation addOrDeleteOperation)
+    {
+        foreach (string relationEntity in SyncConstants.SagaStep.AllEntitySteps)
+        {
+            if (process.CurrentSystem.Steps.TryGetValue(relationEntity, out Step syncStep))
+            {
+                bool relation = syncStep.Operations.HasFlag(addOrDeleteOperation)
+                    || syncStep.Operations.HasFlag(SynchronizationOperation.Update);
+
+                IRelationHandler handler = _relationFactory.CreateRelationHandler(
+                    process.System,
+                    relationEntity);
+
+                ObjectType syncEntity = relationEntity.GetObjectType();
+
+                if (handler == null || syncEntity == ObjectType.Unknown)
+                {
+                    _logger.LogDebug(
+                        "No handler registered for the objet type {objectType}. Continue with next entity type.",
+                        LogHelpers.Arguments(syncEntity.ToLogString()));
+
+                    continue;
+                }
+
+                // delete relation
+                if (addOrDeleteOperation.HasFlag(SynchronizationOperation.Delete))
+                {
+                    await handler.HandleRelationsAsync(process, false, relation, syncEntity);
+                }
+
+                // add relation
+                else
+                {
+                    await handler.HandleRelationsAsync(process, relation, false, syncEntity);
+                }
+            }
+        }
     }
 }

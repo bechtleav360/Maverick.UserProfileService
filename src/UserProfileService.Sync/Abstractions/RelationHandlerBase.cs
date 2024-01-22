@@ -64,13 +64,11 @@ public abstract class RelationHandlerBase<TEntity> : IRelationHandler<TEntity> w
     }
 
     /// <inheritdoc />
-    public async Task HandleRelationsAsync(
+    public abstract Task HandleRelationsAsync(
         Process process,
         bool addRelation,
         bool deleteRelation,
-        ObjectType objectType)
-    {
-    }
+        ObjectType objectType);
 
     /// <summary>
     ///     Get all entities and their relation between each other.
