@@ -162,14 +162,14 @@ public static class SyncConstants
         /// <summary>
         /// All unary sync steps that can be done.
         /// </summary>
-        public static List<string> AllAtomareSteps = new List<string>()
-                                                     {
-                                                         RoleStep,
-                                                         UserStep,
-                                                         OrgUnitStep,
-                                                         GroupStep,
-                                                         FunctionStep,
-                                                     };
+        public static List<string> AllEntitySteps = new List<string>()
+                                                             {
+                                                                 RoleStep,
+                                                                 UserStep,
+                                                                 OrgUnitStep,
+                                                                 GroupStep,
+                                                                 FunctionStep,
+                                                             };
 
     }
 }
