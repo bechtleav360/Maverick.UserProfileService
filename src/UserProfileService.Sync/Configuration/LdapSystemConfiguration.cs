@@ -16,11 +16,6 @@ public class LdapSystemConfiguration
     ///     The active directory configuration.
     /// </summary>
     public ActiveDirectory[] LdapConfiguration { get; set; }
-
-    /// <summary>
-    /// The configuration defines the entities that should synced in the foreign and our "own" system.
-    /// </summary>
-    public SourceSystemConfiguration Source { set; get; }
     
     /// <summary>
     ///     The mapping between the ldap attributes and the model
