@@ -228,25 +228,22 @@ public static class SagaSchedule
                 continue;
             }
 
-            if (systemConfiguration.RelationsExisting)
-            {
-                lastStep.Next = SyncConstants.SagaStep.DeletedRelationStep;
+            lastStep.Next = SyncConstants.SagaStep.DeletedRelationStep;
 
-                var deleteRelationStep = new Step
-                                         {
-                                             Id = SyncConstants.SagaStep.DeletedRelationStep,
-                                             Next = SyncConstants.SagaStep.AddedRelationStep
-                                         };
+            var deleteRelationStep = new Step
+                                     {
+                                         Id = SyncConstants.SagaStep.DeletedRelationStep,
+                                         Next = SyncConstants.SagaStep.AddedRelationStep
+                                     };
 
-                system.Steps.Add(deleteRelationStep.Id, deleteRelationStep);
+            system.Steps.Add(deleteRelationStep.Id, deleteRelationStep);
 
-                var addRelationStep = new Step
-                                      {
-                                          Id = SyncConstants.SagaStep.AddedRelationStep
-                                      };
+            var addRelationStep = new Step
+                                  {
+                                      Id = SyncConstants.SagaStep.AddedRelationStep
+                                  };
 
-                system.Steps.Add(addRelationStep.Id, addRelationStep);
-            }
+            system.Steps.Add(addRelationStep.Id, addRelationStep);
 
             if (logger?.IsEnabled(LogLevel.Trace) == true)
             {

@@ -56,24 +56,24 @@ public static class SyncProviderConfigurationRegistration
             throw new ArgumentNullException(nameof(logger));
         }
 
-        var configurationToBeUser = assemblies
-                                    .SelectMany(a => a.GetTypes())
-                                    .Where(
-                                        p => !string.IsNullOrEmpty(
-                                            p.GetCustomAttribute<SynchConfigurationProviderAttribute>()
-                                             ?.SyncConfigName))
-                                    .Select(
-                                        p => p.GetCustomAttribute<SynchConfigurationProviderAttribute>().SyncConfigName)
-                                    .ToList();
+        List<string> configurationToBeUser = assemblies
+                                             .SelectMany(a => a.GetTypes())
+                                             .Where(
+                                                 p => !string.IsNullOrEmpty(
+                                                     p.GetCustomAttribute<SynchConfigurationProviderAttribute>()
+                                                      ?.SyncConfigName))
+                                             .Select(
+                                                 p => p.GetCustomAttribute<SynchConfigurationProviderAttribute>().SyncConfigName)
+                                             .ToList();
 
-        var systemConfigurationProviders = mainConfiguration
-                                            .GetSection(ConfigSectionsConstants.LdapConfigurationSectionName)
-                                            .Get<Dictionary<string, IConfigurationSection>>()
-                                            .Where(p => configurationToBeUser.Contains(p.Key, StringComparer.InvariantCulture))
-                                            .ToDictionary(
-                                                kv => kv.Key,
-                                                kv => kv.Value,
-                                                StringComparer.OrdinalIgnoreCase);
+        Dictionary<string, IConfigurationSection> systemConfigurationProviders = mainConfiguration
+                                                                                 .GetSection(ConfigSectionsConstants.LdapConfigurationSectionName)
+                                                                                 .Get<Dictionary<string, IConfigurationSection>>()
+                                                                                 .Where(p => configurationToBeUser.Contains(p.Key, StringComparer.InvariantCulture))
+                                                                                 .ToDictionary(
+                                                                                     kv => kv.Key,
+                                                                                     kv => kv.Value,
+                                                                                     StringComparer.OrdinalIgnoreCase);
         
         Type[] implementedProviderRegistrations = 
             assemblies
@@ -89,7 +89,7 @@ public static class SyncProviderConfigurationRegistration
 
         foreach (Type type in implementedProviderRegistrations)
         {
-            var registry = (ISyncProviderConfigurationRegistration?)
+            ISyncProviderConfigurationRegistration registry = (ISyncProviderConfigurationRegistration?)
                 Activator.CreateInstance(type);
 
             registry?.AddConfigurationDependencies(serviceCollection, systemConfigurationProviders, logger);

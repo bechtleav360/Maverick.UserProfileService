@@ -24,7 +24,6 @@ using UserProfileService.Sync.Messages.Responses;
 using UserProfileService.Sync.Models;
 using UserProfileService.Sync.Models.State;
 using UserProfileService.Sync.Projection.Abstractions;
-using UserProfileService.Sync.Services;
 using UserProfileService.Sync.States.Messages;
 using UserProfileService.Sync.Utilities;
 
@@ -44,6 +43,7 @@ public class ProcessStateMachine :
     private readonly IServiceProvider _serviceProvider;
     private readonly SyncConfiguration _syncConfiguration;
     private readonly ISyncProcessSynchronizer _synchronizer;
+    private readonly IRelationFactory _relationFactory;
 
     /// <summary>
     ///     State when the process has been aborted
@@ -179,6 +179,7 @@ public class ProcessStateMachine :
         _mapper = _serviceProvider.GetRequiredService<IMapper>();
         _profileService = _serviceProvider.GetRequiredService<IProfileService>();
         _synchronizer = _serviceProvider.GetRequiredService<ISyncProcessSynchronizer>();
+        _relationFactory = _serviceProvider.GetRequiredService<IRelationFactory>();
 
         DeclareStates();
         DeclareEvents();
@@ -907,22 +908,23 @@ public class ProcessStateMachine :
 
         context.Saga.Process.SetStepStatus(StepStatus.InProgress);
 
-        if (currentSystem.Steps.TryGetValue(
-                SyncConstants.SagaStep.OrgUnitStep,
-                out Step organizationStep))
+        foreach (string relationEntity in SyncConstants.SagaStep.AllAtomareSteps)
         {
-            bool addedRelation = organizationStep.Operations.HasFlag(SynchronizationOperation.Add)
-                || organizationStep.Operations.HasFlag(SynchronizationOperation.Update);
+            if (currentSystem.Steps.TryGetValue(relationEntity, out Step syncStep))
+            {
+                bool addedRelation = syncStep.Operations.HasFlag(SynchronizationOperation.Add)
+                    || syncStep.Operations.HasFlag(SynchronizationOperation.Update);
 
-            var handler = new RelationHandler(context, _serviceProvider);
+                IRelationHandler handler = _relationFactory.CreateRelationHandler(
+                    context.Saga.Process.System,
+                    relationEntity);
 
-            await handler.HandleOrganizationRelations(addedRelation, false);
-        }
-        else
-        {
-            _logger.LogInfoMessage(
-                "No organization step defined for current system '{system}' and saga '{id}'. Adding or updating relation for organizations will be skipped.",
-                LogHelpers.Arguments(currentSystem.Id, context.CorrelationId));
+                if(handler  == null){
+                    continue;    
+                }
+                
+                await handler.HandleRelationsAsync(context, addedRelation, false);
+            }
         }
 
         _logger.LogInfoMessage(
@@ -941,24 +943,25 @@ public class ProcessStateMachine :
 
         context.Saga.Process.SetStepStatus(StepStatus.InProgress);
 
-        if (currentSystem.Steps.TryGetValue(
-                SyncConstants.SagaStep.OrgUnitStep,
-                out Step organizationStep))
+        foreach (string relationEntity in SyncConstants.SagaStep.AllAtomareSteps)
         {
-            bool deleteRelation = organizationStep.Operations.HasFlag(SynchronizationOperation.Delete)
-                || organizationStep.Operations.HasFlag(SynchronizationOperation.Update);
+            if (currentSystem.Steps.TryGetValue(relationEntity, out Step syncStep))
+            {
+                bool deleteRelation = syncStep.Operations.HasFlag(SynchronizationOperation.Delete)
+                    || syncStep.Operations.HasFlag(SynchronizationOperation.Update);
 
-            var handler = new RelationHandler(context, _serviceProvider);
+                IRelationHandler handler = _relationFactory.CreateRelationHandler(
+                    context.Saga.Process.System,
+                    relationEntity);
+                
+                if(handler  == null){
+                    continue;    
+                }
 
-            await handler.HandleOrganizationRelations(false, deleteRelation);
+                await handler.HandleRelationsAsync(context, false, deleteRelation);
+            }
         }
-        else
-        {
-            _logger.LogInfoMessage(
-                "No organization step defined for current system '{system}' and saga '{id}'. Deleting or updating relation for organizations will be skipped.",
-                LogHelpers.Arguments(currentSystem.Id, context.CorrelationId));
-        }
-
+        
         _logger.LogInfoMessage(
             "Set sync state for delete relations to {state} for system {system}",
             LogHelpers.Arguments(nameof(StepStatus.WaitingForResponse), currentSystem.Id));
