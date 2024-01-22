@@ -1,6 +1,8 @@
 ﻿using System.Threading.Tasks;
 using MassTransit;
+using Maverick.UserProfileService.Models.EnumModels;
 using UserProfileService.Sync.Abstraction.Models;
+using UserProfileService.Sync.Models.State;
 using UserProfileService.Sync.States;
 
 namespace UserProfileService.Sync.Abstractions;
@@ -22,12 +24,10 @@ public interface IRelationHandler
     ///     Resolve resolve relation within entities and creates or deleted existing
     ///     relations.
     /// </summary>
-    /// <param name="context">The context for the next step.</param>
+    /// <param name="process">The saga process the relation step is running it.</param>
     /// <param name="addRelation">If the relation should be added.</param>
     /// <param name="deleteRelation">If the relation should be deleted.</param>
+    /// <param name="objectType">The object type for those relations should be added.</param>
     /// <returns></returns>
-    Task HandleRelationsAsync(
-        SagaConsumeContext<ProcessState, ISyncMessage> context,
-        bool addRelation,
-        bool deleteRelation);
+    Task HandleRelationsAsync(Process process, bool addRelation, bool deleteRelation, ObjectType objectType);
 }

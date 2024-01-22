@@ -1,7 +1,9 @@
 ﻿using System.Threading.Tasks;
 using MassTransit;
+using Maverick.UserProfileService.Models.EnumModels;
 using UserProfileService.Sync.Abstraction.Models.Entities;
 using UserProfileService.Sync.Abstractions;
+using UserProfileService.Sync.Models.State;
 using UserProfileService.Sync.States;
 
 namespace UserProfileService.Sync.Handlers;
@@ -13,10 +15,7 @@ namespace UserProfileService.Sync.Handlers;
 public class NoneRelationHandler : IRelationHandler<NoneSyncModel>
 {
     /// <inheritdoc />
-    public Task HandleRelationsAsync(
-        SagaConsumeContext<ProcessState, ISyncMessage> context,
-        bool addRelation,
-        bool deleteRelation)
+    public Task HandleRelationsAsync(Process process, bool addRelation, bool deleteRelation, ObjectType objectType)
     {
         return Task.CompletedTask;
     }

@@ -8,7 +8,9 @@ using UserProfileService.Sync.Abstractions;
 namespace UserProfileService.Sync.Factories;
 
 /// <summary>
-///     The factory is doing none relation.
+///     The factory is doing none relation. If your entities do have
+///     relation you have to implement the factory yourself and create
+///     handler for your purpose.
 /// </summary>
 public class NoneRelationFactory : IRelationFactory
 {
@@ -20,14 +22,18 @@ public class NoneRelationFactory : IRelationFactory
     /// </summary>
     /// <param name="serviceProvider">The service provider that is needed to create a relation handler.</param>
     /// <param name="logger">The logger for logging purposes.</param>
-    public NoneRelationFactory(IServiceProvider serviceProvider, ILogger<NoneRelationFactory> logger)
+    public NoneRelationFactory(
+        IServiceProvider serviceProvider,
+        ILogger<NoneRelationFactory> logger)
     {
         _serviceProvider = serviceProvider;
         _logger = logger;
     }
 
     /// <inheritdoc />
-    public IRelationHandler CreateRelationHandler(string sourceSystem, string relationEntity)
+    public IRelationHandler CreateRelationHandler(
+        string sourceSystem,
+        string relationEntity)
     {
         var handler = _serviceProvider.GetService<IRelationHandler<NoneSyncModel>>();
 
