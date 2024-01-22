@@ -16,7 +16,7 @@ namespace UserProfileService.Sync.Validation;
 /// </summary>
 public class LdapConfigurationValidation: IValidateOptions<LdapSystemConfiguration>
 {
-    private static LoggerFactory _loggerFactory = new LoggerFactory();
+    private static readonly LoggerFactory _loggerFactory = new LoggerFactory();
     
     private static IList<string> ValidateActiveDirectoryConfiguration(ActiveDirectory[] ldapConfiguration)
     {

@@ -3,6 +3,7 @@ using UserProfileService.Sync.Abstraction;
 using UserProfileService.Sync.Abstraction.Models.Entities;
 using UserProfileService.Sync.Abstractions;
 using UserProfileService.Sync.Factories;
+using UserProfileService.Sync.Handlers;
 using UserProfileService.Sync.Services.Comparer;
 using UserProfileService.Sync.Systems;
 
@@ -77,6 +78,19 @@ public static class ServiceCollectionExtension
         services.TryAddScoped<ISyncModelComparer<OrganizationSync>, OrganizationSyncComparer>();
         services.TryAddScoped<ISyncModelComparer<UserSync>, UserSyncComparer>();
         services.TryAddScoped<ISyncModelComparer<RoleSync>, RoleSyncComparer>();
+
+        return services;
+    }
+
+    /// <summary>
+    ///     Register the none relation factory dependencies for the sync system.
+    /// </summary>
+    /// <param name="services">The collection of services.</param>
+    /// <returns>The same service collection so that multiple calls can be chained.</returns>
+    public static IServiceCollection AddNoneRelationFactoryDependencies(this IServiceCollection services)
+    {
+        services.TryAddScoped<IRelationFactory, NoneRelationFactory>();
+        services.TryAddScoped<IRelationHandler<NoneSyncModel>, NoneRelationHandler>();
 
         return services;
     }

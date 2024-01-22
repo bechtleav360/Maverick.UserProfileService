@@ -65,13 +65,13 @@ namespace UserProfileService.Saga.Worker;
 /// <summary>
 ///     The derived start up that is used for the saga worker.
 /// </summary>
-public class SagaWorkerStartUp : DefaultStartupBase
+public class SagaWorkerStartup : DefaultStartupBase
 {
     /// <summary>
-    ///     Creates an instance of type <see cref="SagaWorkerStartUp" />
+    ///     Creates an instance of type <see cref="SagaWorkerStartup" />
     /// </summary>
     /// <param name="configuration">Contains the configuration to initialize the application.</param>
-    public SagaWorkerStartUp(IConfiguration configuration) : base(configuration)
+    public SagaWorkerStartup(IConfiguration configuration) : base(configuration)
     {
     }
 

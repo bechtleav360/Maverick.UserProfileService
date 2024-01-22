@@ -280,6 +280,7 @@ public class SyncStartup : DefaultStartupBase
         services.TryAddSingleton<ISyncProcessCleaner, SyncProcessCleaner>();
         services.TryAddSingleton<ISyncProcessSynchronizer, DefaultSynchronizer>();
         services.AddModelComparer();
+        services.AddNoneRelationFactoryDependencies();
 
         // Configure base services
         base.ConfigureServices(services);

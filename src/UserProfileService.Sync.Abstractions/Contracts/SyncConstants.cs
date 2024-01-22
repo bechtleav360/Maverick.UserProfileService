@@ -1,4 +1,5 @@
-﻿using UserProfileService.Sync.Abstraction.Models.Entities;
+﻿using System.Collections.Generic;
+using UserProfileService.Sync.Abstraction.Models.Entities;
 
 namespace UserProfileService.Sync.Abstraction.Contracts;
 
@@ -157,5 +158,18 @@ public static class SyncConstants
         ///     Identifies the users step message.
         /// </summary>
         public const string UserStep = "users";
+
+        /// <summary>
+        /// All unary sync steps that can be done.
+        /// </summary>
+        public static List<string> AllAtomareSteps = new List<string>()
+                                                     {
+                                                         RoleStep,
+                                                         UserStep,
+                                                         OrgUnitStep,
+                                                         GroupStep,
+                                                         FunctionStep,
+                                                     };
+
     }
 }

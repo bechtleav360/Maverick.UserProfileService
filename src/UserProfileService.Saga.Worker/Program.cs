@@ -36,7 +36,7 @@ public class Program
 
     private static IHostBuilder CreateWebHost(string[] args)
     {
-        return UseProfileServiceHostBuilder.CreateDefaultBuilder<SagaWorkerStartUp>(args);
+        return UseProfileServiceHostBuilder.CreateDefaultBuilder<SagaWorkerStartup>(args);
     }
 
     /// <summary>
