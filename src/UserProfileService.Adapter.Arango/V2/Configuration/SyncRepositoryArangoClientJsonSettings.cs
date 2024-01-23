@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using JsonSubTypes;
 using Maverick.Client.ArangoDb.Public.Configuration;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
@@ -13,12 +15,39 @@ namespace UserProfileService.Adapter.Arango.V2.Configuration;
 /// </summary>
 public class SyncRepositoryArangoClientJsonSettings : IArangoClientJsonSettings
 {
+    /// <summary>
+    ///     Creates an object of type <see cref="SyncRepositoryArangoClientJsonSettings" />.
+    /// </summary>
+    public SyncRepositoryArangoClientJsonSettings()
+    {
+        SerializerSettings = GetDefaultSettings();
+    }
+
+    /// <summary>
+    ///     Creates an object of type <see cref="SyncRepositoryArangoClientJsonSettings" />.
+    /// </summary>
+    /// <param name="additionalRegistration">An function to extend the json converters.</param>
+    public SyncRepositoryArangoClientJsonSettings(Action<JsonSubtypesConverterBuilder> additionalRegistration)
+    {
+        SerializerSettings = GetDefaultSettings(additionalRegistration);
+    }
+
     /// <inheritdoc />
-    public JsonSerializerSettings SerializerSettings { get; } = new JsonSerializerSettings
-                                                                {
-                                                                    Converters = WellKnownJsonConverters.GetDefaultProfileConverters()
-                                                                        .Append(new StringEnumConverter())
-                                                                        .ToList(),
-                                                                    ContractResolver = new DefaultContractResolver()
-                                                                };
+    public virtual JsonSerializerSettings SerializerSettings { get; }
+
+    private static JsonSerializerSettings GetDefaultSettings(
+        Action<JsonSubtypesConverterBuilder> additionalRegistration = null)
+    {
+        return new JsonSerializerSettings
+               {
+                   Converters = new List<JsonConverter>
+                                {
+                                    new StringEnumConverter(),
+                                    WellKnownSecondLevelConverter
+                                        .GetSecondLevelDefaultConverters(additionalRegistration)
+                                },
+                   ContractResolver = new DefaultContractResolver(),
+                   NullValueHandling = NullValueHandling.Ignore
+               };
+    }
 }
