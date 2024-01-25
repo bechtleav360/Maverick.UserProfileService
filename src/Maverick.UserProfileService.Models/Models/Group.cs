@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Maverick.UserProfileService.Models.Annotations;
 using Maverick.UserProfileService.Models.BasicModels;
 // ReSharper disable NonReadonlyMemberInGetHashCode
 
@@ -21,6 +22,12 @@ namespace Maverick.UserProfileService.Models.Models
         ///     The ids from the members ( users or groups ).
         /// </summary>
         public IList<Member> Members { get; set; } = new List<Member>();
+        
+        /// <summary>
+        ///     A link where to find the custom properties for a group.
+        /// </summary>
+        [UriRedirection("profiles/{Id}/customProperties")]
+        public string CustomPropertyUrl { set; get; }
 
         private bool IsMembersEqual(IList<Member> other)
         {
