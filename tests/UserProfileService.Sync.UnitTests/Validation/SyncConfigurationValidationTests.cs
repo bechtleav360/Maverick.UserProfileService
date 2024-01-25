@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.Options;
 using UserProfileService.Sync.Abstraction.Configurations;
+using UserProfileService.Sync.Configuration;
 using UserProfileService.Sync.UnitTests.Validation.TestData;
 using UserProfileService.Sync.Validation;
 using Xunit;
@@ -10,12 +11,12 @@ namespace UserProfileService.Sync.UnitTests.Validation
     public class SyncConfigurationValidationTests
     {
         [Theory]
-        [ClassData(typeof(SyncConfigurationCorrectTestData))]
+        [ClassData(typeof(LdapSystemConfigurationCorrectTestData))]
         public void SyncConfigValidationWithCorrectParameter_should_succeed(
-            SyncConfiguration options,
+            LdapSystemConfiguration options,
             bool validationSucceeded)
         {
-            var validator = new SyncConfigurationValidation();
+            var validator = new LdapConfigurationValidation();
             ValidateOptionsResult result = validator.Validate(string.Empty, options);
 
             result.Should()

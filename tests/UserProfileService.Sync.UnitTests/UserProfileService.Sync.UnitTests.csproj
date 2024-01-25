@@ -27,4 +27,10 @@
         <ProjectReference Include="..\UserProfileService.Common.Tests.Utilities\UserProfileService.Common.Tests.Utilities.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="Configuration\LdapConfiguration.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>
