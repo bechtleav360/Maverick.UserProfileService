@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using UserProfileService.Sync.Abstraction.Configurations;
@@ -20,6 +21,7 @@ namespace UserProfileService.Sync.UnitTests.Factories
 
             serviceCollection.AddTransient<ILoggerFactory>(s => loggerFactory);
             serviceCollection.Configure<SyncConfiguration>(t => { t = new SyncConfiguration(); });
+            serviceCollection.AddTransient<ISyncModelComparer<GroupSync>, GroupSyncComparer>();
 
             ServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -51,10 +53,12 @@ namespace UserProfileService.Sync.UnitTests.Factories
             SyncModelComparerFactory factory = InitializeFactory<GroupSyncComparer>();
 
             // Act
-            ISyncModelComparer<TestSyncModel> comparer = factory.CreateComparer<TestSyncModel>();
 
             // Assert
-            Assert.Null(comparer);
+            Assert.Throws<ConfigurationException>( () =>
+                                                  {
+                                                       factory.CreateComparer<TestSyncModel>();
+                                                  });
         }
     }
 

@@ -28,11 +28,6 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.13" />
-        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-            <_Parameter1>UserProfileService.Saga.Worker.UnitTests</_Parameter1>
-            <_Parameter1>UserProfileService.EventNotifier.UnitTests</_Parameter1>
-            <_Parameter1>UserProfileService.Saga.Validation.UnitTests</_Parameter1>
-        </AssemblyAttribute>
     </ItemGroup>
 
     <ItemGroup>

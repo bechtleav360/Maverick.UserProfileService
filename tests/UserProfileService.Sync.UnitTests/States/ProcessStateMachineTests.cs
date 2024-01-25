@@ -155,8 +155,13 @@ namespace UserProfileService.Sync.UnitTests.States
                 // Sync config
                 ConfigMock = new Mock<IOptions<SyncConfiguration>>()
             };
-
+            
             facade.ConfigMock.SetupGet(s => s.Value).Returns(config);
+
+            var relationFactory = new Mock<IRelationFactory>();
+
+            relationFactory.Setup(p => p.CreateRelationHandler(It.IsAny<string>(), It.IsAny<string>()))
+                           .Returns(() => null);
 
             facade.GroupProcessorMock = new Mock<ISagaEntityProcessor<GroupSync>>();
             var userProcessor = new Mock<ISagaEntityProcessor<UserSync>>();
@@ -193,6 +198,7 @@ namespace UserProfileService.Sync.UnitTests.States
             // ServiceProvider
             ServiceProvider provider = new ServiceCollection()
                                        .AddLogging()
+                                       .AddSingleton(relationFactory.Object)
                                        .AddAutoMapper(typeof(MappingProfiles).Assembly)
                                        .AddSingleton(facade.UserServiceMock.Object)
                                        .AddSingleton(facade.ConfigMock.Object)
