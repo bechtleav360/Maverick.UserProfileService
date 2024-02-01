@@ -102,7 +102,8 @@ public static class ServiceCollectionExtension
             ConnectRetry = redisConfig.ConnectRetry,
             ConnectTimeout = redisConfig.ConnectTimeout,
             User = redisConfig.User,
-            Password = redisConfig.Password
+            Password = redisConfig.Password,
+            ServiceName = redisConfig.ServiceName
         };
 
         foreach (string endpoint in redisConfig.EndpointUrls
