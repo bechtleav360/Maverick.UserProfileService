@@ -49,4 +49,10 @@ public class RedisConfiguration
     ///     User for the redis server (for use with ACLs on redis 6 and above).
     /// </summary>
     public string User { get; set; }
+    
+    
+    /// <summary>
+    ///     The service name used to resolve a service via sentinel.
+    /// </summary>
+    public string ServiceName { get; set; }
 }
