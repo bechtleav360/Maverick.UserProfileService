@@ -70,7 +70,9 @@ namespace UserProfileService
 
             app.UseProblemDetails();
 
-            if (env.IsDevelopment())
+            var useSwaggerUi = Configuration.GetValue("Features:UseSwaggerUI", false);
+            
+            if (useSwaggerUi)
             {
                 _logger.LogInformation("Support for SwaggerUI activated");
                 app.UseMaverickSwaggerWithVersions();
