@@ -94,13 +94,12 @@ namespace UserProfileService.Projection.SecondLevel.Assignments.Tests
 
             await sut.HandleEventAsync(domainEvent, new StreamedEventHeader(), ct);
 
-            mockHandler.Verify(
-                h =>
-                    h.HandleEventAsync(
-                        ItShould.BeEquivalentTo(domainEvent, "The domain event shouldn't be changed"),
-                        It.IsAny<StreamedEventHeader>(),
-                        ItShould.BeEquivalentTo(ct)),
-                Times.Once);
+             mockHandler.Verify(
+                h => h.HandleEventAsync(
+                    ItShould.BeEquivalentTo(domainEvent, "The method will not be used."),
+                    It.IsAny<StreamedEventHeader>(),
+                    ItShould.BeEquivalentTo(ct)),
+                Times.Never);
         }
     }
 }

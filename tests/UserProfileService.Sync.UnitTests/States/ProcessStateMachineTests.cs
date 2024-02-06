@@ -108,7 +108,12 @@ namespace UserProfileService.Sync.UnitTests.States
                                                   {
                                                       {
                                                           SyncConstants.SagaStep.GroupStep,
-                                                          new SynchronizationOperations()
+                                                          new SynchronizationOperations
+                                                          {
+                                                              Converter = new ConverterConfiguration(),
+                                                              Operations = SynchronizationOperation.All,
+                                                              ForceDelete = false
+                                                          }
                                                       }
                                                   }
                                      };
