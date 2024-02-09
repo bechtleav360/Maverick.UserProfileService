@@ -48,7 +48,7 @@ namespace UserProfileService.Sync.UnitTests.States
             Assert.True(await facade.Harness.Consumed.Any<SetNextStepMessage>());
             Assert.True(await facade.Harness.Consumed.Any<FinalizeSyncMessage>());
 
-            facade.ConfigMock.VerifyGet(t => t.Value, Times.Exactly(1));
+            facade.ConfigMock.VerifyGet(t => t.CurrentValue, Times.Exactly(1));
 
             ISagaStateMachineTestHarness<ProcessStateMachine, ProcessState> sagaHarness =
                 facade.Harness.GetSagaStateMachineHarness<ProcessStateMachine, ProcessState>();
@@ -84,7 +84,7 @@ namespace UserProfileService.Sync.UnitTests.States
             Assert.True(await facade.Harness.Consumed.Any<SetNextStepMessage>());
             Assert.True(await facade.Harness.Consumed.Any<FinalizeSyncMessage>());
 
-            facade.ConfigMock.VerifyGet(t => t.Value, Times.Once);
+            facade.ConfigMock.VerifyGet(t => t.CurrentValue, Times.Once);
 
             ISagaStateMachineTestHarness<ProcessStateMachine, ProcessState> sagaHarness =
                 facade.Harness.GetSagaStateMachineHarness<ProcessStateMachine, ProcessState>();
@@ -110,27 +110,27 @@ namespace UserProfileService.Sync.UnitTests.States
                                                           SyncConstants.SagaStep.GroupStep,
                                                           new SynchronizationOperations
                                                           {
+                                                              Operations = SynchronizationOperation.Add,
                                                               Converter = new ConverterConfiguration(),
-                                                              Operations = SynchronizationOperation.All,
                                                               ForceDelete = false
                                                           }
                                                       }
                                                   }
                                      };
 
-            config.SourceConfiguration.Systems.Add(SyncConstants.System.Ldap, bonneaSystemConfig);
+            config.SourceConfiguration.Systems.Add("bonnea", bonneaSystemConfig);
 
             var command = new StartSyncCommand
                           {
                               CorrelationId = Guid.NewGuid(),
                               InitiatorId = "initiator"
                           };
-
+            
             StateMachineFacade facade = await SetupStateMachine(config);
 
             // Act
             await facade.Harness.Bus.Publish(command);
-
+            
             // Assert
             Assert.True(await facade.Harness.Consumed.Any<StartSyncCommand>());
             Assert.True(await facade.Harness.Consumed.Any<SetNextStepMessage>());
@@ -140,7 +140,7 @@ namespace UserProfileService.Sync.UnitTests.States
             Assert.True(await facade.Harness.Consumed.Any<SetNextStepMessage>());
             Assert.True(await facade.Harness.Consumed.Any<FinalizeSyncMessage>());
 
-            facade.ConfigMock.VerifyGet(t => t.Value, Times.Exactly(1));
+            facade.ConfigMock.VerifyGet(t => t.CurrentValue, Times.Exactly(1));
 
             ISagaStateMachineTestHarness<ProcessStateMachine, ProcessState> sagaHarness =
                 facade.Harness.GetSagaStateMachineHarness<ProcessStateMachine, ProcessState>();
@@ -158,10 +158,10 @@ namespace UserProfileService.Sync.UnitTests.States
             var facade = new StateMachineFacade
             {
                 // Sync config
-                ConfigMock = new Mock<IOptions<SyncConfiguration>>()
+                ConfigMock = new Mock<IOptionsMonitor<SyncConfiguration>>()
             };
             
-            facade.ConfigMock.SetupGet(s => s.Value).Returns(config);
+            facade.ConfigMock.SetupGet(s => s.CurrentValue).Returns(config);
 
             var relationFactory = new Mock<IRelationFactory>();
 
@@ -227,7 +227,7 @@ namespace UserProfileService.Sync.UnitTests.States
     {
         public ITestHarness Harness { get; set; }
 
-        public Mock<IOptions<SyncConfiguration>> ConfigMock { get; set; }
+        public Mock<IOptionsMonitor<SyncConfiguration>> ConfigMock { get; set; }
 
         public Mock<ISagaEntityProcessor<GroupSync>> GroupProcessorMock { get; set; }
 
