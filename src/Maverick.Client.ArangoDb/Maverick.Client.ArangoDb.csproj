@@ -19,7 +19,7 @@
         <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.4" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-            <_Parameter1>UserProfileService.Arango.Tests</_Parameter1>
+            <_Parameter1>UserProfileService.Arango.UnitTests</_Parameter1>
         </AssemblyAttribute>
     </ItemGroup>
 

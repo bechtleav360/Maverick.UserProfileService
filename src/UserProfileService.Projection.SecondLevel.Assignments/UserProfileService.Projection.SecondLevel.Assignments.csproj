@@ -16,7 +16,7 @@
 
 	<ItemGroup>
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-			<_Parameter1>UserProfileService.Projection.SecondLevel.Assignments.Tests</_Parameter1>
+			<_Parameter1>UserProfileService.Projection.SecondLevel.Assignments.UnitTests</_Parameter1>
 		</AssemblyAttribute>
 	</ItemGroup>
 </Project>
