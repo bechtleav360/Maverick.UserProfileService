@@ -20,9 +20,11 @@ using UserProfileService.Common.Tests.Utilities.MockDataBuilder;
 using UserProfileService.Common.V2.Abstractions;
 using UserProfileService.Common.V2.Contracts;
 using UserProfileService.EventSourcing.Abstractions.Stores;
+using UserProfileService.Saga.Common;
 using UserProfileService.Saga.Events.Messages;
 using UserProfileService.StateMachine.Abstraction;
 using UserProfileService.StateMachine.Definitions;
+using UserProfileService.StateMachine.Implementations;
 using UserProfileService.StateMachine.Services;
 using UserProfileService.Utilities;
 using UserProfileService.Validation.Abstractions;
@@ -112,8 +114,7 @@ namespace UserProfileService.Saga.Worker.UnitTests.States
                 facade.Harness.GetSagaStateMachineHarness<CommandProcessStateMachine, CommandProcessState>();
 
             Assert.True(await sagaHarness.Consumed.Any<SubmitCommand>());
-            Assert.True(await sagaHarness.Consumed.Any<ValidateCommand>());
-
+            Assert.True(await sagaHarness.Consumed.Any<ValidationCompositeResponse>());
             CommandProcessState saga = AssertSagaData(facade, sagaHarness);
 
             Assert.True(await facade.Harness.Published.Any<ValidateCommand>());
@@ -262,7 +263,7 @@ namespace UserProfileService.Saga.Worker.UnitTests.States
                 c => { c.AddProfile<MappingProfiles>(); }).CreateMapper();
 
             var mockedEventPublisher = new Mock<IEventPublisher>();
-
+            
             mockedEventPublisher.Setup(
                 p => p.PublishAsync(
                     It.IsAny<IUserProfileServiceEvent>(),
@@ -279,7 +280,7 @@ namespace UserProfileService.Saga.Worker.UnitTests.States
                 .Returns(mockedEventPublisher.Object);
 
             facade.MockEventPublisherFactory = mockedEventPublisherFactory;
-
+            
             CreateGroupRequest request = MockDataGeneratorRequests.CreateGroup();
             GroupCreatedMessage message = mapper.Map<CreateGroupRequest, GroupCreatedMessage>(request);
             string rawMessage = JsonConvert.SerializeObject(message);
@@ -292,7 +293,6 @@ namespace UserProfileService.Saga.Worker.UnitTests.States
                                  Initiator = new CommandInitiator("test", CommandInitiatorType.System),
                                  Id = new CommandIdentifier(Guid.NewGuid().ToString(), Guid.NewGuid())
                              };
-
             facade.MockCommandServiceFactory = new Mock<ICommandServiceFactory>();
             facade.MockCommandService = new Mock<ICommandService>();
 
@@ -347,7 +347,7 @@ namespace UserProfileService.Saga.Worker.UnitTests.States
                                                                         }
                                                          }
                                           };
-
+            
             IOptions<ValidationConfiguration> validationOptions = Options.Create(validationConfiguration);
             var mockEventStore = new Mock<IEventStorageClient>();
             facade.MockEventStore = mockEventStore;
@@ -359,6 +359,7 @@ namespace UserProfileService.Saga.Worker.UnitTests.States
                                        .AddSingleton(validationOptions)
                                        .AddSingleton(mockEventStore.Object)
                                        .AddSingleton(mockedEventPublisherFactory.Object)
+                                       .AddSingleton<ISagaCommandFactory, DefaultSagaCommandFactory>()
                                        .AddMassTransitTestHarness(
                                            cfg =>
                                            {

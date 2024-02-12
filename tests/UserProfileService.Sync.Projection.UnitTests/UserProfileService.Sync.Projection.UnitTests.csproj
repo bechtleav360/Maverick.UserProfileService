@@ -18,7 +18,7 @@
     <ItemGroup>
         <ProjectReference Include="..\..\src\UserProfileService.Sync.Projection\UserProfileService.Sync.Projection.csproj" />
         <ProjectReference Include="..\..\src\UserProfileService.Sync\UserProfileService.Sync.csproj" />
-        <ProjectReference Include="..\UserProfileService.Common.Tests\UserProfileService.Common.Tests.csproj" />
+        <ProjectReference Include="..\UserProfileService.Common.UnitTests\UserProfileService.Common.UnitTests.csproj" />
         <ProjectReference Include="..\UserProfileService.Common.Tests.Utilities\UserProfileService.Common.Tests.Utilities.csproj" />
     </ItemGroup>
 </Project>

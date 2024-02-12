@@ -22,7 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\UserProfileService.Marten.EventStore\UserProfileService.Marten.EventStore.csproj" />
-    <ProjectReference Include="..\UserProfileService.Common.Tests\UserProfileService.Common.Tests.csproj" />
+    <ProjectReference Include="..\UserProfileService.Common.UnitTests\UserProfileService.Common.UnitTests.csproj" />
   </ItemGroup>
 
 </Project>

@@ -21,7 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\UserProfileService.Validation.Agent\UserProfileService.EventCollector.csproj" />
-    <ProjectReference Include="..\UserProfileService.Common.Tests\UserProfileService.Common.Tests.csproj" />
+    <ProjectReference Include="..\UserProfileService.Common.UnitTests\UserProfileService.Common.UnitTests.csproj" />
   </ItemGroup>
 
 </Project>

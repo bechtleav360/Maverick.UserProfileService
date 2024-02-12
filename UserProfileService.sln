@@ -13,9 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserProfileService.Sync", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{704C1E2C-FFE8-434F-AB67-7AE940BB0E18}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserProfileService.Common.Tests", "tests\UserProfileService.Common.Tests\UserProfileService.Common.Tests.csproj", "{77C9224D-851B-4176-989E-E86539826359}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserProfileService.Common.UnitTests", "tests\UserProfileService.Common.UnitTests\UserProfileService.Common.UnitTests.csproj", "{77C9224D-851B-4176-989E-E86539826359}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserProfileService.Arango.Tests", "tests\UserProfileService.Arango.Tests\UserProfileService.Arango.Tests.csproj", "{46E90DD6-E936-43EE-96D6-643E5FE1434E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserProfileService.Arango.UnitTests", "tests\UserProfileService.Arango.UnitTests\UserProfileService.Arango.UnitTests.csproj", "{46E90DD6-E936-43EE-96D6-643E5FE1434E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserProfileService", "src\UserProfileService\UserProfileService.csproj", "{9610B6D0-7082-41EF-ABB6-ED730EE70BCD}"
 EndProject
@@ -37,7 +37,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserProfileService.Common.T
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserProfileService.Redis", "src\UserProfileService.Redis\UserProfileService.Redis.csproj", "{85471F32-0A4C-4DC5-976D-00F5C6D8E2E7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserProfileService.Projection.FirstLevel.Tests", "tests\UserProfileService.Projection.FirstLevel.Tests\UserProfileService.Projection.FirstLevel.Tests.csproj", "{6C916B75-FA09-41DE-BA05-CD27C191B3C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserProfileService.Projection.FirstLevel.UnitTests", "tests\UserProfileService.Projection.FirstLevel.UnitTests\UserProfileService.Projection.FirstLevel.UnitTests.csproj", "{6C916B75-FA09-41DE-BA05-CD27C191B3C0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserProfileService.Sync.UnitTests", "tests\UserProfileService.Sync.UnitTests\UserProfileService.Sync.UnitTests.csproj", "{9D091261-38D4-44D3-99C7-9BA6F15C1F28}"
 EndProject
@@ -47,7 +47,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserProfileService.Common.H
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserProfileService.Common.Logging", "src\UserProfileService.Common.Logging\UserProfileService.Common.Logging.csproj", "{235BFCB8-7DD5-4DDB-9934-2756D2C8064D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserProfileService.Common.Logging.Tests", "tests\UserProfileService.Common.Logging.Tests\UserProfileService.Common.Logging.Tests.csproj", "{40989C21-397C-4589-AD4D-FDC0DC978BD4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserProfileService.Common.Logging.UnitTests", "tests\UserProfileService.Common.Logging.UnitTests\UserProfileService.Common.Logging.UnitTests.csproj", "{40989C21-397C-4589-AD4D-FDC0DC978BD4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maverick.UserProfileService.AggregateEvents", "src\Maverick.UserProfileService.AggregateEvents\Maverick.UserProfileService.AggregateEvents.csproj", "{88315E1B-ABDC-4793-8E6B-72E0365FCE4D}"
 EndProject
@@ -65,11 +65,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserProfileService.Projection.SecondLevel.Tests", "tests\UserProfileService.Projection.SecondLevel.Tests\UserProfileService.Projection.SecondLevel.Tests.csproj", "{AF9BB5E8-72BA-44F6-9B2B-CE5989A6EEF0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserProfileService.Projection.SecondLevel.UnitTests", "tests\UserProfileService.Projection.SecondLevel.UnitTests\UserProfileService.Projection.SecondLevel.UnitTests.csproj", "{AF9BB5E8-72BA-44F6-9B2B-CE5989A6EEF0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserProfileService.Projection.FirstLevel", "src\UserProfileService.Projection.FirstLevel\UserProfileService.Projection.FirstLevel.csproj", "{6ADE304E-ED59-4261-BC87-9257AEFDEAA1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserProfileService.Projection.Common.Tests", "tests\UserProfileService.Projection.Common.Tests\UserProfileService.Projection.Common.Tests.csproj", "{A196331A-4133-416C-89BC-4BA564489206}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserProfileService.Projection.Common.UnitTests", "tests\UserProfileService.Projection.Common.UnitTests\UserProfileService.Projection.Common.UnitTests.csproj", "{A196331A-4133-416C-89BC-4BA564489206}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserProfileService.Projection.Abstractions", "src\UserProfileService.Projection.Abstractions\UserProfileService.Projection.Abstractions.csproj", "{343C7420-6B4E-4987-BB0B-3AC8A626B8E8}"
 EndProject
@@ -77,7 +77,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserProfileService.Messagin
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserProfileService.Projection.SecondLevel.Assignments", "src\UserProfileService.Projection.SecondLevel.Assignments\UserProfileService.Projection.SecondLevel.Assignments.csproj", "{FCC53F0B-F2E6-4AB9-A226-FC9ACBB77CD5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserProfileService.Projection.SecondLevel.Assignments.Tests", "tests\UserProfileService.Projection.SecondLevel.Assignments.Tests\UserProfileService.Projection.SecondLevel.Assignments.Tests.csproj", "{67100877-4D48-4E76-BFDF-1637912FC51C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserProfileService.Projection.SecondLevel.Assignments.UnitTests", "tests\UserProfileService.Projection.SecondLevel.Assignments.UnitTests\UserProfileService.Projection.SecondLevel.Assignments.UnitTests.csproj", "{67100877-4D48-4E76-BFDF-1637912FC51C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserProfileService.IntegrationTests", "tests\UserProfileService.IntegrationTests\UserProfileService.IntegrationTests.csproj", "{4FB216E8-3FA2-45D3-AB44-C067C7E63881}"
 EndProject
@@ -99,7 +99,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserProfileService.Sync.Abs
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserProfileService.EventCollector.Abstractions.Messages", "src\UserProfileService.EventCollector.Abstractions.Messages\UserProfileService.EventCollector.Abstractions.Messages.csproj", "{F6399A4E-4F16-4B90-8F4E-27F3C663A4BA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserProfileService.Messaging.ArangoDb.Tests", "tests\UserProfileService.Messaging.ArangoDb.Tests\UserProfileService.Messaging.ArangoDb.Tests.csproj", "{DEA477D5-5B6D-4641-8E4E-B7CF81C15245}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserProfileService.Messaging.ArangoDb.UnitTests", "tests\UserProfileService.Messaging.ArangoDb.UnitTests\UserProfileService.Messaging.ArangoDb.UnitTests.csproj", "{DEA477D5-5B6D-4641-8E4E-B7CF81C15245}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserProfileService.EventCollector.UnitTests", "tests\UserProfileService.EventCollector.UnitTests\UserProfileService.EventCollector.UnitTests.csproj", "{4A38C852-59FB-4C7A-8605-33C0646DF27A}"
 EndProject
@@ -127,7 +127,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserProfileService.Projecti
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserProfileService.Queries.Language", "src\UserProfileService.Queries.Language\UserProfileService.Queries.Language.csproj", "{97C1DD23-717D-46B8-B0F7-E1222DEE5FEE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserProfileService.Queries.Language.Tests", "tests\UserProfileService.Queries.Language.Tests\UserProfileService.Queries.Language.Tests.csproj", "{B0F83498-7D1F-4B75-A5A9-147F70EE99B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserProfileService.Queries.Language.UnitTests", "tests\UserProfileService.Queries.Language.UnitTests\UserProfileService.Queries.Language.UnitTests.csproj", "{B0F83498-7D1F-4B75-A5A9-147F70EE99B3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maverick.UserProfileService.FilterUtility", "src\Maverick.UserProfileService.FilterUtility\Maverick.UserProfileService.FilterUtility.csproj", "{74F31BB4-60BE-49B4-9475-87FAEFD35570}"
 EndProject
