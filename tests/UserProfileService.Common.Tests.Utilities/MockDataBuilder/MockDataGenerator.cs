@@ -1037,15 +1037,16 @@ namespace UserProfileService.Common.Tests.Utilities.MockDataBuilder
         ///     A method to generate fake <see cref="ConditionalOrganization" />
         /// </summary>
         /// <param name="number">the number of fake groups that should be generated</param>
+        /// <param name="maxRangeCondition">The maximum range conditions the organisation can contain.</param>
         /// <returns>A list containing the generated fake <see cref="ConditionalOrganization" /></returns>
-        public static IList<ConditionalOrganization> GenerateOrganizationConditionalInstances(int number = 1)
+        public static IList<ConditionalOrganization> GenerateOrganizationConditionalInstances(int number = 1, int maxRangeCondition = 50)
         {
             return new Faker<ConditionalOrganization>()
                 .ApplyOrganizationBasicRules()
                 .RuleFor(g => g.ChildrenCount, f => f.Random.Int(0, 50))
                 .RuleFor(g => g.HasChildren, (_, g) => g.ChildrenCount > 0)
                 .RuleFor(g => g.Tags, f => f.Random.WordsArray(0, 5))
-                .RuleFor(g => g.Conditions, f => GenerateRangeConditions(f.Random.Int(0, 50)))
+                .RuleFor(g => g.Conditions, f => GenerateRangeConditions(f.Random.Int(0, maxRangeCondition)))
                 .Generate(number);
         }
 
