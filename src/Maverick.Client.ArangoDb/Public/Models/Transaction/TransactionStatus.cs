@@ -11,7 +11,7 @@ public enum TransactionStatus
     Unknown,
 
     /// <summary>
-    /// T   he transaction is currently running.
+    ///     The transaction is currently running.
     /// </summary>
     Running,
 
