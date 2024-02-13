@@ -97,14 +97,12 @@ namespace UserProfileService.Projection.FirstLevel.UnitTests.HandlerTests.Method
                 new object[]
                 {
                     null,
-                    new ProfilePropertiesChangedEvent(),
-                    "1E24F7BB-3E8F-403D-9453-8DAB50AC290E"
+                    new ProfilePropertiesChangedEvent()
                 },
                 new object[]
                 {
                     new PropertiesUpdatedPayload(),
-                    null,
-                    "1E24F7BB-3E8F-403D-9453-8DAB50AC290E"
+                    null
                 }
             };
 
