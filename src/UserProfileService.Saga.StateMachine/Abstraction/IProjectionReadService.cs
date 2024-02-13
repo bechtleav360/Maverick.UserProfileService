@@ -52,14 +52,14 @@ public interface IProjectionReadService
     /// </summary>
     /// <param name="id">Identifier of tag to return.</param>
     /// <returns>Tag for given identifier.</returns>
-    public Task<Tag> GetTagAsync(string id);
+    public Task<Tag?> GetTagAsync(string id);
 
     /// <summary>
     ///     Get the role from a repository.
     /// </summary>
     /// <param name="id">Identifier of role to return.</param>
     /// <returns>Role for given identifier.</returns>
-    public Task<RoleBasic> GetRoleAsync(string id);
+    public Task<RoleBasic?> GetRoleAsync(string id);
 
     /// <summary>
     ///     Get the profile from a repository.
@@ -67,7 +67,7 @@ public interface IProjectionReadService
     /// <param name="id">Identifier of profile to return.</param>
     /// <param name="profileKind">The profile kind of the profile to be retrieved.</param>
     /// <returns>Profile for given identifier.</returns>
-    public Task<IProfile> GetProfileAsync(string id, ProfileKind profileKind);
+    public Task<IProfile?> GetProfileAsync(string id, ProfileKind profileKind);
 
     /// <summary>
     ///     Returns a JSON object that contains all settings of a profile with the specified config key.
@@ -103,5 +103,5 @@ public interface IProjectionReadService
     /// </summary>
     /// <param name="id">Identifier of function to return.</param>
     /// <returns>Function for given identifier.</returns>
-    public Task<FunctionView> GetFunctionAsync(string id);
+    public Task<FunctionView?> GetFunctionAsync(string id);
 }

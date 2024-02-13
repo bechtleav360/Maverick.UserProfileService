@@ -41,7 +41,7 @@ public class TagDeletedMessageService : BaseCommandService<TagDeletedMessage>
         TagDeletedMessage message,
         string correlationId,
         string processId,
-        CommandInitiator initiator,
+        CommandInitiator? initiator,
         CancellationToken cancellationToken = default)
     {
         Logger.EnterMethod();

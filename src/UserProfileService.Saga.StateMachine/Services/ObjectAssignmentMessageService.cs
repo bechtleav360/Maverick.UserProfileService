@@ -32,20 +32,23 @@ public class ObjectAssignmentMessageService : BaseCommandService<ObjectAssignmen
     }
 
     /// <inheritdoc />
-    public override async Task<ObjectAssignmentMessage> ModifyAsync(
-        ObjectAssignmentMessage message,
+    public override async Task<ObjectAssignmentMessage?> ModifyAsync(
+        ObjectAssignmentMessage? message,
         CancellationToken cancellationToken = default)
     {
         Logger.EnterMethod();
         
         cancellationToken.ThrowIfCancellationRequested();
-        
-        message.Added ??= Array.Empty<ConditionObjectIdent>();
-        message.Removed ??= Array.Empty<ConditionObjectIdent>();
-        message.Added.AddDefaultConditions();
-        message.Removed.AddDefaultConditions();
 
-        ObjectAssignmentMessage result = await base.ModifyAsync(message, cancellationToken);
+        if (message != null)
+        {
+            message.Added ??= Array.Empty<ConditionObjectIdent>();
+            message.Removed ??= Array.Empty<ConditionObjectIdent>();
+            message.Added.AddDefaultConditions();
+            message.Removed.AddDefaultConditions();
+        }
+        
+        ObjectAssignmentMessage? result = await base.ModifyAsync(message, cancellationToken);
 
         return Logger.ExitMethod(result);
     }
@@ -55,7 +58,7 @@ public class ObjectAssignmentMessageService : BaseCommandService<ObjectAssignmen
         ObjectAssignmentMessage message,
         string correlationId,
         string processId,
-        CommandInitiator initiator,
+        CommandInitiator? initiator,
         CancellationToken cancellationToken = default)
     {
         Logger.EnterMethod();

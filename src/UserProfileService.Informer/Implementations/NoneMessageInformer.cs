@@ -9,7 +9,8 @@ namespace UserProfileService.Informer.Implementations;
 public class NoneMessageInformer : IMessageInformer
 {
     /// <inheritdoc />
-    public async Task NotifyEventOccurredAsync(IUserProfileServiceEvent serviceEvent, INotifyContext context)
+    public Task NotifyEventOccurredAsync(IUserProfileServiceEvent serviceEvent, INotifyContext context)
     {
+        return Task.CompletedTask;
     }
 }

@@ -351,7 +351,7 @@ public class UserSettingsController : Controller
     ///     <see cref="UserSettingObject" />.
     /// </param>
     /// <param name="userSettingsId">
-    ///     The exact id that identify the <see cref="userSettingsObject" /> where the value has to be
+    ///     The exact id that identify the <paramref name="userSettingsObject" /> where the value has to be
     ///     updated.
     /// </param>
     /// <param name="userSettingsObject">

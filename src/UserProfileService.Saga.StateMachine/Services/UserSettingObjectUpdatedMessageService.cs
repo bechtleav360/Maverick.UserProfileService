@@ -34,7 +34,7 @@ public class UserSettingObjectUpdatedMessageService : BaseCommandService<UserSet
         UserSettingObjectUpdatedMessage createdMessage,
         string correlationId,
         string processId,
-        CommandInitiator initiator,
+        CommandInitiator? initiator,
         CancellationToken cancellationToken = default)
     {
         Logger.EnterMethod();

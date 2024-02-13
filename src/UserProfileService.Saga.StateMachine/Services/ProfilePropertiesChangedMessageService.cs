@@ -5,6 +5,7 @@ using Maverick.UserProfileService.Models.EnumModels;
 using Microsoft.Extensions.Logging;
 using UserProfileService.Commands;
 using UserProfileService.Common.Logging.Extensions;
+using UserProfileService.Common.V2.Exceptions;
 using UserProfileService.Events.Implementation.V2;
 using UserProfileService.Events.Payloads.V2;
 using UserProfileService.Saga.Events.Messages;
@@ -41,20 +42,23 @@ public class ProfilePropertiesChangedMessageService : BaseCommandService<Profile
     }
 
     /// <inheritdoc />
-    public override async Task<ProfilePropertiesChangedMessage> ModifyAsync(
-        ProfilePropertiesChangedMessage message,
+    public override async Task<ProfilePropertiesChangedMessage?> ModifyAsync(
+        ProfilePropertiesChangedMessage? message,
         CancellationToken cancellationToken = default)
     {
         Logger.EnterMethod();
 
         cancellationToken.ThrowIfCancellationRequested();
-        
-        ValidationExtension.RemoveEnumerableNullValues<IList<ExternalIdentifier>, ExternalIdentifier>(
-            message.Properties,
-            nameof(IProfile.ExternalIds),
-            true);
 
-        ProfilePropertiesChangedMessage result = await base.ModifyAsync(message, cancellationToken);
+        if (message != null)
+        {
+            ValidationExtension.RemoveEnumerableNullValues<IList<ExternalIdentifier>, ExternalIdentifier>(
+                message.Properties,
+                nameof(IProfile.ExternalIds),
+                true);
+        }
+        
+        ProfilePropertiesChangedMessage? result = await base.ModifyAsync(message, cancellationToken);
 
         return Logger.ExitMethod(result);
     }
@@ -64,7 +68,7 @@ public class ProfilePropertiesChangedMessageService : BaseCommandService<Profile
         ProfilePropertiesChangedMessage message,
         string correlationId,
         string processId,
-        CommandInitiator initiator,
+        CommandInitiator? initiator,
         CancellationToken cancellationToken = default)
     {
         Logger.EnterMethod();
@@ -79,7 +83,14 @@ public class ProfilePropertiesChangedMessageService : BaseCommandService<Profile
                 initiator,
                 m => m.Id);
 
-        IProfile profile = await _readService.GetProfileAsync(eventData.Payload.Id, ProfileKind.Unknown);
+        IProfile? profile = await _readService.GetProfileAsync(eventData.Payload!.Id, ProfileKind.Unknown);
+
+        if (profile == null)
+        {
+            throw new InstanceNotFoundException(
+                $"Failed to create {nameof(ProfilePropertiesChangedEvent)} "
+                + $"because no profile with id {eventData.Payload.Id} was found.");
+        }
 
         eventData.OldProfile = profile;
         eventData.ProfileKind = profile.Kind;

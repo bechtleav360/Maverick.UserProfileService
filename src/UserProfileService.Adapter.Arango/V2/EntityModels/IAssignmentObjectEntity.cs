@@ -6,6 +6,9 @@ using Newtonsoft.Json;
 
 namespace UserProfileService.Adapter.Arango.V2.EntityModels;
 
+/// <summary>
+///     Represents an entity profiles can be assigned to (i.e. a function or a role).
+/// </summary>
 public interface IAssignmentObjectEntity : IAssignmentObject
 {
     /// <summary>
@@ -14,6 +17,9 @@ public interface IAssignmentObjectEntity : IAssignmentObject
     /// </summary>
     public IList<RangeCondition> Conditions { get; set; }
 
+    /// <summary>
+    ///     A system specific id for this object.
+    /// </summary>
     [JsonProperty(AConstants.IdSystemProperty)]
     string SystemId { get; }
 }

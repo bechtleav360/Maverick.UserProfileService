@@ -12,11 +12,14 @@ namespace UserProfileService.Common.V2.Utilities;
 /// </summary>
 public class DefaultJsonConverterBuilder
 {
-    private readonly IList<JsonConverter> _Converters;
+    private readonly IList<JsonConverter> _converters;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="DefaultJsonConverterBuilder"/> class.
+    /// </summary>
     public DefaultJsonConverterBuilder()
     {
-        _Converters = new List<JsonConverter>();
+        _converters = new List<JsonConverter>();
     }
 
     /// <summary>
@@ -34,7 +37,7 @@ public class DefaultJsonConverterBuilder
             .RegisterSubtype<OrganizationBasic>(ProfileKind.Organization)
             .Build();
 
-        _Converters.Add(jsonConverter);
+        _converters.Add(jsonConverter);
 
         return this;
     }
@@ -45,6 +48,6 @@ public class DefaultJsonConverterBuilder
     /// <returns>A collection fo <see cref="JsonConverter" />.</returns>
     public IList<JsonConverter> Build()
     {
-        return _Converters;
+        return _converters;
     }
 }

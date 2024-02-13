@@ -8,6 +8,7 @@ using UserProfileService.Adapter.Arango.V2.Annotations;
 
 namespace UserProfileService.Adapter.Arango.V2.EntityModels;
 
+/// <inheritdoc cref="IProfileEntityModel"/>
 public class UserEntityModel : User, IProfileEntityModel
 {
     /// <summary>
@@ -16,8 +17,14 @@ public class UserEntityModel : User, IProfileEntityModel
     /// </summary>
     public IList<RangeCondition> Conditions { get; set; }
 
-    public List<FunctionalAccessRightEntityModel> FunctionalAccessRights { get; set; }
+    /// <summary>
+    ///     Gets or sets a collection of functional access rights assigned to this user.
+    /// </summary>
+    public IList<FunctionalAccessRightEntityModel> FunctionalAccessRights { get; set; }
 
+    /// <summary>
+    ///     Gets or sets a list of functions assigned to this profile.
+    /// </summary>
     [VirtualProperty(
         typeof(UserEntityModel),
         nameof(SecurityAssignments),
@@ -26,14 +33,19 @@ public class UserEntityModel : User, IProfileEntityModel
     [JsonIgnore]
     public IList<ILinkedObject> Functions { get; set; }
 
+    /// <inheritdoc />
     public new IList<Member> MemberOf { get; set; }
 
-    public List<string> Paths { get; set; }
+    /// <inheritdoc />
+    public IList<string> Paths { get; set; }
 
+    /// <inheritdoc />
     public IList<ILinkedObject> SecurityAssignments { get; set; }
 
+    /// <inheritdoc />
     [JsonProperty(AConstants.IdSystemProperty)]
     public string SystemId { get; }
 
+    /// <inheritdoc />
     public List<CalculatedTag> Tags { get; set; }
 }

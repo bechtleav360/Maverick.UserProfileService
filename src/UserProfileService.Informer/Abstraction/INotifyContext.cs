@@ -11,12 +11,12 @@ public interface INotifyContext
    /// <summary>
    ///     The type that the notification is related to.
    /// </summary>
-    ObjectIdent ContextType { get; set; }
+    ObjectIdent? ContextType { get; set; }
 
    /// <summary>
    ///     The external id that is needed for the notify context.
    /// </summary>
-    List<ExternalIdentifier> ExternalIdentifier { set; get; }
+    IList<ExternalIdentifier>? ExternalIdentifier { set; get; }
 
    /// <summary>
    /// Decides if the handler should be executed.

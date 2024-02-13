@@ -19,7 +19,7 @@ public class InstanceNotFoundException : Exception
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="InstanceNotFoundException" /> class, without setting the
-    ///     <see cref="Code" /> and the <see cref="InstanceNotFoundException.Message" /> properties.
+    ///     <see cref="Code" /> and the <see cref="Exception.Message" /> properties.
     /// </summary>
     public InstanceNotFoundException()
     {

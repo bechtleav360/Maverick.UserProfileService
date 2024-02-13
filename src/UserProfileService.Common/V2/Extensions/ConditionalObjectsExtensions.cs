@@ -28,6 +28,11 @@ public static class ConditionalObjectsExtensions
         }
     }
 
+    /// <summary>
+    ///     Converts a collection of <see cref="ConditionObjectIdent"/> instances to a flat list of <see cref="ConditionAssignment"/>.
+    /// </summary>
+    /// <param name="conditionalObjects">The collection of conditional objects.</param>
+    /// <returns>A flat list of condition assignments.</returns>
     public static IEnumerable<ConditionAssignment> AsFlatAssignmentList(this IEnumerable<ConditionObjectIdent> conditionalObjects)
     {
         return conditionalObjects?
@@ -53,6 +58,11 @@ public static class ConditionalObjectsExtensions
             ?? Enumerable.Empty<ConditionAssignment>();
     }
 
+    /// <summary>
+    ///     Converts a collection of <see cref="ConditionAssignment"/> instances to a flat list.
+    /// </summary>
+    /// <param name="source">The source collection of condition assignments.</param>
+    /// <returns>A flat list of condition assignments.</returns>
     public static IEnumerable<ConditionAssignment> AsFlatList(
         this IEnumerable<ConditionAssignment> source)
     {

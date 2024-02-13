@@ -13,7 +13,7 @@ public class DefaultNotifyContext : INotifyContext
     public ObjectIdent? ContextType { get; set; }
 
     /// <inheritdoc />
-    public List<ExternalIdentifier> ExternalIdentifier { get; set; }
+    public IList<ExternalIdentifier>? ExternalIdentifier { get; set; }
 
     /// <inheritdoc />
     public bool NotifyConsumer { get; set; }

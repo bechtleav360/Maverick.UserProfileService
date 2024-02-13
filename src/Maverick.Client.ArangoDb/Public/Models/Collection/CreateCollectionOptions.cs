@@ -45,6 +45,9 @@ public class CreateCollectionOptions
     /// </summary>
     public long? JournalSize { get; set; }
 
+    /// <summary>
+    ///     Gets or sets the options used to configure collection key handling.
+    /// </summary>
     public CollectionKeyOptions KeyOptions { get; set; }
 
     /// <summary>

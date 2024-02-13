@@ -59,11 +59,11 @@ public abstract class DependencyRegistrationBase : ISyncProviderConfigurationReg
         if (providerMetadata?.SyncConfigName == null
             || !providerConfiguration.TryGetValue(
                 providerMetadata.SyncConfigName,
-                out IConfigurationSection? searchProviderConfigurationSection))
+                out IConfigurationSection searchProviderConfigurationSection))
         {
             logger.LogWarnMessage(
                 "The sync configuration provider with the name {configProviderName} won't be registered.",
-                LogHelpers.Arguments(providerMetadata.SyncConfigName));
+                LogHelpers.Arguments(providerMetadata?.SyncConfigName));
 
             return;
         }

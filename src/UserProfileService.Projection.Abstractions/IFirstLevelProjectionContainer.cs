@@ -3,7 +3,7 @@
 namespace UserProfileService.Projection.Abstractions;
 
 /// <summary>
-///     The interface marks all containers that are used for the  first level projection repository.
+///     The interface marks all containers that are used for the first level projection repository.
 /// </summary>
 public interface IFirstLevelProjectionContainer : IFirstLevelProjectionSimplifier
 {
@@ -12,5 +12,8 @@ public interface IFirstLevelProjectionContainer : IFirstLevelProjectionSimplifie
     /// </summary>
     ContainerType ContainerType { get; }
 
+    /// <summary>
+    ///     The identifier of the container.
+    /// </summary>
     string Id { get; set; }
 }

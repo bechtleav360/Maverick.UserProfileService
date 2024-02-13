@@ -48,6 +48,12 @@ public class EventLogTuple : EventTuple
     {
     }
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="EventLogTuple"/> class
+    ///     using the values from <paramref name="eventTuple"/> and the <paramref name="batchId"/>.
+    /// </summary>
+    /// <param name="eventTuple"></param>
+    /// <param name="batchId"></param>
     public EventLogTuple(EventTuple eventTuple, string batchId)
     {
         Status = EventStatus.Initialized;
@@ -59,6 +65,12 @@ public class EventLogTuple : EventTuple
         TargetStream = eventTuple.TargetStream;
     }
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="EventLogTuple"/> class with the specified
+    ///     <paramref name="event"/> and <paramref name="streamName"/>.
+    /// </summary>
+    /// <param name="event"></param>
+    /// <param name="streamName"></param>
     public EventLogTuple(IUserProfileServiceEvent @event, string streamName)
     {
         Event = @event;

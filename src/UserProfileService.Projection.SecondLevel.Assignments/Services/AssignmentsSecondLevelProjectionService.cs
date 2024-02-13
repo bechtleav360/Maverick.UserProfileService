@@ -21,6 +21,10 @@ using UserProfileService.Projection.SecondLevel.Assignments.Abstractions;
 
 namespace UserProfileService.Projection.SecondLevel.Assignments.Services;
 
+/// <summary>
+///     Second level event projection that projects all events
+///     associated with assignments of profiles and objects.
+/// </summary>
 public class AssignmentsSecondLevelProjectionService : ProjectionBase, IAssignmentsSecondLevelProjection
 {
     /// <inheritdoc />
@@ -61,6 +65,7 @@ public class AssignmentsSecondLevelProjectionService : ProjectionBase, IAssignme
         return Logger.ExitMethod(events);
     }
 
+    /// <inheritdoc />
     protected override async Task<GlobalPosition> GetGlobalPositionOfLatestProjectedEventAsync(
         CancellationToken cancellationToken = default)
     {
@@ -107,6 +112,7 @@ public class AssignmentsSecondLevelProjectionService : ProjectionBase, IAssignme
         }
     }
 
+    /// <inheritdoc />
     protected override bool TryGetStreamNamePattern(out Regex regEx)
     {
         using IServiceScope scope = ServiceProvider.CreateScope();

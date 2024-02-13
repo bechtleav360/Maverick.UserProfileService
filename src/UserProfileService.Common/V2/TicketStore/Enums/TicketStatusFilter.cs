@@ -1,5 +1,8 @@
 ﻿namespace UserProfileService.Common.V2.TicketStore.Enums;
 
+/// <summary>
+///     Used to filter tickets by status.
+/// </summary>
 public enum TicketStatusFilter
 {
     /// <summary>

@@ -24,11 +24,30 @@ namespace UserProfileService.EventCollector;
 public abstract class Agent<TMessage, TCompositeResponseMessage> : IConsumer<TMessage>
     where TMessage : class, IEventCollectorMessage where TCompositeResponseMessage : class
 {
+    /// <summary>
+    ///     The <see cref="IEventCollectorStore"/>.
+    /// </summary>
     protected readonly IEventCollectorStore CollectorStore;
+    /// <summary>
+    ///     The <see cref="EventCollectorConfiguration"/>.
+    /// </summary>
     protected readonly EventCollectorConfiguration Configuration;
+    /// <summary>
+    ///     The <see cref="ILogger"/>.
+    /// </summary>
     protected readonly ILogger Logger;
+    /// <summary>
+    ///     The <see cref="IServiceProvider"/>.
+    /// </summary>
     protected readonly IServiceProvider ServiceProvider;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="Agent{TMessage,TCompositeResponseMessage}"/> class
+    ///     with the specified service provider, logger and event collector configuration.
+    /// </summary>
+    /// <param name="serviceProvider">The service provider.</param>
+    /// <param name="logger">The logger.</param>
+    /// <param name="eventCollectionConfiguration">The event collection configuration.</param>
     protected Agent(
         IServiceProvider serviceProvider,
         ILogger logger,
@@ -40,6 +59,12 @@ public abstract class Agent<TMessage, TCompositeResponseMessage> : IConsumer<TMe
         Configuration = eventCollectionConfiguration.CurrentValue;
     }
 
+    /// <summary>
+    /// Builds a composite response message based on the collected event data.
+    /// </summary>
+    /// <param name="collectingId">The unique identifier for the collection process.</param>
+    /// <param name="eventDataCollection">The collection of event data.</param>
+    /// <returns>A composite response message containing relevant information.</returns>
     protected abstract TCompositeResponseMessage BuildCompositeResponseMessage(
         Guid collectingId,
         ICollection<EventData> eventDataCollection);
@@ -99,6 +124,11 @@ public abstract class Agent<TMessage, TCompositeResponseMessage> : IConsumer<TMe
             await collectorStore.SetTerminateTimeForCollectingItemsProcessAsync(collectingId, cancellationToken));
     }
 
+    /// <summary>
+    ///     Retrieves the event data for starting the collection process.
+    /// </summary>
+    /// <param name="context">The context containing the event collector message.</param>
+    /// <returns>A task representing the asynchronous operation with the start collecting event data.</returns>
     protected virtual Task<StartCollectingEventData> GetStartCollectingEventData(
         ConsumeContext<IEventCollectorMessage> context)
     {
@@ -140,6 +170,12 @@ public abstract class Agent<TMessage, TCompositeResponseMessage> : IConsumer<TMe
         Logger.ExitMethod();
     }
 
+    /// <summary>
+    /// Creates an <see cref="EventData"/> instance based on the provided message and host.
+    /// </summary>
+    /// <param name="message">The message from which to create the event data.</param>
+    /// <param name="host">The host information associated with the event.</param>
+    /// <returns>An <see cref="EventData"/> instance representing the event.</returns>
     public abstract EventData CreateEventData(TMessage message, string host);
 
     private protected async Task CheckAndSendStatus<T>(ConsumeContext<T> context)
@@ -246,6 +282,7 @@ public abstract class
     where
     TCompositeResponseMessage : class
 {
+    /// <inheritdoc />
     protected Agent(
         IServiceProvider serviceProvider,
         ILogger logger,
@@ -280,7 +317,7 @@ public abstract class
 
         if (Logger.IsEnabledForTrace())
         {
-            Logger.LogTrace(
+            Logger.LogTraceMessage(
                 "Saving the eventData: {eventData} for the collectingId: {collectiondId}",
                 LogHelpers.Arguments(eventData.ToLogString(), context.Message.CollectingId.ToLogString()));
         }
@@ -296,5 +333,11 @@ public abstract class
         Logger.ExitMethod();
     }
 
+    /// <summary>
+    ///     Creates event data with the specified failure message to be consumed by the event collector.
+    /// </summary>
+    /// <param name="message">The message indicating some failure.</param>
+    /// <param name="host">The host of the event.</param>
+    /// <returns>The created event data.</returns>
     public abstract EventData CreateEventData(TFailureMessage message, string host);
 }

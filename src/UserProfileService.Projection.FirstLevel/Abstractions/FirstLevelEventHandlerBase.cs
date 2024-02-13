@@ -20,14 +20,20 @@ namespace UserProfileService.Projection.FirstLevel.Abstractions;
 public abstract class FirstLevelEventHandlerBase<TEventType> : IFirstLevelProjectionEventHandler<TEventType>
     where TEventType : class, IUserProfileServiceEvent
 {
+    /// <summary>
+    ///     The <see cref="ILogger" /> to be used.
+    /// </summary>
     protected readonly ILogger Logger;
+    /// <summary>
+    ///    he repository to be used to persist first level projection data. 
+    /// </summary>
     protected readonly IFirstLevelProjectionRepository Repository;
 
     /// <summary>
     ///     Creates a new instance of <see cref="FirstLevelEventHandlerBase{TEventType}" />
     /// </summary>
     /// <param name="logger">The <see cref="ILogger" /> to be used.</param>
-    /// <param name="repository"></param>
+    /// <param name="repository">The repository to be used to persist first level projection data.</param>
     protected FirstLevelEventHandlerBase(ILogger logger, IFirstLevelProjectionRepository repository)
     {
         Logger = logger;

@@ -4,6 +4,9 @@ using System.Linq;
 
 namespace UserProfileService.Adapter.Arango.V2.EntityModels;
 
+/// <summary>
+///     Represents options for Arango model builders.
+/// </summary>
 public class ModelBuilderOptions
 {
     // keys: alias types, values reference types (i.e. interface)
@@ -175,6 +178,10 @@ public class ModelBuilderOptions
         return false;
     }
 
+    /// <summary>
+    ///     Gets a list of query document collections.
+    /// </summary>
+    /// <returns>A list of collection names.</returns>
     public IList<string> GetQueryDocumentCollections()
     {
         return SavedInfos
@@ -185,6 +192,10 @@ public class ModelBuilderOptions
             .ToList();
     }
 
+    /// <summary>
+    ///     Gets a list of document collections.
+    /// </summary>
+    /// <returns>A list of collection names.</returns>
     public IList<string> GetDocumentCollections()
     {
         return SavedInfos
@@ -195,6 +206,10 @@ public class ModelBuilderOptions
             .ToList();
     }
 
+    /// <summary>
+    ///     Gets a list of edge collections.
+    /// </summary>
+    /// <returns>A list of collection names.</returns>
     public IList<string> GetEdgeCollections()
     {
         return SavedInfos
@@ -206,16 +221,31 @@ public class ModelBuilderOptions
             .ToList();
     }
 
+    /// <summary>
+    ///     Gets the collection name for the specified entity type.
+    /// </summary>
+    /// <param name="type">The type to get the collection name for.</param>
+    /// <returns>The collection name.</returns>
     public string GetCollectionName(Type type)
     {
         return GetValue(type)?.GetCollectionName(type);
     }
 
+    /// <summary>
+    ///     Gets the collection name for the specified entity type.
+    /// </summary>
+    /// <typeparam name="TEntity">The entity type.</typeparam>
+    /// <returns>The collection name.</returns>
     public string GetCollectionName<TEntity>()
     {
         return GetCollectionName(typeof(TEntity));
     }
 
+    /// <summary>
+    ///     Gets the query collection name for the specified entity type.
+    /// </summary>
+    /// <param name="type">The type to get the query collection name for.</param>
+    /// <returns>The query collection name.</returns>
     public string GetQueryCollectionName(Type type)
     {
         return GetValue(type)?.QueryCollectionName
@@ -223,6 +253,11 @@ public class ModelBuilderOptions
                 $"No query collection name has been mapped to type '{type?.Name ?? "unknown"}' (regarding model builder).");
     }
 
+    /// <summary>
+    ///     Gets the query collection name for the specified entity type.
+    /// </summary>
+    /// <typeparam name="TEntity">The entity type.</typeparam>
+    /// <returns>The query collection name.</returns>
     public string GetQueryCollectionName<TEntity>()
     {
         return GetQueryCollectionName(typeof(TEntity));
@@ -233,6 +268,11 @@ public class ModelBuilderOptions
         return GetValue(type)?.KeyPropertyName;
     }
 
+    /// <summary>
+    ///     Gets the key identifier for the specified entity type.
+    /// </summary>
+    /// <typeparam name="TEntity">The entity type.</typeparam>
+    /// <returns>The key identifier.</returns>
     public string GetKeyIdentifier<TEntity>()
     {
         return GetKeyIdentifier(typeof(TEntity));
@@ -274,11 +314,23 @@ public class ModelBuilderOptions
         return GetValue(type)?.GetToRelations(type, m => m.EdgeCollection).ToArray() ?? Array.Empty<string>();
     }
 
+    /// <summary>
+    ///     Gets the relation between the specified "from" and "to" types.
+    /// </summary>
+    /// <typeparam name="TFrom">The "from" type.</typeparam>
+    /// <typeparam name="TTo">The "to" type.</typeparam>
+    /// <returns>The type relation configuration.</returns>
     public ModelBuilderOptionsTypeRelation GetRelation<TFrom, TTo>()
     {
         return GetRelation(typeof(TFrom), typeof(TTo));
     }
 
+    /// <summary>
+    ///     Gets the relation between the specified "from" and "to" entity types.
+    /// </summary>
+    /// <param name="fromType">The "from" type.</param>
+    /// <param name="toType">The "to" type.</param>
+    /// <returns>The type relation configuration.</returns>
     public ModelBuilderOptionsTypeRelation GetRelation(Type fromType, Type toType)
     {
         ModelBuilderOptionsType value = GetValue(fromType);

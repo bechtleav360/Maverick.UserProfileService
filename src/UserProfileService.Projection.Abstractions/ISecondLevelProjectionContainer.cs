@@ -2,6 +2,9 @@
 
 namespace UserProfileService.Projection.Abstractions;
 
+/// <summary>
+///     The interface marks all containers that are used for the second level projection repository.
+/// </summary>
 public interface ISecondLevelProjectionContainer
 {
     /// <summary>

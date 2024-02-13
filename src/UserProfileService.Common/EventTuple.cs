@@ -28,6 +28,9 @@ public class EventTuple
         Event = @event;
     }
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="EventTuple"/> class.
+    /// </summary>
     public EventTuple()
     {
     }

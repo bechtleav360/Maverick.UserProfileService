@@ -37,7 +37,7 @@ public interface ISagaRepositoryQueryContext<TSaga> : QuerySagaRepositoryContext
     /// <summary>
     ///     Update the given saga instance
     /// </summary>
-    /// <param name="instance">Saga instance of type <see cref="TSaga" /></param>
+    /// <param name="instance">Saga instance of type <typeparamref name="TSaga" /></param>
     /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
     /// <returns> A <see cref="Task" /></returns>
     Task UpdateAsync(TSaga instance, CancellationToken cancellationToken = default);

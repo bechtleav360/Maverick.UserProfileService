@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace UserProfileService.Common.V2.Abstractions;
 
+/// <summary>
+///     Provides asnychronous methods to get and set values in a synchronized fashion using locks.
+/// </summary>
 public interface ICacheStore
 {
     /// <summary>

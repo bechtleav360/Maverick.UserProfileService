@@ -9,7 +9,7 @@ namespace UserProfileService.Informer.Implementations;
 public class MessageInformerBuilder : IMessageInformerBuilder
 {
     /// <inheritdoc />
-    public Dictionary<Type, List<Func<IServiceProvider, IProcessNotifierExecutor>>>?
+    public Dictionary<Type, List<Func<IServiceProvider, IProcessNotifierExecutor>>>
         NotificationDictionary { set; get; } =
         new Dictionary<Type, List<Func<IServiceProvider, IProcessNotifierExecutor>>>();
 

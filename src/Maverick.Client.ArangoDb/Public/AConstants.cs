@@ -11,6 +11,9 @@ public static class AConstants
 {
     internal static readonly Regex KeyRegex = new Regex(@"^[a-zA-Z0-9_\-:.@()+,=;$!*'%]*$");
 
+    /// <summary>
+    ///     Gets the Arango client name.
+    /// </summary>
     public const string ArangoClientName = "Arango_DB_Client";
 
     /// <summary>

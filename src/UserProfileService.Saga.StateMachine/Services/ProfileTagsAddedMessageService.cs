@@ -5,6 +5,7 @@ using Maverick.UserProfileService.Models.RequestModels;
 using Microsoft.Extensions.Logging;
 using UserProfileService.Commands;
 using UserProfileService.Common.Logging.Extensions;
+using UserProfileService.Common.V2.Exceptions;
 using UserProfileService.Events.Implementation.V2;
 using UserProfileService.Events.Payloads.V2;
 using UserProfileService.Saga.Events.Messages;
@@ -39,17 +40,20 @@ public class ProfileTagsAddedMessageService : BaseCommandService<ProfileTagsAdde
     }
 
     /// <inheritdoc />
-    public override async Task<ProfileTagsAddedMessage> ModifyAsync(
-        ProfileTagsAddedMessage message,
+    public override async Task<ProfileTagsAddedMessage?> ModifyAsync(
+        ProfileTagsAddedMessage? message,
         CancellationToken cancellationToken = default)
     {
         Logger.EnterMethod();
         
         cancellationToken.ThrowIfCancellationRequested();
-        
-        message.Tags ??= Array.Empty<TagAssignment>();
 
-        ProfileTagsAddedMessage result = await base.ModifyAsync(message, cancellationToken);
+        if (message != null)
+        {
+            message.Tags ??= Array.Empty<TagAssignment>();
+        }
+        
+        ProfileTagsAddedMessage? result = await base.ModifyAsync(message, cancellationToken);
 
         return Logger.ExitMethod(result);
     }
@@ -59,7 +63,7 @@ public class ProfileTagsAddedMessageService : BaseCommandService<ProfileTagsAdde
         ProfileTagsAddedMessage message,
         string correlationId,
         string processId,
-        CommandInitiator initiator,
+        CommandInitiator? initiator,
         CancellationToken cancellationToken = default)
     {
         Logger.EnterMethod();
@@ -74,7 +78,14 @@ public class ProfileTagsAddedMessageService : BaseCommandService<ProfileTagsAdde
                 initiator,
                 m => m.Id);
 
-        IProfile profile = await _readService.GetProfileAsync(eventData.Payload.Id, ProfileKind.Unknown);
+        IProfile? profile = await _readService.GetProfileAsync(eventData.Payload!.Id, ProfileKind.Unknown);
+
+        if (profile == null)
+        {
+            throw new InstanceNotFoundException(
+                $"Failed to create {nameof(ProfileTagsAddedEvent)} "
+                + $"because no profile with id {eventData.Payload.Id} was found.");
+        }
 
         eventData.ProfileKind = profile.Kind;
 

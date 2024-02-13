@@ -43,7 +43,7 @@ public class ProfileClientSettingsSetBatchMessageService : BaseCommandService<Pr
         ProfileClientSettingsSetBatchMessage message,
         string correlationId,
         string processId,
-        CommandInitiator initiator,
+        CommandInitiator? initiator,
         CancellationToken cancellationToken = default)
     {
         Logger.EnterMethod();
@@ -58,7 +58,7 @@ public class ProfileClientSettingsSetBatchMessageService : BaseCommandService<Pr
 
         foreach (ProfileIdent resource in message.Resources)
         {
-            IProfile profile = profiles.FirstOrDefault(p => p.Id == resource.Id);
+            IProfile? profile = profiles.FirstOrDefault(p => p.Id == resource.Id);
 
             if (profile == null)
             {

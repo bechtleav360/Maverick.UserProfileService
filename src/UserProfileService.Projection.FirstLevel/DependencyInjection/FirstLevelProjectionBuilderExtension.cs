@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
+using Maverick.UserProfileService.AggregateEvents.Common;
 using Maverick.UserProfileService.Models.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -128,8 +129,8 @@ public static class FirstLevelProjectionBuilderExtension
     }
 
     /// <summary>
-    ///     Adds a tuple creator that is used  to create out of an <see cref="IUserProfileEvent" />
-    ///     and a <see cref="ObjectIdent" /> an <see cref="EventTuple" /> for the <see cref="ISagaService" />.
+    ///     Adds a tuple creator that is used to create an <see cref="EventTuple" /> out of an <see cref="IUserProfileServiceEvent" />
+    ///     and an <see cref="ObjectIdent" /> for the <see cref="ISagaService" />.
     /// </summary>
     /// <param name="builder">The builder that is used to configure the first level projection.</param>
     /// <param name="serviceLifetime">

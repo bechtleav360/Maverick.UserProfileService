@@ -41,7 +41,7 @@ public class FunctionDeletedMessageService : BaseCommandService<FunctionDeletedM
         FunctionDeletedMessage message,
         string correlationId,
         string processId,
-        CommandInitiator initiator,
+        CommandInitiator? initiator,
         CancellationToken cancellationToken = default)
     {
         Logger.EnterMethod();
@@ -56,7 +56,7 @@ public class FunctionDeletedMessageService : BaseCommandService<FunctionDeletedM
                 initiator,
                 m => m.Id);
 
-        FunctionView function = await _readService.GetFunctionAsync(eventData.Payload.Id);
+        FunctionView? function = await _readService.GetFunctionAsync(eventData.Payload!.Id);
 
         eventData.OldFunction = function;
 

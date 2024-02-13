@@ -51,12 +51,28 @@ public class UserProfileOperationTicket : TicketBase
     {
     }
 
+    /// <summary>
+    ///     Initializes a new instance of <see cref="UserProfileOperationTicket" /> with specified id, operation ids
+    ///     time and operation.
+    /// </summary>
+    /// <param name="id">The id of the ticket.</param>
+    /// <param name="objectIds">The object ids that the operation is about to change.</param>
+    /// <param name="operation">The operation that is performed on <paramref name="objectIds"/>.</param>
     public UserProfileOperationTicket(string id, string[] objectIds, string operation) : base(id, TicketType)
     {
         ObjectIds = objectIds;
         Operation = operation;
     }
 
+    /// <summary>
+    ///     Initializes a new instance of <see cref="UserProfileOperationTicket" /> with specified id, operation ids
+    ///     time and operation.
+    /// </summary>
+    /// <param name="id">The id of the ticket.</param>
+    /// <param name="objectIds">The object ids that the operation is about to change.</param>
+    /// <param name="operation">The operation that is performed on <paramref name="objectIds"/>.</param>
+    /// <param name="finished">The point of time when the ticket has been finished.</param>
+    /// <param name="status">The status of the ticket.</param>
     public UserProfileOperationTicket(
         string id,
         string[] objectIds,

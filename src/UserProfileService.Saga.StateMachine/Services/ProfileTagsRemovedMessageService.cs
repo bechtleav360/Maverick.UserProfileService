@@ -4,6 +4,7 @@ using Maverick.UserProfileService.Models.EnumModels;
 using Microsoft.Extensions.Logging;
 using UserProfileService.Commands;
 using UserProfileService.Common.Logging.Extensions;
+using UserProfileService.Common.V2.Exceptions;
 using UserProfileService.Events.Implementation.V2;
 using UserProfileService.Events.Payloads.V2;
 using UserProfileService.Saga.Events.Messages;
@@ -38,17 +39,20 @@ public class ProfileTagsRemovedMessageService : BaseCommandService<ProfileTagsRe
     }
 
     /// <inheritdoc />
-    public override async Task<ProfileTagsRemovedMessage> ModifyAsync(
-        ProfileTagsRemovedMessage message,
+    public override async Task<ProfileTagsRemovedMessage?> ModifyAsync(
+        ProfileTagsRemovedMessage? message,
         CancellationToken cancellationToken = default)
     {
         Logger.EnterMethod();
         
         cancellationToken.ThrowIfCancellationRequested();
-        
-        message.Tags ??= Array.Empty<string>();
 
-        ProfileTagsRemovedMessage result = await base.ModifyAsync(message, cancellationToken);
+        if (message != null)
+        {
+            message.Tags ??= Array.Empty<string>();
+        }
+
+        ProfileTagsRemovedMessage? result = await base.ModifyAsync(message, cancellationToken);
 
         return Logger.ExitMethod(result);
     }
@@ -58,7 +62,7 @@ public class ProfileTagsRemovedMessageService : BaseCommandService<ProfileTagsRe
         ProfileTagsRemovedMessage message,
         string correlationId,
         string processId,
-        CommandInitiator initiator,
+        CommandInitiator? initiator,
         CancellationToken cancellationToken = default)
     {
         Logger.EnterMethod();
@@ -73,7 +77,14 @@ public class ProfileTagsRemovedMessageService : BaseCommandService<ProfileTagsRe
                 initiator,
                 m => m.ResourceId);
 
-        IProfile profile = await _readService.GetProfileAsync(eventData.Payload.ResourceId, ProfileKind.Unknown);
+        IProfile? profile = await _readService.GetProfileAsync(eventData.Payload!.ResourceId, ProfileKind.Unknown);
+
+        if (profile == null)
+        {
+            throw new InstanceNotFoundException(
+                $"Failed to create {nameof(ProfileTagsRemovedEvent)} "
+                + $"because no profile with id {eventData.Payload.ResourceId} was found.");
+        }
 
         eventData.ProfileKind = profile.Kind;
 

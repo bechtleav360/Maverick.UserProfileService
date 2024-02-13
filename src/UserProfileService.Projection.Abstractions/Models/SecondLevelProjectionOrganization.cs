@@ -7,6 +7,9 @@ using UserProfileService.Projection.Abstractions.Annotations;
 
 namespace UserProfileService.Projection.Abstractions.Models;
 
+/// <summary>
+///     Organization profile model used in the second level projection.
+/// </summary>
 public class SecondLevelProjectionOrganization : ISecondLevelProjectionContainer,
     ISecondLevelProjectionProfile
 {

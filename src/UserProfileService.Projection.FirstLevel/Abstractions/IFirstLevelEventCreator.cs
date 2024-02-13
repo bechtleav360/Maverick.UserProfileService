@@ -8,8 +8,8 @@ using UserProfileService.EventSourcing.Abstractions.Models;
 namespace UserProfileService.Projection.FirstLevel.Abstractions;
 
 /// <summary>
-///     The first level creator create out of the  <see cref="IUserProfileServiceEvent" />s
-///     and given metadata the <see cref="EventTuple" />s for the first level projection.
+///     The first level creator creates the <see cref="EventTuple" />s for the
+///     first level projection out of the <see cref="IUserProfileServiceEvent" />s and given metadata.
 /// </summary>
 public interface IFirstLevelEventTupleCreator
 {

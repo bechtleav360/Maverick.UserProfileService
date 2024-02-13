@@ -163,6 +163,7 @@ public class EventCollectorAgent :
         };
     }
 
+    /// <inheritdoc />
     protected override async Task<StartCollectingEventData> GetStartCollectingEventData(
         ConsumeContext<IEventCollectorMessage> context)
     {

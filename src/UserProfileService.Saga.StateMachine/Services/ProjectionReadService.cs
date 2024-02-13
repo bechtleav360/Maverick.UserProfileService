@@ -103,10 +103,10 @@ public class ProjectionReadService : IProjectionReadService, IValidationReadServ
                     : // Unknown is only used for profile assignments and validated in saga worker.
                     var profile =
                         await _readService.GetProfileAsync<IProfile>(objectIdent.Id, RequestedProfileKind.All);
-
+                    
                     result = profile != null;
 
-                    if (result)
+                    if (profile != null)
                     {
                         objectIdent.Type = profile.Kind.ToObjectType();
                     }
@@ -267,7 +267,7 @@ public class ProjectionReadService : IProjectionReadService, IValidationReadServ
     }
 
     /// <inheritdoc cref="IProjectionReadService.GetProfileAsync" />
-    public async Task<IProfile> GetProfileAsync(string id, ProfileKind profileKind)
+    public async Task<IProfile?> GetProfileAsync(string id, ProfileKind profileKind)
     {
         Logger.EnterMethod();
 
@@ -303,7 +303,7 @@ public class ProjectionReadService : IProjectionReadService, IValidationReadServ
     }
 
     /// <inheritdoc cref= "IProjectionReadService.GetProfilesAsync"/>
-    public async Task<Tag> GetTagAsync(string id)
+    public async Task<Tag?> GetTagAsync(string id)
     {
         Logger.EnterMethod();
 
@@ -315,7 +315,7 @@ public class ProjectionReadService : IProjectionReadService, IValidationReadServ
         }
         catch (InstanceNotFoundException)
         {
-            return Logger.ExitMethod<Tag>(null);
+            return Logger.ExitMethod<Tag?>(null);
         }
     }
 
@@ -351,7 +351,7 @@ public class ProjectionReadService : IProjectionReadService, IValidationReadServ
     }
 
     /// <inheritdoc cref="IProjectionReadService.GetFunctionAsync"/>
-    public async Task<FunctionView> GetFunctionAsync(string id)
+    public async Task<FunctionView?> GetFunctionAsync(string id)
     {
         Logger.EnterMethod();
 
@@ -363,7 +363,7 @@ public class ProjectionReadService : IProjectionReadService, IValidationReadServ
         }
         catch (InstanceNotFoundException)
         {
-            return Logger.ExitMethod<FunctionView>(null);
+            return Logger.ExitMethod<FunctionView?>(null);
         }
     }
 
@@ -412,7 +412,7 @@ public class ProjectionReadService : IProjectionReadService, IValidationReadServ
     }
 
     /// <inheritdoc cref="IProjectionReadService.GetRoleAsync"/>
-    public async Task<RoleBasic> GetRoleAsync(string id)
+    public async Task<RoleBasic?> GetRoleAsync(string id)
     {
         Logger.EnterMethod();
 
@@ -424,7 +424,7 @@ public class ProjectionReadService : IProjectionReadService, IValidationReadServ
         }
         catch (InstanceNotFoundException)
         {
-            return Logger.ExitMethod<RoleBasic>(null);
+            return Logger.ExitMethod<RoleBasic?>(null);
         }
     }
 

@@ -15,6 +15,10 @@ using ProfileKind = Maverick.UserProfileService.Models.EnumModels.ProfileKind;
 
 namespace UserProfileService.Adapter.Arango.V2.Helpers;
 
+/// <summary>
+///     Utility class that provides collections of <see cref="JsonConverter"/>s
+///     containing default converters for certain scenarios.
+/// </summary>
 public static class WellKnownJsonConverters
 {
     internal static IEnumerable<JsonConverter> GetDefaultProfileConverters()
@@ -79,6 +83,12 @@ public static class WellKnownJsonConverters
         yield return new StringEnumConverter();
     }
 
+    /// <summary>
+    ///     Gets the default JSON converters for the second level assignment projection.
+    ///     Including converters that resolve the correct implementation
+    ///     when deserializing <see cref="ISecondLevelAssignmentContainer"/> objects.
+    /// </summary>
+    /// <returns></returns>
     public static IEnumerable<JsonConverter> GetDefaultSecondLevelAssignmentProjectionConverters()
     {
         yield return GetAssignmentSubtypeConverter();

@@ -281,9 +281,14 @@ public class ArangoSecondLevelProjectionRepository : ArangoRepositoryBase, ISeco
         return Logger.ExitMethod(response);
     }
 
-    protected string GetCollectionName<T>()
+    /// <summary>
+    ///     Gets the collection name for the specified entity type.
+    /// </summary>
+    /// <typeparam name="TEntity">The entity type.</typeparam>
+    /// <returns>The collection name.</returns>
+    protected string GetCollectionName<TEntity>()
     {
-        var collectionName = _modelsInfo.GetCollectionName<T>();
+        var collectionName = _modelsInfo.GetCollectionName<TEntity>();
 
         return collectionName;
     }
@@ -430,6 +435,16 @@ public class ArangoSecondLevelProjectionRepository : ArangoRepositoryBase, ISeco
         return Logger.ExitMethod(arangoTransaction);
     }
 
+    /// <summary>
+    ///     Creates an entity asynchronously.
+    /// </summary>
+    /// <typeparam name="TEntity">The type of the entity.</typeparam>
+    /// <param name="entity">The entity to create.</param>
+    /// <param name="entityId">The optional entity ID.</param>
+    /// <param name="withResponseCheck">Indicates whether to perform response checks.</param>
+    /// <param name="transaction">The database transaction (if any).</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
     protected async Task<CreateDocumentResponse> CreateEntityInternalAsync<TEntity>(
         TEntity entity,
         string entityId = null,
@@ -452,7 +467,7 @@ public class ArangoSecondLevelProjectionRepository : ArangoRepositoryBase, ISeco
         else
         {
             Logger.LogDebugMessage(
-                "Inserting entity of type :{entityType} with id: {profileId} in the collection {collectionName} inside the transaction: {transactionId}.",
+                "Inserting entity of type: {entityType} with id: {profileId} in the collection {collectionName} inside the transaction: {transactionId}.",
                 LogHelpers.Arguments(typeof(TEntity), entityId, collectionName, transactionId));
         }
 

@@ -4,6 +4,7 @@ using Maverick.UserProfileService.Models.EnumModels;
 using Microsoft.Extensions.Logging;
 using UserProfileService.Commands;
 using UserProfileService.Common.Logging.Extensions;
+using UserProfileService.Common.V2.Exceptions;
 using UserProfileService.Events.Implementation.V2;
 using UserProfileService.Events.Payloads.V2;
 using UserProfileService.Saga.Events.Messages;
@@ -42,16 +43,23 @@ public class ProfileClientSettingsSetMessageService : BaseCommandService<Profile
         ProfileClientSettingsSetMessage message,
         string correlationId,
         string processId,
-        CommandInitiator initiator,
+        CommandInitiator? initiator,
         CancellationToken cancellationToken = default)
     {
         Logger.EnterMethod();
         
         cancellationToken.ThrowIfCancellationRequested();
         
-        IProfile profile = await _readService.GetProfileAsync(
+        IProfile? profile = await _readService.GetProfileAsync(
             message.Resource.Id,
             ProfileKind.Unknown);
+
+        if (profile == null)
+        {
+            throw new InstanceNotFoundException(
+                $"Failed to create {nameof(ProfileClientSettingsSetEvent)} "
+                + $"because no profile with id {message.Resource.Id} was found.");
+        }
 
         message.Resource.ProfileKind = profile.Kind;
 

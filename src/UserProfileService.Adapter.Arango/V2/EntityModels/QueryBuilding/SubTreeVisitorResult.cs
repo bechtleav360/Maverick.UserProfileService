@@ -4,6 +4,9 @@ using System.Linq.Expressions;
 
 namespace UserProfileService.Adapter.Arango.V2.EntityModels.QueryBuilding;
 
+/// <summary>
+///     <see cref="Expression"/> representing the result of a subtree visitor.
+/// </summary>
 public class SubTreeVisitorResult : Expression
 {
     internal Dictionary<string, string> CollectionToIterationVarMapping { get; set; } =

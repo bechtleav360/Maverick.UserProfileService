@@ -6,6 +6,10 @@ using UserProfileService.Projection.Abstractions.Models;
 
 namespace UserProfileService.Projection.Abstractions;
 
+/// <summary>
+///     Represents a repository of the projection state and contains methods to read/write
+///     data related to the projection state.
+/// </summary>
 public interface IProjectionStateRepository
 {
     /// <summary>

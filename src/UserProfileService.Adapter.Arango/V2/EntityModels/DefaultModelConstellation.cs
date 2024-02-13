@@ -21,26 +21,41 @@ using SyncProfileKind = UserProfileService.Sync.Abstraction.Models.ProfileKind;
 
 namespace UserProfileService.Adapter.Arango.V2.EntityModels;
 
+/// <summary>
+///     Provides functions to create default Arango model constellations.
+/// </summary>
 public class DefaultModelConstellation
 {
     internal const string ProjectionStateCollection = "projectionState";
 
     private const string ProfileAssignmentsCollection = "assignments";
 
-    private readonly IList<Action<IModelBuilder>> ModelCustomizer =
+    private readonly IList<Action<IModelBuilder>> _modelCustomizer =
         new List<Action<IModelBuilder>>();
 
 
-    private static readonly Dictionary<string, Action<IModelBuilder>> CustomModels =
+    private static readonly Dictionary<string, Action<IModelBuilder>> _customModels =
         new Dictionary<string, Action<IModelBuilder>>();
 
+    /// <summary>
+    ///     Gets the <see cref="ModelBuilderOptions"/>.
+    /// </summary>
     public ModelBuilderOptions ModelsInfo { get; private set; }
 
-    public DefaultModelConstellation(IModelBuilder modelBuilder, string prefix, string queryPrefix = null)
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="DefaultModelConstellation"/> class with a
+    ///     specified model builder, prefix and optional query prefix.
+    /// </summary>
+    /// <param name="modelBuilder">The <see cref="IModelBuilder"/> to use.</param>
+    /// <param name="collectionPrefix">The collection prefix.</param>
+    /// <param name="queryPrefix">
+    ///     An optional query prefix. If set to <see langword="null"/>, the <paramref name="collectionPrefix"/> will be used.
+    /// </param>
+    public DefaultModelConstellation(IModelBuilder modelBuilder, string collectionPrefix, string queryPrefix = null)
     {
-        ModelsInfo = modelBuilder.BuildOptions(prefix, queryPrefix ?? prefix);
+        ModelsInfo = modelBuilder.BuildOptions(collectionPrefix, queryPrefix ?? collectionPrefix);
     }
-    
+
     private static DefaultModelConstellation NewUserProfileStorage(
         string prefix,
         string queryCollectionPrefix = null,
@@ -326,20 +341,38 @@ public class DefaultModelConstellation
         return new DefaultModelConstellation(modelBuilder, prefix);
     }
 
+    /// <summary>
+    ///     Creates a new <see cref="DefaultModelConstellation"/> given a collection prefix
+    ///     and a query prefix.
+    /// </summary>
+    /// <param name="collectionPrefix">The collection prefix.</param>
+    /// <param name="queryPrefix">
+    ///     An optional query prefix. If set to <see langword="null"/>, the <paramref name="collectionPrefix"/> will be used.
+    /// </param>
+    /// <returns>The new <see cref="DefaultModelConstellation"/>.</returns>
     public static DefaultModelConstellation CreateNew(
-        string prefix = WellKnownDatabaseKeys.CollectionPrefixUserProfileService,
+        string collectionPrefix = WellKnownDatabaseKeys.CollectionPrefixUserProfileService,
         string queryPrefix = null)
     {
-       return NewUserProfileStorage(prefix, queryPrefix);
-
+       return NewUserProfileStorage(collectionPrefix, queryPrefix);
     }
-    
+
+    /// <summary>
+    ///     Creates a new <see cref="DefaultModelConstellation"/> given a collection prefix
+    ///     and a query prefix. The default models can be customized using the <paramref name="modelSetUp"/> callback.
+    /// </summary>
+    /// <param name="modelSetUp">Action called with the <see cref="IModelBuilder"/> after the default model setup.</param>
+    /// <param name="collectionPrefix">The collection prefix.</param>
+    /// <param name="queryPrefix">
+    ///     An optional query prefix. If set to <see langword="null"/>, the <paramref name="collectionPrefix"/> will be used.
+    /// </param>
+    /// <returns></returns>
     public static DefaultModelConstellation CreateNew(
-        Action<IModelBuilder> modeSetUp,
-        string prefix = WellKnownDatabaseKeys.CollectionPrefixUserProfileService,
+        Action<IModelBuilder> modelSetUp,
+        string collectionPrefix = WellKnownDatabaseKeys.CollectionPrefixUserProfileService,
         string queryPrefix = null)
     {
-        return  NewUserProfileStorage(prefix, queryPrefix, modeSetUp);
+        return  NewUserProfileStorage(collectionPrefix, queryPrefix, modelSetUp);
     }
 
     internal static DefaultModelConstellation CreateNewTicketStore(string prefix)
@@ -399,7 +432,15 @@ public class DefaultModelConstellation
         return new DefaultModelConstellation(modelBuilder, prefix);
     }
 
-    public static DefaultModelConstellation NewAssignmentsProjectionRepository(string prefix, string queryPrefix = null)
+    /// <summary>
+    ///     Creates a new <see cref="DefaultModelConstellation"/> for the assignment projection.
+    /// </summary>
+    /// <param name="collectionPrefix">The collection prefix.</param>
+    /// <param name="queryPrefix">
+    ///     An optional query prefix. If set to <see langword="null"/>, the <paramref name="collectionPrefix"/> will be used.
+    /// </param>
+    /// <returns></returns>
+    public static DefaultModelConstellation NewAssignmentsProjectionRepository(string collectionPrefix, string queryPrefix = null)
     {
         IModelBuilder modelBuilder = ModelBuilder.NewOne;
 
@@ -410,6 +451,6 @@ public class DefaultModelConstellation
             .NoCollection()
             .QueryCollection(ProfileAssignmentsCollection);
 
-        return new DefaultModelConstellation(modelBuilder, prefix, queryPrefix);
+        return new DefaultModelConstellation(modelBuilder, collectionPrefix, queryPrefix);
     }
 }

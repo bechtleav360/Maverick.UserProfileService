@@ -5,12 +5,31 @@ using UserProfileService.Adapter.Arango.V2.Extensions;
 
 namespace UserProfileService.Adapter.Arango.V2.EntityModels;
 
+/// <summary>
+///     Represents a type relation configuration for model builders.
+/// </summary>
 public class ModelBuilderOptionsTypeRelation : IModelBuilderSubclass
 {
+    /// <summary>
+    ///     Gets or sets the name of the edge collection.
+    /// </summary>
     public string EdgeCollection { get; private set; }
+
+    /// <summary>
+    ///     Gets the properties from the "from" side of the relation.
+    /// </summary>
     public string[] FromProperties { get; }
+
+    /// <summary>
+    ///     Gets the type of the "from" side of the relation.
+    /// </summary>
     public Type FromType { get; }
+
+    /// <summary>
+    ///     Gets the properties from the "to" side of the relation.
+    /// </summary>
     public string[] ToProperties { get; }
+
     internal Type ToType { get; }
 
     /// <inheritdoc />
@@ -19,6 +38,7 @@ public class ModelBuilderOptionsTypeRelation : IModelBuilderSubclass
     /// <inheritdoc />
     public ModelBuilderOptions Options { get; }
 
+    /// <inheritdoc />
     public IModelBuilderSubclass Parent { get; }
 
     private ModelBuilderOptionsTypeRelation(
@@ -90,6 +110,11 @@ public class ModelBuilderOptionsTypeRelation : IModelBuilderSubclass
             toProperties.ToArray());
     }
 
+    /// <summary>
+    ///     Determines whether this <see cref="ModelBuilderOptionsTypeRelation"/> is equal to another instance.
+    /// </summary>
+    /// <param name="other">The other instance to compare.</param>
+    /// <returns><see langword="true"/> if the instances are equal; otherwise, <see langword="false"/>.</returns>
     protected bool Equals(ModelBuilderOptionsTypeRelation other)
     {
         return FromType == other.FromType && ToType == other.ToType;

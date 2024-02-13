@@ -31,17 +31,20 @@ public class RoleTagsAddedMessageService : BaseCommandService<RoleTagsAddedMessa
     }
 
     /// <inheritdoc />
-    public override async Task<RoleTagsAddedMessage> ModifyAsync(
-        RoleTagsAddedMessage message,
+    public override async Task<RoleTagsAddedMessage?> ModifyAsync(
+        RoleTagsAddedMessage? message,
         CancellationToken cancellationToken = default)
     {
         Logger.EnterMethod();
         
         cancellationToken.ThrowIfCancellationRequested();
-        
-        message.Tags ??= Array.Empty<TagAssignment>();
 
-        RoleTagsAddedMessage result = await base.ModifyAsync(message, cancellationToken);
+        if (message != null)
+        {
+            message.Tags ??= Array.Empty<TagAssignment>();
+        }
+
+        RoleTagsAddedMessage? result = await base.ModifyAsync(message, cancellationToken);
 
         return Logger.ExitMethod(result);
     }
@@ -51,7 +54,7 @@ public class RoleTagsAddedMessageService : BaseCommandService<RoleTagsAddedMessa
         RoleTagsAddedMessage message,
         string correlationId,
         string processId,
-        CommandInitiator initiator,
+        CommandInitiator? initiator,
         CancellationToken cancellationToken = default)
     {
         Logger.EnterMethod();

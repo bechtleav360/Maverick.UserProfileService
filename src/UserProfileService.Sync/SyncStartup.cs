@@ -243,7 +243,7 @@ public class SyncStartup : DefaultStartupBase
                 bus =>
                 {
                     bus.AddSagaStateMachine<ProcessStateMachine, ProcessState>(
-                            s => s.UseInMemoryOutbox())
+                            (ctx,s) => s.UseInMemoryOutbox(ctx))
                         .ArangoRepository(
                             r =>
                             {

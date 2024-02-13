@@ -9,7 +9,7 @@ namespace UserProfileService.Projection.SecondLevel.Assignments.Abstractions;
 public interface ISecondLevelEventHandlerFactory
 {
     /// <summary>
-    ///     Creates Event handler which handles event of type <see cref="TEvent" />
+    ///     Creates Event handler which handles event of type <typeparamref name="TEvent" />
     /// </summary>
     /// <typeparam name="TEvent">   Event type supported by the generated event handler</typeparam>
     /// <returns> Event handler <see cref="ISecondLevelAssignmentEventHandler" /></returns>

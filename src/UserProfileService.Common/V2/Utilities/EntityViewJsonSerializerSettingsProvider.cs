@@ -11,9 +11,12 @@ using UserProfileService.Common.V2.Abstractions;
 
 namespace UserProfileService.Common.V2.Utilities;
 
+/// <summary>
+///     Provides JSON serializer settings for entity views.
+/// </summary>
 public class EntityViewJsonSerializerSettingsProvider : IJsonSerializerSettingsProvider
 {
-    private JsonConverter[] ViewConverters =>
+    private static JsonConverter[] ViewConverters =>
         new[]
         {
             JsonSubtypesConverterBuilder
@@ -39,6 +42,11 @@ public class EntityViewJsonSerializerSettingsProvider : IJsonSerializerSettingsP
                 .Build()
         };
 
+    /// <summary>
+    ///     Returns the <see cref="JsonSerializerSettings"/> for Newtonsoft.Json,
+    ///     configured for use with entity views.
+    /// </summary>
+    /// <returns>The configured <see cref="JsonSerializerSettings"/>.</returns>
     public JsonSerializerSettings GetNewtonsoftSettings()
     {
         return new JsonSerializerSettings

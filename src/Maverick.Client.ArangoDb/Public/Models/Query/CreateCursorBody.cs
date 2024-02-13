@@ -14,6 +14,9 @@ public class CreateCursorBody
     /// </summary>
     public long? BatchSize { get; set; }
 
+    /// <summary>
+    ///     Gets or sets a collection of variable names and their bound <see cref="object"/> values.
+    /// </summary>
     public Dictionary<string, object> BindVars { get; set; }
 
     /// <summary>

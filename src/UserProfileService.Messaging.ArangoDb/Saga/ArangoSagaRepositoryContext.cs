@@ -39,8 +39,8 @@ public class ArangoSagaRepositoryContext<TSaga, TMessage> :
     /// <summary>
     ///     Create an instance of <see cref="ArangoSagaRepositoryContext{TSaga,TMessage}" />.
     /// </summary>
-    /// <param name="dbContext">Database context for <see cref="TSaga" />.</param>
-    /// <param name="context">Consume context for <see cref="TMessage" />.</param>
+    /// <param name="dbContext">Database context for <typeparamref name="TSaga" />.</param>
+    /// <param name="context">Consume context for <typeparamref name="TMessage" />.</param>
     /// <param name="factory">Consume context factory to create <see cref="IDatabaseContext{TSaga}" />.</param>
     /// <param name="loggerFactory">Factory to create logger.</param>
     public ArangoSagaRepositoryContext(
@@ -276,7 +276,7 @@ public class ArangoSagaRepositoryContext<TSaga> :
     /// <summary>
     ///     Create an instance of <see cref="ArangoSagaRepositoryContext{TSaga}" />.
     /// </summary>
-    /// <param name="context">Database context for <see cref="TSaga" />.</param>
+    /// <param name="context">Database context for <typeparamref name="TSaga" />.</param>
     /// <param name="loggerFactory">Create factory for logger.</param>
     /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
     public ArangoSagaRepositoryContext(

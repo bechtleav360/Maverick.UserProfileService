@@ -18,7 +18,7 @@ namespace UserProfileService.StateMachine.Utilities
             string key,
             bool remove = false) where TObject : IEnumerable<TType>
         {
-            if (dict.TryGetValue(key, out object @object) && @object.TryConvertObject(out TObject objectList))
+            if (dict.TryGetValue(key, out object? @object) && @object.TryConvertObject(out TObject objectList))
             {
                 IEnumerable<TType> filteredList = objectList.Where(o => o != null);
 

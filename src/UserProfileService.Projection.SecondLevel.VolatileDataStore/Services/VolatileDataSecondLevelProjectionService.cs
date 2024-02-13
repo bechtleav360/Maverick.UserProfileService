@@ -58,6 +58,7 @@ public class VolatileDataSecondLevelProjectionService : ProjectionBase, IVolatil
         return Logger.ExitMethod(events);
     }
 
+    /// <inheritdoc />
     protected override Task<GlobalPosition> GetGlobalPositionOfLatestProjectedEventAsync(
         CancellationToken cancellationToken = default)
     {
@@ -103,6 +104,7 @@ public class VolatileDataSecondLevelProjectionService : ProjectionBase, IVolatil
         }
     }
 
+    /// <inheritdoc />
     protected override bool TryGetStreamNamePattern(out Regex? regEx)
     {
         using IServiceScope scope = ServiceProvider.CreateScope();

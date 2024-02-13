@@ -32,21 +32,24 @@ public class UserCreatedMessageService : BaseCommandService<UserCreatedMessage>
     }
 
     /// <inheritdoc />
-    public override async Task<UserCreatedMessage> ModifyAsync(
-        UserCreatedMessage message,
+    public override async Task<UserCreatedMessage?> ModifyAsync(
+        UserCreatedMessage? message,
         CancellationToken cancellationToken = default)
     {
         Logger.EnterMethod();
 
         cancellationToken.ThrowIfCancellationRequested();
-        
-        message.Id = Guid.NewGuid().ToString();
-        message.Tags ??= Array.Empty<TagAssignment>();
-        message.ExternalIds ??= new List<ExternalIdentifier>();
-        message.ExternalIds = message.ExternalIds.Where(ei => ei != null).ToList();
-        message.Email = message.Email?.ToLowerInvariant();
 
-        UserCreatedMessage result = await base.ModifyAsync(message, cancellationToken);
+        if (message != null)
+        {
+            message.Id = Guid.NewGuid().ToString();
+            message.Tags ??= Array.Empty<TagAssignment>();
+            message.ExternalIds ??= new List<ExternalIdentifier>();
+            message.ExternalIds = message.ExternalIds.Where(ei => ei != null).ToList();
+            message.Email = message.Email?.ToLowerInvariant();
+        }
+        
+        UserCreatedMessage? result = await base.ModifyAsync(message, cancellationToken);
 
         return Logger.ExitMethod(result);
     }
@@ -56,7 +59,7 @@ public class UserCreatedMessageService : BaseCommandService<UserCreatedMessage>
         UserCreatedMessage message,
         string correlationId,
         string processId,
-        CommandInitiator initiator,
+        CommandInitiator? initiator,
         CancellationToken cancellationToken = default)
     {
         Logger.EnterMethod();

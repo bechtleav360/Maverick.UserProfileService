@@ -12,8 +12,8 @@ public static class ExpressionExtension
 {
     /// <summary>
     ///     Extracts the name of the expression including the concatenation.
-    ///     (o => o.Object.Name, null) => "o.Object.Name" (excl. <see cref="baseParameter" />)
-    ///     (o => o.Object.Name, "x" ) => "x.Object.Name" (incl. <see cref="baseParameter" />)
+    ///     (o => o.Object.Name, null) => "o.Object.Name" (excl. <paramref name="baseParameter" />)
+    ///     (o => o.Object.Name, "x" ) => "x.Object.Name" (incl. <paramref name="baseParameter" />)
     /// </summary>
     /// <typeparam name="TModel">Model to get the expression based on.</typeparam>
     /// <typeparam name="TValue">Value of expression.</typeparam>

@@ -6,6 +6,9 @@ using UserProfileService.Common.V2.TicketStore.Enums;
 
 namespace UserProfileService.Common.V2.TicketStore.Abstractions;
 
+/// <summary>
+///     Abstract base class for tickets used to track the status of api operations.
+/// </summary>
 public abstract class TicketBase
 {
     /// <summary>
@@ -61,6 +64,13 @@ public abstract class TicketBase
         Started = DateTime.UtcNow;
     }
 
+    /// <summary>
+    ///     Initializes a new instance of <see cref="TicketBase" /> an sets the id to specified string
+    ///     and a finished date and its status.
+    /// </summary>
+    /// <param name="id">The id of the ticket.</param>
+    /// <param name="finished">The time the ticket was finished.</param>
+    /// <param name="status">The status the ticket finished with.</param>
     protected TicketBase(string id, DateTime finished, TicketStatus status)
     {
         Id = id;

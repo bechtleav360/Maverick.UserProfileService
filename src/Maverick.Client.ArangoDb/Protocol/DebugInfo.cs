@@ -6,7 +6,7 @@
 public class DebugInfo
 {
     /// <summary>
-    ///     Request Execution time
+    ///     Request Execution time in milliseconds.
     /// </summary>
     public long ExecutionTime { get; set; }
 

@@ -31,6 +31,7 @@ public static class ObjectExtension
     /// </summary>
     /// <typeparam name="T">Type of the target object into which the source object should be converted. </typeparam>
     /// <param name="object">Object to be converted.</param>
+    /// <param name="logger">An optional logger.</param>
     /// <returns>The converted object if no conversion could be performed will return null.</returns>
     public static T TryConvertObject<T>(this object @object, ILogger logger = null)
     {

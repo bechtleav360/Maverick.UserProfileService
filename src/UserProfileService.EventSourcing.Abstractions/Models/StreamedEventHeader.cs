@@ -28,15 +28,15 @@ public class StreamedEventHeader
     /// <summary>
     ///     The Event Stream that this event belongs to
     /// </summary>
-    public string EventStreamId { get; set; }
+    public string? EventStreamId { get; set; }
 
     /// <summary>
     ///     The type of event this is
     /// </summary>
-    public string EventType { get; set; }
+    public string? EventType { get; set; }
 
     /// <summary>
     ///     The name of the stream that this event is received from.
     /// </summary>
-    public string StreamId { get; set; }
+    public string? StreamId { get; set; }
 }

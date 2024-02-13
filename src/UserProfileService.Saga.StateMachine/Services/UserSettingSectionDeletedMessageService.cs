@@ -34,7 +34,7 @@ public class UserSettingSectionDeletedMessageService : BaseCommandService<UserSe
         UserSettingSectionDeletedMessage createdMessage,
         string correlationId,
         string processId,
-        CommandInitiator initiator,
+        CommandInitiator? initiator,
         CancellationToken cancellationToken = default)
     {
         Logger.EnterMethod();

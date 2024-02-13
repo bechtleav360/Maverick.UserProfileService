@@ -6,6 +6,9 @@ using Maverick.UserProfileService.AggregateEvents.Resolved.V1.Models;
 
 namespace UserProfileService.Projection.Abstractions;
 
+/// <summary>
+///     The interface marks all profiles that are used for the second level projection repository.
+/// </summary>
 public interface ISecondLevelProjectionProfile
 {
     /// <summary>

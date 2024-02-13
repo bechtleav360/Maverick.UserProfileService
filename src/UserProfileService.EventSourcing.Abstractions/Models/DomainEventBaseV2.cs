@@ -9,7 +9,7 @@ public abstract class DomainEventBaseV2<TPayload> : DomainEvent<TPayload>, IUser
 {
     /// <summary>
     ///     Initializes a new instance of <see cref="DomainEventBaseV2{TPayload}" /> and sets the
-    ///     <see cref="IUserProfileServiceEvent.VersionInformation" />.
+    ///     <see cref="DomainEvent{TPayload}.VersionInformation" />.
     /// </summary>
     public DomainEventBaseV2()
     {
@@ -17,7 +17,7 @@ public abstract class DomainEventBaseV2<TPayload> : DomainEvent<TPayload>, IUser
 
     /// <summary>
     ///     Initializes a new instance of <see cref="DomainEventBaseV2{TPayload}" /> and sets the
-    ///     <see cref="IUserProfileServiceEvent.VersionInformation" />.
+    ///     <see cref="DomainEvent{TPayload}.VersionInformation" />.
     /// </summary>
     /// <param name="timestamp">The timestamp as a <see cref="DateTime" />, when the event was raised.</param>
     /// <param name="payload">The payload carried by the event as a {TPayload}.</param>
@@ -27,7 +27,7 @@ public abstract class DomainEventBaseV2<TPayload> : DomainEvent<TPayload>, IUser
 
     /// <summary>
     ///     Initializes a new instance of <see cref="DomainEventBaseV2{TPayload}" /> and sets the
-    ///     <see cref="IUserProfileServiceEvent.VersionInformation" />.
+    ///     <see cref="DomainEvent{TPayload}.VersionInformation" />.
     /// </summary>
     /// <param name="timestamp">The timestamp as a <see cref="DateTime" />, when the event was raised.</param>
     /// <param name="payload">The payload carried by the event as a {TPayload}.</param>

@@ -33,22 +33,25 @@ public class OrganizationCreatedMessageService : BaseCommandService<Organization
     }
 
     /// <inheritdoc />
-    public override Task<OrganizationCreatedMessage> ModifyAsync(
-        OrganizationCreatedMessage message,
+    public override Task<OrganizationCreatedMessage?> ModifyAsync(
+        OrganizationCreatedMessage? message,
         CancellationToken cancellationToken = default)
     {
         Logger.EnterMethod();
 
         cancellationToken.ThrowIfCancellationRequested();
-        
-        message.Id = Guid.NewGuid().ToString();
-        message.Members ??= Array.Empty<ConditionObjectIdent>();
-        message.Tags ??= Array.Empty<TagAssignment>();
-        message.ExternalIds ??= new List<ExternalIdentifier>();
-        message.ExternalIds = message.ExternalIds.Where(ei => ei != null).ToList();
-        message.Members.AddDefaultConditions();
 
-        Task<OrganizationCreatedMessage> result = Task.FromResult(message);
+        if (message != null)
+        {
+            message.Id = Guid.NewGuid().ToString();
+            message.Members ??= Array.Empty<ConditionObjectIdent>();
+            message.Tags ??= Array.Empty<TagAssignment>();
+            message.ExternalIds ??= new List<ExternalIdentifier>();
+            message.ExternalIds = message.ExternalIds.Where(ei => ei != null).ToList();
+            message.Members.AddDefaultConditions();
+        }
+
+        Task<OrganizationCreatedMessage?> result = Task.FromResult(message);
 
         return Logger.ExitMethod(result);
     }
@@ -58,7 +61,7 @@ public class OrganizationCreatedMessageService : BaseCommandService<Organization
         OrganizationCreatedMessage message,
         string correlationId,
         string processId,
-        CommandInitiator initiator,
+        CommandInitiator? initiator,
         CancellationToken cancellationToken = default)
     {
         Logger.EnterMethod();

@@ -170,6 +170,8 @@ internal class TemporaryAssignmentsExecutor : ITemporaryAssignmentsExecutor
     {
         _Logger.EnterMethod();
 
+        await Task.Yield();
+
         var assignmentConditionTriggered = new AssignmentConditionTriggered
         {
             ProfileId = assignment.ProfileId,

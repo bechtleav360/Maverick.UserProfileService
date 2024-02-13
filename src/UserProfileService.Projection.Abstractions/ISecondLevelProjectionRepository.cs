@@ -53,7 +53,7 @@ public interface ISecondLevelProjectionRepository : IProjectionStateRepository
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    ///     Adds a new <paramref name="container" /> to a profile with specified <paramref name="member" /> as
+    ///     Adds a new <paramref name="container" /> to a profile with specified <paramref name="memberId" /> as
     ///     container/memberOf.
     /// </summary>
     /// <param name="relatedProfileId">
@@ -290,9 +290,8 @@ public interface ISecondLevelProjectionRepository : IProjectionStateRepository
     /// </summary>
     /// <param name="relatedProfileId">
     ///     The id of the profile from whose point of view the related event is viewed.<br />
-    ///     This can be the same value like <paramref name="member.Id" />, if the "own" data set should be modified. But it
-    ///     will
-    ///     be different, if just a related profile has been changed and the "own" relation tree must be modified.
+    ///     This can be the same value as <paramref name="objectId" />, if the "own" data set should be modified. But it
+    ///     will be different, if just a related profile has been changed and the "own" relation tree must be modified.
     /// </param>
     /// <param name="objectId"> The Id of the tagged object. </param>
     /// <param name="objectType"> The object type <see cref="ObjectType" /> that has been tagged. </param>
@@ -639,7 +638,7 @@ public interface ISecondLevelProjectionRepository : IProjectionStateRepository
     /// </summary>
     /// <remarks>
     ///     The method won't threw an exception, if <paramref name="memberIdentifier" /> is not part of
-    ///     <see cref="relatedProfileId" />'s set of linked objects. Neither will an error occur, if the property set
+    ///     <paramref name="relatedProfileId" />'s set of linked objects. Neither will an error occur, if the property set
     ///     contains irrelevant properties.
     /// </remarks>
     /// <param name="relatedProfileId">The id of the profile whose member should been updated.</param>
@@ -673,7 +672,7 @@ public interface ISecondLevelProjectionRepository : IProjectionStateRepository
     /// </summary>
     /// <remarks>
     ///     The method won't threw an exception, if <paramref name="memberIdentifier" /> is not part of
-    ///     <see cref="relatedProfileId" />'s set of linked objects. Neither will an error occur, if the property set
+    ///     <paramref name="relatedProfileId" />'s set of linked objects. Neither will an error occur, if the property set
     ///     contains irrelevant properties.
     /// </remarks>
     /// <param name="relatedProfileId">The id of the profile whose member-of entry should been updated.</param>
@@ -706,7 +705,7 @@ public interface ISecondLevelProjectionRepository : IProjectionStateRepository
     /// <remarks>
     ///     Linked objects can be functions or roles.<br />
     ///     The method won't threw an exception, if <paramref name="linkedObjectId" /> is not part of
-    ///     <see cref="relatedProfileId" />'s set of linked objects. Neither will an error occur, if the property set
+    ///     <paramref name="relatedProfileId" />'s set of linked objects. Neither will an error occur, if the property set
     ///     contains irrelevant properties.
     /// </remarks>
     /// <param name="linkedObjectId">
@@ -742,7 +741,7 @@ public interface ISecondLevelProjectionRepository : IProjectionStateRepository
     /// <remarks>
     ///     Linked objects can be functions or roles.<br />
     ///     The method won't threw an exception, if <paramref name="linkedProfileId" /> is not part of
-    ///     <see cref="relatedLinkedObjectId" />'s set of linked objects. Neither will an error occur, if the property set
+    ///     <paramref name="relatedLinkedObjectId" />'s set of linked objects. Neither will an error occur, if the property set
     ///     contains irrelevant properties.
     /// </remarks>
     /// <param name="linkedProfileId">
@@ -771,8 +770,8 @@ public interface ISecondLevelProjectionRepository : IProjectionStateRepository
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    ///     (Re-)Calculates all properties of <paramref name="relatedProfileId" /> that are influences by inheritance, like
-    ///     path or tags, due of changed relationships between
+    ///     (Re-)Calculates all properties of <paramref name="relatedEntity" /> that are influenced by inheritance, like
+    ///     path or tags, due to changed relationships between
     ///     a inherited profile with id equals <paramref name="profileId" /> and a target with id equals
     ///     <paramref name="targetId" />.
     /// </summary>
@@ -797,12 +796,12 @@ public interface ISecondLevelProjectionRepository : IProjectionStateRepository
     /// </param>
     /// <returns>A task representing the asynchronous write operation.</returns>
     /// <exception cref="System.ArgumentNullException">
-    ///     <paramref name="relatedProfileId" /> is <c>null</c><br />-or-<br />
+    ///     <paramref name="relatedEntity" /> is <c>null</c><br />-or-<br />
     ///     <paramref name="profileId" /> is <c>null</c><br />-or-<br />
     ///     <paramref name="targetId" /> is <c>null</c><br />-or-<br />
     /// </exception>
     /// <exception cref="System.ArgumentException">
-    ///     <paramref name="relatedProfileId" /> is empty or whitespace<br />-or-<br />
+    ///     <paramref name="relatedEntity" /> is empty or whitespace<br />-or-<br />
     ///     <paramref name="profileId" /> is empty or whitespace<br />-or-<br />
     ///     <paramref name="targetId" /> is empty or whitespace<br />-or-<br />
     /// </exception>

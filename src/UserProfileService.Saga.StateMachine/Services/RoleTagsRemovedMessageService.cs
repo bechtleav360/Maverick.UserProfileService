@@ -30,17 +30,20 @@ public class RoleTagsRemovedMessageService : BaseCommandService<RoleTagsRemovedM
     }
 
     /// <inheritdoc />
-    public override async Task<RoleTagsRemovedMessage> ModifyAsync(
-        RoleTagsRemovedMessage message,
+    public override async Task<RoleTagsRemovedMessage?> ModifyAsync(
+        RoleTagsRemovedMessage? message,
         CancellationToken cancellationToken = default)
     {
         Logger.EnterMethod();
         
         cancellationToken.ThrowIfCancellationRequested();
-        
-        message.Tags ??= Array.Empty<string>();
 
-        RoleTagsRemovedMessage result = await base.ModifyAsync(message, cancellationToken);
+        if (message != null)
+        {
+            message.Tags ??= Array.Empty<string>();
+        }
+
+        RoleTagsRemovedMessage? result = await base.ModifyAsync(message, cancellationToken);
 
         return Logger.ExitMethod(result);
     }
@@ -50,7 +53,7 @@ public class RoleTagsRemovedMessageService : BaseCommandService<RoleTagsRemovedM
         RoleTagsRemovedMessage message,
         string correlationId,
         string processId,
-        CommandInitiator initiator,
+        CommandInitiator? initiator,
         CancellationToken cancellationToken = default)
     {
         Logger.EnterMethod();

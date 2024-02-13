@@ -316,6 +316,7 @@ public class ADatabase : IDisposable, IADatabase
         return new DropDbResponse(response, response.Exception);
     }
 
+    /// <inheritdoc />
     public void Dispose()
     {
         _connection?.Dispose();

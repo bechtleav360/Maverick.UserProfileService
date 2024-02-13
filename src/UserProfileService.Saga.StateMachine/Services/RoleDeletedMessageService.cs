@@ -42,7 +42,7 @@ public class RoleDeletedMessageService : BaseCommandService<RoleDeletedMessage>
         RoleDeletedMessage message,
         string correlationId,
         string processId,
-        CommandInitiator initiator,
+        CommandInitiator? initiator,
         CancellationToken cancellationToken = default)
     {
         Logger.EnterMethod();
@@ -58,9 +58,9 @@ public class RoleDeletedMessageService : BaseCommandService<RoleDeletedMessage>
                 m => m.Id);
 
         ICollection<Member> assignedMembers =
-            await _readService.GetAssignedProfilesAsync(eventData.Payload.Id);
+            await _readService.GetAssignedProfilesAsync(eventData.Payload!.Id);
 
-        RoleBasic role = await _readService.GetRoleAsync(eventData.Payload.Id);
+        RoleBasic? role = await _readService.GetRoleAsync(eventData.Payload.Id);
 
         eventData.OldRole = role;
         eventData.Profiles = assignedMembers;

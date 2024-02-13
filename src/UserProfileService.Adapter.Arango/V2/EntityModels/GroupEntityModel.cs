@@ -7,8 +7,14 @@ using UserProfileService.Adapter.Arango.V2.Annotations;
 
 namespace UserProfileService.Adapter.Arango.V2.EntityModels;
 
+/// <summary>
+///     Represents an entity model for group profiles.
+/// </summary>
 public class GroupEntityModel : Group, IContainerProfileEntityModel
 {
+    /// <summary>
+    ///     Gets or sets the number of child profiles assigned to this profile.  
+    /// </summary>
     [VirtualProperty(
         typeof(GroupEntityModel),
         nameof(Members),
@@ -22,15 +28,29 @@ public class GroupEntityModel : Group, IContainerProfileEntityModel
     /// </summary>
     public IList<RangeCondition> Conditions { get; set; }
 
-    public List<FunctionalAccessRightEntityModel> FunctionalAccessRights { get; set; }
+    /// <summary>
+    ///     A list of functional access rights for this group.
+    /// </summary>
+    public IList<FunctionalAccessRightEntityModel> FunctionalAccessRights { get; set; }
+
+    /// <summary>
+    ///     Gets or sets whether this group has any children.
+    /// </summary>
     public bool HasChildren { get; set; }
 
+    /// <inheritdoc />
     public new IList<Member> MemberOf { set; get; } = new List<Member>();
-    public List<string> Paths { get; set; }
+
+    /// <inheritdoc />
+    public IList<string> Paths { get; set; }
+
+    /// <inheritdoc />
     public IList<ILinkedObject> SecurityAssignments { get; set; }
 
+    /// <inheritdoc />
     [JsonProperty(AConstants.IdSystemProperty)]
     public string SystemId { get; set; }
 
+    /// <inheritdoc />
     public List<CalculatedTag> Tags { get; set; }
 }

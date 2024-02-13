@@ -12,9 +12,10 @@ public class CommandProcessStateDefinition :
     /// <inheritdoc />
     protected override void ConfigureSaga(
         IReceiveEndpointConfigurator endpointConfigurator,
-        ISagaConfigurator<CommandProcessState> sagaConfigurator)
+        ISagaConfigurator<CommandProcessState> sagaConfigurator,
+        IRegistrationContext context)
     {
         endpointConfigurator.UseMessageRetry(r => r.Interval(5, 1000));
-        endpointConfigurator.UseInMemoryOutbox();
+        endpointConfigurator.UseInMemoryOutbox(context);
     }
 }

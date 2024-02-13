@@ -106,6 +106,18 @@ public class FunctionChangedHandler : SecondLevelAssignmentEventHandlerBase<Func
         Logger.ExitMethod();
     }
 
+    /// <summary>
+    ///     Internal event handler for <see cref="FunctionChanged"/> events.
+    /// </summary>
+    /// <param name="repo">The repository to be used.</param>
+    /// <param name="transaction">The current transaction.</param>
+    /// <param name="relatedEntityId">
+    ///     The object identifier of the entity that is related to <paramref name="functionChanged" />
+    /// </param>
+    /// <param name="changedEntityId">The id of the updated function.</param>
+    /// <param name="functionChanged">The affected function object.</param>
+    /// <param name="cancellationToken">The token to monitor and propagate cancellation requests.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
     protected async Task HandleInternalAsync(
         ISecondLevelAssignmentRepository repo,
         IDatabaseTransaction transaction,

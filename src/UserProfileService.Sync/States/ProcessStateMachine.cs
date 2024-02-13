@@ -299,7 +299,7 @@ public class ProcessStateMachine :
                     "Got user with id {userId} and name {name} for saga with id {sagaId}",
                     LogHelpers.Arguments(initiator.Id, user.Name, context.CorrelationId));
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 _logger.LogInfoMessage(
                     "An error occurred while getting user for id {id}. Possibly the user is not known, correlation Id: {correlationId}.",

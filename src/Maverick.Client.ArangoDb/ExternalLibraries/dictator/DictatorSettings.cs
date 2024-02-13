@@ -4,6 +4,10 @@
 // with some bug fixes and extensions to support asynchronous operations 
 namespace Maverick.Client.ArangoDb.ExternalLibraries.dictator;
 
+/// <summary>
+///     Represents settings for the <see cref="Dictator"/> class that
+///     controls how the objects are converted.
+/// </summary>
 public class DictatorSettings
 {
     /// <summary>

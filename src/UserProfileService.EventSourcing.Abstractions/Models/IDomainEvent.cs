@@ -8,9 +8,9 @@ namespace UserProfileService.EventSourcing.Abstractions.Models;
 public interface IDomainEvent
 {
     /// <summary>
-    ///     An unique identifier to link series of events.s
+    ///     A unique identifier to link series of events.
     /// </summary>
-    string CorrelationId { get; set; }
+    string? CorrelationId { get; set; }
 
     /// <summary>
     ///     An identifier of this event.
@@ -33,7 +33,7 @@ public interface IDomainEvent
     ///     This means that it is the parent saga id that starts an new event
     ///     to assign the response of the event to the related saga.
     /// </summary>
-    string RequestSagaId { get; set; }
+    string? RequestSagaId { get; set; }
 
     /// <summary>
     ///     The timestamp when the event occurred.

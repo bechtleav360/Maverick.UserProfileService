@@ -158,7 +158,7 @@ public static class AssignmentUserExtensions
     ///     Calculates the containers which are connected to the given user.
     /// </summary>
     /// <param name="user">The user to calculate.</param>
-    /// <param name="logger">A <see cref="Logger" />.</param>
+    /// <param name="logger">An <see cref="ILogger"/> (optional).</param>
     /// <returns>All connected containers as <see cref="ObjectIdent" />.</returns>
     public static ISet<ObjectIdent> GetConnectedContainers(
         this SecondLevelProjectionAssignmentsUser user,

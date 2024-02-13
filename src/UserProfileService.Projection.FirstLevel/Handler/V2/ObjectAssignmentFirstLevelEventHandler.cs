@@ -642,7 +642,7 @@ internal class ObjectAssignmentFirstLevelEventHandler : FirstLevelEventHandlerBa
     /// </summary>
     /// <param name="relationEdge"></param>
     /// <returns>A "was-assigned-event" that is basically a <see cref="IUserProfileServiceEvent" />.</returns>
-    /// <exception cref="ArgumentNullException">If the <see cref="relationEdge" /> is null.</exception>
+    /// <exception cref="ArgumentNullException">If the <paramref name="relationEdge" /> is null.</exception>
     /// <exception cref="NotSupportedException">If the container type could not mapped to a container type.</exception>
     internal IUserProfileServiceEvent GenerateWasAssignedToEvent(FirstLevelProjectionTreeEdgeRelation relationEdge)
     {

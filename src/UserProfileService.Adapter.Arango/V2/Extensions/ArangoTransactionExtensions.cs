@@ -5,6 +5,10 @@ using UserProfileService.Adapter.Arango.V2.Helpers;
 
 namespace UserProfileService.Adapter.Arango.V2.Extensions;
 
+/// <summary>
+///     Utility class containing functions and extension methods to work with
+///     <see cref="ArangoTransaction"/>.
+/// </summary>
 public static class ArangoTransactionExtensions
 {
     private static async Task<TResult> WithLock<TResult>(

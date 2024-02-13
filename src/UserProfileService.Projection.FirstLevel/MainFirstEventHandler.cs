@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Maverick.UserProfileService.AggregateEvents.Common;
@@ -57,7 +56,8 @@ internal class MainFirstEventHandler : IFirstLevelProjectionEventHandler
         catch (InvalidOperationException inEx)
         {
             throw new NotSupportedException(
-                $"This domain event (full type: {domainEvent.GetType().FullName}) is not supported by this event handler.");
+                $"This domain event (full type: {domainEvent.GetType().FullName}) is not supported by this event handler.",
+                inEx);
         }
         catch (Exception ex)
         {

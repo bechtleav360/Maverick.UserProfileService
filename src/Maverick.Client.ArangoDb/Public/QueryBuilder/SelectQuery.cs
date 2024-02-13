@@ -22,7 +22,6 @@ public class SelectQuery : Query
     /// <param name="collectionName"></param>
     /// <param name="attributes"></param>
     /// <param name="filter"></param>
-    /// <param name="sortingBy"></param>
     public SelectQuery(string collectionName, List<string> attributes = null, string filter = null) : base(
         collectionName)
     {

@@ -9,18 +9,39 @@ using UserProfileService.Adapter.Arango.V2.Contracts;
 
 namespace UserProfileService.Adapter.Arango.V2.EntityModels.QueryBuilding;
 
+/// <summary>
+///     Base class for an ArangoDB tree visitor that processes expression trees.
+/// </summary>
 public abstract class ArangoDbTreeVisitorBase : ExpressionVisitor, IDisposable
 {
     private readonly Dictionary<Type, Func<Expression, VisitorMethodArgument, Expression>> _methodMapping
         = new Dictionary<Type, Func<Expression, VisitorMethodArgument, Expression>>();
 
+    /// <summary>
+    ///     A semaphore for thread-safe access (used for locking).
+    /// </summary>
     protected readonly SemaphoreSlim Lock = new SemaphoreSlim(1, 1);
 
+    /// <summary>
+    ///     Mapping of variable names to collection keys.
+    /// </summary>
     protected Dictionary<string, string> VarMapping;
+    /// <summary>
+    ///     Gets or sets the iteration number for generating unique keys.
+    /// </summary>
     protected int IterationNumber { get; set; }
+    /// <summary>
+    ///     Gets or sets the current key associated with a collection or entity type.
+    /// </summary>
     protected string Key { get; set; }
+    /// <summary>
+    ///     Gets or sets the scope of the collection (e.g. Query, Command).
+    /// </summary>
     protected CollectionScope Scope { get; set; }
 
+    /// <summary>
+    ///     Gets or sets predefined collection name (optional).
+    /// </summary>
     public string PredefineCollectionName { get; set; }
 
     private Expression VisitLambda(Type innerType, Expression node, VisitorMethodArgument argument)
@@ -47,6 +68,12 @@ public abstract class ArangoDbTreeVisitorBase : ExpressionVisitor, IDisposable
         }
     }
 
+    /// <summary>
+    ///     Tries to resolve and update the key associated with a collection or entity type.
+    /// </summary>
+    /// <typeparam name="T">The type of the expression.</typeparam>
+    /// <param name="node">The expression node (usually a lambda expression).</param>
+    /// <returns><see langword="true"/> if the key was successfully resolved and updated; otherwise, <see langword="false"/>.</returns>
     protected bool TryResolveAndUpdateKey<T>(Expression<T> node)
     {
         if (VarMapping == null)
@@ -92,12 +119,23 @@ public abstract class ArangoDbTreeVisitorBase : ExpressionVisitor, IDisposable
         return true;
     }
 
+    /// <summary>
+    ///     Associates a visitor method with a specific expression type for dynamic dispatch.
+    /// </summary>
+    /// <typeparam name="TExpression">The type of the expression.</typeparam>
+    /// <param name="method">The method to associate with the expression type.</param>
     protected void When<TExpression>(Func<Expression, VisitorMethodArgument, Expression> method)
         where TExpression : Expression
     {
         _methodMapping.Add(typeof(TExpression), method);
     }
 
+    /// <summary>
+    ///     Visits an expression node and performs specific actions based on its type.
+    /// </summary>
+    /// <param name="node">The expression node to visit.</param>
+    /// <param name="argument">Additional arguments for the visitor method.</param>
+    /// <returns>The modified or processed expression.</returns>
     protected Expression Visit(Expression node, VisitorMethodArgument argument)
     {
         if (_methodMapping.ContainsKey(node.GetType()))
@@ -185,8 +223,18 @@ public abstract class ArangoDbTreeVisitorBase : ExpressionVisitor, IDisposable
         return VisitUnary(node);
     }
 
+    /// <summary>
+    ///     Gets the options for the model builder.
+    /// </summary>
+    /// <returns>The model builder options.</returns>
     protected abstract ModelBuilderOptions GetModelOptions();
 
+    /// <summary>
+    ///     Gets the collection name for the specified entity type and collection scope.
+    /// </summary>
+    /// <param name="entityType">The type to get the collection name for.</param>
+    /// <param name="collectionScope"></param>
+    /// <returns>The collection name.</returns>
     protected string GetCollectionName(Type entityType, CollectionScope collectionScope)
     {
         if (GetModelOptions() == null)
@@ -202,6 +250,7 @@ public abstract class ArangoDbTreeVisitorBase : ExpressionVisitor, IDisposable
         };
     }
 
+    /// <inheritdoc />
     public void Dispose()
     {
         if (Lock?.CurrentCount == 0)

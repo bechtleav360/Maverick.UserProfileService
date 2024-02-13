@@ -5,9 +5,9 @@ using Maverick.UserProfileService.Models.Models;
 namespace UserProfileService.EventSourcing.Abstractions;
 
 /// <summary>
-///     The first level stream name resolves the the stream name an <see cref="IUserProfileServiceEvent" />
-///     has to be written. An <inheritdoc cref="ObjectIdent" /> is needed to generate/resolve the stream name.
-///     That object contains the object type and the id of the object. From that on the stream name is created.
+///     Resolves the name of the first level stream an <see cref="IUserProfileServiceEvent" />
+///     has to be written to. An <inheritdoc cref="ObjectIdent" /> is needed to generate/resolve the stream name.
+///     That object contains the object type and the id of the object from which the stream name is created.
 /// </summary>
 public interface IStreamNameResolver
 {

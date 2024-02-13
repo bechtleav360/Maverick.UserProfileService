@@ -89,8 +89,8 @@ public static class SyncProviderConfigurationRegistration
 
         foreach (Type type in implementedProviderRegistrations)
         {
-            ISyncProviderConfigurationRegistration registry = (ISyncProviderConfigurationRegistration?)
-                Activator.CreateInstance(type);
+            ISyncProviderConfigurationRegistration registry =
+                (ISyncProviderConfigurationRegistration)Activator.CreateInstance(type);
 
             registry?.AddConfigurationDependencies(serviceCollection, systemConfigurationProviders, logger);
         }

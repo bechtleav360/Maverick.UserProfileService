@@ -23,4 +23,8 @@
         </AssemblyAttribute>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\UserProfileService.Common\UserProfileService.Common.csproj" />
+    </ItemGroup>
+
 </Project>

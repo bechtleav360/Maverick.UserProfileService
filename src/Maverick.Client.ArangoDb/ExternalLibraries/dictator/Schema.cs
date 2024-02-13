@@ -7,6 +7,9 @@ using System.Text.RegularExpressions;
 // with some bug fixes and extensions to support asynchronous operations 
 namespace Maverick.Client.ArangoDb.ExternalLibraries.dictator;
 
+/// <summary>
+///     Represents a validation schema with fluent-style configuration API.
+/// </summary>
 public class Schema
 {
     private Constraint _lastAddedConstraint;

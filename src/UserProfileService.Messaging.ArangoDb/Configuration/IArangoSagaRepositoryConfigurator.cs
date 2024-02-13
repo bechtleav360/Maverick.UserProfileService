@@ -30,7 +30,7 @@ public interface IArangoSagaRepositoryConfigurator
 }
 
 /// <summary>
-///     Describes the configurator for arango repository of <see cref="TSaga" />.
+///     Describes the configurator for arango repository of <typeparamref name="TSaga" />.
 /// </summary>
 /// <typeparam name="TSaga">Type of saga repository to configure.</typeparam>
 public interface IArangoSagaRepositoryConfigurator<TSaga> :

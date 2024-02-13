@@ -31,7 +31,7 @@ public static class StringExtensions
         var sbCurrentTerm = new StringBuilder();
         char[] formatChars = format.ToCharArray();
         var inTerm = false;
-        object currentPropValue = source;
+        object? currentPropValue = source;
 
         for (var i = 0; i < format.Length; i++)
         {
@@ -41,20 +41,20 @@ public static class StringExtensions
             }
             else if (formatChars[i] == '}')
             {
-                PropertyInfo pi = currentPropValue?.GetType().GetProperty(sbCurrentTerm.ToString());
+                PropertyInfo? pi = currentPropValue?.GetType().GetProperty(sbCurrentTerm.ToString());
 
                 if (pi == null)
                 {
                     continue;
                 }
 
-                MethodInfo methodInfo = pi.PropertyType.GetMethod(nameof(ToString), Array.Empty<Type>());
+                MethodInfo? methodInfo = pi.PropertyType.GetMethod(nameof(ToString), Array.Empty<Type>());
                 if (methodInfo == null)
                 {
                     continue;
                 }
 
-                sbResult.Append((string)methodInfo
+                sbResult.Append((string?)methodInfo
                     .Invoke(pi.GetValue(currentPropValue, null), null));
 
                 sbCurrentTerm.Clear();
@@ -65,7 +65,7 @@ public static class StringExtensions
             {
                 if (formatChars[i] == '.')
                 {
-                    PropertyInfo pi = currentPropValue?.GetType().GetProperty(sbCurrentTerm.ToString());
+                    PropertyInfo? pi = currentPropValue?.GetType().GetProperty(sbCurrentTerm.ToString());
                     currentPropValue = pi?.GetValue(source, null);
                     sbCurrentTerm.Clear();
                 }

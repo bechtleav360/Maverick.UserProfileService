@@ -132,9 +132,11 @@ namespace UserProfileService.Hosting.Abstraction
         /// <param name="options">The swagger options that can be configured.</param>
         protected virtual void ConfigureAssemblyDocumentation(SwaggerGenOptions options)
         {
-            foreach (var ass in AdditionalAssemblies.Concat(new[] {Assembly.GetEntryAssembly(), Assembly.GetExecutingAssembly()}))
+            foreach (Assembly assembly in AdditionalAssemblies
+                         .Concat(new[] { Assembly.GetEntryAssembly(), Assembly.GetExecutingAssembly() })
+                         .OfType<Assembly>())
             {
-                var docFile = Path.Combine(AppContext.BaseDirectory, $"{ass.GetName().Name}.xml");
+                var docFile = Path.Combine(AppContext.BaseDirectory, $"{assembly.GetName().Name}.xml");
 
                 if (File.Exists(docFile))
                 {

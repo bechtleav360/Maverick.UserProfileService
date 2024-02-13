@@ -28,8 +28,14 @@ public class ArangoDbClient : IArangoDbClient, IDisposable
     /// </summary>
     private readonly ADatabase _database;
 
+    /// <summary>
+    ///     Gets the name of the client.
+    /// </summary>
     public string Name { get; }
 
+    /// <summary>
+    ///     Gets the active <see cref="JsonSerializerSettings"/>.
+    /// </summary>
     public JsonSerializerSettings UsedJsonSerializerSettings => _database.DefaultSerializerSettings;
 
     /// <summary>
@@ -394,6 +400,7 @@ public class ArangoDbClient : IArangoDbClient, IDisposable
             transactionId);
     }
 
+    /// <inheritdoc />
     public async Task<ReplaceDocumentResponse> ReplaceEdgeAsync<T>(
         string id,
         string fromId,
@@ -477,6 +484,7 @@ public class ArangoDbClient : IArangoDbClient, IDisposable
         return await _database.Query.PutCursorAsync<T>(cursorId, timeout, cancellationToken);
     }
 
+    /// <inheritdoc />
     public async Task<ParseQueryResponse> ParseAsync(string query)
     {
         return await _database.Query.ParseAsync(query);
