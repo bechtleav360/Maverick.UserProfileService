@@ -12,6 +12,9 @@ using UserProfileService.Common.V2.Extensions;
 
 namespace UserProfileService.Projection.Common.Converters;
 
+/// <summary>
+///     Converter used to deserialize <see cref="PropertiesChanged"/> events.
+/// </summary>
 public class PropertiesChangedEventJsonConverter : JsonConverter
 {
     /// <inheritdoc />

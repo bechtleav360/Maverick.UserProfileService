@@ -8,6 +8,9 @@ using System.Reflection;
 // with some bug fixes and extensions to support asynchronous operations 
 namespace Maverick.Client.ArangoDb.ExternalLibraries.dictator;
 
+/// <summary>
+///     Utility class that converts <see cref="object"/>s from and to <see cref="Dictionary{TKey,TValue}"/>s.
+/// </summary>
 public static class Dictator
 {
     /// <summary>

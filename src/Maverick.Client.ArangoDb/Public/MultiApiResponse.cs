@@ -53,7 +53,7 @@ public class MultiApiResponse : IApiResponse
     public List<string> Warnings { get; }
 
     /// <summary>
-    ///     Requests execution time
+    ///     Request execution time in milliseconds.
     /// </summary>
     public long ExecutionTime { get; }
 

@@ -7,6 +7,9 @@ using Microsoft.Extensions.Options;
 
 namespace UserProfileService.Adapter.Arango.V2.Configuration;
 
+/// <summary>
+///     An <see cref="IValidateOptions{TOptions}"/> to validate <see cref="ArangoConfiguration"/>s.
+/// </summary>
 public class ArangoConfigurationValidation : IValidateOptions<ArangoConfiguration>
 {
     private static IEnumerable<string> ValidateConnectionString(string value)

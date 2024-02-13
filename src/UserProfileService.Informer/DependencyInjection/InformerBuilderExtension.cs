@@ -35,7 +35,6 @@ public static class InformerBuilderExtension
         {
             functionsList.Add(p => (IProcessNotifierExecutor)ActivatorUtilities.CreateInstance(p, typeof(THandler), p));
         }
-
         else
         {
             informerBuilder.NotificationDictionary.Add(

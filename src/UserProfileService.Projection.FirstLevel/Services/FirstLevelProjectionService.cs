@@ -27,16 +27,30 @@ namespace UserProfileService.Projection.FirstLevel.Services;
 /// </summary>
 public class FirstLevelProjectionService : ProjectionBase, IFirstLevelProjection
 {
-    private readonly IDbInitializer _DbInitializer;
-    private readonly IFirstLevelProjectionRepository _FirstLevelProjectionRepository;
-    private readonly ProjectionServiceHealthCheck _HealthStore;
-    private readonly IFirstLevelProjectionEventHandler _MainFirstLevelProjectionHandler;
+    private readonly IDbInitializer _dbInitializer;
+    private readonly IFirstLevelProjectionRepository _firstLevelProjectionRepository;
+    private readonly ProjectionServiceHealthCheck _healthStore;
+    private readonly IFirstLevelProjectionEventHandler _mainFirstLevelProjectionHandler;
 
     /// <summary>
     ///     Only one stream is needed to get the events.
     /// </summary>
     protected override bool UseAllStreams => false;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="FirstLevelProjectionService"/> class.
+    /// </summary>
+    /// <param name="logger">The logger to be used.</param>
+    /// <param name="activitySourceWrapper">The wrapper that contains the activity source used in this instance.</param>
+    /// <param name="eventStorageConfiguration">
+    ///     The <see cref="IOptionsMonitor{TOptions}" /> that wraps the event storage
+    ///     configuration.
+    /// </param>
+    /// <param name="firstLevelProjectionRepository">The repository for first-level projections.</param>
+    /// <param name="dbInitializer">The database initializer.</param>
+    /// <param name="healthStore">The health store for projection service.</param>
+    /// <param name="mainFirstLevelProjectionHandler">The main event handler for first-level projections.</param>
+    /// <param name="serviceProvider">The service provider.</param>
     public FirstLevelProjectionService(
         ILogger<FirstLevelProjectionService> logger,
         IActivitySourceWrapper activitySourceWrapper,
@@ -51,21 +65,22 @@ public class FirstLevelProjectionService : ProjectionBase, IFirstLevelProjection
         serviceProvider,
         eventStorageConfiguration)
     {
-        _FirstLevelProjectionRepository = firstLevelProjectionRepository;
-        _DbInitializer = dbInitializer;
-        _HealthStore = healthStore;
-        _MainFirstLevelProjectionHandler = mainFirstLevelProjectionHandler;
+        _firstLevelProjectionRepository = firstLevelProjectionRepository;
+        _dbInitializer = dbInitializer;
+        _healthStore = healthStore;
+        _mainFirstLevelProjectionHandler = mainFirstLevelProjectionHandler;
     }
 
+    /// <inheritdoc />
     protected override async Task<Dictionary<string, ulong>> GetLatestProjectedEventPositionAsync(
         CancellationToken cancellationToken = default)
     {
         Logger.EnterMethod();
 
-        await _DbInitializer.EnsureDatabaseAsync(cancellationToken: cancellationToken);
+        await _dbInitializer.EnsureDatabaseAsync(cancellationToken: cancellationToken);
 
         Dictionary<string, ulong> events =
-            await _FirstLevelProjectionRepository.GetLatestProjectedEventIdsAsync(cancellationToken);
+            await _firstLevelProjectionRepository.GetLatestProjectedEventIdsAsync(cancellationToken);
 
         return Logger.ExitMethod(events);
     }
@@ -76,14 +91,15 @@ public class FirstLevelProjectionService : ProjectionBase, IFirstLevelProjection
     {
         Logger.EnterMethod();
 
-        await _DbInitializer.EnsureDatabaseAsync(cancellationToken: cancellationToken);
+        await _dbInitializer.EnsureDatabaseAsync(cancellationToken: cancellationToken);
 
         GlobalPosition latestPosition =
-            await _FirstLevelProjectionRepository.GetPositionOfLatestProjectedEventAsync(cancellationToken);
+            await _firstLevelProjectionRepository.GetPositionOfLatestProjectedEventAsync(cancellationToken);
 
         return Logger.ExitMethod(latestPosition);
     }
 
+    /// <inheritdoc />
     protected override async Task HandleDomainEventAsync(
         StreamedEventHeader eventHeader,
         IUserProfileServiceEvent domainEvent,
@@ -93,9 +109,9 @@ public class FirstLevelProjectionService : ProjectionBase, IFirstLevelProjection
 
         try
         {
-            await _DbInitializer.EnsureDatabaseAsync(cancellationToken: cancellationToken);
+            await _dbInitializer.EnsureDatabaseAsync(cancellationToken: cancellationToken);
 
-            await _MainFirstLevelProjectionHandler.HandleEventAsync(domainEvent, eventHeader, cancellationToken);
+            await _mainFirstLevelProjectionHandler.HandleEventAsync(domainEvent, eventHeader, cancellationToken);
         }
         catch (OperationCanceledException)
         {
@@ -124,7 +140,7 @@ public class FirstLevelProjectionService : ProjectionBase, IFirstLevelProjection
     /// <inheritdoc />
     protected override void SetHealthStatus(HealthStatus status, string message = null)
     {
-        _HealthStore.Status = status;
-        _HealthStore.Message = message;
+        _healthStore.Status = status;
+        _healthStore.Message = message;
     }
 }

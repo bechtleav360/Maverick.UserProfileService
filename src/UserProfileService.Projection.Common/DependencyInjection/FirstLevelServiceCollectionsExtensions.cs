@@ -6,6 +6,10 @@ using UserProfileService.Projection.Common.Implementations;
 
 namespace UserProfileService.Projection.Common.DependencyInjection;
 
+/// <summary>
+///     Extension class containing extension methods for <see cref="IServiceCollection"/>s that add
+///     services for the first level projection.
+/// </summary>
 public static class FirstLevelServiceCollectionsExtensions
 {
     private static IServiceCollection AddOutboxProcessorService(this IServiceCollection services)

@@ -1,4 +1,6 @@
-﻿namespace Maverick.Client.ArangoDb.Public.Configuration;
+﻿using UserProfileService.Common.V2.Abstractions;
+
+namespace Maverick.Client.ArangoDb.Public.Configuration;
 
 /// <summary>
 ///     The configuration fot the ArangoDB provider.

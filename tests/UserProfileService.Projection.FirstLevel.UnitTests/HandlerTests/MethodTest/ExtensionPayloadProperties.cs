@@ -224,8 +224,7 @@ namespace UserProfileService.Projection.FirstLevel.UnitTests.HandlerTests.Method
         [MemberData(nameof(DataFunctionArgumentNull))]
         public void PropertiesCreatedPayloadExtensions_ArgumentExceptionNull(
             PropertiesUpdatedPayload payload,
-            Api.IDomainEvent domainEvent,
-            string functionId)
+            Api.IDomainEvent domainEvent)
         {
             Assert.Throws<ArgumentNullException>(
                 () => payload.CreateFunctionEventRelatedToPropertiesPayload(domainEvent));

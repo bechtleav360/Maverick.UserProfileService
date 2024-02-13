@@ -17,6 +17,9 @@ using UserProfileService.Adapter.Arango.V2.Helpers;
 
 namespace UserProfileService.Adapter.Arango.V2.EntityModels.QueryBuilding;
 
+/// <summary>
+///     An ArangoDB tree visitor that processes filter expression trees.
+/// </summary>
 public sealed class ArangoDbFilterTreeVisitor : ArangoDbTreeVisitorBase
 {
     private List<string> _filterStrings;
@@ -1200,11 +1203,13 @@ public sealed class ArangoDbFilterTreeVisitor : ArangoDbTreeVisitorBase
         return _options;
     }
 
+    /// <inheritdoc />
     protected override Expression VisitLambda<T>(Expression<T> node)
     {
         return VisitLambda(node, null);
     }
 
+    /// <inheritdoc />
     protected override Expression VisitLambda<T>(
         Expression<T> node,
         VisitorMethodArgument argument)
@@ -1228,11 +1233,13 @@ public sealed class ArangoDbFilterTreeVisitor : ArangoDbTreeVisitorBase
             : body;
     }
 
+    /// <inheritdoc />
     protected override Expression VisitBinary(BinaryExpression node)
     {
         return VisitBinary(node, null);
     }
 
+    /// <inheritdoc />
     protected override Expression VisitBinary(
         BinaryExpression node,
         VisitorMethodArgument argument)
@@ -1276,6 +1283,7 @@ public sealed class ArangoDbFilterTreeVisitor : ArangoDbTreeVisitorBase
                 GetAppropriateString(right));
     }
 
+    /// <inheritdoc />
     protected override Expression VisitMember(MemberExpression node)
     {
         return VisitMember(
@@ -1286,6 +1294,7 @@ public sealed class ArangoDbFilterTreeVisitor : ArangoDbTreeVisitorBase
             });
     }
 
+    /// <inheritdoc />
     protected override Expression VisitMember(
         MemberExpression node,
         VisitorMethodArgument arg)
@@ -1413,6 +1422,7 @@ public sealed class ArangoDbFilterTreeVisitor : ArangoDbTreeVisitorBase
                 : null);
     }
 
+    /// <inheritdoc />
     protected override Expression VisitConstant(ConstantExpression node)
     {
         return VisitConstant(
@@ -1423,6 +1433,7 @@ public sealed class ArangoDbFilterTreeVisitor : ArangoDbTreeVisitorBase
             });
     }
 
+    /// <inheritdoc />
     protected override Expression VisitConstant(
         ConstantExpression node,
         VisitorMethodArgument argument)
@@ -1449,6 +1460,7 @@ public sealed class ArangoDbFilterTreeVisitor : ArangoDbTreeVisitorBase
         return new TextResultExpression(propertyValue, argument?.CastTo, relatedObject: node.Value);
     }
 
+    /// <inheritdoc />
     protected override Expression VisitMethodCall(MethodCallExpression node)
     {
         return Visit(
@@ -1460,6 +1472,7 @@ public sealed class ArangoDbFilterTreeVisitor : ArangoDbTreeVisitorBase
             ?? node;
     }
 
+    /// <inheritdoc />
     protected override Expression VisitMethodCall(
         MethodCallExpression node,
         VisitorMethodArgument argument)
@@ -1668,6 +1681,7 @@ public sealed class ArangoDbFilterTreeVisitor : ArangoDbTreeVisitorBase
         throw new InvalidOperationException("This is not supported by this kind of visitor.");
     }
 
+    /// <inheritdoc />
     public override SubTreeVisitorResult GetResultExpression(
         IArangoDbEnumerable enumerable,
         CollectionScope collectionScope)
@@ -1789,6 +1803,7 @@ public sealed class ArangoDbFilterTreeVisitor : ArangoDbTreeVisitorBase
         }
     }
 
+    /// <inheritdoc />
     public override Expression Visit(Expression node)
     {
         throw new InvalidOperationException("This method should not be used in this context!");

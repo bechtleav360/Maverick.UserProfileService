@@ -5,8 +5,23 @@
 /// </summary>
 public enum TransactionStatus
 {
+    /// <summary>
+    ///     The transaction status is unknown.
+    /// </summary>
     Unknown,
+
+    /// <summary>
+    /// T   he transaction is currently running.
+    /// </summary>
     Running,
+
+    /// <summary>
+    ///     The transaction has been committed.
+    /// </summary>
     Committed,
+
+    /// <summary>
+    ///     The transaction has been aborted.
+    /// </summary>
     Aborted
 }

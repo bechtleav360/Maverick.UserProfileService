@@ -26,17 +26,17 @@ public static class ObjectExtensions
     /// <param name="initiator">Initiator of command.</param>
     /// <returns>
     ///     Create <see cref="SubmitCommand" /> of
-    ///     <param name="obj"></param>
+    ///     <paramref name="obj"></paramref>
     ///     .
     /// </returns>
     /// <exception cref="ArgumentNullException">
     ///     Is throws, if
-    ///     <param name="obj"></param>
+    ///     <paramref name="obj"></paramref>
     ///     is null.
     /// </exception>
     /// <exception cref="ArgumentException">
     ///     Is thrown if
-    ///     <param name="obj"></param>
+    ///     <paramref name="obj"></paramref>
     ///     has no <see cref="CommandAttribute" />.
     /// </exception>
     public static SubmitCommand ToCommand(

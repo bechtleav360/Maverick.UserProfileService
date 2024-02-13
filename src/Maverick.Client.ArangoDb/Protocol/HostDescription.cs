@@ -9,6 +9,10 @@ public class HostDescription
     internal bool IsSecured { get; set; }
     internal int Port { get; set; }
 
+    /// <summary>
+    ///     Gets the <see cref="string"/> representation of the host.
+    /// </summary>
+    /// <returns>A <see cref="string"/> representing the host.</returns>
     public string GetHost()
     {
         string result = Host + ":" + Port + "/";

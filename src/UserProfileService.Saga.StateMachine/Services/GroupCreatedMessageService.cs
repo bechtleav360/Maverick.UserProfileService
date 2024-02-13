@@ -33,23 +33,26 @@ public class GroupCreatedMessageService : BaseCommandService<GroupCreatedMessage
     }
 
     /// <inheritdoc />
-    public override async Task<GroupCreatedMessage> ModifyAsync(
-        GroupCreatedMessage message,
+    public override async Task<GroupCreatedMessage?> ModifyAsync(
+        GroupCreatedMessage? message,
         CancellationToken cancellationToken = default)
     {
         Logger.EnterMethod();
         
         cancellationToken.ThrowIfCancellationRequested();
 
-        message.Id = Guid.NewGuid().ToString();
+        if (message != null)
+        {
+            message.Id = Guid.NewGuid().ToString();
 
-        message.Members ??= Array.Empty<ConditionObjectIdent>();
-        message.Tags ??= Array.Empty<TagAssignment>();
-        message.ExternalIds ??= new List<ExternalIdentifier>();
-        message.ExternalIds = message.ExternalIds.Where(ei => ei != null).ToList();
-        message.Members.AddDefaultConditions();
+            message.Members ??= Array.Empty<ConditionObjectIdent>();
+            message.Tags ??= Array.Empty<TagAssignment>();
+            message.ExternalIds ??= new List<ExternalIdentifier>();
+            message.ExternalIds = message.ExternalIds.Where(ei => ei != null).ToList();
+            message.Members.AddDefaultConditions();
+        }
 
-        GroupCreatedMessage result = await base.ModifyAsync(message, cancellationToken);
+        GroupCreatedMessage? result = await base.ModifyAsync(message, cancellationToken);
 
         return Logger.ExitMethod(result);
     }
@@ -59,7 +62,7 @@ public class GroupCreatedMessageService : BaseCommandService<GroupCreatedMessage
         GroupCreatedMessage message,
         string correlationId,
         string processId,
-        CommandInitiator initiator,
+        CommandInitiator? initiator,
         CancellationToken cancellationToken = default)
     {
         Logger.EnterMethod();

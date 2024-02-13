@@ -53,8 +53,8 @@ public interface IACollection
     /// <summary>
     ///     Retrieves basic information about specified collection
     /// </summary>
-    /// <param name="collectionName">Collection name.</param>
-    /// <param name="forceDirtyRead">Allow to send request to a follower (only available in the active-failover setup)</param>
+    /// <param name="collectionName">Name of the collection.</param>
+    /// <param name="forceDirtyRead">Allow to send request to a follower (only available in the active-failover setup).</param>
     /// <returns>
     ///     Object containing some attributes of the specified collection or possibly occurred errors
     ///     <see cref="GetCollectionResponse" />.
@@ -66,9 +66,10 @@ public interface IACollection
     /// </summary>
     /// <typeparam name="TResponse">
     ///     Defines the type of the response object.<br />
-    ///     <param name="forceDirtyRead">Allow to send request to a follower (only available in the active-failover setup)</param>
     ///     If <typeparamref name="TResponse" /> is "<c>string</c>" type, the raw json will be returned.
     /// </typeparam>
+    /// <param name="collectionName">Name of the collection.</param>
+    /// <param name="forceDirtyRead">Allow to send request to a follower (only available in the active-failover setup).</param>
     Task<SingleApiResponse<TResponse>> GetCollectionAsync<TResponse>(
         string collectionName,
         bool forceDirtyRead = false);
@@ -77,9 +78,10 @@ public interface IACollection
     ///     Retrieves basic information with additional properties about specified collection.
     /// </summary>
     /// <typeparam name="TResponse">
-    ///     <param name="forceDirtyRead">Allow to send request to a follower (only available in the active-failover setup)</param>
     ///     If <typeparamref name="TResponse" /> is "<c>string</c>" type, the raw json will be returned.
     /// </typeparam>
+    /// <param name="collectionName">Name of the collection.</param>
+    /// <param name="forceDirtyRead">Allow to send request to a follower (only available in the active-failover setup).</param>
     Task<SingleApiResponse<TResponse>> GetCollectionPropertiesAsync<TResponse>(
         string collectionName,
         bool forceDirtyRead = false);
@@ -87,7 +89,7 @@ public interface IACollection
     /// <summary>
     ///     Retrieves basic information with additional properties about specified collection.
     /// </summary>
-    /// <param name="collectionName">Collection name.</param>
+    /// <param name="collectionName">Name of the collection.</param>
     /// <param name="forceDirtyRead">Allow to send request to a follower (only available in the active-failover setup)</param>
     /// <returns>
     ///     Object containing detailed about the specified collection or possibly occurred errors
@@ -100,7 +102,7 @@ public interface IACollection
     /// <summary>
     ///     Retrieves basic information with additional properties and document count in specified collection.
     /// </summary>
-    /// <param name="collectionName">Collection name.</param>
+    /// <param name="collectionName">Name of the collection.</param>
     /// <param name="transactionId">
     ///     Transaction id (only meaningful if the operation is being executed inside a stream
     ///     transaction).
@@ -121,6 +123,7 @@ public interface IACollection
     /// <typeparam name="TResponse">
     ///     If <typeparamref name="TResponse" /> is "<c>string</c>" type, the raw json will be returned.
     /// </typeparam>
+    /// <param name="collectionName">Name of the collection.</param>
     /// <param name="forceDirtyRead">Allow to send request to a follower (only available in the active-failover setup)</param>
     Task<SingleApiResponse<CollectionCountEntity>> GetCollectionCountAsync<TResponse>(
         string collectionName,
@@ -132,6 +135,7 @@ public interface IACollection
     /// <typeparam name="TResponse">
     ///     If <typeparamref name="TResponse" /> is "<c>string</c>" type, the raw json will be returned.
     /// </typeparam>
+    /// <param name="collectionName">Name of the collection.</param>
     /// <param name="forceDirtyRead">Allow to send request to a follower (only available in the active-failover setup)</param>
     Task<SingleApiResponse<TResponse>> GetCollectionFiguresAsync<TResponse>(
         string collectionName,
@@ -141,7 +145,7 @@ public interface IACollection
     ///     Retrieves basic information with additional properties, document count and figures in specified collection.
     /// </summary>
     /// <param name="collectionName">Collection name.</param>
-    /// <param name="forceDirtyRead">Allow to send request to a follower (only available in the active-failover setup)</param>
+    /// <param name="allowDirytRead">Allow to send request to a follower (only available in the active-failover setup)</param>
     /// <returns>
     ///     Contains object with statistical information about a collection or possibly occurred errors
     ///     <see cref="GetFiguresResponse" />

@@ -4,8 +4,18 @@
 // with some bug fixes and extensions to support asynchronous operations 
 namespace Maverick.Client.ArangoDb.ExternalLibraries.fastJSON;
 
+/// <summary>
+///     Represents the structure or schema of a data source.
+/// </summary>
 public sealed class DataSetSchema
 {
-    public List<string> Info; //{ get; set; }
-    public string Name; //{ get; set; }
+    /// <summary>
+    ///     Additional information related to the schema.
+    /// </summary>
+    public List<string> Info;
+
+    /// <summary>
+    ///     The name associated with the schema.
+    /// </summary>
+    public string Name;
 }

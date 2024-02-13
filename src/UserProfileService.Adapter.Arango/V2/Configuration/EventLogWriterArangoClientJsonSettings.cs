@@ -15,11 +15,19 @@ namespace UserProfileService.Adapter.Arango.V2.Configuration;
 /// </summary>
 public class EventLogWriterArangoClientJsonSettings : IArangoClientJsonSettings
 {
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="EventLogWriterArangoClientJsonSettings"/> class.
+    /// </summary>
     public EventLogWriterArangoClientJsonSettings()
     {
         SerializerSettings = GetDefaultSettings();
     }
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="EventLogWriterArangoClientJsonSettings"/> class
+    ///     with an aditional <see cref="JsonSubtypesConverterBuilder"/>.
+    /// </summary>
+    /// <param name="additionalRegistration"></param>
     public EventLogWriterArangoClientJsonSettings(Action<JsonSubtypesConverterBuilder> additionalRegistration)
     {
         SerializerSettings = GetDefaultSettings(additionalRegistration);

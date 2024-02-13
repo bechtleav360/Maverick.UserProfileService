@@ -5,7 +5,9 @@ using System.Collections.Generic;
 // with some bug fixes and extensions to support asynchronous operations 
 namespace Maverick.Client.ArangoDb.Public;
 
-// contains ArangoDB specific extension methods, Dictator implementation code can be found in external libraries
+/// <summary>
+///     Extension class that contains ArangoDB specific extension methods, Dictator implementation code can be found in external libraries.
+/// </summary>
 public static class DictionaryExtensions
 {
     /// <summary>

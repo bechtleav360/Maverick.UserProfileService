@@ -9,6 +9,10 @@ using System.Reflection;
 // with some bug fixes and extensions to support asynchronous operations 
 namespace Maverick.Client.ArangoDb.ExternalLibraries.dictator;
 
+/// <summary>
+///     Utility class containing extension methods for <see cref="Dictionary{TKey,TValue}"/>
+///     representing JSON-like object trees.
+/// </summary>
 public static class DictionaryExtensions
 {
     /// <summary>

@@ -31,20 +31,23 @@ public class TagCreatedMessageService : BaseCommandService<TagCreatedMessage>
     }
 
     /// <inheritdoc />
-    public override async Task<TagCreatedMessage> ModifyAsync(
-        TagCreatedMessage message,
+    public override async Task<TagCreatedMessage?> ModifyAsync(
+        TagCreatedMessage? message,
         CancellationToken cancellationToken = default)
     {
         Logger.EnterMethod();
         
         cancellationToken.ThrowIfCancellationRequested();
-        
-        message.Id = Guid.NewGuid().ToString();
 
-        message.ExternalIds ??= new List<ExternalIdentifier>();
-        message.ExternalIds = message.ExternalIds.Where(ei => ei != null).ToList();
+        if (message != null)
+        {
+            message.Id = Guid.NewGuid().ToString();
 
-        TagCreatedMessage result = await base.ModifyAsync(message, cancellationToken);
+            message.ExternalIds ??= new List<ExternalIdentifier>();
+            message.ExternalIds = message.ExternalIds.Where(ei => ei != null).ToList();
+        }
+
+        TagCreatedMessage? result = await base.ModifyAsync(message, cancellationToken);
 
         return Logger.ExitMethod(result);
     }
@@ -54,7 +57,7 @@ public class TagCreatedMessageService : BaseCommandService<TagCreatedMessage>
         TagCreatedMessage message,
         string correlationId,
         string processId,
-        CommandInitiator initiator,
+        CommandInitiator? initiator,
         CancellationToken cancellationToken = default)
     {
         Logger.EnterMethod();

@@ -21,6 +21,9 @@ using UserProfileService.Projection.SecondLevel.Abstractions;
 
 namespace UserProfileService.Projection.SecondLevel.Services;
 
+/// <summary>
+///     Service handling <see cref="IUserProfileServiceEvent"/>s for the second level projection of the API. 
+/// </summary>
 public class ApiSecondLevelProjectionService : ProjectionBase, ISecondLevelProjection
 {
     /// <inheritdoc />
@@ -139,6 +142,7 @@ public class ApiSecondLevelProjectionService : ProjectionBase, ISecondLevelProje
     {
     }
 
+    /// <inheritdoc />
     protected override bool TryGetStreamNamePattern(out Regex regEx)
     {
         using IServiceScope scope = ServiceProvider.CreateScope();

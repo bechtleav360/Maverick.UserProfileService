@@ -4,6 +4,7 @@ using Maverick.UserProfileService.Models.Models;
 using Microsoft.Extensions.Logging;
 using UserProfileService.Commands;
 using UserProfileService.Common.Logging.Extensions;
+using UserProfileService.Common.V2.Exceptions;
 using UserProfileService.Events.Implementation.V2;
 using UserProfileService.Events.Payloads.V2;
 using UserProfileService.Saga.Events.Messages;
@@ -38,16 +39,26 @@ public class ProfileDeletedMessageService : BaseCommandService<ProfileDeletedMes
     }
 
     /// <inheritdoc />
-    public override async Task<ProfileDeletedMessage> ModifyAsync(
-        ProfileDeletedMessage message,
+    public override async Task<ProfileDeletedMessage?> ModifyAsync(
+        ProfileDeletedMessage? message,
         CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        
-        IProfile repoGroup = await _readService.GetProfileAsync(message.Id, message.ProfileKind);
 
-        // Set external ids for further process like validation in external services.
-        message.ExternalIds = repoGroup.ExternalIds;
+        if (message != null)
+        {
+            IProfile? repoGroup = await _readService.GetProfileAsync(message.Id, message.ProfileKind);
+
+            if (repoGroup == null)
+            {
+                throw new InstanceNotFoundException(
+                    $"Failed to modify {nameof(ProfileDeletedMessage)} "
+                    + $"because no profile with id {message.Id} was found.");
+            }
+
+            // Set external ids for further process like validation in external services.
+            message.ExternalIds = repoGroup.ExternalIds;
+        }
 
         return await base.ModifyAsync(message, cancellationToken);
     }
@@ -57,7 +68,7 @@ public class ProfileDeletedMessageService : BaseCommandService<ProfileDeletedMes
         ProfileDeletedMessage message,
         string correlationId,
         string processId,
-        CommandInitiator initiator,
+        CommandInitiator? initiator,
         CancellationToken cancellationToken = default)
     {
         Logger.EnterMethod();

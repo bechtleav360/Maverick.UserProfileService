@@ -6,7 +6,7 @@ using MassTransit;
 namespace UserProfileService.Messaging.ArangoDb.Configuration;
 
 /// <summary>
-///     Options for arango saga repository for <see cref="TSaga" />.
+///     Options for arango saga repository for <typeparamref name="TSaga" />.
 /// </summary>
 /// <typeparam name="TSaga">Type of saga.</typeparam>
 public class ArangoSagaRepositoryOptions<TSaga>

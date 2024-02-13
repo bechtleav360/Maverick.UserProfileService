@@ -19,7 +19,7 @@ public static class FunctionObjectEntityModelExtension
     /// <param name="functionModel">The model that has to be updated.</param>
     /// <param name="function">
     ///     The function that should update the
-    ///     <param name="functionModel"></param>
+    ///     <paramref name="functionModel"/>
     /// </param>
     /// <param name="mapper">The mapper is used to map complex objects.</param>
     /// <returns>The updated <see cref="FunctionObjectEntityModel" />.</returns>

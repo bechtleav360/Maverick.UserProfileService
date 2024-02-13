@@ -7,17 +7,17 @@
     public interface IFilterUtility<TFilter>
     {
         /// <summary>
-        ///     Deserializes a string to <see cref="TFilter" />
+        ///     Deserializes a string to <typeparamref name="TFilter"/>
         /// </summary>
         /// <param name="serializedFilter">The serialized string filter</param>
-        /// <returns>The deserialized <see cref="TFilter" /></returns>
+        /// <returns>The deserialized <typeparamref name="TFilter"/></returns>
         TFilter Deserialize(string serializedFilter);
 
         /// <summary>
-        ///     Serializes a <see cref="TFilter" /> to string
+        ///     Serializes a <typeparamref name="TFilter"/> to string
         /// </summary>
         /// <param name="filter">The filter object</param>
-        /// <returns>The serialized <see cref="TFilter" /> as string</returns>
+        /// <returns>The serialized <typeparamref name="TFilter"/> as string</returns>
         string Serialize(TFilter filter);
     }
 }

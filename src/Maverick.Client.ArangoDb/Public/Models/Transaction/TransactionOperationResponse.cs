@@ -34,6 +34,9 @@ public class TransactionOperationResponse : SingleApiResponse<TransactionEntity>
     {
     }
 
+    /// <summary>
+    ///     Disposes of resources asynchronously.
+    /// </summary>
     protected virtual async ValueTask DisposeAsyncCore()
     {
         if (_connection != null)
@@ -55,6 +58,10 @@ public class TransactionOperationResponse : SingleApiResponse<TransactionEntity>
         _connection = null;
     }
 
+    /// <summary>
+    ///     Disposes of the <see cref="Connection"/> used by this object.
+    /// </summary>
+    /// <param name="disposing">True if called from the <see cref="IDisposable.Dispose"/> method, false if called from the finalizer.</param>
     protected virtual void Dispose(bool disposing)
     {
         if (disposing)
@@ -65,6 +72,7 @@ public class TransactionOperationResponse : SingleApiResponse<TransactionEntity>
         _connection = null;
     }
 
+    /// <inheritdoc />
     public async ValueTask DisposeAsync()
     {
         await DisposeAsyncCore().ConfigureAwait(false);
@@ -72,6 +80,7 @@ public class TransactionOperationResponse : SingleApiResponse<TransactionEntity>
         GC.SuppressFinalize(this);
     }
 
+    /// <inheritdoc />
     public void Dispose()
     {
         Dispose(true);

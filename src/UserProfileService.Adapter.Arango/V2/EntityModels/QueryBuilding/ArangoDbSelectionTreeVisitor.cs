@@ -11,6 +11,9 @@ using UserProfileService.Adapter.Arango.V2.Contracts;
 
 namespace UserProfileService.Adapter.Arango.V2.EntityModels.QueryBuilding;
 
+/// <summary>
+///     An ArangoDB tree visitor that processes selection expression trees.
+/// </summary>
 public sealed class ArangoDbSelectionTreeVisitor : ArangoDbTreeVisitorBase
 {
     private ModelBuilderOptions _options;
@@ -77,6 +80,7 @@ public sealed class ArangoDbSelectionTreeVisitor : ArangoDbTreeVisitorBase
         return _options;
     }
 
+    /// <inheritdoc />
     protected override Expression VisitLambda<T>(Expression<T> node, VisitorMethodArgument argument)
     {
         if (!TryResolveAndUpdateKey(node))
@@ -112,6 +116,7 @@ public sealed class ArangoDbSelectionTreeVisitor : ArangoDbTreeVisitorBase
         throw new InvalidOperationException("This operation is not supported by this tree visitor! Wrong linq syntax!");
     }
 
+    /// <inheritdoc />
     protected override Expression VisitMember(MemberExpression node)
     {
         if (Key == null)
@@ -127,6 +132,7 @@ public sealed class ArangoDbSelectionTreeVisitor : ArangoDbTreeVisitorBase
         };
     }
 
+    /// <inheritdoc />
     public override SubTreeVisitorResult GetResultExpression(
         IArangoDbEnumerable enumerable,
         CollectionScope collectionScope)
@@ -134,6 +140,13 @@ public sealed class ArangoDbSelectionTreeVisitor : ArangoDbTreeVisitorBase
         return GetResultExpression(enumerable, collectionScope, null);
     }
 
+    /// <summary>
+    ///     Gets the result expression for an ArangoDB enumerable.
+    /// </summary>
+    /// <param name="enumerable">The ArangoDB enumerable.</param>
+    /// <param name="collectionScope">The collection scope.</param>
+    /// <param name="precedingVariableCollectionMapping">Mapping of preceding variable names to collection keys.</param>
+    /// <returns>The result expression as a <see cref="SubTreeVisitorResult"/>.</returns>
     public SubTreeVisitorResult GetResultExpression(
         IArangoDbEnumerable enumerable,
         CollectionScope collectionScope,

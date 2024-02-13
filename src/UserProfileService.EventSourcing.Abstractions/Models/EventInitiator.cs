@@ -8,7 +8,7 @@ public class EventInitiator
     /// <summary>
     ///     Identifier of initiator for the event.
     /// </summary>
-    public string Id { get; set; }
+    public string? Id { get; set; }
 
     /// <summary>
     ///     Defines the type of the initiator that initiates or publish the message

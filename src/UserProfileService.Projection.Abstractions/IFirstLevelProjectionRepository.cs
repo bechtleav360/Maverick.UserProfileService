@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Maverick.UserProfileService.AggregateEvents.Common.Enums;
 using Maverick.UserProfileService.Models.BasicModels;
 using Maverick.UserProfileService.Models.Models;
+using Maverick.UserProfileService.Models.RequestModels;
 using UserProfileService.Projection.Abstractions.Models;
 
 namespace UserProfileService.Projection.Abstractions;
@@ -276,7 +277,7 @@ public interface IFirstLevelProjectionRepository : IProjectionStateRepository
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    ///     Delete a tag by a given id <see cref="tagId" />.
+    ///     Delete a tag by a given id <paramref name="tagId" />.
     /// </summary>
     /// <param name="tagId">The id of the tag that should be deleted.</param>
     /// <param name="transaction">
@@ -397,9 +398,7 @@ public interface IFirstLevelProjectionRepository : IProjectionStateRepository
     ///     <see cref="FirstLevelProjectionParentsTreeDifferenceResult" />.
     ///     The tree that contains only the parents relations from the profile <paramref name="profileId" /> without
     ///     the parents relations form the <paramref name="referenceProfileId" />. It also includes TagAssignment that
-    ///     are different to the
-    ///     <param name="referenceProfileId"></param>
-    ///     .
+    ///     are different to the <paramref name="referenceProfileId"/>.
     /// </returns>
     IAsyncEnumerable<FirstLevelProjectionParentsTreeDifferenceResult> GetDifferenceInParentsTreesAsync(
         string profileId,

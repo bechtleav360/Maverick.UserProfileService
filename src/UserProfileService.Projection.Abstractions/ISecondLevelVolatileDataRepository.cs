@@ -13,6 +13,7 @@ public interface ISecondLevelVolatileDataRepository : IProjectionStateRepository
     ///     Saves the user id in the repository.
     /// </summary>
     /// <param name="userId">The id of the user to be stored.</param>
+    /// <param name="transaction">Optional object including information about the transaction to commit.</param>
     /// <param name="cancellationToken">
     ///     The token to monitor for cancellation requests. The default value is
     ///     <see cref="CancellationToken.None" />.
@@ -26,7 +27,8 @@ public interface ISecondLevelVolatileDataRepository : IProjectionStateRepository
     /// <summary>
     ///     Attempt to deletes the user id in the repository.
     /// </summary>
-    /// <param name="userId">The id of the user to be deleted..</param>
+    /// <param name="userId">The id of the user to be deleted.</param>
+    /// <param name="transaction">Optional object including information about the transaction to commit.</param>
     /// <param name="cancellationToken">
     ///     The token to monitor for cancellation requests. The default value is
     ///     <see cref="CancellationToken.None" />.

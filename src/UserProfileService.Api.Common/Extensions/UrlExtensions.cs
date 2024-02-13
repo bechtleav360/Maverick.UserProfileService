@@ -73,15 +73,14 @@ public static class UrlExtensions
 
         IUrlHelper urlHelper = new UrlHelperFactory().GetUrlHelper(context);
 
-        var baseUrl = new Uri(
-            urlHelper.RouteUrl(
-                    new UrlRouteContext
-                    {
-                        Host = urlHelper.ActionContext.HttpContext.Request.Host.Value,
-                        Protocol = urlHelper.ActionContext.HttpContext.Request.Scheme
-                    })
-                .RemoveControllerFromUrl(),
-            UriKind.Absolute);
+        string routeUrl = urlHelper.RouteUrl(
+            new UrlRouteContext
+            {
+                Host = urlHelper.ActionContext.HttpContext.Request.Host.Value,
+                Protocol = urlHelper.ActionContext.HttpContext.Request.Scheme
+            })!;
+
+        Uri baseUrl = new Uri(routeUrl.RemoveControllerFromUrl(), UriKind.Absolute);
 
         foreach (PropertyInfo redirectionProperty in redirectionProperties)
         {

@@ -16,24 +16,24 @@ namespace UserProfileService.Common.V2.RequestBuilder;
 public class BasicRequestBuilder
 {
     /// <summary>
-    ///     The fixed relative part of the uri (version & api path)
+    ///     The fixed relative part of the uri (version &amp; api path)
     /// </summary>
-    private readonly string _FixedRelativeUri;
+    private readonly string _fixedRelativeUri;
 
     /// <summary>
     ///     The logger
     /// </summary>
-    private readonly ILogger _Logger;
+    private readonly ILogger _logger;
 
     /// <summary>
     ///     For storing the optional parameter.
     /// </summary>
-    private readonly IDictionary<string, List<string>> _QueryParameters = new Dictionary<string, List<string>>();
+    private readonly IDictionary<string, List<string>> _queryParameters = new Dictionary<string, List<string>>();
 
     /// <summary>
     ///     The request message that is build.
     /// </summary>
-    private HttpRequestMessage _RequestMessage;
+    private HttpRequestMessage _requestMessage;
 
     /// <summary>
     ///     The base url for the service.
@@ -54,10 +54,10 @@ public class BasicRequestBuilder
         Uri baseUri,
         ILoggerFactory loggerFactory)
     {
-        _RequestMessage = new HttpRequestMessage();
+        _requestMessage = new HttpRequestMessage();
         BaseUri = baseUri;
-        _FixedRelativeUri = baseUri.PathAndQuery;
-        _Logger = loggerFactory.CreateLogger(GetType().FullName);
+        _fixedRelativeUri = baseUri.PathAndQuery;
+        _logger = loggerFactory.CreateLogger(GetType().FullName);
     }
 
     /// <summary>
@@ -65,8 +65,8 @@ public class BasicRequestBuilder
     /// </summary>
     private void Clean()
     {
-        _QueryParameters.Clear();
-        _RequestMessage = new HttpRequestMessage();
+        _queryParameters.Clear();
+        _requestMessage = new HttpRequestMessage();
     }
 
     /// <summary>
@@ -77,13 +77,13 @@ public class BasicRequestBuilder
     {
         var uri = new StringBuilder(OperationUri?.AbsoluteUri);
 
-        if (_QueryParameters.Count > 0)
+        if (_queryParameters.Count > 0)
         {
             uri.Append("?");
 
             var index = 0;
 
-            foreach (KeyValuePair<string, List<string>> itemList in _QueryParameters)
+            foreach (KeyValuePair<string, List<string>> itemList in _queryParameters)
             {
                 foreach (string item in itemList.Value)
                 {
@@ -91,7 +91,7 @@ public class BasicRequestBuilder
 
                     index++;
 
-                    if (index != _QueryParameters.Count)
+                    if (index != _queryParameters.Count)
                     {
                         uri.Append("&");
                     }
@@ -99,7 +99,7 @@ public class BasicRequestBuilder
             }
         }
 
-        _Logger.LogInformation("Generated request uri.", uri.ToString());
+        _logger.LogInformation("Generated request uri.", uri.ToString());
 
         return uri.ToString();
     }
@@ -110,8 +110,8 @@ public class BasicRequestBuilder
     /// <returns>Returns a <see cref="HttpRequestMessage" /> object.</returns>
     public HttpRequestMessage BuildRequest()
     {
-        _RequestMessage.RequestUri = new Uri(BuildRelativeUri());
-        HttpRequestMessage result = _RequestMessage;
+        _requestMessage.RequestUri = new Uri(BuildRelativeUri());
+        HttpRequestMessage result = _requestMessage;
         Clean();
 
         return result;
@@ -129,7 +129,7 @@ public class BasicRequestBuilder
             throw new ArgumentNullException(nameof(httpMethod));
         }
 
-        _RequestMessage.Method = httpMethod;
+        _requestMessage.Method = httpMethod;
 
         return this;
     }
@@ -146,7 +146,7 @@ public class BasicRequestBuilder
             throw new ArgumentNullException(nameof(content));
         }
 
-        _RequestMessage.Content = content;
+        _requestMessage.Content = content;
 
         return this;
     }
@@ -156,6 +156,10 @@ public class BasicRequestBuilder
     /// </summary>
     /// <param name="headerParameterName">Set name of the header parameter.</param>
     /// <param name="value">The value for the header.</param>
+    /// <param name="throwException">
+    ///     If set to <see langword="false"/>,
+    ///     the argument exceptions are suppressed. <see langword="true"/> by default.
+    /// </param>
     /// <returns>Returns the <see cref="RequestBuilder" /> object.</returns>
     public BasicRequestBuilder AddHeaders(string headerParameterName, string value, bool throwException = true)
     {
@@ -169,18 +173,18 @@ public class BasicRequestBuilder
             throw new ArgumentNullException(nameof(value));
         }
 
-        if (_RequestMessage?.Headers == null)
+        if (_requestMessage?.Headers == null)
         {
-            _Logger.LogWarning(
+            _logger.LogWarning(
                 "Unable to add Header in RequestBuilder (Headers is null). Request message: '{requestMessage}'",
-                _RequestMessage);
+                _requestMessage);
 
             return this;
         }
 
         if (headerParameterName != null && value != null)
         {
-            _RequestMessage.Headers.Add(headerParameterName, value);
+            _requestMessage.Headers.Add(headerParameterName, value);
         }
 
         return this;
@@ -190,6 +194,7 @@ public class BasicRequestBuilder
     ///     Set the operation uri that contains the baseUri and the request url.
     /// </summary>
     /// <param name="requestUrl">The request url.</param>
+    /// <param name="rootPath">The root path.</param>
     /// <returns>Returns the <see cref="RequestBuilder" /> object.</returns>
     public BasicRequestBuilder SetUri(string requestUrl, string rootPath = "api")
     {
@@ -200,7 +205,7 @@ public class BasicRequestBuilder
 
         OperationUri = new Uri(
             BaseUri,
-            _FixedRelativeUri
+            _fixedRelativeUri
             + rootPath
             + "/"
             + requestUrl.TrimStart('/'));
@@ -218,12 +223,12 @@ public class BasicRequestBuilder
     {
         if (value == null)
         {
-            _Logger.LogWarning(string.Format("Tried adding null value as \"{0}\" parameter", parameterName));
+            _logger.LogWarning(string.Format("Tried adding null value as \"{0}\" parameter", parameterName));
 
             return this;
         }
 
-        _QueryParameters.Add(
+        _queryParameters.Add(
             parameterName,
             new List<string>
             {
@@ -245,19 +250,19 @@ public class BasicRequestBuilder
     {
         if (!condition)
         {
-            _Logger.LogTrace("Condition not reached. Skipping setting query parameter.");
+            _logger.LogTrace("Condition not reached. Skipping setting query parameter.");
 
             return this;
         }
 
         if (value == null)
         {
-            _Logger.LogWarning("Tried adding null value as {pName} parameter", parameterName);
+            _logger.LogWarning("Tried adding null value as {pName} parameter", parameterName);
 
             return this;
         }
 
-        _QueryParameters.Add(
+        _queryParameters.Add(
             parameterName,
             new List<string>
             {
@@ -297,7 +302,7 @@ public class BasicRequestBuilder
     /// <returns>Returns the <see cref="RequestBuilder" /> object.</returns>
     public BasicRequestBuilder AddQueryParameter(string parameterName, IEnumerable<string> values)
     {
-        _QueryParameters.Add(parameterName, values.ToList());
+        _queryParameters.Add(parameterName, values.ToList());
 
         return this;
     }
@@ -311,10 +316,10 @@ public class BasicRequestBuilder
     /// <returns></returns>
     public BasicRequestBuilder SetBody<T>(T bodyObject, string mediaType = "application/json")
     {
-        _RequestMessage.Content =
+        _requestMessage.Content =
             new StringContent(JsonConvert.SerializeObject(bodyObject), Encoding.UTF8, mediaType);
 
-        _RequestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(mediaType));
+        _requestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(mediaType));
 
         return this;
     }

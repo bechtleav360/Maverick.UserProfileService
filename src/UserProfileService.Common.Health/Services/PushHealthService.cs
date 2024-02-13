@@ -18,10 +18,21 @@ namespace UserProfileService.Common.Health.Services;
 /// </summary>
 public class PushHealthService : BackgroundService
 {
- 
+    /// <summary>
+    ///     The <see cref="IBus"/> used to publish the health check results.
+    /// </summary>
     protected readonly IBus Bus;
+    /// <summary>
+    ///     Configuration used by this <see cref="PushHealthService"/>.
+    /// </summary>
     protected readonly PushHealthCheckConfiguration Configuration;
+    /// <summary>
+    ///     <see cref="HealthCheckService"/> used to perform health checks.
+    /// </summary>
     protected readonly HealthCheckService HealthCheckService;
+    /// <summary>
+    ///     Logger used by <see cref="PushHealthService"/>.
+    /// </summary>
     protected readonly ILogger<PushHealthService> Logger;
 
     /// <summary>

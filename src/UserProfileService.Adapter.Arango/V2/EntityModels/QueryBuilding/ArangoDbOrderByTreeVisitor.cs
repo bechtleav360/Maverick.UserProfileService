@@ -7,10 +7,16 @@ using UserProfileService.Adapter.Arango.V2.Contracts;
 
 namespace UserProfileService.Adapter.Arango.V2.EntityModels.QueryBuilding;
 
+/// <summary>
+///     An ArangoDB tree visitor that processes order by expression trees.
+/// </summary>
 public sealed class ArangoDbOrderByTreeVisitor : ArangoDbTreeVisitorBase
 {
     private ModelBuilderOptions _options;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="ArangoDbOrderByTreeVisitor"/>.
+    /// </summary>
     public ArangoDbOrderByTreeVisitor()
     {
         When<OrderByExpression>(VisitOrderByExpression);
@@ -44,6 +50,7 @@ public sealed class ArangoDbOrderByTreeVisitor : ArangoDbTreeVisitorBase
         return _options;
     }
 
+    /// <inheritdoc />
     protected override Expression VisitLambda<T>(Expression<T> node, VisitorMethodArgument argument)
     {
         if (!TryResolveAndUpdateKey(node))
@@ -90,6 +97,7 @@ public sealed class ArangoDbOrderByTreeVisitor : ArangoDbTreeVisitorBase
         };
     }
 
+    /// <inheritdoc />
     protected override Expression VisitMember(MemberExpression node, VisitorMethodArgument argument)
     {
         if (Key == null)
@@ -109,6 +117,13 @@ public sealed class ArangoDbOrderByTreeVisitor : ArangoDbTreeVisitorBase
         };
     }
 
+    /// <summary>
+    ///     Gets the result expression for an ArangoDB enumerable.
+    /// </summary>
+    /// <param name="enumerable">The ArangoDB enumerable.</param>
+    /// <param name="collectionScope">The collection scope.</param>
+    /// <param name="precedingVariableCollectionMapping">Mapping of preceding variable names to collection keys.</param>
+    /// <returns>The result expression as a <see cref="SubTreeVisitorResult"/>.</returns>
     public SubTreeVisitorResult GetResultExpression(
         IArangoDbEnumerable enumerable,
         CollectionScope collectionScope,

@@ -109,10 +109,6 @@ public static class SecondLevelAssignmentProjectionBuilderExtension
     ///     Add for the second level projection the needed mapper.
     /// </summary>
     /// <param name="builder">The builder that is used to configure the second level projection.</param>
-    /// <param name="serviceLifetime">
-    ///     Specifies the lifetime of a service in an
-    ///     <see cref="IServiceCollection" />
-    /// </param>
     /// <returns>The <see cref="IServiceCollection" /> itself.</returns>
     public static ISecondLevelAssignmentProjectionBuilder AddSecondLevelMapper(
         this ISecondLevelAssignmentProjectionBuilder builder)

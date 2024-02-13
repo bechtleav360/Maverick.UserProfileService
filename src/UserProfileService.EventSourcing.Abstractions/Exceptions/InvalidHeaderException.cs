@@ -11,7 +11,7 @@ public class InvalidHeaderException : Exception
     /// <summary>
     ///     The regarding header that caused the error.
     /// </summary>
-    public StreamedEventHeader Header { get; }
+    public StreamedEventHeader? Header { get; }
 
     /// <summary>
     ///     Initializes a new instance of <see cref="InvalidHeaderException" /> without specifying any message or further
@@ -33,7 +33,7 @@ public class InvalidHeaderException : Exception
 
     /// <summary>
     ///     Initializes a new instance of <see cref="InvalidHeaderException" /> with a specified error
-    ///     <see cref="message" /> and a reference to an inner exception that caused the error.
+    ///     <paramref name="message" /> and a reference to an inner exception that caused the error.
     /// </summary>
     /// <param name="message">A message containing information about the error or it's cause.</param>
     /// <param name="innerException">A reference to the exception that caused the error.</param>
@@ -45,7 +45,7 @@ public class InvalidHeaderException : Exception
     }
 
     /// <summary>
-    ///     Initializes a new instance of <see cref="InvalidHeaderException" /> with a specified <see cref="message" />
+    ///     Initializes a new instance of <see cref="InvalidHeaderException" /> with a specified <paramref name="message" />
     ///     containing information about the error and the <paramref name="header" /> that caused the error.
     /// </summary>
     /// <param name="message">A message containing information about the error or it's cause.</param>

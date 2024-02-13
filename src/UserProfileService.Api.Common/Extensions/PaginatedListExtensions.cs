@@ -33,10 +33,10 @@ public static class PaginatedListExtensions
         return uri;
     }
 
-    public static ListResponseResult<T> ToListResponseResult<T>(
-        this IEnumerable<T> list,
+    public static ListResponseResult<T>? ToListResponseResult<T>(
+        this IEnumerable<T>? list,
         HttpContext context,
-        IPaginationSettings paginationSettings = null)
+        IPaginationSettings? paginationSettings = null)
     {
         paginationSettings ??= new QueryObject();
 
@@ -74,7 +74,7 @@ public static class PaginatedListExtensions
     public static ListResponse CreateListResponse(
         this HttpContext context,
         long totalAmount,
-        IPaginationSettings query = null)
+        IPaginationSettings? query = null)
     {
         return new ListResponse
         {

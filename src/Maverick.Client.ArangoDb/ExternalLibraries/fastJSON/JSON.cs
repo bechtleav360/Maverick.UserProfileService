@@ -17,10 +17,23 @@ using Maverick.Client.ArangoDb.ExternalLibraries.dictator;
 // with some bug fixes and extensions to support asynchronous operations 
 namespace Maverick.Client.ArangoDb.ExternalLibraries.fastJSON;
 
+/// <summary>
+///     Represents a delegate for serializing an object to a string.
+/// </summary>
+/// <param name="data">The object to serialize.</param>
+/// <returns>The serialized string representation of the object.</returns>
 public delegate string Serialize(object data);
 
+/// <summary>
+///     Represents a delegate for deserializing a string to an object.
+/// </summary>
+/// <param name="data">The serialized string data.</param>
+/// <returns>The deserialized object.</returns>
 public delegate object Deserialize(string data);
 
+/// <summary>
+///     Represents parameters for JSON serialization.
+/// </summary>
 public sealed class JsonParameters
 {
     /// <summary>
@@ -118,6 +131,9 @@ public sealed class JsonParameters
     /// </summary>
     public bool UsingGlobalTypes = true;
 
+    /// <summary>
+    ///     Fix inconsistent configuration combinations.
+    /// </summary>
     public void FixValues()
     {
         if (UseExtensions == false) // disable conflicting params
@@ -133,6 +149,9 @@ public sealed class JsonParameters
     }
 }
 
+/// <summary>
+///     Utility class containing functions to (de-)serialize JSON objects.
+/// </summary>
 public static class Json
 {
     /// <summary>

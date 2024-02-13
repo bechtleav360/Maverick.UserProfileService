@@ -47,11 +47,13 @@ public class NoCacheImplementation : ICacheStore
         return Task.FromResult(true);
     }
 
+    /// <inheritdoc />
     public Task DeleteAsync(IEnumerable<string> keys, CancellationToken token = default)
     {
         return Task.CompletedTask;
     }
 
+    /// <inheritdoc />
     public Task DeleteAsync(string key, ICacheTransaction transaction = null, CancellationToken token = default)
     {
         return Task.CompletedTask;

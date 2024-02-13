@@ -7,6 +7,7 @@ using UserProfileService.Adapter.Arango.V2.EntityModels;
 
 namespace UserProfileService.Adapter.Arango.V2.Implementations;
 
+/// <inheritdoc />
 public class UserProfileStoreCollectionsProvider : ICollectionDetailsProvider
 {
     private readonly string _prefix;
@@ -21,6 +22,7 @@ public class UserProfileStoreCollectionsProvider : ICollectionDetailsProvider
         _prefix = prefix;
     }
 
+    /// <inheritdoc />
     public IEnumerable<CollectionDetails> GetCollectionDetails()
     {
         ModelBuilderOptions modelInfo = DefaultModelConstellation.CreateNew(_prefix).ModelsInfo;

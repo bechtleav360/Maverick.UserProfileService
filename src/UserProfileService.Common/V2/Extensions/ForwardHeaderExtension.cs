@@ -17,7 +17,7 @@ public static class ServiceCollectionExtensions
     /// <returns>Returns the <see cref="IServiceCollection" /> itself.</returns>
     /// <exception cref="ArgumentNullException">
     ///     Will be thrown when the
-    ///     <param name="services"> is null.</param>
+    ///     <paramref name="services"/> is null.
     /// </exception>
     public static IServiceCollection AddForwardedHeaders(this IServiceCollection services)
     {

@@ -29,6 +29,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
+using System.Runtime.Versioning;
 
 namespace UserProfileService.Sync.Models.System.Security.Principal;
 
@@ -44,6 +45,7 @@ public sealed class IdentityNotMappedException : SystemException
     /// <summary>
     ///     The unmapped identities.
     /// </summary>
+    [SupportedOSPlatform("windows")]
     public global::System.Security.Principal.IdentityReferenceCollection UnmappedIdentities =>
         _coll ??= new global::System.Security.Principal.IdentityReferenceCollection();
 

@@ -1,5 +1,8 @@
 ﻿namespace UserProfileService.Common.V2.TicketStore.Enums;
 
+/// <summary>
+///     Represents the status of a ticket.
+/// </summary>
 public enum TicketStatus
 {
     /// <summary>

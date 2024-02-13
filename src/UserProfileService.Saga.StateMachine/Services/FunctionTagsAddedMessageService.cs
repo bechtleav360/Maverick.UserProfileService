@@ -31,15 +31,18 @@ public class FunctionTagsAddedMessageService : BaseCommandService<FunctionTagsAd
     }
 
     /// <inheritdoc />
-    public override async Task<FunctionTagsAddedMessage> ModifyAsync(
-        FunctionTagsAddedMessage message,
+    public override async Task<FunctionTagsAddedMessage?> ModifyAsync(
+        FunctionTagsAddedMessage? message,
         CancellationToken cancellationToken = default)
     {
         Logger.EnterMethod();
 
-        message.Tags ??= Array.Empty<TagAssignment>();
+        if (message != null)
+        {
+            message.Tags ??= Array.Empty<TagAssignment>();
+        }
 
-        FunctionTagsAddedMessage result = await base.ModifyAsync(message, cancellationToken);
+        FunctionTagsAddedMessage? result = await base.ModifyAsync(message, cancellationToken);
 
         return Logger.ExitMethod(result);
     }
@@ -49,7 +52,7 @@ public class FunctionTagsAddedMessageService : BaseCommandService<FunctionTagsAd
         FunctionTagsAddedMessage message,
         string correlationId,
         string processId,
-        CommandInitiator initiator,
+        CommandInitiator? initiator,
         CancellationToken cancellationToken = default)
     {
         Logger.EnterMethod();

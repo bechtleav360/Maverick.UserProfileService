@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using UserProfileService.Projection.Common.Abstractions;
 
 namespace UserProfileService.Projection.Common.Services;
 
 /// <summary>
-///     Health check for <see cref="ProjectionServiceBase" />.
+///     Health check for <see cref="ProjectionBase" />.
 /// </summary>
 public class ProjectionServiceHealthCheck : IHealthCheck
 {

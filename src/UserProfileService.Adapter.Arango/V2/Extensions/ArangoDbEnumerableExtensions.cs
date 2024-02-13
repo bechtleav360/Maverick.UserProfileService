@@ -21,6 +21,9 @@ using UserProfileService.Common.V2.Extensions;
 
 namespace UserProfileService.Adapter.Arango.V2.Extensions;
 
+/// <summary>
+///     Extension class that provides extension methods for querying <see cref="IArangoDbEnumerable{TEntity}"/>s.
+/// </summary>
 public static class ArangoDbEnumerableExtensions
 {
     private static bool TryGenerateOrderExpression<TEntity>(
@@ -1251,6 +1254,13 @@ public static class ArangoDbEnumerableExtensions
         return Entity<TEntity>(constellation.ModelsInfo);
     }
 
+    /// <summary>
+    ///     Retrieves the first element from an ArangoDB enumerable that satisfies the specified filter condition.
+    /// </summary>
+    /// <typeparam name="TEntity">The type of the entity.</typeparam>
+    /// <param name="enumerable">The ArangoDB enumerable.</param>
+    /// <param name="filter">The filter expression.</param>
+    /// <returns>An ArangoDB single enumerable containing the first matching element.</returns>
     public static IArangoDbSingleEnumerable<TEntity> First<TEntity>(
         this IArangoDbEnumerable<TEntity> enumerable,
         Expression<Func<TEntity, bool>> filter)
@@ -1332,6 +1342,14 @@ public static class ArangoDbEnumerableExtensions
         return new ArangoNestedQueryEnumerable<TOutput>(outerQuery, enumerable);
     }
 
+    /// <summary>
+    ///     Projects each element of an ArangoDB single enumerable into a new form using the specified selector.
+    /// </summary>
+    /// <typeparam name="TEntity">The type of the entity.</typeparam>
+    /// <typeparam name="TResult">The type of the result after projection.</typeparam>
+    /// <param name="enumerable">The ArangoDB single enumerable.</param>
+    /// <param name="selector">The selector expression.</param>
+    /// <returns>An ArangoDB enumerable with the applied projection.</returns>
     public static IArangoDbEnumerable<TEntity> Select<TEntity, TResult>(
         this IArangoDbSingleEnumerable<TEntity> enumerable,
         Expression<Func<TEntity, TResult>> selector)
@@ -1432,6 +1450,13 @@ public static class ArangoDbEnumerableExtensions
         return next;
     }
 
+    /// <summary>
+    ///     Filters the elements in the ArangoDB enumerable based on the specified condition.
+    /// </summary>
+    /// <typeparam name="TEntity">The type of the entity.</typeparam>
+    /// <param name="enumerable">The ArangoDB enumerable.</param>
+    /// <param name="filter">The filter expression.</param>
+    /// <returns>An ArangoDB enumerable with the added filter expression.</returns>
     public static IArangoDbEnumerable<TEntity> Where<TEntity>(
         this IArangoDbEnumerable<TEntity> enumerable,
         Expression<Func<TEntity, bool>> filter)
@@ -1442,6 +1467,14 @@ public static class ArangoDbEnumerableExtensions
         return next;
     }
 
+    /// <summary>
+    ///     Applies query options to an ArangoDB enumerable based on the specified <paramref name="options"/>.
+    /// </summary>
+    /// <typeparam name="TEntity">The type of the entity.</typeparam>
+    /// <param name="enumerable">The ArangoDB enumerable.</param>
+    /// <param name="options">The query options to apply.</param>
+    /// <param name="argument">Additional argument (optional).</param>
+    /// <returns>An ArangoDB enumerable with the applied query options.</returns>
     public static IArangoDbEnumerable<TEntity> UsingOptions<TEntity>(
         this IArangoDbEnumerable<TEntity> enumerable,
         IQueryObject options,
@@ -1525,6 +1558,14 @@ public static class ArangoDbEnumerableExtensions
         return enumerable.Compile<TEntity>(collectionScope).GetQueryString();
     }
 
+    /// <summary>
+    ///     Creates a new ArangoDB enumerable with distinct elements based on a specified property.
+    /// </summary>
+    /// <typeparam name="TEntity">The type of the entity.</typeparam>
+    /// <typeparam name="TProp">The type of the property used for distinction.</typeparam>
+    /// <param name="enumerable">The ArangoDB enumerable.</param>
+    /// <param name="propertySelector">The property selector expression.</param>
+    /// <returns>An ArangoDB enumerable with distinct elements based on the specified property.</returns>
     public static IArangoDbEnumerable<TEntity> DistinctByKey<TEntity, TProp>(
         this IArangoDbEnumerable<TEntity> enumerable,
         Expression<Func<TEntity, TProp>> propertySelector)

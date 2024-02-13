@@ -30,12 +30,12 @@ namespace UserProfileService.Projection.Common.Abstractions;
 /// </summary>
 public abstract class ProjectionBase : IProjection
 {
-    private const int _MaxNumberOfRequests = 1;
-    private CancellationTokenSource _CancellationTokenSource;
-    private readonly IDisposable _ChangeToken;
-    private bool _InitializationDone = false;
-    private readonly IDictionary<string, ulong> _InitialLatestEvents = new Dictionary<string, ulong>();
-    private readonly SemaphoreSlim _SyncObject = new SemaphoreSlim(1, _MaxNumberOfRequests);
+    private const int MaxNumberOfRequests = 1;
+    private readonly IDisposable _changeToken;
+    private readonly IDictionary<string, ulong> _initialLatestEvents = new Dictionary<string, ulong>();
+    private readonly SemaphoreSlim _syncObject = new SemaphoreSlim(1, MaxNumberOfRequests);
+
+    private CancellationTokenSource _cancellationTokenSource;
 
     /// <summary>
     ///     The activity source wrapper to be used for this instance.
@@ -79,6 +79,7 @@ public abstract class ProjectionBase : IProjection
     /// </summary>
     /// <param name="logger">The logger to be used.</param>
     /// <param name="activitySourceWrapper">The wrapper that contains the activity source used in this instance.</param>
+    /// <param name="serviceProvider">The service provider.</param>
     /// <param name="martenEventStoreOptions">
     ///     The <see cref="IOptionsMonitor{TOptions}" /> that wraps the event storage
     ///     configuration.
@@ -92,7 +93,8 @@ public abstract class ProjectionBase : IProjection
         Logger = logger;
         ActivitySourceWrapper = activitySourceWrapper;
         ServiceProvider = serviceProvider;
-        _ChangeToken = martenEventStoreOptions.OnChange(OnConfigurationChanged);
+        _cancellationTokenSource = new CancellationTokenSource();
+        _changeToken = martenEventStoreOptions.OnChange(OnConfigurationChanged);
         // Initial set config
         MartenEventStoreOptions = martenEventStoreOptions.CurrentValue;
     }
@@ -105,7 +107,24 @@ public abstract class ProjectionBase : IProjection
             return;
         }
 
-        await _SyncObject.WaitAsync(_CancellationTokenSource.Token);
+        // Cancel waiting for old configuration change.
+        CancellationTokenSource oldSource = _cancellationTokenSource;
+        _cancellationTokenSource = null;
+        oldSource?.Cancel();
+        oldSource?.Dispose();
+
+        _cancellationTokenSource = new CancellationTokenSource();
+
+        try
+        {
+            await _syncObject.WaitAsync(_cancellationTokenSource.Token);
+        }
+        catch (OperationCanceledException)
+        {
+            // Operation was cancelled by another configuration change.
+            // Discard this change.
+            return;
+        }
 
         try
         {
@@ -119,7 +138,7 @@ public abstract class ProjectionBase : IProjection
         }
         finally
         {
-            _SyncObject.Release();
+            _syncObject.Release();
         }
     }
 
@@ -212,9 +231,9 @@ public abstract class ProjectionBase : IProjection
     {
         if (disposing)
         {
-            _SyncObject?.Dispose();
-            _ChangeToken?.Dispose();
-            _CancellationTokenSource?.Dispose();
+            _syncObject?.Dispose();
+            _changeToken?.Dispose();
+            _cancellationTokenSource?.Dispose();
         }
     }
 
@@ -237,6 +256,15 @@ public abstract class ProjectionBase : IProjection
     protected abstract Task<GlobalPosition> GetGlobalPositionOfLatestProjectedEventAsync(
         CancellationToken cancellationToken = default);
 
+    /// <summary>
+    ///     Handles a domain event asynchronously.
+    /// </summary>
+    /// <param name="eventHeader">The streamed event header.</param>
+    /// <param name="domainEvent">The domain event to handle.</param>
+    /// <param name="cancellationToken">
+    ///     The token to monitor for cancellation requests. The default value is
+    ///     <see cref="CancellationToken.None" />
+    /// </param>
     protected abstract Task HandleDomainEventAsync(
         StreamedEventHeader eventHeader,
         IUserProfileServiceEvent domainEvent,
@@ -267,7 +295,7 @@ public abstract class ProjectionBase : IProjection
         }
 
         if (UseAllStreams
-            && _InitialLatestEvents.TryGetValue(eventHeader.EventStreamId, out ulong eventNumber)
+            && _initialLatestEvents.TryGetValue(eventHeader.EventStreamId, out ulong eventNumber)
             && eventHeader.EventNumberVersion <= (long)eventNumber)
         {
             Logger.LogTraceMessage(
@@ -362,7 +390,7 @@ public abstract class ProjectionBase : IProjection
     ///     If the returning string is null or empty, the pattern will be ignored.
     /// </summary>
     /// <param name="regEx">The suitable regular expression.</param>
-    /// <returns><c>true</c>, if a valid <see cref="Regex" /> could be retrieved. Otherwise <c>false</c>.</returns>
+    /// <returns><see langword="true" />, if a valid <see cref="Regex" /> could be retrieved. Otherwise <see langword="false" /></returns>
     protected virtual bool TryGetStreamNamePattern(out Regex regEx)
     {
         regEx = default;
@@ -373,6 +401,7 @@ public abstract class ProjectionBase : IProjection
     /// <summary>
     ///     Sends the response for the given event to ensure that the underlying saga/process is completed.
     /// </summary>
+    /// <param name="sendAction">Async callback that provides an <see cref="IProjectionResponseService"/> to send the response.</param>
     /// <param name="domainEvent">The domain a response will be sent for.</param>
     /// <param name="cancellationToken">The token to monitor and propagate cancellation requests.</param>
     /// <returns>A task representing the asynchronous operation.</returns>

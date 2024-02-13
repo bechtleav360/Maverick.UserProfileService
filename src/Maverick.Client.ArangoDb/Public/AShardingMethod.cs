@@ -9,12 +9,21 @@ namespace Maverick.Client.ArangoDb.Public;
 /// </summary>
 public enum AShardingMethod
 {
+    /// <summary>
+    ///     No specific sharding method.
+    /// </summary>
     [EnumMember(Value = "")]
     None,
 
+    /// <summary>
+    ///     Flexible sharding method.
+    /// </summary>
     [EnumMember(Value = "flexible")]
     Flexible,
 
+    /// <summary>
+    ///     Single sharding method.
+    /// </summary>
     [EnumMember(Value = "single")]
     Single
 }

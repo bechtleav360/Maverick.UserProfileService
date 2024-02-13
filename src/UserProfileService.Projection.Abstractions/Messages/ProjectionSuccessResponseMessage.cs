@@ -1,5 +1,7 @@
 ﻿namespace UserProfileService.Projection.Abstractions.Messages;
-
+/// <summary>
+///     Message containing information about a successful projection.
+/// </summary>
 public class ProjectionSuccessResponseMessage
 {
     /// <summary>

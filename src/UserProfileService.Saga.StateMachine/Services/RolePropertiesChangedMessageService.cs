@@ -39,20 +39,23 @@ public class RolePropertiesChangedMessageService : BaseCommandService<RoleProper
     }
 
     /// <inheritdoc />
-    public override async Task<RolePropertiesChangedMessage> ModifyAsync(
-        RolePropertiesChangedMessage message,
+    public override async Task<RolePropertiesChangedMessage?> ModifyAsync(
+        RolePropertiesChangedMessage? message,
         CancellationToken cancellationToken = default)
     {
         Logger.EnterMethod();
         
         cancellationToken.ThrowIfCancellationRequested();
-        
-        ValidationExtension.RemoveEnumerableNullValues<IList<ExternalIdentifier>, ExternalIdentifier>(
-            message.Properties,
-            nameof(RoleBasic.ExternalIds),
-            true);
 
-        RolePropertiesChangedMessage result = await base.ModifyAsync(message, cancellationToken);
+        if (message != null)
+        {
+            ValidationExtension.RemoveEnumerableNullValues<IList<ExternalIdentifier>, ExternalIdentifier>(
+                message.Properties,
+                nameof(RoleBasic.ExternalIds),
+                true);
+        }
+        
+        RolePropertiesChangedMessage? result = await base.ModifyAsync(message, cancellationToken);
 
         return Logger.ExitMethod(result);
     }
@@ -62,7 +65,7 @@ public class RolePropertiesChangedMessageService : BaseCommandService<RoleProper
         RolePropertiesChangedMessage message,
         string correlationId,
         string processId,
-        CommandInitiator initiator,
+        CommandInitiator? initiator,
         CancellationToken cancellationToken = default)
     {
         Logger.EnterMethod();
@@ -77,7 +80,7 @@ public class RolePropertiesChangedMessageService : BaseCommandService<RoleProper
                 initiator,
                 m => m.Id);
 
-        RoleBasic repoRole = await _readService.GetRoleAsync(eventData.Payload.Id);
+        RoleBasic? repoRole = await _readService.GetRoleAsync(eventData.Payload!.Id);
 
         eventData.OldRole = repoRole;
 

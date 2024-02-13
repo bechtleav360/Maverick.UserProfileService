@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -33,15 +32,42 @@ using UserProfileService.Projection.Abstractions.Models;
 
 namespace UserProfileService.Adapter.Arango.V2.Implementations;
 
+/// <summary>
+///     Provides read operations related to profiles from a Arango backend.
+///     Mostly the profile related methods show which profile is assigned
+///     to which object or profile.
+/// </summary>
 public class ArangoReadService : ArangoRepositoryBase, IReadService
 {
-    protected readonly string _collectionPrefix;
     private readonly IDbInitializer _dbInitializer;
+
+    /// <summary>
+    ///     The collection prefix that precedes collection names.
+    /// </summary>
+    protected readonly string _collectionPrefix;
+
+    /// <summary>
+    ///     Gets the options for the model builder.
+    /// </summary>
+    protected virtual ModelBuilderOptions ModelBuilderOptions { get; }
 
     /// <inheritdoc />
     protected override string ArangoDbClientName { get; }
 
-    // useful in tests
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="ArangoReadService"/> class.
+    /// </summary>
+    /// <param name="serviceProvider">
+    ///     The service provider is needed to create an <see cref="IArangoDbClientFactory" /> that
+    ///     manages <see cref="IArangoDbClient" />s.
+    /// </param>
+    /// <param name="dbInitializer">
+    ///     The instance of an <see cref="IDbInitializer" /> that will be used to initialize the
+    ///     database with a custom client name and a custom collection prefix. Mainly used for tests.
+    /// </param>
+    /// <param name="logger">The <see cref="ILogger{TCategoryName}" /> that will accept logging messages of this instance.</param>
+    /// <param name="arangoDbClientName">The custom name of the <see cref="IArangoDbClient"/>.</param>
+    /// <param name="collectionPrefix">The custom collection prefix.</param>
     public ArangoReadService(
         IServiceProvider serviceProvider,
         IDbInitializer dbInitializer,
@@ -1217,6 +1243,7 @@ public class ArangoReadService : ArangoRepositoryBase, IReadService
                 .ToPaginatedList(tags.TotalAmount));
     }
 
+    /// <inheritdoc />
     public async Task<List<IProfile>> GetProfileByExternalOrInternalIdAsync<TUser, TGroup, TOrgUnit>(
         string profileId,
         bool allowExternalIds = true,
@@ -1403,6 +1430,16 @@ public class ArangoReadService : ArangoRepositoryBase, IReadService
                 .ToPaginatedList(calculatedTags.Count));
     }
 
+    /// <summary>
+    ///     Executes counting queries asynchronously.
+    /// </summary>
+    /// <typeparam name="TEntity">The type of the entity.</typeparam>
+    /// <param name="selectionQuery">The selection query.</param>
+    /// <param name="cancellationToken">The cancellation token (optional).</param>
+    /// <param name="throwException">Whether to throw an exception (default: <see langword="true"/>).</param>
+    /// <param name="throwExceptionIfNotFound">Whether to throw an exception if not found (default: <see langword="true"/>).</param>
+    /// <param name="caller">The name of the calling method (automatically populated).</param>
+    /// <returns>A task representing a pagination API response of type <typeparamref name="TEntity"/>.</returns>
     public Task<PaginationApiResponse<TEntity>> ExecuteCountingQueriesAsync<TEntity>(
         Func<IArangoDbEnumerable<TEntity>, IArangoDbQueryResult> selectionQuery,
         CancellationToken cancellationToken = default,
@@ -1419,9 +1456,17 @@ public class ArangoReadService : ArangoRepositoryBase, IReadService
             caller);
     }
 
-    
-    protected virtual ModelBuilderOptions ModelBuilderOptions { get; }
-    
+    /// <summary>
+    ///     Executes counting queries asynchronously.
+    /// </summary>
+    /// <typeparam name="TEntity">The type of the entity.</typeparam>
+    /// <typeparam name="TOutput">The type of the output.</typeparam>
+    /// <param name="selectionQuery">The selection query.</param>
+    /// <param name="cancellationToken">The cancellation token (optional).</param>
+    /// <param name="throwException">Whether to throw an exception (default: <see langword="true"/>).</param>
+    /// <param name="throwExceptionIfNotFound">Whether to throw an exception if not found (default: <see langword="true"/>).</param>
+    /// <param name="caller">The name of the calling method (automatically populated).</param>
+    /// <returns>A task representing a pagination API response of type TOutput.</returns>
     protected async Task<PaginationApiResponse<TOutput>> ExecuteCountingQueriesAsync<TEntity, TOutput>(
         Func<IArangoDbEnumerable<TEntity>, IArangoDbQueryResult> selectionQuery,
         CancellationToken cancellationToken = default,
@@ -1543,6 +1588,17 @@ public class ArangoReadService : ArangoRepositoryBase, IReadService
             caller);
     }
 
+    /// <summary>
+    ///     Executes a query asynchronously.
+    /// </summary>
+    /// <typeparam name="TEntity">The type of the entity.</typeparam>
+    /// <typeparam name="TOutput">The type of the output.</typeparam>
+    /// <param name="selectionQuery">The selection query.</param>
+    /// <param name="throwException">Whether to throw an exception.</param>
+    /// <param name="throwExceptionIfNotFound">Whether to throw an exception if not found.</param>
+    /// <param name="cancellationToken">The cancellation token (optional).</param>
+    /// <param name="caller">The name of the calling method (automatically populated).</param>
+    /// <returns>A list of <typeparamref name="TOutput"/> objects.</returns>
     public async Task<List<TOutput>> ExecuteQueryAsync<TEntity, TOutput>(
         Func<IArangoDbEnumerable<TEntity>, IArangoDbQueryResult> selectionQuery,
         bool throwException,

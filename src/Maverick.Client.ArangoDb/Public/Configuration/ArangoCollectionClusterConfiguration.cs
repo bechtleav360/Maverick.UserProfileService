@@ -7,10 +7,26 @@ namespace Maverick.Client.ArangoDb.Public.Configuration;
 /// </summary>
 public class ArangoCollectionClusterConfiguration
 {
+    /// <summary>
+    ///     Gets or sets the number of shards for the collection.
+    /// </summary>
     public int? NumberOfShards { get; set; }
+
+    /// <summary>
+    ///     Gets or sets the replication factor for the collection.
+    /// </summary>
     public int? ReplicationFactor { get; set; }
+
+    /// <summary>
+    ///     Gets or sets the write concern for the collection.
+    /// </summary>
     public int? WriteConcern { get; set; }
 
+    /// <summary>
+    ///     Determines whether this <see cref="ArangoCollectionClusterConfiguration"/> instance is equal to another.
+    /// </summary>
+    /// <param name="other">The other <see cref="ArangoCollectionClusterConfiguration"/> instance to compare.</param>
+    /// <returns><see langword="true"/> if the instances are equal; otherwise, <see langword="false"/>.</returns>
     protected bool Equals(ArangoCollectionClusterConfiguration other)
     {
         return NumberOfShards == other.NumberOfShards

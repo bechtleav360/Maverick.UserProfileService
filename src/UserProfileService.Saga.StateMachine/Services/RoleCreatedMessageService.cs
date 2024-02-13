@@ -31,27 +31,30 @@ public class RoleCreatedMessageService : BaseCommandService<RoleCreatedMessage>
     }
 
     /// <inheritdoc />
-    public override async Task<RoleCreatedMessage> ModifyAsync(
-        RoleCreatedMessage message,
+    public override async Task<RoleCreatedMessage?> ModifyAsync(
+        RoleCreatedMessage? message,
         CancellationToken cancellationToken = default)
     {
         Logger.EnterMethod();
 
-        message.Id = Guid.NewGuid().ToString();
+        if (message != null)
+        {
+            message.Id = Guid.NewGuid().ToString();
 
-        message.Permissions ??= new List<string>();
-        message.DeniedPermissions ??= new List<string>();
-        message.Tags ??= Array.Empty<TagAssignment>();
-        message.ExternalIds = message.ExternalIds.Where(ei => ei != null).ToList();
+            message.Permissions ??= new List<string>();
+            message.DeniedPermissions ??= new List<string>();
+            message.Tags ??= Array.Empty<TagAssignment>();
+            message.ExternalIds = message.ExternalIds.Where(ei => ei != null).ToList();
 
-        // Remove all null or empty permissions
-        message.Permissions =
-            message.Permissions.Where(t => !string.IsNullOrWhiteSpace(t)).ToArray();
+            // Remove all null or empty permissions
+            message.Permissions =
+                message.Permissions.Where(t => !string.IsNullOrWhiteSpace(t)).ToArray();
 
-        message.DeniedPermissions =
-            message.DeniedPermissions.Where(t => !string.IsNullOrWhiteSpace(t)).ToArray();
+            message.DeniedPermissions =
+                message.DeniedPermissions.Where(t => !string.IsNullOrWhiteSpace(t)).ToArray();
+        }
 
-        RoleCreatedMessage result = await base.ModifyAsync(message, cancellationToken);
+        RoleCreatedMessage? result = await base.ModifyAsync(message, cancellationToken);
 
         return Logger.ExitMethod(result);
     }
@@ -61,7 +64,7 @@ public class RoleCreatedMessageService : BaseCommandService<RoleCreatedMessage>
         RoleCreatedMessage message,
         string correlationId,
         string processId,
-        CommandInitiator initiator,
+        CommandInitiator? initiator,
         CancellationToken cancellationToken = default)
     {
         Logger.EnterMethod();

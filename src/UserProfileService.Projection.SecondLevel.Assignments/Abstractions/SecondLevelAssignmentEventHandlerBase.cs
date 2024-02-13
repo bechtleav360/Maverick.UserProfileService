@@ -38,6 +38,9 @@ public abstract class SecondLevelAssignmentEventHandlerBase<TEvent> : ISecondLev
     /// </summary>
     public IMapper Mapper { get; }
 
+    /// <summary>
+    ///     Gets the stream name resolver.
+    /// </summary>
     public IStreamNameResolver StreamNameResolver { get; }
 
     /// <summary>
@@ -65,7 +68,7 @@ public abstract class SecondLevelAssignmentEventHandlerBase<TEvent> : ISecondLev
     /// <summary>
     ///     Take care of a provided <paramref name="domainEvent" />, if necessary. This method will be defined for each event.
     /// </summary>
-    /// <param name="domainEvent">The domain to be handled.</param>
+    /// <param name="domainEvent">The domain event to be handled.</param>
     /// <param name="relatedEntityIdent">
     ///     The object identifier of the entity that is related to <paramref name="domainEvent" />
     /// </param>

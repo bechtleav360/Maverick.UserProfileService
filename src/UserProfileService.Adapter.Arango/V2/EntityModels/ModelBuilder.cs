@@ -3,20 +3,32 @@ using System.Linq.Expressions;
 
 namespace UserProfileService.Adapter.Arango.V2.EntityModels;
 
+/// <summary>
+///     A model builder for Arango entity models.
+/// </summary>
 public class ModelBuilder : IModelBuilder
 {
+    /// <summary>
+    ///     Gets a new instance of the <see cref="ModelBuilder"/> class.
+    /// </summary>
     public static IModelBuilder NewOne => new ModelBuilder();
+
+    /// <summary>
+    ///     Gets the model builder options used for this model builder.
+    /// </summary>
     public ModelBuilderOptions Options { get; } = new ModelBuilderOptions();
 
     private ModelBuilder()
     {
     }
 
+    /// <inheritdoc />
     public string GetCollectionName<TEntity>()
     {
         return Options.GetCollectionName<TEntity>();
     }
 
+    /// <inheritdoc />
     public string GetCollectionName(Type type)
     {
         return Options.GetCollectionName(type);

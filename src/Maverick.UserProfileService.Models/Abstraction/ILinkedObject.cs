@@ -4,7 +4,7 @@ using Maverick.UserProfileService.Models.Models;
 namespace Maverick.UserProfileService.Models.Abstraction
 {
     /// <summary>
-    ///     An abstraction for an linked object ( role or function)
+    ///     An abstraction for an linked object (role or function)
     /// </summary>
     public interface ILinkedObject
     {

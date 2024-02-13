@@ -8,7 +8,8 @@ public class HealthCheckMessageConsumerDefinition : ConsumerDefinition<HealthChe
     /// <inheritdoc />
     protected override void ConfigureConsumer(
         IReceiveEndpointConfigurator endpointConfigurator,
-        IConsumerConfigurator<HealthCheckMessageConsumer> consumerConfigurator)
+        IConsumerConfigurator<HealthCheckMessageConsumer> consumerConfigurator,
+        IRegistrationContext context)
     {
         if (endpointConfigurator is IRabbitMqReceiveEndpointConfigurator rbc)
         {

@@ -11,52 +11,33 @@ namespace UserProfileService.EventSourcing.Abstractions.Models;
 [EventVersion(2)] // Default version
 public abstract class DomainEvent<TPayload> : IDomainEvent
 {
-    /// <summary>
-    ///     An unique identifier to link series of events.s
-    /// </summary>
-    public string CorrelationId { get; set; }
+    /// <inheritdoc />
+    public string? CorrelationId { get; set; }
 
-    /// <summary>
-    ///     An identifier of this event.
-    /// </summary>
+    /// <inheritdoc />
     public string EventId { get; set; }
 
-    /// <summary>
-    ///     Some user or service that initiates the event.
-    /// </summary>
+    /// <inheritdoc />
     public EventInitiator? Initiator { get; set; }
 
-    /// <summary>
-    ///     The meta data of the current event.
-    ///     Actually this property is not used.
-    /// </summary>
+    /// <inheritdoc />
     public EventMetaData MetaData { get; set; } = new EventMetaData();
 
     /// <summary>
     ///     The data that will be added to the event.
     /// </summary>
-    public TPayload Payload { set; get; }
+    public TPayload? Payload { set; get; }
 
-    /// <summary>
-    ///     Saga Id of the saga that is or should start a new event.
-    ///     This means that it is the parent saga id that starts an new event
-    ///     to assign the response of the event to the related saga.
-    /// </summary>
-    public string RequestSagaId { get; set; }
+    /// <inheritdoc />
+    public string? RequestSagaId { get; set; }
 
-    /// <summary>
-    ///     The timestamp when the event occurred.
-    /// </summary>
+    /// <inheritdoc />
     public DateTime Timestamp { get; set; }
 
-    /// <summary>
-    ///     A string that identifies the type of the event.
-    /// </summary>
-    public virtual string Type { set; get; }
+    /// <inheritdoc />
+    public string Type { set; get; }
 
-    /// <summary>
-    ///     Information about the used version of this event.
-    /// </summary>
+    /// <inheritdoc />
     public long VersionInformation { get; set; }
 
     /// <summary>
@@ -68,8 +49,7 @@ public abstract class DomainEvent<TPayload> : IDomainEvent
         Type = GetType().Name;
 
         // Can not be null, because default attribute of class is set
-        // ReSharper disable once PossibleInvalidOperationException
-        VersionInformation = (long)GetType().GetCustomAttribute<EventVersionAttribute>(true)?.VersionInformation;
+        VersionInformation = GetType().GetCustomAttribute<EventVersionAttribute>(true)!.VersionInformation;
     }
 
     /// <summary>

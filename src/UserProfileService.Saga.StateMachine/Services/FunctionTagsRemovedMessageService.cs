@@ -30,15 +30,18 @@ public class FunctionTagsRemovedMessageService : BaseCommandService<FunctionTags
     }
 
     /// <inheritdoc />
-    public override async Task<FunctionTagsRemovedMessage> ModifyAsync(
-        FunctionTagsRemovedMessage message,
+    public override async Task<FunctionTagsRemovedMessage?> ModifyAsync(
+        FunctionTagsRemovedMessage? message,
         CancellationToken cancellationToken = default)
     {
         Logger.EnterMethod();
 
-        message.Tags ??= Array.Empty<string>();
+        if (message != null)
+        {
+            message.Tags ??= Array.Empty<string>();
+        }
 
-        FunctionTagsRemovedMessage result = await base.ModifyAsync(message, cancellationToken);
+        FunctionTagsRemovedMessage? result = await base.ModifyAsync(message, cancellationToken);
 
         return Logger.ExitMethod(result);
     }
@@ -48,7 +51,7 @@ public class FunctionTagsRemovedMessageService : BaseCommandService<FunctionTags
         FunctionTagsRemovedMessage message,
         string correlationId,
         string processId,
-        CommandInitiator initiator,
+        CommandInitiator? initiator,
         CancellationToken cancellationToken = default)
     {
         Logger.EnterMethod();

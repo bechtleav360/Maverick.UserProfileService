@@ -231,6 +231,7 @@ public interface IADocument
     ///     Edges direction <see cref="ADirection"/>.</param>
     /// <exception cref="ArgumentException">Specified 'startVertexID' value has invalid format.</exception>
     /// <param name="transactionId"> The id of the transaction (only if the operation us being executed inside a transaction). </param>
+    /// <param name="forceDirtyRead"><see langword="true" /> if the operation should be execute on a follower (only available in failover). </param>
     /// <returns>Object containing a list of edges or possibly occurred errors <see cref="GetEdgesResponse"/>.</returns>
     Task<GetEdgesResponse> GetEdgesAsync(
         string collectionName,

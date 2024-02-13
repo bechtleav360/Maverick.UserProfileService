@@ -41,5 +41,8 @@ public abstract class SagaMessage
 /// <typeparam name="T">The generic type for the saga message.</typeparam>
 public class SagaMessage<T> : SagaMessage
 {
+    /// <summary>
+    ///     Message payload of type <typeparamref name="T"/>.
+    /// </summary>
     public new T Payload { get; set; }
 }

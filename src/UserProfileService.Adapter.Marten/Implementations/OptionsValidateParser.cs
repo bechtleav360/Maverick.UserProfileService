@@ -93,7 +93,7 @@ public class OptionsValidateParser : IOptionsValidateParser
     /// <param name="options">The query options that should be parser and validated.</param>
     /// <typeparam name="TResult">The result object that is used to validate if a property is part of the object.</typeparam>
     /// <returns>Returns a <see cref="QueryOptionsVolatileModel" /> that is used to filter the result set of volatile date.</returns>
-    /// <exception cref="ArgumentNullException">If the <see cref="options" /> is null.</exception>
+    /// <exception cref="ArgumentNullException">If the <paramref name="options" /> is null.</exception>
     /// <exception cref="QueryValidationException">
     ///     This exception will be thrown when the <see cref="QueryOptions.Filter" />
     ///     or the <see cref="QueryOptions.OrderBy" /> query are not valid and can not be parsed.

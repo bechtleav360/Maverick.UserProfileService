@@ -8,7 +8,7 @@ public class LoadEventResult
     /// <summary>
     ///     The actual event data body
     /// </summary>
-    public object Data { get; set; }
+    public object? Data { get; set; }
 
     /// <summary>
     ///     Unique identifier for the event. Uses a sequential Guid

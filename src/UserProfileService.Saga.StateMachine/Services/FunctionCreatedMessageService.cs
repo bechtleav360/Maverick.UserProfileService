@@ -33,19 +33,22 @@ public class FunctionCreatedMessageService : BaseCommandService<FunctionCreatedM
     }
 
     /// <inheritdoc />
-    public override async Task<FunctionCreatedMessage> ModifyAsync(
-        FunctionCreatedMessage message,
+    public override async Task<FunctionCreatedMessage?> ModifyAsync(
+        FunctionCreatedMessage? message,
         CancellationToken cancellationToken = default)
     {
         Logger.EnterMethod();
 
-        message.Id = Guid.NewGuid().ToString();
+        if (message != null)
+        {
+            message.Id = Guid.NewGuid().ToString();
 
-        message.Tags ??= Array.Empty<TagAssignment>();
-        message.ExternalIds ??= new List<ExternalIdentifier>();
-        message.ExternalIds = message.ExternalIds.Where(ei => ei != null).ToList();
+            message.Tags ??= Array.Empty<TagAssignment>();
+            message.ExternalIds ??= new List<ExternalIdentifier>();
+            message.ExternalIds = message.ExternalIds.Where(ei => ei != null).ToList();
+        }
 
-        FunctionCreatedMessage result = await base.ModifyAsync(message, cancellationToken);
+        FunctionCreatedMessage? result = await base.ModifyAsync(message, cancellationToken);
 
         return Logger.ExitMethod(result);
     }
@@ -55,7 +58,7 @@ public class FunctionCreatedMessageService : BaseCommandService<FunctionCreatedM
         FunctionCreatedMessage message,
         string correlationId,
         string processId,
-        CommandInitiator initiator,
+        CommandInitiator? initiator,
         CancellationToken cancellationToken = default)
     {
         Logger.EnterMethod();

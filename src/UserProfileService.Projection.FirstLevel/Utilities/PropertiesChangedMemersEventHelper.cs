@@ -32,7 +32,7 @@ public static class PropertiesChangedMembersEventHelper
     /// <param name="originalEvent">The original event that is need to created a <see cref="EventTuple" />.</param>
     /// <param name="creator">The creator the create an <see cref="EventTuple" />.</param>
     /// <returns>
-    ///     An <see cref="originalEvent" /> that contains the right event to changed members that are affected by the
+    ///     An <paramref name="originalEvent" /> that contains the right event to changed members that are affected by the
     ///     changed group.
     /// </returns>
     public static EventTuple HandleGroupAsReference(
@@ -77,8 +77,13 @@ public static class PropertiesChangedMembersEventHelper
                     PropertiesChangedRelation.MemberOf =>
                         PropertiesChangedContext.Members,
                     PropertiesChangedRelation.Member =>
-                        PropertiesChangedContext
-                            .MemberOf
+                        PropertiesChangedContext.MemberOf,
+                    PropertiesChangedRelation.IndirectMember =>
+                        PropertiesChangedContext.IndirectMember,
+                    _ => throw new ArgumentOutOfRangeException(
+                        nameof(relationToChangedObject),
+                        relationToChangedObject,
+                        $"Argument did not match any values of {nameof(PropertiesChangedRelation)}")
                 };
 
                 break;
@@ -105,7 +110,7 @@ public static class PropertiesChangedMembersEventHelper
     /// <param name="originalEvent">The original event that is need to created a <see cref="EventTuple" />.</param>
     /// <param name="creator">The creator the create an <see cref="EventTuple" />.</param>
     /// <returns>
-    ///     An <see cref="originalEvent" /> that contains the right event to changed members that are affected by the
+    ///     An <paramref name="originalEvent" /> that contains the right event to changed members that are affected by the
     ///     changed user.
     /// </returns>
     public static EventTuple HandleUserAsReference(
@@ -165,7 +170,7 @@ public static class PropertiesChangedMembersEventHelper
     /// <param name="originalEvent">The original event that is need to created a <see cref="EventTuple" />.</param>
     /// <param name="creator">The creator the create an <see cref="EventTuple" />.</param>
     /// <returns>
-    ///     An <see cref="originalEvent" /> that contains the right event to changed members that are affected by the
+    ///     An <paramref name="originalEvent" /> that contains the right event to changed members that are affected by the
     ///     changed organization.
     /// </returns>
     public static EventTuple HandleOrganizationAsReference(

@@ -53,7 +53,8 @@ internal class MainSecondLevelEventHandler : ISecondLevelEventHandler
         catch (InvalidOperationException inEx)
         {
             throw new NotSupportedException(
-                $"This domain event (full type: {domainEvent.GetType().FullName}) is not supported by this event handler.");
+                $"This domain event (full type: {domainEvent.GetType().FullName}) is not supported by this event handler.",
+                inEx);
         }
         catch (Exception ex)
         {

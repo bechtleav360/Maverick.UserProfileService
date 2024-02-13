@@ -35,7 +35,7 @@ public class UserSettingsSectionCreatedMessageService : BaseCommandService<UserS
         UserSettingsSectionCreatedMessage createdMessage,
         string correlationId,
         string processId,
-        CommandInitiator initiator,
+        CommandInitiator? initiator,
         CancellationToken cancellationToken = default)
     {
         Logger.EnterMethod();

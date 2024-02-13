@@ -8,6 +8,9 @@ namespace Maverick.Client.ArangoDb.Public.Models.Transaction;
 /// </summary>
 public abstract class TransactionMethods
 {
+    /// <summary>
+    ///     Gets the running transaction.
+    /// </summary>
     protected IRunningTransaction Transaction { get; }
 
     internal TransactionMethods(IRunningTransaction transaction)

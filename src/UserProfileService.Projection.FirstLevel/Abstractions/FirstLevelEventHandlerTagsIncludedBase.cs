@@ -42,10 +42,18 @@ namespace UserProfileService.Projection.FirstLevel.Abstractions;
 public abstract class FirstLevelEventHandlerTagsIncludedBase<TEventType> : FirstLevelEventHandlerBase<TEventType>
     where TEventType : class, IUserProfileServiceEvent, IDomainEvent
 {
+    /// <summary>
+    ///     Used to create event tuples for the first level projection.
+    /// </summary>
     protected readonly IFirstLevelEventTupleCreator Creator;
+    /// <summary>
+    ///     The Mapper used to map several existing events in new event with the right order.
+    /// </summary>
     protected readonly IMapper Mapper;
+    /// <summary>
+    ///     The saga service that generates the streams for the entities with the given objects.
+    /// </summary>
     protected readonly ISagaService SagaService;
-    protected readonly IStreamNameResolver StreamNameResolver;
 
     /// <summary>
     ///     The constructor that is used to create an instance of <see cref="FirstLevelEventHandlerTagsIncludedBase{TEventType}" />.

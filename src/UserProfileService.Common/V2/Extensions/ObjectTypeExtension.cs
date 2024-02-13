@@ -48,6 +48,12 @@ public static class ObjectTypeExtension
         return objectType == ObjectType.Group || objectType == ObjectType.Organization;
     }
 
+    /// <summary>
+    ///     Maps the <see cref="ObjectType"/> <paramref name="objectType"/> to a <see cref="ContainerType"/>.
+    /// </summary>
+    /// <param name="objectType">The object type to map.</param>
+    /// <returns>The corresponding <see cref="ContainerType"/> for <paramref name="objectType"/>.</returns>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
     public static ContainerType ToContainerType(this ObjectType objectType)
     {
         return objectType switch
