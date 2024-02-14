@@ -30,6 +30,8 @@
         <PackageReference Include="prometheus-net.AspNetCore" Version="6.0.0" />
         <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
         <PackageReference Include="Novell.Directory.Ldap.NETStandard" Version="3.6.0" />
+        <!-- Added the libarary because of vulnerability scan of trivy.  -->
+        <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
     </ItemGroup>
 
     <ItemGroup>
