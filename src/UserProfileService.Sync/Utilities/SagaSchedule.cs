@@ -142,8 +142,7 @@ public static class SagaSchedule
 
         Models.State.System lastSystem = null;
 
-        foreach ((string systemKey, SourceSystemConfiguration systemConfiguration) in configuration.SourceConfiguration
-                     .Systems)
+        foreach ((string systemKey, SourceSystemConfiguration systemConfiguration) in configuration.GetSystemSorted())
         {
             logger?.LogInfoMessage(
                 "Start building sync process for system '{system}'.",

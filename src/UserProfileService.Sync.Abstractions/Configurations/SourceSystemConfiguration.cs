@@ -22,4 +22,10 @@ public class SourceSystemConfiguration
     /// </summary>
     public Dictionary<string, SynchronizationOperations> Source { set; get; } =
         new Dictionary<string, SynchronizationOperations>();
+
+
+    /// <summary>
+    ///     The priority of the current system used to determine the order of the synchronization plan.
+    /// </summary>
+    public int Priority { get; set; }
 }
