@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using MassTransit;
-using Maverick.UserProfileService.AggregateEvents.Common.Enums;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Http.Logging;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using UserProfileService.Commands;
@@ -48,26 +46,54 @@ public class ProcessStateMachine :
     private readonly ISyncProcessSynchronizer _synchronizer;
     private readonly IRelationFactory _relationFactory;
 
-    /// <summary>
-    ///     State when the process has been aborted
-    /// </summary>
-    public State Aborted { get; private set; }
+    #region States
 
     /// <summary>
-    ///     Defines the event to abort sync process.
+    ///     State when the process has been triggered
+    ///     and the schedule plan has been prepared for the next step.
     /// </summary>
-    public Event<AbortSyncMessage> AbortSyncMessage { get; private set; }
+    public State Initialized { get; private set; }
+
+    /// <summary>
+    ///     State when the next step initialized.
+    /// </summary>
+    public State InitializedStep { get; private set; }
+
+    /// <summary>
+    ///     State when the current state has been analyzed and processed.
+    /// </summary>
+    public State Analyzed { get; private set; }
+
+    /// <summary>
+    ///     State when all responses arrived.
+    /// </summary>
+    public State WaitedForResponse { get; private set; }
+
+    /// <summary>
+    ///     State when the process has been finalized.
+    /// </summary>
+    public State Finalized { get; private set; }
+
+
+    #endregion
+
+    #region Events
+
+    /// <summary>
+    ///     Defines the event to be handled in the state. See also <see cref="StartSyncCommand" />.
+    /// </summary>
+    public Event<StartSyncCommand> StartSyncCommand { get; private set; }
+
+    /// <summary>
+    ///     Defines the event to set next system/step, if step finished or new process was started.
+    /// </summary>
+    public Event<SetNextStepMessage> SetNextStepMessage { get; private set; }
 
     /// <summary>
     ///     Defines the event to handle synchronization of adding relations for a specific system defined in
     ///     <see cref="ProcessState" />.
     /// </summary>
     public Event<AddedRelationSyncMessage> AddedRelationSyncMessage { get; private set; }
-
-    /// <summary>
-    ///     State when the current state has been analyzed and processed.
-    /// </summary>
-    public State Analyzed { get; private set; }
 
     /// <summary>
     ///     Defines the event to retrieve information about the final collection status.
@@ -90,11 +116,6 @@ public class ProcessStateMachine :
     public Event<DeletedRelationSyncMessage> DeletedRelationSyncMessage { get; private set; }
 
     /// <summary>
-    ///     State when the process has been finalized.
-    /// </summary>
-    public State Finalized { get; private set; }
-
-    /// <summary>
     ///     Defines the event to finalize sync process.
     /// </summary>
     public Event<FinalizeSyncMessage> FinalizeSyncMessage { get; private set; }
@@ -111,17 +132,6 @@ public class ProcessStateMachine :
     public Event<GroupSyncMessage> GroupSyncMessage { get; private set; }
 
     /// <summary>
-    ///     State when the process has been triggered
-    ///     and the schedule plan has been prepared for the next step.
-    /// </summary>
-    public State Initialized { get; private set; }
-
-    /// <summary>
-    ///     State when the next step initialized.
-    /// </summary>
-    public State InitializedStep { get; private set; }
-
-    /// <summary>
     ///     Defines the event to handle synchronization of organizations for a specific system defined in
     ///     <see cref="ProcessState" />.
     /// </summary>
@@ -131,16 +141,6 @@ public class ProcessStateMachine :
     ///     Defines the event to handle synchronization of roles for a specific system defined in <see cref="ProcessState" />.
     /// </summary>
     public Event<RoleSyncMessage> RoleSyncMessage { get; private set; }
-
-    /// <summary>
-    ///     Defines the event to set next system/step, if step finished or new process was started.
-    /// </summary>
-    public Event<SetNextStepMessage> SetNextStepMessage { get; private set; }
-
-    /// <summary>
-    ///     Defines the event to be handled in the state. See also <see cref="StartSyncCommand" />.
-    /// </summary>
-    public Event<StartSyncCommand> StartSyncCommand { get; private set; }
 
     /// <summary>
     ///     Defines the event to update process in state.
@@ -156,14 +156,11 @@ public class ProcessStateMachine :
     public Event<UserSyncMessage> UserSyncMessage { get; private set; }
 
     /// <summary>
-    ///     State when all responses arrived.
-    /// </summary>
-    public State WaitedForResponse { get; private set; }
-
-    /// <summary>
     ///     Defines the event to wait for responses of sync command.
     /// </summary>
     public Event<WaitingForResponseMessage> WaitingForResponseMessage { get; private set; }
+
+    #endregion
 
     /// <summary>
     ///     Create an instance of <see cref="ProcessStateMachine" />.
@@ -203,7 +200,6 @@ public class ProcessStateMachine :
             InitializedStep,
             Analyzed,
             WaitedForResponse,
-            Aborted,
             Finalized);
 
         _logger.ExitMethod();
@@ -233,14 +229,6 @@ public class ProcessStateMachine :
         Event(() => WaitingForResponseMessage, e => e.CorrelateById(c => c.Message.Id));
         Event(() => FinalizeSyncMessage, e => e.CorrelateById(c => c.Message.Id));
         Event(() => UpdateProcessMessage, e => e.CorrelateById(c => c.Message.Id));
-
-        Event(
-            () => AbortSyncMessage,
-            e =>
-            {
-                e.CorrelateById(c => c.Message.Id);
-                e.OnMissingInstance(c => c.ExecuteAsync(AbortProcessAsync));
-            });
 
         Event(
             () => CollectingItemsStatusMessage,
@@ -367,13 +355,6 @@ public class ProcessStateMachine :
                 .ThenAsync(FinalizeProcess)
                 .Publish(GenerateSyncStatusMessage)
                 .TransitionTo(Finalized));
-
-        // abort sync process in every state when stop sync message is received
-
-        DuringAny(
-            When(AbortSyncMessage)
-                .Then(p => AbortProcess(p))
-                .Finalize());
 
         // Entity step for all relevant entities
         DeclareEntityStep<GroupSyncMessage, GroupSync>(GroupSyncMessage);
@@ -758,18 +739,7 @@ public class ProcessStateMachine :
         _logger.ExitMethod();
     }
 
-    private async Task AbortProcessAsync(ConsumeContext<AbortSyncMessage> context)
-    {
-        _logger.EnterMethod();
-
-        using IServiceScope scope = _serviceProvider.CreateScope();
-        var synchronizationService = scope.ServiceProvider.GetRequiredService<ISynchronizationService>();
-
-        await synchronizationService.DeclareProcessAbortedAsync(context.Message.Id);
-
-        _logger.ExitMethod();
-    }
-
+    
     private static Process AbortedProcessObject(bool processHasFailed)
     {
         return new Process
