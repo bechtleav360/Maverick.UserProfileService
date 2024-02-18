@@ -374,6 +374,7 @@ public class ProcessStateMachine :
                 .Then(c => c.Saga.Version++)
                 .ThenAsync(ProcessAddedRelationSyncMessage)
                 .CatchException(_logger)
+                .CatchException(_logger)
                 .IfElse(
                     c => c.Saga.Process.CurrentStep.Final.Total != 0 || StepHasFailed(c),
                     ifBinder => ifBinder
@@ -387,10 +388,12 @@ public class ProcessStateMachine :
                                     .GetValueOrDefault()
                             })
                         .Publish(GenerateSyncStatusMessage)
+                        .CatchException(_logger)
                         .LogAndTransitionTo(Analyzed, _logger),
                     elseBinder => elseBinder
                         .Publish(c => new WaitingForResponseMessage(c.Saga.CorrelationId))
                         .Publish(GenerateSyncStatusMessage)
+                        .CatchException(_logger)
                         .LogAndTransitionTo(Analyzed, _logger)));
 
         // Same as entity step but for deleting relations.
@@ -402,6 +405,7 @@ public class ProcessStateMachine :
                 // the version must be initially incremented by 1 to prevent a version conflict at the completion of the step.
                 .Then(c => c.Saga.Version++)
                 .ThenAsync(ProcessDeletedRelationSyncMessage)
+                .CatchException(_logger)
                 .IfElse(
                     c => c.Saga.Process.CurrentStep.Final.Total != 0,
                     ifBinder => ifBinder
@@ -413,10 +417,12 @@ public class ProcessStateMachine :
                                     .GetValueOrDefault()
                             })
                         .Publish(GenerateSyncStatusMessage)
+                        .CatchException(_logger)
                         .LogAndTransitionTo(Analyzed, _logger),
                     elseBinder => elseBinder
                         .Publish(c => new WaitingForResponseMessage(c.Saga.CorrelationId))
                         .Publish(GenerateSyncStatusMessage)
+                        .CatchException(_logger)
                         .LogAndTransitionTo(Analyzed, _logger)));
 
         // update of the process.
@@ -428,6 +434,7 @@ public class ProcessStateMachine :
                 .LogEnterState(_logger, InitializedStep, UpdateProcessMessage)
                 .Then(c => { c.Saga.Process = c.Message.Process; })
                 .Publish(GenerateSyncStatusMessage)
+                .CatchException(_logger)
                 .LogAndTransitionTo(InitializedStep));
 
         // Final response of the event collector for a step.
@@ -459,6 +466,7 @@ public class ProcessStateMachine :
                     })
                 .Publish(c => new SetNextStepMessage(c.Saga.CorrelationId))
                 .Publish(GenerateSyncStatusMessage)
+                .CatchException(_logger)
                 .LogAndTransitionTo(WaitedForResponse, _logger));
 
         During(
@@ -471,6 +479,7 @@ public class ProcessStateMachine :
                         ifBinder
                             .Publish(c => new SetNextStepMessage(c.Saga.CorrelationId))
                             .Publish(GenerateSyncStatusMessage)
+                            .CatchException(_logger)
                             .LogAndTransitionTo(WaitedForResponse, _logger)));
 
         // update of the meanwhile received responses at the event collector for a step.
@@ -487,6 +496,7 @@ public class ProcessStateMachine :
                             c.Message.CollectedItemsAccount;
                     })
                 .Publish(GenerateSyncStatusMessage)
+                .CatchException(_logger)
                 .LogAndTransitionTo(Analyzed, _logger));
 
         _logger.ExitMethod();
@@ -503,6 +513,7 @@ public class ProcessStateMachine :
             When(SetNextStepMessage, c => c.Saga.Process.CurrentStep?.FinishedAt == null)
                 .LogEnterState(_logger, state, SetNextStepMessage)
                 .Then(SetNextStep)
+                .CatchException(_logger)
                 .IfElse(
                     WasLastSystem,
                     ifBinder => ifBinder
@@ -512,7 +523,9 @@ public class ProcessStateMachine :
                     elseBinder => elseBinder
                         .Publish(GenerateStartCollectingMessage)
                         .ThenAsync(PublishNextMessage)
+                        .CatchException(_logger)
                         .Publish(GenerateSyncStatusMessage)
+                        .CatchException(_logger)
                         .LogAndTransitionTo(InitializedStep)));
     }
 
@@ -529,6 +542,7 @@ public class ProcessStateMachine :
                 // the version must be initially incremented by 1 to prevent a version conflict at the completion of the step.
                 .Then(c => c.Saga.Version++)
                 .ThenAsync(ProcessEntityStep<TMessage, TEntity>)
+                .CatchException(_logger)
                 .IfElse(
                     c => c.Saga.Process.CurrentStep.Final.Total != 0,
                     ifBinder => ifBinder
@@ -540,12 +554,14 @@ public class ProcessStateMachine :
                                     .GetValueOrDefault()
                             })
                         .Publish(GenerateSyncStatusMessage)
+                        .CatchException(_logger)
                         .LogAndTransitionTo(Analyzed, _logger),
                     elseBinder => elseBinder
                         .Publish(
                             c =>
                                 new WaitingForResponseMessage(c.Saga.CorrelationId))
                         .Publish(GenerateSyncStatusMessage)
+                        .CatchException(_logger)
                         .LogAndTransitionTo(Analyzed, _logger)));
 
         _logger.ExitMethod();

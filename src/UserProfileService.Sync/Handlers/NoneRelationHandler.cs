@@ -1,10 +1,8 @@
 ﻿using System.Threading.Tasks;
-using MassTransit;
 using Maverick.UserProfileService.Models.EnumModels;
 using UserProfileService.Sync.Abstraction.Models.Entities;
 using UserProfileService.Sync.Abstractions;
 using UserProfileService.Sync.Models.State;
-using UserProfileService.Sync.States;
 
 namespace UserProfileService.Sync.Handlers;
 
