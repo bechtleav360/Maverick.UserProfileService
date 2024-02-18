@@ -24,8 +24,8 @@ public static class SagaSchedule
         // first step
         if (string.IsNullOrWhiteSpace(currentStepId))
         {
-            currentSystem.StartedAt = DateTime.Now;
-            currentSystem.UpdatedAt = DateTime.Now;
+            currentSystem.StartedAt = DateTime.UtcNow;
+            currentSystem.UpdatedAt = DateTime.UtcNow;
 
             nextStep = currentSystem.Steps.FirstOrDefault(s => currentSystem.Steps.Values.All(v => v.Next != s.Key))
                 .Value;
@@ -46,6 +46,10 @@ public static class SagaSchedule
 
         currentStep.UpdatedAt = DateTime.UtcNow;
         currentStep.FinishedAt = DateTime.UtcNow;
+
+        currentStep.Status = currentStep.Status is StepStatus.WaitingForResponse or StepStatus.Success
+            ? StepStatus.Success
+            : StepStatus.Failure;
 
         if (string.IsNullOrWhiteSpace(currentStep.Next))
         {
@@ -98,6 +102,11 @@ public static class SagaSchedule
 
         process.UpdateSystemTime();
         currentSystem.FinishedAt = DateTime.UtcNow;
+
+        // After the synchronization of the current system is done, the status will be actualized
+        currentSystem.Status = currentSystem.Steps.All(s => s.Value.Status == StepStatus.Success)
+            ? SystemStatus.Success
+            : SystemStatus.Failed;
 
         process.System = process.Systems[process.System].Next;
         process.Step = null;

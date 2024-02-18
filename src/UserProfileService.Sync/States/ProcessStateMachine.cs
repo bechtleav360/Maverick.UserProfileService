@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using MassTransit;
@@ -88,6 +89,11 @@ public class ProcessStateMachine :
     ///     Defines the event to set next system/step, if step finished or new process was started.
     /// </summary>
     public Event<SetNextStepMessage> SetNextStepMessage { get; private set; }
+
+    /// <summary>
+    ///     Defines the event used to skip a step
+    /// </summary>
+    public Event<SkipStepMessage> SkipStepMessage { get; private set; }
 
     /// <summary>
     ///     Defines the event to handle synchronization of adding relations for a specific system defined in
@@ -226,6 +232,7 @@ public class ProcessStateMachine :
             });
 
         Event(() => SetNextStepMessage, e => e.CorrelateById(c => c.Message.Id));
+        Event(() => SkipStepMessage, e => e.CorrelateById(c => c.Message.Id));
         Event(() => WaitingForResponseMessage, e => e.CorrelateById(c => c.Message.Id));
         Event(() => FinalizeSyncMessage, e => e.CorrelateById(c => c.Message.Id));
         Event(() => UpdateProcessMessage, e => e.CorrelateById(c => c.Message.Id));
@@ -387,6 +394,13 @@ public class ProcessStateMachine :
                                 CollectingId = c.Saga.Process.CurrentStep.CollectingId
                                     .GetValueOrDefault()
                             })
+                        .Publish(c => new TriggerStopWatchCommand
+                        {
+                            CorrelationId = c.CorrelationId,
+                            CollectingId = c.Saga.Process.CurrentStep
+                                .CollectingId
+                                .GetValueOrDefault()
+                        })
                         .Publish(GenerateSyncStatusMessage)
                         .CatchException(_logger)
                         .LogAndTransitionTo(Analyzed, _logger),
@@ -407,15 +421,25 @@ public class ProcessStateMachine :
                 .ThenAsync(ProcessDeletedRelationSyncMessage)
                 .CatchException(_logger)
                 .IfElse(
-                    c => c.Saga.Process.CurrentStep.Final.Total != 0,
+                    c => c.Saga.Process.CurrentStep.Final.Total != 0 || StepHasFailed(c),
                     ifBinder => ifBinder
                         .Publish(
                             c => new SetCollectItemsAccountMessage
                             {
-                                CollectItemsAccount = c.Saga.Process.CurrentStep.Final.Total,
-                                CollectingId = c.Saga.Process.CurrentStep.CollectingId
+                                CollectItemsAccount = StepHasFailed(c)
+                                    ? 0
+                                    : c.Saga.Process.CurrentStep.Final.Total,
+                                CollectingId = c.Saga.Process.CurrentStep
+                                    .CollectingId
                                     .GetValueOrDefault()
                             })
+                        .Publish(c => new TriggerStopWatchCommand
+                        {
+                            CorrelationId = c.CorrelationId,
+                            CollectingId = c.Saga.Process.CurrentStep
+                                .CollectingId
+                                .GetValueOrDefault()
+                        })
                         .Publish(GenerateSyncStatusMessage)
                         .CatchException(_logger)
                         .LogAndTransitionTo(Analyzed, _logger),
@@ -474,13 +498,39 @@ public class ProcessStateMachine :
             When(WaitingForResponseMessage)
                  .LogEnterState(_logger, Analyzed, WaitingForResponseMessage)
                 .If(
-                    CollectingCompleted,
+                    c => CollectingCompleted(c) || StepHasFailed(c),
                     ifBinder =>
                         ifBinder
                             .Publish(c => new SetNextStepMessage(c.Saga.CorrelationId))
                             .Publish(GenerateSyncStatusMessage)
                             .CatchException(_logger)
                             .LogAndTransitionTo(WaitedForResponse, _logger)));
+
+        During(
+            Analyzed,
+            When(
+                    SkipStepMessage,
+                    s => s.Message.CollectingId.GetValueOrDefault()
+                         == s.Saga.Process.CurrentStep?.CollectingId.GetValueOrDefault())
+                .Then(c => LogEnterDuring(c, Analyzed, SkipStepMessage))
+                .IfElse(
+                    c =>
+                        c.Saga.Process.CurrentStep.StepLastUpdateIsOlderThan(
+                            _syncConfiguration.DelayBeforeTimeoutForStep),
+                    ifBinder => ifBinder
+                        .Publish(c => new SetNextStepMessage(c.Saga.CorrelationId))
+                        .LogAndTransitionTo(WaitedForResponse),
+                    elseBinder => elseBinder
+                        .Publish(
+                            c => new TriggerStopWatchCommand
+                            {
+                                CorrelationId = c.CorrelationId,
+                                CollectingId = c.Saga.Process
+                                    .CurrentStep
+                                    .CollectingId
+                                    .GetValueOrDefault()
+                            })
+                        .LogAndTransitionTo(Analyzed)));
 
         // update of the meanwhile received responses at the event collector for a step.
         During(
@@ -494,10 +544,15 @@ public class ProcessStateMachine :
                     {
                         c.Saga.Process.CurrentStep.Temporary.Handled =
                             c.Message.CollectedItemsAccount;
+
+                        c.Saga.Process.CurrentStep.UpdatedAt = DateTime.UtcNow;
                     })
                 .Publish(GenerateSyncStatusMessage)
                 .CatchException(_logger)
                 .LogAndTransitionTo(Analyzed, _logger));
+
+        // The SkipStepMessage is only important for the analyzed step.
+        During(InitializedStep,WaitedForResponse,Finalized, Ignore(SkipStepMessage));
 
         _logger.ExitMethod();
     }
@@ -544,15 +599,24 @@ public class ProcessStateMachine :
                 .ThenAsync(ProcessEntityStep<TMessage, TEntity>)
                 .CatchException(_logger)
                 .IfElse(
-                    c => c.Saga.Process.CurrentStep.Final.Total != 0,
+                    c => c.Saga.Process.CurrentStep.Final.Total != 0 || StepHasFailed(c),
                     ifBinder => ifBinder
                         .Publish(
                             c => new SetCollectItemsAccountMessage
                             {
-                                CollectItemsAccount = c.Saga.Process.CurrentStep.Final.Total,
+                                CollectItemsAccount = StepHasFailed(c)
+                                    ? 0
+                                    : c.Saga.Process.CurrentStep.Final.Total,
                                 CollectingId = c.Saga.Process.CurrentStep.CollectingId
                                     .GetValueOrDefault()
                             })
+                        .Publish(c => new TriggerStopWatchCommand
+                        {
+                            CorrelationId = c.CorrelationId,
+                            CollectingId = c.Saga.Process.CurrentStep
+                                .CollectingId
+                                .GetValueOrDefault()
+                        })
                         .Publish(GenerateSyncStatusMessage)
                         .CatchException(_logger)
                         .LogAndTransitionTo(Analyzed, _logger),
@@ -738,7 +802,10 @@ public class ProcessStateMachine :
             "All systems for the saga '{id}' was synchronized. Finalize saga.",
             context.CorrelationId.AsArgumentList());
 
-        context.Saga.Process.SetProcessStatus(ProcessStatus.Success);
+        bool allSystemSucceeded = context.Saga.Process.Systems.Values.All(s => s.Status == SystemStatus.Success);
+
+        context.Saga.Process.SetProcessStatus(allSystemSucceeded ? ProcessStatus.Success : ProcessStatus.Failed);
+
         context.Saga.Process.FinishedAt = DateTime.UtcNow;
 
         _logger.LogInfoMessage(

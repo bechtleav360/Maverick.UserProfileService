@@ -14,7 +14,6 @@ namespace UserProfileService.Sync.Extensions
     /// </summary>
     internal static class SagaEventActivityBinderExtensions
     {
-
         /// <summary>
         ///     Adds the default error handling to the activity list of the current behaviour.
         /// </summary>
@@ -52,7 +51,6 @@ namespace UserProfileService.Sync.Extensions
                             c.Saga.Process.CurrentStep.Status = StepStatus.Failure;
                         }));
         }
-
 
         /// <summary>
         /// Transition the state machine to the specified state
@@ -94,6 +92,5 @@ namespace UserProfileService.Sync.Extensions
                 });
 
         }
-
     }
 }

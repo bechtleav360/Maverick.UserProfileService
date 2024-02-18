@@ -198,7 +198,7 @@ public class EventCollectorAgent :
 
         int? collectingAmount = context.Message.CollectItemsAccount;
 
-        if (collectingAmount != null && collectingAmount.Value <= 0)
+        if (collectingAmount != null && collectingAmount.Value < 0)
         {
             throw new ArgumentException("The collecting item amount should not be less than 0 .");
         }
@@ -273,7 +273,7 @@ public class EventCollectorAgent :
 
         int collectingAmount = context.Message.CollectItemsAccount;
 
-        if (collectingAmount <= 0)
+        if (collectingAmount < 0)
         {
             throw new ArgumentException("The collecting item amount should not be less than 0 .");
         }

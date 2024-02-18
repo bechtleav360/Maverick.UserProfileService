@@ -12,6 +12,11 @@ public class SyncConfiguration
     public int LockExpirationTime { get; set; } = 15;
 
     /// <summary>
+    ///     The delay (in minutes) of inaction before a timeout has to be raised during a step of a synchronization process.
+    /// </summary>
+    public int DelayBeforeTimeoutForStep { get; set; } = 5;
+
+    /// <summary>
     ///     The source configuration that contains all needed configuration to synchronize data from
     ///     the source system.
     /// </summary>
