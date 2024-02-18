@@ -41,7 +41,12 @@ namespace UserProfileService.Sync.Extensions
                                 {
                                     ErrorMessage = c.Exception.Message,
                                     Step = c.Saga.Process.Step,
-                                    System = c.Saga.Process.System
+                                    System = c.Saga.Process.System,
+                                    ExceptionType = c.Exception.GetType().Name,
+                                    HResult = c.Exception.HResult,
+                                    HelpLink = c.Exception.HelpLink,
+                                    Source = c.Exception.Source,
+                                    StackTrace = c.Exception.StackTrace
                                 });
 
                             c.Saga.Process.CurrentStep.Status = StepStatus.Failure;
@@ -83,7 +88,7 @@ namespace UserProfileService.Sync.Extensions
                 c =>
                 {
                     logger.LogInfoMessage(
-                        "Executing During statement: Entred in state: {state}, consumed message of type: {messageType} with correlation id: {corrId}",
+                        "Executing During statement: Entered in state: {state}, consumed message of type: {messageType} with correlation id: {corrId}",
                         LogHelpers.Arguments(currentState.Name, consumedEvent.Name, c.CorrelationId));
 
                 });
