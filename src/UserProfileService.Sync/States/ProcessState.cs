@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using MassTransit;
 using UserProfileService.Sync.Models;
 using UserProfileService.Sync.Models.State;
@@ -46,4 +47,9 @@ public class ProcessState :
     ///     (Higher on error and retry)
     /// </summary>
     public int Version { get; set; }
+
+    /// <summary>
+    ///     A list containing a list of <see cref="ExceptionInformation"/> occurred during synchronization process.
+    /// </summary>
+    public IList<ExceptionInformation> Exceptions { get; set; } = new List<ExceptionInformation>();
 }

@@ -521,7 +521,7 @@ public class SagaEntityProcessor<TSyncEntity> : ISagaEntityProcessor<TSyncEntity
             Logger.LogErrorMessage(e, "An error occurred when fetching the entities.", LogHelpers.Arguments());
             syncProcess.SetStepStatus(StepStatus.Failure);
 
-            return;
+            throw;
         }
 
         if (Configuration.SourceConfiguration.Systems.TryGetValue(
@@ -780,7 +780,7 @@ public class SagaEntityProcessor<TSyncEntity> : ISagaEntityProcessor<TSyncEntity
 
                     syncProcess.SetStepStatus(StepStatus.Failure);
 
-                    return;
+                    throw;
                 }
 
                 Logger.LogInfoMessage(

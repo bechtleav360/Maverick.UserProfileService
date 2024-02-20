@@ -20,7 +20,15 @@ public class LdapConfigurationValidation: IValidateOptions<LdapSystemConfigurati
     
     private static IList<string> ValidateActiveDirectoryConfiguration(ActiveDirectory[] ldapConfiguration)
     {
+        
         var validationErrors = new List<string>();
+
+        if (ldapConfiguration == null)
+        {
+            validationErrors.Add("The list/array containing the configured active directories (AD) is null ");
+
+            return validationErrors;
+        }
 
         foreach (ActiveDirectory activeDirectory in ldapConfiguration)
         {
