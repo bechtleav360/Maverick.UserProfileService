@@ -21,9 +21,9 @@ namespace UserProfileService.Sync.Extensions
         ///     Catches an <see cref="Exception" />, sets the <see cref="Exception" /> property of
         ///     <see cref="ProcessState" /> to the caught exception and sets the state to
         /// </remarks>
-        public static EventActivityBinder<ProcessState, TCommand> CatchException<TCommand>(
-            this EventActivityBinder<ProcessState, TCommand> source,
-            ILogger logger = null) where TCommand : class
+        public static EventActivityBinder<ProcessState, TMessage> CatchException<TMessage>(
+            this EventActivityBinder<ProcessState, TMessage> source,
+            ILogger logger = null) where TMessage : class
         {
             return source.Catch<Exception>(
                 callback =>
@@ -57,15 +57,24 @@ namespace UserProfileService.Sync.Extensions
         /// </summary>
         public static EventActivityBinder<ProcessState, TMessage> LogAndTransitionTo<TMessage>(
             this EventActivityBinder<ProcessState, TMessage> source,
+            State fromState,
             State toState,
             ILogger logger = null)
             where TMessage : class
         {
-            logger?.LogInfoMessage(
-                "The state machine will execute transition to state: {state}",
-                LogHelpers.Arguments(toState.Name));
-
-            return source.TransitionTo(toState);
+            
+            return source.Then(
+                    c =>
+                    {
+                        logger?.LogDebugMessage(
+                            "Transition in sync saga {FromState} -> {ToState} [message = {message}; correlation id = {correlationId}]",
+                            LogHelpers.Arguments(
+                                fromState?.Name,
+                                toState?.Name,
+                                typeof(TMessage).Name,
+                                c.CorrelationId));
+                    })
+                .TransitionTo(toState);
         }
 
         /// <summary>
@@ -85,7 +94,7 @@ namespace UserProfileService.Sync.Extensions
             return binder.Then(
                 c =>
                 {
-                    logger.LogInfoMessage(
+                    logger.LogDebugMessage(
                         "Executing During statement: Entered in state: {state}, consumed message of type: {messageType} with correlation id: {corrId}",
                         LogHelpers.Arguments(currentState.Name, consumedEvent.Name, c.CorrelationId));
 

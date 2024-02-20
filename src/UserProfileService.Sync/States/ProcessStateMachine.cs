@@ -342,7 +342,7 @@ public class ProcessStateMachine :
                         .Then(InitializeProcess)
                         .Publish(c => new SetNextStepMessage(c.Saga.CorrelationId))
                         .Publish(GenerateSyncStatusMessage)
-                        .LogAndTransitionTo(Initialized, _logger),
+                        .LogAndTransitionTo(Initial,Initialized, _logger),
                     elseBinder => elseBinder.Publish(
                             c => new StartSyncFailure
                             {
@@ -351,7 +351,7 @@ public class ProcessStateMachine :
                                 ErrorDescription = "Synchronization can not be started, another process is running"
                             })
                         .Then(p => AbortProcess(p, true))
-                        .LogAndTransitionTo(Finalized, _logger)));
+                        .LogAndTransitionTo(Initial,Finalized, _logger)));
 
         DeclareNextStepMessage(Initialized);
         DeclareNextStepMessage(WaitedForResponse);
@@ -362,7 +362,7 @@ public class ProcessStateMachine :
                 .LogEnterState(_logger,InitializedStep,FinalizeSyncMessage)
                 .ThenAsync(FinalizeProcess)
                 .Publish(GenerateSyncStatusMessage)
-                .LogAndTransitionTo(Finalized, _logger));
+                .LogAndTransitionTo(InitializedStep, Finalized, _logger));
 
         // Entity step for all relevant entities
         DeclareEntityStep<GroupSyncMessage, GroupSync>(GroupSyncMessage);
@@ -380,7 +380,6 @@ public class ProcessStateMachine :
                 // the version must be initially incremented by 1 to prevent a version conflict at the completion of the step.
                 .Then(c => c.Saga.Version++)
                 .ThenAsync(ProcessAddedRelationSyncMessage)
-                .CatchException(_logger)
                 .CatchException(_logger)
                 .IfElse(
                     c => c.Saga.Process.CurrentStep.Final.Total != 0 || StepHasFailed(c),
@@ -403,12 +402,12 @@ public class ProcessStateMachine :
                         })
                         .Publish(GenerateSyncStatusMessage)
                         .CatchException(_logger)
-                        .LogAndTransitionTo(Analyzed, _logger),
+                        .LogAndTransitionTo(InitializedStep, Analyzed, _logger),
                     elseBinder => elseBinder
                         .Publish(c => new WaitingForResponseMessage(c.Saga.CorrelationId))
                         .Publish(GenerateSyncStatusMessage)
                         .CatchException(_logger)
-                        .LogAndTransitionTo(Analyzed, _logger)));
+                        .LogAndTransitionTo(InitializedStep, Analyzed, _logger)));
 
         // Same as entity step but for deleting relations.
         During(
@@ -442,12 +441,12 @@ public class ProcessStateMachine :
                         })
                         .Publish(GenerateSyncStatusMessage)
                         .CatchException(_logger)
-                        .LogAndTransitionTo(Analyzed, _logger),
+                        .LogAndTransitionTo(InitializedStep, Analyzed, _logger),
                     elseBinder => elseBinder
                         .Publish(c => new WaitingForResponseMessage(c.Saga.CorrelationId))
                         .Publish(GenerateSyncStatusMessage)
                         .CatchException(_logger)
-                        .LogAndTransitionTo(Analyzed, _logger)));
+                        .LogAndTransitionTo(InitializedStep, Analyzed, _logger)));
 
         // update of the process.
         During(
@@ -459,7 +458,7 @@ public class ProcessStateMachine :
                 .Then(c => { c.Saga.Process = c.Message.Process; })
                 .Publish(GenerateSyncStatusMessage)
                 .CatchException(_logger)
-                .LogAndTransitionTo(InitializedStep));
+                .LogAndTransitionTo(InitializedStep,InitializedStep, _logger));
 
         // Final response of the event collector for a step.
         During(
@@ -491,7 +490,7 @@ public class ProcessStateMachine :
                 .Publish(c => new SetNextStepMessage(c.Saga.CorrelationId))
                 .Publish(GenerateSyncStatusMessage)
                 .CatchException(_logger)
-                .LogAndTransitionTo(WaitedForResponse, _logger));
+                .LogAndTransitionTo(Analyzed, WaitedForResponse, _logger));
 
         During(
             Analyzed,
@@ -504,7 +503,7 @@ public class ProcessStateMachine :
                             .Publish(c => new SetNextStepMessage(c.Saga.CorrelationId))
                             .Publish(GenerateSyncStatusMessage)
                             .CatchException(_logger)
-                            .LogAndTransitionTo(WaitedForResponse, _logger)));
+                            .LogAndTransitionTo(Analyzed, WaitedForResponse, _logger)));
 
         During(
             Analyzed,
@@ -519,7 +518,7 @@ public class ProcessStateMachine :
                             _syncConfiguration.DelayBeforeTimeoutForStep),
                     ifBinder => ifBinder
                         .Publish(c => new SetNextStepMessage(c.Saga.CorrelationId))
-                        .LogAndTransitionTo(WaitedForResponse),
+                        .LogAndTransitionTo(Analyzed, WaitedForResponse, _logger),
                     elseBinder => elseBinder
                         .Publish(
                             c => new TriggerStopWatchCommand
@@ -530,7 +529,7 @@ public class ProcessStateMachine :
                                     .CollectingId
                                     .GetValueOrDefault()
                             })
-                        .LogAndTransitionTo(Analyzed)));
+                        .LogAndTransitionTo(Analyzed, Analyzed, _logger)));
 
         // update of the meanwhile received responses at the event collector for a step.
         During(
@@ -549,7 +548,7 @@ public class ProcessStateMachine :
                     })
                 .Publish(GenerateSyncStatusMessage)
                 .CatchException(_logger)
-                .LogAndTransitionTo(Analyzed, _logger));
+                .LogAndTransitionTo(Analyzed, Analyzed, _logger));
 
         // The SkipStepMessage is only important for the analyzed step.
         During(InitializedStep,WaitedForResponse,Finalized, Ignore(SkipStepMessage));
@@ -574,14 +573,14 @@ public class ProcessStateMachine :
                     ifBinder => ifBinder
                         .Publish(c => new FinalizeSyncMessage(c.Saga.CorrelationId))
                         .Publish(GenerateSyncStatusMessage)
-                        .LogAndTransitionTo(InitializedStep),
+                        .LogAndTransitionTo(state,InitializedStep, _logger),
                     elseBinder => elseBinder
                         .Publish(GenerateStartCollectingMessage)
                         .ThenAsync(PublishNextMessage)
                         .CatchException(_logger)
                         .Publish(GenerateSyncStatusMessage)
                         .CatchException(_logger)
-                        .LogAndTransitionTo(InitializedStep)));
+                        .LogAndTransitionTo(state, InitializedStep, _logger)));
     }
 
     private void DeclareEntityStep<TMessage, TEntity>(Event<TMessage> @event)
@@ -619,14 +618,14 @@ public class ProcessStateMachine :
                         })
                         .Publish(GenerateSyncStatusMessage)
                         .CatchException(_logger)
-                        .LogAndTransitionTo(Analyzed, _logger),
+                        .LogAndTransitionTo(InitializedStep,Analyzed, _logger),
                     elseBinder => elseBinder
                         .Publish(
                             c =>
                                 new WaitingForResponseMessage(c.Saga.CorrelationId))
                         .Publish(GenerateSyncStatusMessage)
                         .CatchException(_logger)
-                        .LogAndTransitionTo(Analyzed, _logger)));
+                        .LogAndTransitionTo(InitializedStep,Analyzed, _logger)));
 
         _logger.ExitMethod();
     }

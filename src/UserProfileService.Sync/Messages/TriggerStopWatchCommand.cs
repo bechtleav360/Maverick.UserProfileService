@@ -5,7 +5,8 @@ namespace UserProfileService.Sync.Messages
 {
     /// <summary>
     ///     Defines a command for the start stopwatch in the analyzed state of the state machine.
-    ///     It's useful to check, if the saga worker doesn't answer anymore, the the step will be skipped
+    ///     Its aim is to track the change of the UpdateAt property in the saga object. The current step will be skipped
+    ///     if there is a longer standstill. It's useful to check, if the saga worker doesn't respond anymore.
     /// </summary>
     [Message(ServiceName = "sync", ServiceGroup = "user-profile")]
     public class TriggerStopWatchCommand

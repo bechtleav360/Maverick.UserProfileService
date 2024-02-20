@@ -1,7 +1,7 @@
 ﻿namespace UserProfileService.Sync.Models.State
 {
     /// <summary>
-    ///     Contains some information about happened errors during synchronization process.
+    ///     Contains some information about errors that happened during synchronization process.
     /// </summary>
     public class ExceptionInformation
     {
@@ -16,7 +16,7 @@
         public string System { get; set; }
 
         /// <summary>
-        ///     The error happened during the synchronization for the given system in the given step
+        ///     The error that happened during the synchronization for the given system in the given step
         /// </summary>
         public string ErrorMessage { get; set; }
 

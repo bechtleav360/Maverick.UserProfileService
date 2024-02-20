@@ -22,8 +22,8 @@ public class TriggerStopWatchConsumer : IConsumer<TriggerStopWatchCommand>
     /// <summary>
     ///     Creates a new instance of <see cref="TriggerStopWatchConsumer"/>
     /// </summary>
-    ///  /// <param name="syncConfigOptions"> Options to configure synchronization. </param>
-    /// <param name="logger"></param>
+    /// <param name="syncConfigOptions"> Options to configure synchronization. </param>
+    /// <param name="logger"> An instance of <see cref="ILogger"/></param>
     public TriggerStopWatchConsumer(
         IOptions<SyncConfiguration> syncConfigOptions,
         ILogger<TriggerStopWatchConsumer> logger)

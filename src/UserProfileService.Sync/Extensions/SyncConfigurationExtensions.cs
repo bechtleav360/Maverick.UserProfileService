@@ -16,7 +16,7 @@ namespace UserProfileService.Sync.Extensions
         ///     Get all configured systems sorted by priority (if the priority values are not set, the systems will sorted alphabetically in descending order).
         /// </summary>
         /// <param name="configuration">The configuration of the UPS-Sync <see cref="SyncConfiguration"/></param>
-        /// <returns></returns>
+        /// <returns>Returns a dictionary containing the sorted <see cref="SourceSystemConfiguration"/></returns>
         /// <exception cref="ArgumentNullException">will be thrown when <see cref="SyncConfiguration"/> is null.</exception>
         /// <exception cref="ArgumentException">will be thrown when <see cref="SourceConfiguration"/> is null inside the <see cref="SyncConfiguration"/>.</exception>
         public static Dictionary<string, SourceSystemConfiguration> GetSystemSorted(

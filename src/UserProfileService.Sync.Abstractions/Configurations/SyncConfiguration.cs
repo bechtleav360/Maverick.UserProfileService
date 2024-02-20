@@ -15,7 +15,7 @@ public class SyncConfiguration
 
     /// <summary>
     ///     The delay (in minutes) of inaction before a timeout has to be raised during a step of a synchronization process.
-    ///     Before set this value you should take in consideration which value has been set for <see cref="StatusDispatch"/>.
+    ///     Before setting this value you should take in consideration which value has been set for <see cref="StatusDispatch"/>.
     ///     The higher the <see cref="StatusDispatch"/> value, the higher the timeout value should be set.
     /// </summary>
     public int DelayBeforeTimeoutForStep { get; set; } = 3;
