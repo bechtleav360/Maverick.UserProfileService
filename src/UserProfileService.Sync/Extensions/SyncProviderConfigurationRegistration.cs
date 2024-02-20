@@ -69,7 +69,7 @@ public static class SyncProviderConfigurationRegistration
         Dictionary<string, IConfigurationSection> systemConfigurationProviders = mainConfiguration
                                                                                  .GetSection(ConfigSectionsConstants.LdapConfigurationSectionName)
                                                                                  .Get<Dictionary<string, IConfigurationSection>>()
-                                                                                 .Where(p => configurationToBeUser.Contains(p.Key, StringComparer.InvariantCulture))
+                                                                                 .Where(p => configurationToBeUser.Contains(p.Key, StringComparer.OrdinalIgnoreCase))
                                                                                  .ToDictionary(
                                                                                      kv => kv.Key,
                                                                                      kv => kv.Value,
