@@ -1,8 +1,8 @@
-﻿﻿using System;
+﻿using System;
 using System.Diagnostics;
 using System.Reflection;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 using NLog;
 using UserProfileService.Common.Logging;
@@ -20,7 +20,7 @@ public class Program
 {
     private const string DefaultLoggerName = "UserProfileService.Saga.Sync";
     private static ILogger _logger;
-    
+
     /// <summary>
     ///     This activity should only created once on a central place and
     ///     is used for logging reason.
@@ -34,9 +34,9 @@ public class Program
         return Assembly.GetExecutingAssembly().GetName().Version?.ToString();
     }
 
-    internal static IHostBuilder CreateHostBuilder(string[] args)
+    internal static IWebHostBuilder CreateHostBuilder(string[] args)
     {
-        IHostBuilder host = UseProfileServiceHostBuilder.CreateDefaultBuilder<SyncStartup>(args);
+        IWebHostBuilder host = UseProfileServiceHostBuilder.CreateDefaultBuilder<SyncStartup>(args);
 
         return host;
     }
@@ -50,21 +50,18 @@ public class Program
         try
         {
             _logger = SetIntermediateLogger();
-            IHostBuilder host = CreateHostBuilder(args);
+            IWebHostBuilder host = CreateHostBuilder(args);
             await host.Build().RunAsync();
         }
         catch (Exception ex)
-        {    
+        {
             if (_logger == null)
             {
                 LogManager.GetLogger(DefaultLoggerName).Fatal(ex);
             }
             else
             {
-                _logger.LogErrorMessage(
-                    ex,
-                    "Stopped program because of an exception!",
-                    LogHelpers.Arguments());
+                _logger.LogErrorMessage(ex, "Stopped program because of an exception!", LogHelpers.Arguments());
             }
         }
         // Shutdown the log manager
@@ -73,14 +70,11 @@ public class Program
             LogManager.Shutdown();
         }
     }
-    
+
     private static ILogger SetIntermediateLogger()
     {
         ILoggerFactory loggerFactory = LoggerFactory.Create(
-            builder => builder.ClearProviders()
-                .SetMinimumLevel(LogLevel.Trace)
-                .AddDebug()
-                .AddConsole());
+            builder => builder.ClearProviders().SetMinimumLevel(LogLevel.Trace).AddDebug().AddConsole());
 
         ILogger logger = loggerFactory.CreateLogger("MainIntermediate");
 

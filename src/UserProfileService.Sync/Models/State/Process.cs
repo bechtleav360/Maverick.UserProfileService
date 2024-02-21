@@ -54,7 +54,7 @@ public class Process
     /// <summary>
     ///     List of all information about system synchronizations.
     /// </summary>
-    public IDictionary<string, System> Systems { get; set; } = new Dictionary<string, System>();
+    public IDictionary<string, System> Systems { get; set; } = new Dictionary<string, System>(StringComparer.OrdinalIgnoreCase);
 
     /// <summary>
     ///     Timestamp when synchronization state changed.

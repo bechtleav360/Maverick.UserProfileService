@@ -43,7 +43,7 @@ public class System
     ///     Steps of system.
     /// </summary>
     // ReSharper disable once UnusedAutoPropertyAccessor.Global => Set modifier is needed.
-    public IDictionary<string, Step> Steps { get; set; } = new Dictionary<string, Step>();
+    public IDictionary<string, Step> Steps { get; set; } = new Dictionary<string, Step>(StringComparer.OrdinalIgnoreCase);
 
     /// <summary>
     ///     Timestamp when synchronization of system updated by action.

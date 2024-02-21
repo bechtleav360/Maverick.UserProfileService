@@ -13,10 +13,9 @@ namespace UserProfileService;
 public class Program
 {
     private static ILogger _logger;
-
     private const string DefaultLoggerName = "UserProfileService";
 
-    internal static IHostBuilder CreateHostBuilder(string[] args)
+    internal static IWebHostBuilder CreateHostBuilder(string[] args)
     {
         // Why set a global timeout?
         // Regular expressions could be used by an attacker to launch a denial-of-service attack for a website
@@ -26,11 +25,10 @@ public class Program
         // https://learn.microsoft.com/en-us/dotnet/api/system.text.regularexpressions.regex.matchtimeout?view=net-6.0#remarks
         AppDomain.CurrentDomain.SetData("REGEX_DEFAULT_MATCH_TIMEOUT", TimeSpan.FromSeconds(2));
 
-        IHostBuilder host = UseProfileServiceHostBuilder.CreateDefaultBuilder<UserProfileStartUp>(args);
+        var host = UseProfileServiceHostBuilder.CreateDefaultBuilder<UserProfileStartUp>(args);
 
         return host;
     }
-
 
     /// <summary>
     ///     The entry point method for the service.
@@ -41,7 +39,7 @@ public class Program
         try
         {
             _logger = SetIntermediateLogger();
-            IHostBuilder host = CreateHostBuilder(args);
+            IWebHostBuilder host = CreateHostBuilder(args);
             await host.Build().RunAsync();
         }
         catch (Exception ex)
@@ -52,10 +50,7 @@ public class Program
             }
             else
             {
-                _logger.LogErrorMessage(
-                    ex,
-                    "Stopped program because of an exception!",
-                    LogHelpers.Arguments());
+                _logger.LogErrorMessage(ex, "Stopped program because of an exception!", LogHelpers.Arguments());
             }
         }
         // Shutdown the log manager
@@ -64,14 +59,11 @@ public class Program
             LogManager.Shutdown();
         }
     }
-    
+
     private static ILogger SetIntermediateLogger()
     {
         ILoggerFactory loggerFactory = LoggerFactory.Create(
-            builder => builder.ClearProviders()
-                .SetMinimumLevel(LogLevel.Trace)
-                .AddDebug()
-                .AddConsole());
+            builder => builder.ClearProviders().SetMinimumLevel(LogLevel.Trace).AddDebug().AddConsole());
 
         ILogger logger = loggerFactory.CreateLogger("MainIntermediate");
 
