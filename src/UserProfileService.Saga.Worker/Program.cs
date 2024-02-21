@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Reflection;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 using NLog;
 using UserProfileService.Common.Logging;
@@ -34,7 +34,7 @@ public class Program
         return Assembly.GetExecutingAssembly().GetName().Version?.ToString();
     }
 
-    private static IHostBuilder CreateWebHost(string[] args)
+    private static IWebHostBuilder CreateWebHost(string[] args)
     {
         return UseProfileServiceHostBuilder.CreateDefaultBuilder<SagaWorkerStartup>(args);
     }
@@ -49,7 +49,7 @@ public class Program
 
         try
         {
-            IHostBuilder host = CreateWebHost(args);
+            IWebHostBuilder host = CreateWebHost(args);
             await host.Build().RunAsync();
         }
         catch (Exception ex)
@@ -60,10 +60,7 @@ public class Program
             }
             else
             {
-                _logger.LogErrorMessage(
-                    ex,
-                    "Stopped program because of an exception!",
-                    LogHelpers.Arguments());
+                _logger.LogErrorMessage(ex, "Stopped program because of an exception!", LogHelpers.Arguments());
             }
         }
         // Shutdown the log manager
@@ -76,10 +73,7 @@ public class Program
     private static ILogger SetIntermediateLogger()
     {
         ILoggerFactory loggerFactory = LoggerFactory.Create(
-            builder => builder.ClearProviders()
-                .SetMinimumLevel(LogLevel.Trace)
-                .AddDebug()
-                .AddConsole());
+            builder => builder.ClearProviders().SetMinimumLevel(LogLevel.Trace).AddDebug().AddConsole());
 
         ILogger logger = loggerFactory.CreateLogger("MainIntermediate");
 
