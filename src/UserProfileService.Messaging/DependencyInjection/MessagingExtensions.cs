@@ -53,9 +53,7 @@ public static class MessagingExtensions
             throw new InvalidMessagingConfigurationException("no 'Messaging:Type' set");
         }
 
-        // configurator.SetEndpointNameFormatter(nameFormatter);
-        configurator.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter(
-            includeNamespace: false));
+        configurator.SetEndpointNameFormatter(nameFormatter);
 
         if (messagingType.Equals("none", StringComparison.OrdinalIgnoreCase))
         {
