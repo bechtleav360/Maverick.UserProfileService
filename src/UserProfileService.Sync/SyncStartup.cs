@@ -29,6 +29,7 @@ using UserProfileService.Common.V2.Abstractions;
 using UserProfileService.Common.V2.Contracts;
 using UserProfileService.Common.V2.Utilities;
 using UserProfileService.Hosting.Abstraction;
+using UserProfileService.Hosting.Tracing;
 using UserProfileService.Marten.EventStore.DependencyInjection;
 using UserProfileService.Messaging.ArangoDb.Configuration;
 using UserProfileService.Messaging.DependencyInjection;
@@ -233,36 +234,6 @@ public class SyncStartup : DefaultStartupBase
                         HealthStatus.Unhealthy,
                         new[] { HealthCheckTags.Liveness }));
 
-        services
-            .AddMessaging(
-                MessageSourceBuilder.GroupedApp(
-                    "sync",
-                    Constants.Messaging.ServiceGroup),
-                Configuration,
-                new[] { typeof(Program).Assembly },
-                bus =>
-                {
-                    bus.AddSagaStateMachine<ProcessStateMachine, ProcessState>(
-                            (ctx,s) => s.UseInMemoryOutbox(ctx))
-                        .ArangoRepository(
-                            r =>
-                            {
-                                var arangoConfiguration =
-                                    arangoConfigurationSection.Get<ArangoConfiguration>();
-
-                                r.DatabaseConfiguration("sync-client", arangoConfiguration);
-
-                                // Default is Optimistic
-                                r.ConcurrencyMode = ConcurrencyMode.Pessimistic;
-
-                                // Optional, default is "saga_state_{typeof(TSaga).Name}"
-                                r.CollectionName = "Sync_Process_StateMachine";
-                            });
-
-                    bus.AddConsumer<HealthCheckMessageConsumer>()
-                        .Endpoint(e => { e.Temporary = true; });
-                });
-
         // Projection for sync and state machine (currently for initiator)
         services.AddSecondLevelSyncProjection();
 
@@ -281,6 +252,8 @@ public class SyncStartup : DefaultStartupBase
         services.TryAddSingleton<ISyncProcessSynchronizer, DefaultSynchronizer>();
         services.AddModelComparer();
         services.AddNoneRelationFactoryDependencies();
+        RegisterMessaging(services,Configuration);
+        RegisterTracing(services, Configuration);
 
         // Configure base services
         base.ConfigureServices(services);
@@ -293,10 +266,53 @@ public class SyncStartup : DefaultStartupBase
     /// <returns>The names of the workers</returns>
     protected virtual string[] GetIncludedWorkerHealthChecks() => Array.Empty<string>();
 
-    /// <inheritdoc />
-    protected override ActivitySource CreateSource() => new ActivitySource(
-        "Maverick.UserProfileService.Sync",
-        GetAssemblyVersion());
+    /// <inheritdoc/>
+    public override void RegisterMessaging(IServiceCollection serviceCollection, IConfiguration configuration)
+    {
+        IConfigurationSection arangoConfigurationSection =
+            Configuration.GetSection(WellKnownConfigurationKeys.ProfileStorage);
 
-    #endregion
+        serviceCollection.AddMessaging(
+            MessageSourceBuilder.GroupedApp("sync", Constants.Messaging.ServiceGroup),
+            Configuration,
+            new[] { typeof(Program).Assembly },
+            bus =>
+            {
+                bus.AddSagaStateMachine<ProcessStateMachine, ProcessState>((ctx, s) => s.UseInMemoryOutbox(ctx))
+                   .ArangoRepository(
+                       r =>
+                       {
+                           var arangoConfiguration = arangoConfigurationSection.Get<ArangoConfiguration>();
+
+                           r.DatabaseConfiguration("sync-client", arangoConfiguration);
+
+                           // Default is Optimistic
+                           r.ConcurrencyMode = ConcurrencyMode.Pessimistic;
+
+                           // Optional, default is "saga_state_{typeof(TSaga).Name}"
+                           r.CollectionName = "Sync_Process_StateMachine";
+                       });
+
+                bus.AddConsumer<HealthCheckMessageConsumer>().Endpoint(e => { e.Temporary = true; });
+            });
+    }
+
+    /// <inheritdoc/>
+    public override void RegisterTracing(IServiceCollection services, IConfiguration configuration)
+    {
+        var tracingOptions = Configuration.GetSection("Tracing").Get<TracingOptions>();
+
+        services.AddUserProfileServiceTracing(
+            options =>
+            {
+                options.ServiceName = tracingOptions.ServiceName;
+                options.OtlpEndpoint = tracingOptions.OtlpEndpoint;
+            });
+    }
+
+    /// <inheritdoc />
+    protected override ActivitySource CreateSource() =>
+        new ActivitySource("Maverick.UserProfileService.Sync", GetAssemblyVersion());
+
+#endregion
 }

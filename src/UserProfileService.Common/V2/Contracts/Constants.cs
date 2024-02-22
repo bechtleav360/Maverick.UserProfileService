@@ -18,7 +18,7 @@ public static class Constants
         /// <summary>
         /// The name of the endpoint that take care of health check messages from/to WebAPI.
         /// </summary>
-        public const string HealthCheckApiConsumerEndpoint = "user-profile.api-health-check-message.consumer";
+        public const string HealthCheckApiConsumerEndpoint = "maverick.user-profile.api-health-check-message.consumer";
 
         /// <summary>
         /// The name of the endpoint that take care of health check messages from/to Sync.
