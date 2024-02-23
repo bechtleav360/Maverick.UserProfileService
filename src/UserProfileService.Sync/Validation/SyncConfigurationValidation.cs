@@ -34,7 +34,7 @@ public class SyncConfigurationValidation : IValidateOptions<SyncConfiguration>
 
         return validationErrors;
     }
-    
+
     private static IList<string> ValidateSynchronizationOperations(
         string systemName,
         Dictionary<string, SynchronizationOperations> input,
@@ -53,6 +53,12 @@ public class SyncConfigurationValidation : IValidateOptions<SyncConfiguration>
             {
                 validationErrors.Add(
                     $"Configuration error concerning '{propertyName}' in the system: {systemName} : The key should not be empty or whitespace");
+            }
+
+            if (!SyncConstants.SupportedEntities.All.Contains(entry.Key, StringComparer.OrdinalIgnoreCase))
+            {
+                validationErrors.Add(
+                    $"Configuration error concerning '{propertyName}' in the system: {systemName} : This entity name: {entry.Key} is not valid, supported values are: {string.Join(',', SyncConstants.SupportedEntities.All)}");
             }
 
             if (entry.Value == null)
