@@ -120,6 +120,42 @@ public static class SyncConstants
     }
 
     /// <summary>
+    ///     Defines the well-known supported entity types.
+    /// </summary>
+    public static class SupportedEntities
+    {
+        /// <summary>
+        ///     Identifier for <see cref="FunctionSync" />.
+        /// </summary>
+        public const string Function = "functions";
+
+        /// <summary>
+        ///     Identifier for <see cref="GroupSync" />.
+        /// </summary>
+        public const string Group = "groups";
+
+        /// <summary>
+        ///     Identifier for <see cref="OrganizationSync" />.
+        /// </summary>
+        public const string Organization = "organizations";
+
+        /// <summary>
+        ///     Identifier for <see cref="RoleSync" />.
+        /// </summary>
+        public const string Role = "roles";
+
+        /// <summary>
+        ///     Identifier for <see cref="UserSync" />.
+        /// </summary>
+        public const string User = "users";
+
+        /// <summary>
+        ///     List containing all supported entities in UPS-Sync
+        /// </summary>
+        public static IList<string> All => new List<string> {Function, Group, Organization, Role, User};
+    }
+
+    /// <summary>
     ///     Identifies the saga step that are mapped to the saga messages.
     /// </summary>
     public static class SagaStep

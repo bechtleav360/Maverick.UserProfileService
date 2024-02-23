@@ -113,15 +113,15 @@ public class SyncStartup : DefaultStartupBase
     {
         services.RemoveAll<IHttpMessageHandlerBuilderFilter>();
 
-       services.TryAddTransient<IValidateOptions<SyncConfiguration>, SyncConfigurationValidation>();
-       services.TryAddTransient<IValidateOptions<LdapSystemConfiguration>, LdapConfigurationValidation>();
 
         services.AddSyncConfigurationProvider(
             new[] { typeof(LdapConfigurationDependencyRegistration).Assembly },
             Configuration,
             _logger);
 
-        services.Configure<SyncConfiguration>(Configuration.GetSection("SyncConfiguration"));
+        services.AddValidatedOptions<SyncConfiguration, SyncConfigurationValidation>(
+            Configuration.GetSection("SyncConfiguration"),
+            true);
 
         IConfigurationSection arangoConfigurationSection =
             Configuration.GetSection(WellKnownConfigurationKeys.ProfileStorage);

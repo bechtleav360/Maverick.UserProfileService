@@ -7,6 +7,7 @@ using UserProfileService.Sync.Abstraction.Models.Entities;
 using UserProfileService.Sync.Abstraction.Systems;
 using UserProfileService.Sync.Configuration;
 using UserProfileService.Sync.Systems;
+using UserProfileService.Sync.Validation;
 
 namespace UserProfileService.Sync.ConfigurationProvider;
 
@@ -21,7 +22,9 @@ public class LdapConfigurationDependencyRegistration : DependencyRegistrationBas
         ILogger logger,
         IConfigurationSection syncProviderConfigurationSection)
     {
-        serviceCollection.Configure<LdapSystemConfiguration>(syncProviderConfigurationSection);
+        serviceCollection.AddValidatedOptions<LdapSystemConfiguration, LdapConfigurationValidation>(
+            syncProviderConfigurationSection,
+            true);
         serviceCollection.AddScoped<ISynchronizationSourceSystem<GroupSync>, LdapSourceSystem>();
         serviceCollection.AddScoped<ISynchronizationSourceSystem<UserSync>, LdapSourceSystem>();
     }

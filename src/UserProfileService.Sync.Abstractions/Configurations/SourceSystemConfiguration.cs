@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UserProfileService.Sync.Abstraction.Configurations.Implementations;
 
 namespace UserProfileService.Sync.Abstraction.Configurations;
@@ -14,14 +15,14 @@ public class SourceSystemConfiguration
     ///     for entities that should be synchronized.
     /// </summary>
     public Dictionary<string, SynchronizationOperations> Destination { set; get; } =
-        new Dictionary<string, SynchronizationOperations>();
+        new Dictionary<string, SynchronizationOperations>(StringComparer.OrdinalIgnoreCase);
 
     /// <summary>
     ///     The configuration for the source system and is configured
     ///     for entities that should be synchronized.
     /// </summary>
     public Dictionary<string, SynchronizationOperations> Source { set; get; } =
-        new Dictionary<string, SynchronizationOperations>();
+        new Dictionary<string, SynchronizationOperations>(StringComparer.OrdinalIgnoreCase);
 
 
     /// <summary>

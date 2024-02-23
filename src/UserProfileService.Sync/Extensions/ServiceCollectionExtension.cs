@@ -1,4 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection.Extensions;
+﻿using System;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
+using Remotion.Linq.Clauses;
 using UserProfileService.Sync.Abstraction;
 using UserProfileService.Sync.Abstraction.Models.Entities;
 using UserProfileService.Sync.Abstractions;
@@ -93,5 +98,108 @@ public static class ServiceCollectionExtension
         services.TryAddScoped<IRelationHandler<NoneSyncModel>, NoneRelationHandler>();
 
         return services;
+    }
+
+    /// <summary>
+    ///     Adds options with validation to the <see cref="IServiceCollection"/>.
+    /// </summary>
+    /// <typeparam name="TOptions">The type of options to configure.</typeparam>
+    /// <typeparam name="TValidator">The type of options validator implementing <see cref="IValidateOptions{TOptions}"/>.</typeparam>
+    /// <param name="services">The <see cref="IServiceCollection"/> to add the options to.</param>
+    /// <param name="configSection">The configuration section to bind options from.</param>
+    /// <param name="validateOnStart">Flag indicating whether to validate options on startup.</param>
+    /// <returns>The modified <see cref="IServiceCollection"/>.</returns>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown when <paramref name="services"/> or <paramref name="configSection"/> is null.
+    /// </exception>
+    public static IServiceCollection AddValidatedOptions<TOptions, TValidator>(
+        this IServiceCollection services,
+        IConfigurationSection configSection,
+        bool validateOnStart = false)
+        where TOptions : class
+        where TValidator : class, IValidateOptions<TOptions>, new()
+    {
+        if (services == null)
+        {
+            throw new ArgumentNullException(nameof(services));
+        }
+
+        if (configSection == null)
+        {
+            throw new ArgumentNullException(nameof(configSection));
+        }
+
+        if (validateOnStart)
+        {
+            services.AddOptions<TOptions>()
+                .Bind(configSection)
+                .Validate(
+                    config =>
+                    {
+                        ValidateOptionsResult validateResult = new TValidator().Validate(string.Empty, config);
+
+                        if (validateResult.Failed)
+                        {
+                            throw new OptionsValidationException(
+                                nameof(TOptions),
+                                typeof(TOptions),
+                                validateResult.Failures);
+                        }
+
+                        return true;
+                    })
+                .ValidateOnStart();
+        }
+        else
+        {
+            services.TryAddTransient<IValidateOptions<TOptions>, TValidator>();
+            services.AddOptions<TOptions>().Bind(configSection);
+        }
+
+
+        return services;
+    }
+
+    /// <summary>
+    ///     Adds options with validation to the <see cref="IServiceCollection"/> from a specified configuration section.
+    /// </summary>
+    /// <typeparam name="TOptions">The type of options to configure.</typeparam>
+    /// <typeparam name="TValidator">The type of options validator implementing <see cref="IValidateOptions{TOptions}"/>.</typeparam>
+    /// <param name="services">The <see cref="IServiceCollection"/> to add the options to.</param>
+    /// <param name="configuration">The configuration from which the section will be retrieved.</param>
+    /// <param name="configSectionName">The name of the configuration section to bind options from.</param>
+    /// <param name="validateOnStart">Flag indicating whether to validate options on startup.</param>
+    /// <returns>The modified <see cref="IServiceCollection"/>.</returns>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown when <paramref name="services"/>, <paramref name="configuration"/>, or <paramref name="configSectionName"/> is null.
+    /// </exception>
+    public static IServiceCollection AddValidatedOptions<TOptions, TValidator>(
+        this IServiceCollection services,
+        IConfiguration configuration,
+        string configSectionName,
+        bool validateOnStart = false)
+        where TOptions : class
+        where TValidator : class, IValidateOptions<TOptions>, new()
+    {
+        if (services == null)
+        {
+            throw new ArgumentNullException(nameof(services));
+        }
+
+        if (configuration == null)
+        {
+            throw new ArgumentNullException(nameof(configuration));
+        }
+
+        if (string.IsNullOrWhiteSpace(configSectionName))
+        {
+            throw new ArgumentException("The section name should not be null, empty or whitespace");
+        }
+
+        return AddValidatedOptions<TOptions, TValidator>(
+            services,
+            configuration.GetSection(configSectionName),
+            validateOnStart);
+
     }
 }
