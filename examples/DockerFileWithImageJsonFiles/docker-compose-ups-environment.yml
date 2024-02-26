@@ -1,0 +1,184 @@
+version: "3.8"
+services:
+
+  arangodb:
+    image: arangodb:latest
+    ports:
+      - 8529:8529
+    environment:
+      - ARANGO_ROOT_PASSWORD=$ARANGO_ROOT_PASSWORD
+    volumes:
+      - arangodb_data:/var/lib/arangodb3
+      - arangodb_apps_data:/var/lib/arangodb3-apps
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:8529 || exit 
+      interval: 10s
+      timeout: 10s
+      start_period: 10s
+      retries: 5  
+
+  arangodatabasecreator:
+      image: alpine:latest
+      depends_on:
+        arangodb:
+          condition: service_healthy
+      environment:
+        ARANGO_ROOT_USER_NAME: $ARANGO_ROOT_USER_NAME
+        ARANGO_ROOT_PASSWORD: $ARANGO_ROOT_PASSWORD
+        ARANGO_USER: $ARANGO_USER
+        ARANGO_DB_NAME: $ARANGO_DB_NAME
+        ARANGO_USER_PASSWORD: $ARANGO_USER_PASSWORD
+      command: 
+        - /bin/sh
+        - -c
+        - |
+          apk add --no-cache curl
+          ARANGO_ROOT_PASSWORD_BASE64=$$(echo -n $${ARANGO_ROOT_USER_NAME}:$${ARANGO_ROOT_PASSWORD} | base64 )
+          curl -X 'POST' \
+          'http://arangodb:8529/_db/_system/_api/database' \
+          -H 'accept: */*' \
+          -H 'Content-Type: application/json' \
+          -H 'Authorization: basic '"$${ARANGO_ROOT_PASSWORD_BASE64}"'' \
+          -d '{
+          "name": "'"$${ARANGO_DB_NAME}"'",
+          "options": {
+            "replicationFactor": 0,
+            "writeConcern": 0
+          },
+          "users": [
+            {
+              "active": true,
+              "extra": {},
+              "passwd": "'"$${ARANGO_USER_PASSWORD}"'",
+              "username": "'"$${ARANGO_USER}"'"
+            }
+          ]
+          }'
+
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: $POSTGRES_USER
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+      POSTGRES_DB: $POSTGRES_DB
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-d", "db_prod"]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
+
+  redis:
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning
+    volumes: 
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      interval: 1s
+      timeout: 3s
+      retries: 5
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: "rabbitmq"
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      RABBITMQ_DEFAULT_PASS: $RABBITMQ_DEFAULT_PASS
+      RABBITMQ_DEFAULT_USER: $RABBITMQ_DEFAULT_USER
+      RABBITMQ_DEFAULT_VHOST: $RABBITMQ_DEFAULT_VHOST
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    restart: unless-stopped
+    healthcheck:
+      test: rabbitmq-diagnostics check_port_connectivity
+      interval: 1s
+      timeout: 3s
+      retries: 30
+
+  userprofile-api:
+    image: ghcr.io/bechtleav360/user-profile-service:latest
+    ports: 
+      - 5010:8000
+    volumes:
+      - ./appsettings.UserProfileAPI.json:/app/appsettings.Development.json
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://*:8000
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      arangodb:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    
+  userprofile-saga-worker:
+    image: ghcr.io/bechtleav360/user-profile-saga-worker:latest
+    environment:
+      - PROFILESTORAGE__CLUSTERCONFIGURATION__DOCUMENTCOLLECTIONS__*__NUMBEROFSHARDS=3
+      - PROFILESTORAGE__CLUSTERCONFIGURATION__DOCUMENTCOLLECTIONS__*__REPLICATIONFACTOR=2
+      - PROFILESTORAGE__CLUSTERCONFIGURATION__DOCUMENTCOLLECTIONS__*__WRITECONCERN=1
+      - PROFILESTORAGE__CLUSTERCONFIGURATION__EDGECOLLECTIONS__*__NUMBEROFSHARDS=3
+      - PROFILESTORAGE__CLUSTERCONFIGURATION__EDGECOLLECTIONS__*__REPLICATIONFACTOR=2
+      - PROFILESTORAGE__CLUSTERCONFIGURATION__EDGECOLLECTIONS__*__WRITECONCERN=1
+      - SEEDING__TAGS__9F2AE377-065C-4093-A431-351E19372017__NAME=audit
+      - SEEDING__TAGS__9F2AE377-065C-4093-A431-351E19372017__REFERENCE=
+      - SEEDING__TAGS__9F2AE377-065C-4093-A431-351E19372017__TYPE=Custom
+      - VALIDATION__COMMANDS__EXTERNAL__PROFILE-DELETED=true
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://*:8001
+    volumes:
+      - ./appsettings.UserProfileSagaWorker.json:/app/appsettings.Development.json
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      arangodb:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+
+  userprofile-sync:
+    image: ghcr.io/bechtleav360/user-profile-sync:latest
+    environment:
+      - PROFILESTORAGE__CLUSTERCONFIGURATION__DOCUMENTCOLLECTIONS__*__NUMBEROFSHARDS=3
+      - PROFILESTORAGE__CLUSTERCONFIGURATION__DOCUMENTCOLLECTIONS__*__REPLICATIONFACTOR=2
+      - PROFILESTORAGE__CLUSTERCONFIGURATION__DOCUMENTCOLLECTIONS__*__WRITECONCERN=1
+      - PROFILESTORAGE__CLUSTERCONFIGURATION__EDGECOLLECTIONS__*__NUMBEROFSHARDS=3
+      - PROFILESTORAGE__CLUSTERCONFIGURATION__EDGECOLLECTIONS__*__REPLICATIONFACTOR=2
+      - PROFILESTORAGE__CLUSTERCONFIGURATION__EDGECOLLECTIONS__*__WRITECONCERN=1
+      - SYNCCONFIGURATION__SOURCECONFIGURATION__VALIDATION__COMMANDS__EXTERNAL__PROFILE-DELETED=true
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://*:8002
+    ports:
+      - 5020:8002
+    volumes:
+      - ./appsettings.UserProfileSync.json:/app/appsettings.Development.json
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      arangodb:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+volumes:
+  arangodb_data:
+  arangodb_apps_data:
+  postgres-data:
+  redis-data:
