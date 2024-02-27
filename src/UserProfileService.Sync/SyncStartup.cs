@@ -108,6 +108,23 @@ public class SyncStartup : DefaultStartupBase
         app.UseSwaggerUI(c => { c.SwaggerEndpoint("v1/swagger.json", "UserProfileService Sync V1"); });
     }
 
+    /// <summary>
+    /// Adds validation configuration for the synchronization process to the specified <see cref="IServiceCollection"/>.
+    /// </summary>
+    /// <param name="services">The <see cref="IServiceCollection"/> to which the validation configuration will be added.</param>
+    /// <remarks>
+    /// This method is responsible for adding validated options for the synchronization configuration using the provided
+    /// <paramref name="services"/> and configuration settings from the "SyncConfiguration" section.
+    /// </remarks>
+    /// <seealso cref="SyncConfiguration"/>
+    /// <seealso cref="SyncConfigurationValidation"/>
+    protected virtual void AddValidationConfiguration(IServiceCollection services)
+    {
+        services.AddValidatedOptions<SyncConfiguration, SyncConfigurationValidation>(
+            Configuration.GetSection("SyncConfiguration"),
+            true);
+    }
+
     /// <inheritdoc />
     public override void ConfigureServices(IServiceCollection services)
     {
@@ -119,9 +136,7 @@ public class SyncStartup : DefaultStartupBase
             Configuration,
             _logger);
 
-        services.AddValidatedOptions<SyncConfiguration, SyncConfigurationValidation>(
-            Configuration.GetSection("SyncConfiguration"),
-            true);
+        AddValidationConfiguration(services);
 
         IConfigurationSection arangoConfigurationSection =
             Configuration.GetSection(WellKnownConfigurationKeys.ProfileStorage);
