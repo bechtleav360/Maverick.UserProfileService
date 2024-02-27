@@ -136,7 +136,7 @@ public class SyncStartup : DefaultStartupBase
             Configuration,
             _logger);
 
-        AddValidationConfiguration(services);
+        RegisterValidationConfiguration(services);
 
         IConfigurationSection arangoConfigurationSection =
             Configuration.GetSection(WellKnownConfigurationKeys.ProfileStorage);
