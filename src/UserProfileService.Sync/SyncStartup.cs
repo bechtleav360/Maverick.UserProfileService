@@ -118,7 +118,7 @@ public class SyncStartup : DefaultStartupBase
     /// </remarks>
     /// <seealso cref="SyncConfiguration"/>
     /// <seealso cref="SyncConfigurationValidation"/>
-    protected virtual void AddValidationConfiguration(IServiceCollection services)
+    protected virtual void RegisterValidationConfiguration(IServiceCollection services)
     {
         services.AddValidatedOptions<SyncConfiguration, SyncConfigurationValidation>(
             Configuration.GetSection("SyncConfiguration"),
