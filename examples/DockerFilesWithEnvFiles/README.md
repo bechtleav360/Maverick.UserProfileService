@@ -1,18 +1,23 @@
 ## Docker Build with Environment Variables
 
-In these example docker will build the explicit Dockerfile that is placed under the folder of the service/worker. Here you can feel free to changed the **Dockerfile**. You can changed for example the base image or changed other components. All configuration are now stored in *env* files. For configuration the main components you can refer to this README.md file. The command you can start the build for the ups-environment:
+In these examples, Docker will build the specific Dockerfile located within the service/worker folder. Here, you are free to modify the Dockerfile as needed. For instance, you can alter the base image or adjust other components. All configurations are now stored in env files. For guidance on configuring the main components, please refer to the README.md file. To initiate the build for the ups-environment, you can use the following command:
 
 ```ps1
 docker compose -f .\docker-compose-ups-environment.yml --env-file docker-compose-env-vars.env  up
 ```
 
 ## The docker-compose-env-var file
-The file is used to configure the main storing components. You can configure the user, password the database for example. But be aware, if you configure the password or user of the components you have to changed them in the configuration as well. Before you want to startup you should change the **WORKING_DIRECTORY_CONTEXT**. This Variable has the absolut path to the UserProfileService.
+The file is utilized to configure the primary storage components. You can configure parameters such as the user, password, and database, for example. However, please note that if you modify the password or user of any components, you must also update them in the configuration accordingly. Prior to startup, ensure to modify the WORKING_DIRECTORY_CONTEXT variable. This variable contains the absolute path to the UserProfileService.
 
-For example when your UserProfileSerivce Code is placed under E:\Repos\Maverick.UserProfileService, then your variable should look like:
+For example, if your UserProfileService code is located under E:\Repos\Maverick.UserProfileService, then your variable should appear as follows:
 
 **WORKING_DIRECTORY_CONTEXT='E:\Repos\Maverick.UserProfileService'**
 
 ## The configuration files
+In this environment we are using the **.env** files.  
+
+
+
+
 
 
