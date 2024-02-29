@@ -159,6 +159,46 @@ An example configuration section could look like this:
 
 `User` and `Password` are credential information to connect to RabbitMQ.
 
+#### Redis
+The UserProfileService-Sync uses Redis as a temporary storage for the synchronized data.
+
+An example configuration section could look like this:
+
+```json
+  "Redis": {
+    "ServiceName": "redis",
+    "AbortOnConnectFail": "False",
+    "AllowAdmin": "True",
+    "ConnectRetry": 5,
+    "ConnectTimeout": 5000,
+    "EndpointUrls": [
+      "localhost:6379"
+    ],
+    "ExpirationTime": 7200,
+    "Password": "",
+    "User": ""
+  }
+```
+
+The `EndpointUrls` define the endpoints for Redis. Please note that `EndpointUrls` is an array where you can store more than one Redis endpoint. In this section, Redis is only bound to localhost. The port **6379** is the standard port for Redis.
+
+The `User` and `Password` are used for authentication to the Redis system.
+
+The other configuration options for redis:
+
+`ServiceName` -  The service name used to resolve a service via the [Sentinel](https://redis.io/docs/management/sentinel/).
+
+`AbortOnConnectFail` - The connect will not create a connection while no servers are available.
+
+`AllowAdmin` - Enables a range of commands that are considered risky.
+
+`ConnectRetry` - The number of times to repeat connect attempts during initial Connect.
+ 
+`ConnectTimeout` - Timeout (ms) for connect operations.
+
+`ExpirationTime` - Expiration time after the stored values in redis expires and are deleted (in seconds).
+
+
 #### Logging
 
 The configuration uses the default .NET Core "Logging" configuration of the MEL stack and extends it in an easy way.  
@@ -327,9 +367,17 @@ While writing this extension we could find no real use-case for **Option-3**.
 While we don't expect usage of **Option-4**, we can see scenarios where this configuration makes sense, so we added it to this extension.  
 Using `DiscardResponsePathBase` with any other setting did not produce usable results, so we chose to treat its use with other settings as an error.
 
+## Docker Deployment
+
+ We have prepared a set of docker
+ comose files, allowing you to effortlessly set up and explore UserProfileService in isolated containers.The files include all third-party dependencies and are pre-configured to run seamlessly within the container environment.
+
+ The examples can be found [here](https://github.com/bechtleav360/Maverick.UserProfileService/tree/main/examples).
+
+
 ## Licensing
 
-## Used packages
+### Used packages
 
 We are using following great third-party-libraries:
 
