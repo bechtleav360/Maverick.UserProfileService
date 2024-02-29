@@ -113,8 +113,6 @@ services:
       - 'userprofile-service.env'
     ports: 
       - 5010:8000
-    volumes:
-      - userprofile-api-config/appsettings.json:app/appsettings.json
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -140,8 +138,6 @@ services:
       - SEEDING__TAGS__9F2AE377-065C-4093-A431-351E19372017__REFERENCE=
       - SEEDING__TAGS__9F2AE377-065C-4093-A431-351E19372017__TYPE=Custom
       - VALIDATION__COMMANDS__EXTERNAL__PROFILE-DELETED=true
-    volumes:
-      - user-saga-worker-config/appsettings.json:app/appsettings.json
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -164,8 +160,6 @@ services:
       - 'userprofile-sync.env'
     ports:
       - 5020:8002
-    volumes:
-      - user-sync-config/appsettings.json:app/appsettings.json
     depends_on:
       rabbitmq:
         condition: service_healthy
