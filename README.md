@@ -462,9 +462,7 @@ We have prepared a set of docker compose files, allowing you to effortlessly set
 
 Please be aware that the examples provided should not be used in a **production** environment! They are intended to give you an impression of how the UserProfileService works and should only be utilized in a development environment for testing purposes.
 
-In one example, we also briefly explain how the UserProfileService-Sync can be configured to synchronize from an LDAP system. The configuration details can be found [here](https://github.com/bechtleav360/Maverick.UserProfileService/tree/main/examples/README.md).
-
-The examples can be found [here](https://github.com/bechtleav360/Maverick.UserProfileService/tree/main/examples/DockerFileWithImageJsonFiles/).
+The examples can be found [here](https://github.com/bechtleav360/Maverick.UserProfileService/tree/main/examples/).
 
 ## Licensing
 
