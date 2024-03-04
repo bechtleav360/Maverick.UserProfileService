@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using MassTransit;
 using Maverick.UserProfileService.AggregateEvents.Resolved.V1;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using UserProfileService.Common.Logging;
 using UserProfileService.Common.Logging.Extensions;
+using UserProfileService.EventCollector.Abstractions.Messages;
 using UserProfileService.EventSourcing.Abstractions.Models;
 using UserProfileService.Sync.Abstraction;
 using UserProfileService.Sync.Abstraction.Configurations;
@@ -35,6 +37,7 @@ internal class GroupCreatedEventHandler : SyncBaseEventHandler<GroupCreated>
     private readonly IMapper _mapper;
     private readonly ISyncSourceSystemFactory _sourceSystemFactory;
     private readonly SyncConfiguration _syncConfiguration;
+    protected readonly IBus _messageBus;
 
     /// <summary>
     ///     Creates a new instance of <see cref="GroupCreatedEventHandler" />
@@ -51,6 +54,7 @@ internal class GroupCreatedEventHandler : SyncBaseEventHandler<GroupCreated>
     ///     A Factory used to generate converter which convert external Ids of entities if
     ///     necessary.
     /// </param>
+    /// <param name="messageBus">The component that communicates with the configured message broker. </param>
     public GroupCreatedEventHandler(
         IOptions<SyncConfiguration> syncConfigOptions,
         ISyncSourceSystemFactory sourceSystemFactory,
@@ -58,7 +62,8 @@ internal class GroupCreatedEventHandler : SyncBaseEventHandler<GroupCreated>
         ILogger<GroupCreatedEventHandler> logger,
         ISynchronizationWriteDestination<GroupSync> groupWriteDestination,
         IProfileService stateProfileService,
-        IConverterFactory<ISyncModel> converterFactory) : base(logger, stateProfileService)
+        IConverterFactory<ISyncModel> converterFactory,
+        IBus messageBus) : base(logger, stateProfileService)
     {
         _syncConfiguration = syncConfigOptions.Value;
         _sourceSystemFactory = sourceSystemFactory;
@@ -66,6 +71,7 @@ internal class GroupCreatedEventHandler : SyncBaseEventHandler<GroupCreated>
         _mapper = mapper;
         _groupWriteDestination = groupWriteDestination;
         _converterFactory = converterFactory;
+        _messageBus = messageBus;
     }
 
     private async Task<GroupSync> CreateGroupInRepoAsync(GroupCreated group, CancellationToken cancellationToken)
@@ -175,8 +181,19 @@ internal class GroupCreatedEventHandler : SyncBaseEventHandler<GroupCreated>
                         "Update external id '{externalIds}' for group with id '{groupSyncId}'.",
                         LogHelpers.Arguments(string.Join(",", groupSync.ExternalIds), groupSync.Id));
 
+                    var collectionId = Guid.NewGuid();
+
+                    await _messageBus.Publish(
+                        new StartCollectingMessage
+                        {
+                            CollectingId = collectionId,
+                            CollectItemsAccount = 1,
+                            Dispatch = new StatusDispatch(1)
+                        },
+                        cancellationToken);
+                    
                     await _groupWriteDestination.UpdateObjectAsync(
-                        Guid.NewGuid(),
+                        collectionId,
                         groupSync,
                         modifiedProperties,
                         cancellationToken);
