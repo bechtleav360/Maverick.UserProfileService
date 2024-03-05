@@ -48,7 +48,7 @@ public class SynchronizationService : ISynchronizationService
     /// <param name="scheduleService">Service to manage sync schedule.</param>
     /// <param name="synchronizer"> The service used for process synchronization</param>
     /// <param name="sagaRepositoryContextFactory">Factory to create context to access <see cref="ProcessState" /> data.</param>
-    /// <param name="syncConfiguration">Factory to create context to access <see cref="ProcessState" /> data.</param>
+    /// <param name="syncConfiguration">The <see cref="IOptions{SyncConfiguration}"/> containing the configuration object of UPS-Sync <see cref="SyncConfiguration"/>.</param>
     /// <param name="mapper">The mapper.</param>
     public SynchronizationService(
         IBus bus,

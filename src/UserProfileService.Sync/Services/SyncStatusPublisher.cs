@@ -53,16 +53,13 @@ public class SyncStatusPublisher : BackgroundService
     {
         _logger.EnterMethod();
 
-        using IServiceScope scope = _serviceProvider.CreateScope();
-        var synchronizationService = scope.ServiceProvider.GetRequiredService<ISynchronizationService>();
-
         while (!stoppingToken.IsCancellationRequested)
         {
             _logger.LogInfoMessage("Getting status from the UPS-Sync", LogHelpers.Arguments());
 
             try
             {
-                SyncStatus status = await synchronizationService.GetSyncStatusAsync(null, stoppingToken);
+                SyncStatus status = await GetSyncStatusAsync(stoppingToken);
                 await _bus.Publish(status, stoppingToken);
 
                 _logger.LogInfoMessage(
@@ -81,5 +78,16 @@ public class SyncStatusPublisher : BackgroundService
         }
 
         _logger.ExitMethod();
+    }
+
+    private async Task<SyncStatus> GetSyncStatusAsync(CancellationToken stoppingToken)
+    {
+        _logger.EnterMethod();
+
+        using IServiceScope scope = _serviceProvider.CreateScope();
+        var synchronizationService = scope.ServiceProvider.GetRequiredService<ISynchronizationService>();
+        SyncStatus status = await synchronizationService.GetSyncStatusAsync(null, stoppingToken);
+
+        return _logger.ExitMethod(status);
     }
 }
