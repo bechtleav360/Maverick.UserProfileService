@@ -57,6 +57,7 @@ namespace UserProfileService.Sync.UnitTests.Services
                 scheduleService.Object,
                 synchronizer.Object,
                 null,
+                syncOptions,
                 null);
 
             // Act
@@ -83,7 +84,7 @@ namespace UserProfileService.Sync.UnitTests.Services
 
             IOptions<SyncConfiguration> syncOptions = new OptionsWrapper<SyncConfiguration>(null);
 
-            var service = new SynchronizationService(null, logger, scheduleService.Object,null, null, null);
+            var service = new SynchronizationService(null, logger, scheduleService.Object,null, null,syncOptions, null);
 
             // Act
             await Assert.ThrowsAsync<InvalidOperationException>(
@@ -139,7 +140,7 @@ namespace UserProfileService.Sync.UnitTests.Services
                 .ReturnsAsync(new ProcessState());
             
             mock.Setup(
-                    m => m.Execute<ProcessState>(
+                    m => m.Execute(
                         It.IsAny<Func<LoadSagaRepositoryContext<ProcessState>, Task<ProcessState>>>(),
                         It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new ProcessState());
@@ -158,7 +159,7 @@ namespace UserProfileService.Sync.UnitTests.Services
             ILogger<SynchronizationService> logger = new LoggerFactory().CreateLogger<SynchronizationService>();
             var scheduleService = new Mock<IScheduleService>();
             
-            IOptions<SyncConfiguration> syncOptions = new OptionsWrapper<SyncConfiguration>(null);
+            IOptions<SyncConfiguration> syncOptions = new OptionsWrapper<SyncConfiguration>(new SyncConfiguration());
 
             var synchronizerMock = new Mock<ISyncProcessSynchronizer>();
 
@@ -207,7 +208,7 @@ namespace UserProfileService.Sync.UnitTests.Services
             
                         
             mock.Setup(
-                    m => m.Execute<ProcessState>(
+                    m => m.Execute(
                         It.IsAny<Func<LoadSagaRepositoryContext<ProcessState>, Task<ProcessState>>>(),
                         It.IsAny<CancellationToken>()))
                 .ReturnsAsync(process);
@@ -566,9 +567,27 @@ namespace UserProfileService.Sync.UnitTests.Services
             var testProcess = new Fixture().Build<ProcessState>().Create();
             testProcess.Process.FinishedAt = null;
 
-            yield return new object[] { new Tuple<int, IList<ProcessState>>(0, new List<ProcessState>()), true, new SyncStatus{ IsRunning = false} };
-            yield return new object[] { new Tuple<int, IList<ProcessState>>(1, new List<ProcessState>{testProcess}), false, new SyncStatus { IsRunning = true} };
+            yield return new object[] { new Tuple<int, IList<ProcessState>>(0, new List<ProcessState>()), true, new SyncStatus { IsRunning = false } };
+            yield return new object[] { new Tuple<int, IList<ProcessState>>(1, new List<ProcessState> { CreateProcessObject() }), false, new SyncStatus { IsRunning = true } };
+            yield return new object[]
+            {
+                new Tuple<int, IList<ProcessState>>(1, new List<ProcessState> {CreateProcessObject(lastUpdate:DateTime.UtcNow.AddDays(-2))}), true,
+                new SyncStatus {IsRunning = false}
+            };
 
+        }
+
+        private static ProcessState CreateProcessObject(DateTime? finishedAt = null, DateTime? lastUpdate = null)
+        {
+            ProcessState newProcess = new Fixture().Build<ProcessState>().Create();
+            newProcess.Process.FinishedAt = finishedAt;
+
+            if (lastUpdate != null)
+            {
+                newProcess.Process.UpdatedAt = lastUpdate.Value;
+            }
+            
+            return newProcess;
         }
 
        

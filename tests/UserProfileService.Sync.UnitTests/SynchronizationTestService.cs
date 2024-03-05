@@ -37,6 +37,7 @@ internal class SynchronizationTestService : SynchronizationService
         scheduleService,
         synchronizer,
         sagaRepositoryContextFactory,
+        syncOptions,
         mapper)
     {
     }
