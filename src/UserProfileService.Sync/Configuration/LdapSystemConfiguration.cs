@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using UserProfileService.Sync.Abstraction.Annotations;
-using UserProfileService.Sync.Abstraction.Configurations;
 using UserProfileService.Sync.Abstraction.Configurations.Implementations;
 using UserProfileService.Sync.Abstraction.Contracts;
 

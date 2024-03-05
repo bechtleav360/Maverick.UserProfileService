@@ -194,6 +194,7 @@ public class SyncStartup : DefaultStartupBase
         services.TryAddTransient<ISyncSourceSystemFactory, SyncSourceSystemFactory>();
         services.TryAddTransient<ISynchronizationService, SynchronizationService>();
         services.TryAddTransient<IScheduleService, ScheduleService>();
+        services.AddHostedService<SyncStatusPublisher>();
 
         services.TryAddTransient<ISyncModelComparerFactory, SyncModelComparerFactory>();
         services.TryAddSingleton(typeof(IConverterFactory<>), typeof(ExternalIdConverterFactory<>));
