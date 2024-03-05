@@ -8,11 +8,13 @@ using AutoMapper;
 using MassTransit;
 using Maverick.UserProfileService.Models.EnumModels;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using UserProfileService.Common.Logging;
 using UserProfileService.Common.Logging.Extensions;
 using UserProfileService.Common.V2.Utilities;
 using UserProfileService.Messaging.ArangoDb.Saga;
+using UserProfileService.Sync.Abstraction.Configurations;
 using UserProfileService.Sync.Abstraction.Contracts;
 using UserProfileService.Sync.Abstraction.Models;
 using UserProfileService.Sync.Abstractions;
@@ -36,6 +38,7 @@ public class SynchronizationService : ISynchronizationService
     private readonly ISagaRepositoryQueryContextFactory<ProcessState> _sagaRepositoryContextFactory;
     private readonly IScheduleService _scheduleService;
     private readonly ISyncProcessSynchronizer _synchronizer;
+    private readonly SyncConfiguration _syncConfiguration;
 
     /// <summary>
     ///     Create an instance of <see cref="SynchronizationService" />.
@@ -45,6 +48,7 @@ public class SynchronizationService : ISynchronizationService
     /// <param name="scheduleService">Service to manage sync schedule.</param>
     /// <param name="synchronizer"> The service used for process synchronization</param>
     /// <param name="sagaRepositoryContextFactory">Factory to create context to access <see cref="ProcessState" /> data.</param>
+    /// <param name="syncConfiguration">Factory to create context to access <see cref="ProcessState" /> data.</param>
     /// <param name="mapper">The mapper.</param>
     public SynchronizationService(
         IBus bus,
@@ -52,6 +56,7 @@ public class SynchronizationService : ISynchronizationService
         IScheduleService scheduleService,
         ISyncProcessSynchronizer synchronizer,
         ISagaRepositoryQueryContextFactory<ProcessState> sagaRepositoryContextFactory,
+        IOptions<SyncConfiguration> syncConfiguration,
         IMapper mapper)
     {
         _bus = bus;
@@ -59,8 +64,10 @@ public class SynchronizationService : ISynchronizationService
         _scheduleService = scheduleService;
         _sagaRepositoryContextFactory = sagaRepositoryContextFactory;
         _synchronizer = synchronizer;
+        _syncConfiguration = syncConfiguration.Value;
         _mapper = mapper;
     }
+
 
     private static Expression<Func<ProcessState, object>> GetSortExpression(string propertyName)
     {
@@ -192,7 +199,7 @@ public class SynchronizationService : ISynchronizationService
 
         if (processViews.Any() != true && isLockReleased)
         {
-            _logger.LogInfoMessage("No running sync processes, sync status will be send", LogHelpers.Arguments());
+            _logger.LogInfoMessage("No running sync processes, sync status will be returned", LogHelpers.Arguments());
 
             return
                 new SyncStatus
@@ -202,13 +209,21 @@ public class SynchronizationService : ISynchronizationService
                 };
         }
 
-        if (isLockReleased)
+        if (isLockReleased) // process is running longer than 15 min (default value)
         {
-            _logger.LogInfoMessage("Sync lock object is released, sync status will be send ", LogHelpers.Arguments());
+            _logger.LogInfoMessage("Sync lock object is released, sync status will be returned ", LogHelpers.Arguments());
 
-            foreach (ProcessView processView in processViews)
+            if (processViews.Any())
             {
-                await DeclareProcessAbortedAsync(processView.CorrelationId, cancellationToken);
+                bool areProcessesHanging = processViews.Any(
+                    p => p.LastActivity != null
+                         && DateTime.Compare(DateTime.UtcNow, p.LastActivity.Value.AddMinutes(_syncConfiguration.DelayBeforeTimeoutForStep)) > 0);
+
+                return new SyncStatus
+                {
+                    IsRunning = !areProcessesHanging,
+                    RequestId = requestId
+                };
             }
 
             return new SyncStatus
@@ -218,7 +233,7 @@ public class SynchronizationService : ISynchronizationService
             };
         }
 
-        _logger.LogInfoMessage("A synchronization is running, sync status will be send", LogHelpers.Arguments());
+        _logger.LogInfoMessage("A synchronization is running, sync status will be returned", LogHelpers.Arguments());
 
         return new SyncStatus
         {
