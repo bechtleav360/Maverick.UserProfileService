@@ -4,10 +4,13 @@ using UserProfileService.Messaging.Annotations;
 
 namespace UserProfileService.Validation.Abstractions.Message;
 
+// This change of ServiceName had to be made because several third-party systems need to connect to the corresponding Exchange.
+// The ServiceName property would be recalculated for each consumer of the respective third-party systems and
+// therefore would not be globally consistent.
 /// <summary>
 ///     Defines a message that triggered a validation process.
 /// </summary>
-[Message(Name = "validation-triggered", Version = "v1")]
+[Message(ServiceName = "validators")]
 public class ValidationTriggered : IEventCollectorMessage
 {
     /// <inheritdoc cref="IEventCollectorMessage" />
