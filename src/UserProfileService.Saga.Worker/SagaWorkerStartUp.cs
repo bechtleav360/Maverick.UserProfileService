@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using Marten;
 using MassTransit;
 using Maverick.Client.ArangoDb.Public.Configuration;
 using Maverick.UserProfileService.AggregateEvents.Common;
@@ -117,6 +118,8 @@ public class SagaWorkerStartup : DefaultStartupBase
         serviceCollection.TryAddSingleton<ISagaCommandFactory, DefaultSagaCommandFactory>();
     }
 
+    
+    
     /// <inheritdoc/>
     public override void RegisterTracing(IServiceCollection services, IConfiguration configuration)
     {
@@ -238,13 +241,7 @@ public class SagaWorkerStartup : DefaultStartupBase
             Configuration,
             Constants.EventStorage.MartenSectionName,
             typeof(IUserProfileServiceEvent),
-            (opt, provider) =>
-            {
-                opt.AddFirstLevelProjection(provider);
-                opt.AddSecondLevelProjection(provider);
-                opt.AddSecondLevelAssignmentProjection(provider);
-                opt.AddSecondLevelVolatileDataProjection(provider);
-            },
+            RegisterMartenProjections,
             SagaWorkerConverter.GetAllConvertersForMartenProjections());
 
         services.AddMartenVolatileUserSettingsStore(Configuration.GetSection(WellKnownConfigurationKeys.MartenSettings))
@@ -367,5 +364,21 @@ public class SagaWorkerStartup : DefaultStartupBase
                     .SetDelay(Configuration[WellKnownConfigKeys.HealthPushDelay]));
 
         services.AddNoneMessageInformer();
+    }
+
+    /// <summary>
+    ///   Handling the registration process for a Marten projection.
+    /// </summary>
+    /// <param name="opt">The options store is where the projections can be registered.</param>
+    /// <param name="provider">
+    ///     Defines a mechanism for retrieving a service object; that is, an object that provides custom
+    ///     support to other objects.
+    /// </param>
+    protected virtual void RegisterMartenProjections(StoreOptions opt, IServiceProvider provider)
+    {
+            opt.AddFirstLevelProjection(provider);
+            opt.AddSecondLevelProjection(provider);
+            opt.AddSecondLevelAssignmentProjection(provider);
+            opt.AddSecondLevelVolatileDataProjection(provider);
     }
 }
