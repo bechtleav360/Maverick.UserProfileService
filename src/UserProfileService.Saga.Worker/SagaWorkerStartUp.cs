@@ -112,6 +112,12 @@ public class SagaWorkerStartup : DefaultStartupBase
                                             // Optional, default is "saga_state_{typeof(TSaga).Name}"
                                             r.CollectionName = "SagaWorker_Command_StateMachine";
                                         });
+
+                                 bus.AddConfigureEndpointsCallback(
+                                     (name, cfg) =>
+                                     {
+                                         cfg.DiscardFaultedMessages();
+                                     });
                              })
                          .AddTransient<ICommandServiceFactory, CommandServiceFactory>();
 
@@ -195,7 +201,7 @@ public class SagaWorkerStartup : DefaultStartupBase
         
         RegisterMessaging(services, arangoConfigurationSection);
         RegisterTracing(services, Configuration);
-
+        
         // first level projection
         services.AddFirstLevelProjectionService(
             b =>
