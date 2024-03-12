@@ -20,9 +20,8 @@ namespace UserProfileService.Adapter.Marten.Implementations;
 /// <summary>
 ///     It represents the implementation of <see cref="IVolatileUserSettingsStore" /> that uses Marten with PostgreSQL.
 /// </summary>
-internal class MartenVolatileUserSettingsStore : IVolatileUserSettingsStore, IVolatileDataReadStore, IDisposable
+internal class MartenVolatileUserSettingsStore : IVolatileUserSettingsStore, IVolatileDataReadStore
 {
-    private readonly IDocumentSession _documentSession;
     private readonly IVolatileDataStore _documentStore;
     private readonly ILogger<MartenVolatileUserSettingsStore> _logger;
 
@@ -35,7 +34,6 @@ internal class MartenVolatileUserSettingsStore : IVolatileUserSettingsStore, IVo
         IVolatileDataStore documentStore,
         ILogger<MartenVolatileUserSettingsStore> logger)
     {
-        _documentSession = documentStore.LightweightSession();
         _documentStore = documentStore;
         _logger = logger;
     }
@@ -72,9 +70,9 @@ internal class MartenVolatileUserSettingsStore : IVolatileUserSettingsStore, IVo
                 userSettingSectionName.AsArgumentList());
         }
 
-        IDocumentSession documentSession = transaction != null
+        await using IDocumentSession documentSession = transaction != null
             ? _documentStore.LightweightSession(SessionOptions.ForTransaction(transaction))
-            : _documentSession;
+            : _documentStore.LightweightSession(); ;
 
         UserSettingSectionDbModel? existingSection = await documentSession.Query<UserSettingSectionDbModel>()
             .FirstOrDefaultAsync(
@@ -162,12 +160,14 @@ internal class MartenVolatileUserSettingsStore : IVolatileUserSettingsStore, IVo
     {
         _logger.EnterMethod();
 
-        if (_documentSession.Connection == null)
+        await using var outerSession = _documentStore.LightweightSession();
+
+        if (outerSession.Connection == null)
         {
             throw new TransactionException("cannot start transaction, because a connection object is missing.");
         }
 
-        await using NpgsqlTransaction transaction = await _documentSession
+        await using NpgsqlTransaction transaction = await outerSession
             .Connection
             .BeginTransactionAsync(cancellationToken);
 
@@ -207,6 +207,8 @@ internal class MartenVolatileUserSettingsStore : IVolatileUserSettingsStore, IVo
     {
         _logger.EnterMethod();
 
+        await using IDocumentSession documentSession = _documentStore.LightweightSession();
+
         if (string.IsNullOrWhiteSpace(userId))
         {
             throw new ArgumentException(null, nameof(userId));
@@ -223,7 +225,7 @@ internal class MartenVolatileUserSettingsStore : IVolatileUserSettingsStore, IVo
             "Trying to get all section names for the userId: {userId} from database",
             userId.AsArgumentList());
 
-        IEnumerable<UserSettingSectionDbModel> sectionObjects = await _documentSession
+        IEnumerable<UserSettingSectionDbModel> sectionObjects = await documentSession
             .Query<UserSettingObjectDbModel>()
             .Where(u => u.UserId == userId)
             .Select(p => p.UserSettingSection)
@@ -251,6 +253,8 @@ internal class MartenVolatileUserSettingsStore : IVolatileUserSettingsStore, IVo
     {
         _logger.EnterMethod();
 
+        await using IDocumentSession documentSession = _documentStore.LightweightSession();
+
         if (string.IsNullOrWhiteSpace(userId))
         {
             throw new ArgumentException("Value cannot be null or whitespace.", nameof(userId));
@@ -265,15 +269,15 @@ internal class MartenVolatileUserSettingsStore : IVolatileUserSettingsStore, IVo
             "Trying to delete all setting objects of section {sectionName} related to user {userId}.",
             LogHelpers.Arguments(userSettingSectionName, userId));
 
-        _documentSession
+        documentSession
             .DeleteWhere<UserSettingObjectDbModel>(
                 p => p.UserId == userId
                     && p.UserSettingSection.Name.EqualsIgnoreCase(userSettingSectionName));
 
-        await _documentSession.SaveChangesAsync(cancellationToken);
+        await documentSession.SaveChangesAsync(cancellationToken);
 
         await EnsureEmptySectionsAreDeletedAsync(
-            _documentSession,
+            documentSession,
             cancellationToken);
 
         _logger.LogInfoMessage(
@@ -377,6 +381,8 @@ internal class MartenVolatileUserSettingsStore : IVolatileUserSettingsStore, IVo
     {
         _logger.EnterMethod();
 
+        await using IDocumentSession documentSession = _documentStore.LightweightSession();
+
         if (string.IsNullOrWhiteSpace(userId))
         {
             throw new ArgumentException("Value cannot be null or whitespace.", nameof(userId));
@@ -396,17 +402,17 @@ internal class MartenVolatileUserSettingsStore : IVolatileUserSettingsStore, IVo
             "Trying to delete setting object {objectId} of section {sectionName} related to user {userId}.",
             LogHelpers.Arguments(userSettingsId, userSettingsSectionName, userId));
 
-        _documentSession
+        documentSession
             .DeleteWhere<UserSettingObjectDbModel>(
                 p =>
                     p.UserId == userId
                     && p.UserSettingSection.Name.EqualsIgnoreCase(userSettingsSectionName)
                     && p.Id == userSettingsId);
 
-        await _documentSession.SaveChangesAsync(cancellationToken);
+        await documentSession.SaveChangesAsync(cancellationToken);
 
         await EnsureEmptySectionsAreDeletedAsync(
-            _documentSession,
+            documentSession,
             cancellationToken);
 
         _logger.LogInfoMessage(
@@ -425,6 +431,8 @@ internal class MartenVolatileUserSettingsStore : IVolatileUserSettingsStore, IVo
         CancellationToken cancellationToken = default)
     {
         _logger.EnterMethod();
+
+        await using IDocumentSession documentSession = _documentStore.LightweightSession();
 
         if (string.IsNullOrWhiteSpace(userId))
         {
@@ -449,7 +457,7 @@ internal class MartenVolatileUserSettingsStore : IVolatileUserSettingsStore, IVo
         }
 
         UserSettingObjectDbModel? userSettingObjectOld =
-            await _documentSession.Query<UserSettingObjectDbModel>()
+            await documentSession.Query<UserSettingObjectDbModel>()
                 .FirstOrDefaultAsync(
                     p => p.Id.EqualsIgnoreCase(userSettingsId)
                         && p.UserSettingSection.Name.EqualsIgnoreCase(userSettingsSectionName)
@@ -479,9 +487,9 @@ internal class MartenVolatileUserSettingsStore : IVolatileUserSettingsStore, IVo
             "The new object that updated the old one: {userSettingObjectNew}",
             LogHelpers.Arguments(userSettingObjectNew.ToLogString()));
 
-        _documentSession.Update(userSettingObjectNew);
+        documentSession.Update(userSettingObjectNew);
 
-        await _documentSession.SaveChangesAsync(cancellationToken);
+        await documentSession.SaveChangesAsync(cancellationToken);
 
         return _logger.ExitMethod(userSettingObjectNew);
     }
@@ -494,6 +502,8 @@ internal class MartenVolatileUserSettingsStore : IVolatileUserSettingsStore, IVo
         CancellationToken cancellationToken = default)
     {
         _logger.EnterMethod();
+
+        await using IDocumentSession documentSession = _documentStore.LightweightSession();
 
         if (paginationAndSorting == null)
         {
@@ -517,7 +527,7 @@ internal class MartenVolatileUserSettingsStore : IVolatileUserSettingsStore, IVo
                 LogHelpers.Arguments(userId, userSettingsSectionName));
         }
 
-        List<UserSettingObjectDbModel> resultItems = (await _documentSession.Query<UserSettingObjectDbModel>()
+        List<UserSettingObjectDbModel> resultItems = (await documentSession.Query<UserSettingObjectDbModel>()
                 .Where(
                     p => p.UserId == userId
                         && p.UserSettingSection.Name == userSettingsSectionName)
@@ -542,6 +552,8 @@ internal class MartenVolatileUserSettingsStore : IVolatileUserSettingsStore, IVo
     {
         _logger.EnterMethod();
 
+        await using IDocumentSession documentSession = _documentStore.LightweightSession();
+
         if (paginationAndSorting == null)
         {
             throw new ArgumentNullException(nameof(paginationAndSorting));
@@ -559,7 +571,7 @@ internal class MartenVolatileUserSettingsStore : IVolatileUserSettingsStore, IVo
                 LogHelpers.Arguments(userId));
         }
 
-        List<UserSettingObjectDbModel> allUserObjects = (await _documentSession.Query<UserSettingObjectDbModel>()
+        List<UserSettingObjectDbModel> allUserObjects = (await documentSession.Query<UserSettingObjectDbModel>()
                 .Where(p => p.UserId == userId)
                 .ApplyOptions(paginationAndSorting, cancellationToken))
             .ToList();
@@ -590,12 +602,14 @@ internal class MartenVolatileUserSettingsStore : IVolatileUserSettingsStore, IVo
     {
         _logger.EnterMethod();
 
+        await using IDocumentSession documentSession = _documentStore.LightweightSession();
+
         if (_logger.IsEnabledForDebug())
         {
             _logger.LogDebugMessage("Checking if user {userId} exists.", userId.AsArgumentList());
         }
 
-        bool userExists = await _documentSession.Query<UserDbModel>()
+        bool userExists = await documentSession.Query<UserDbModel>()
             .AnyAsync(u => u.Id == userId, cancellationToken);
 
         return _logger.ExitMethod(userExists);
@@ -610,6 +624,8 @@ internal class MartenVolatileUserSettingsStore : IVolatileUserSettingsStore, IVo
     {
         _logger.EnterMethod();
 
+        await using IDocumentSession documentSession = _documentStore.LightweightSession();
+
         if (_logger.IsEnabledForDebug())
         {
             _logger.LogDebugMessage(
@@ -617,7 +633,7 @@ internal class MartenVolatileUserSettingsStore : IVolatileUserSettingsStore, IVo
                 LogHelpers.Arguments(userId, sectionName, objectId));
         }
 
-        bool objectExists = await _documentSession.Query<UserSettingObjectDbModel>()
+        bool objectExists = await documentSession.Query<UserSettingObjectDbModel>()
             .AnyAsync(
                 o => o.Id == objectId
                     && o.UserId == userId
@@ -625,12 +641,5 @@ internal class MartenVolatileUserSettingsStore : IVolatileUserSettingsStore, IVo
                 cancellationToken);
 
         return _logger.ExitMethod(objectExists);
-    }
-
-    /// <inheritdoc />
-    public void Dispose()
-    {
-        _documentSession.Connection?.Close();
-        _documentSession.Dispose();
     }
 }
