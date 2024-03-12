@@ -14,7 +14,6 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Http;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Converters;
 using Prometheus;
@@ -40,7 +39,6 @@ using UserProfileService.Sync.Abstraction.Configurations;
 using UserProfileService.Sync.Abstraction.Converters;
 using UserProfileService.Sync.Abstraction.Factories;
 using UserProfileService.Sync.Abstractions;
-using UserProfileService.Sync.Configuration;
 using UserProfileService.Sync.ConfigurationProvider;
 using UserProfileService.Sync.Converter;
 using UserProfileService.Sync.Extensions;
@@ -310,6 +308,11 @@ public class SyncStartup : DefaultStartupBase
                        });
 
                 bus.AddConsumer<HealthCheckMessageConsumer>().Endpoint(e => { e.Temporary = true; });
+                bus.AddConfigureEndpointsCallback(
+                    (name, cfg) =>
+                    {
+                        cfg.DiscardFaultedMessages();
+                    });
             });
     }
 
