@@ -171,7 +171,7 @@ public class ProjectionReadService : IProjectionReadService, IValidationReadServ
                         FieldName = nameof(UserBasic.Email),
                         Values = new[] { email },
                         BinaryOperator = BinaryOperator.And,
-                        Operator = FilterOperator.Equals
+                        Operator = FilterOperator.EqualsCaseInsensitive
                     }
                 }
             }
@@ -218,7 +218,7 @@ public class ProjectionReadService : IProjectionReadService, IValidationReadServ
                         Values = new[] { name, displayName },
                         BinaryOperator = BinaryOperator.Or,
                         Operator = ignoreCase
-                            ? FilterOperator.Contains
+                            ? FilterOperator.EqualsCaseInsensitive
                             : FilterOperator.Equals
                     },
                     new Maverick.UserProfileService.Models.RequestModels.Definitions
@@ -227,7 +227,7 @@ public class ProjectionReadService : IProjectionReadService, IValidationReadServ
                         Values = new[] { name, displayName },
                         BinaryOperator = BinaryOperator.Or,
                         Operator = ignoreCase
-                            ? FilterOperator.Contains
+                            ? FilterOperator.EqualsCaseInsensitive
                             : FilterOperator.Equals
                     }
                 }

@@ -145,7 +145,7 @@ public class SagaEntityProcessor<TSyncEntity> : ISagaEntityProcessor<TSyncEntity
                         Values = new[] { group.Name, group.DisplayName },
                         BinaryOperator = BinaryOperator.Or,
                         Operator = ignoreCase
-                            ? FilterOperator.Contains
+                            ? FilterOperator.EqualsCaseInsensitive
                             : FilterOperator.Equals
                     },
                     new Definitions
@@ -154,7 +154,7 @@ public class SagaEntityProcessor<TSyncEntity> : ISagaEntityProcessor<TSyncEntity
                         Values = new[] { group.Name, group.DisplayName },
                         BinaryOperator = BinaryOperator.Or,
                         Operator = ignoreCase
-                            ? FilterOperator.Contains
+                            ? FilterOperator.EqualsCaseInsensitive
                             : FilterOperator.Equals
                     },
                     externalIdDefinition
@@ -206,7 +206,8 @@ public class SagaEntityProcessor<TSyncEntity> : ISagaEntityProcessor<TSyncEntity
                     {
                         FieldName = nameof(UserSync.Email),
                         Values = new[] { user.Email },
-                        BinaryOperator = BinaryOperator.And
+                        BinaryOperator = BinaryOperator.And,
+                        Operator = FilterOperator.EqualsCaseInsensitive
                     });
             }
         }

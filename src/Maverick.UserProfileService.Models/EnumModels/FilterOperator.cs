@@ -48,6 +48,12 @@ namespace Maverick.UserProfileService.Models.EnumModels
         ///     Represents the greater than equals operator.
         /// </summary>
         [FilterSerialize(">=")]
-        GreaterThanEquals
+        GreaterThanEquals,
+
+        /// <summary>
+        ///     Represents the equals operator, that ignores the case.
+        /// </summary>
+        [FilterSerialize("~=")]
+        EqualsCaseInsensitive
     }
 }
