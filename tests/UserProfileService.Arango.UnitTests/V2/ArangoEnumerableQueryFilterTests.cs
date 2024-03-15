@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text.RegularExpressions;
+using FluentAssertions;
 using Maverick.UserProfileService.Models.EnumModels;
 using Maverick.UserProfileService.Models.Models;
 using Maverick.UserProfileService.Models.RequestModels;
@@ -528,6 +529,37 @@ namespace UserProfileService.Arango.UnitTests.V2
                 + "\\[\\*\\s+RETURN\\s+LIKE\\(insideProperty\\.Name,CONCAT\\(\"%\",CURRENT,\"%\"\\),true\\)\\]ANY==true\\)\\s*ANY\\s*==\\s*true\\)\\)\\s*"
                 + "LIMIT\\s+0,100\\s+RETURN\\s+u0",
                 text);
+        }
+
+        [Fact]
+        public void Get_all_users_with_a_specified_email_case_insensitive_should_work()
+        {
+            var startingPoint =
+                new ArangoDbEnumerable<IProfileEntityModel>(DefaultModelConstellation.CreateNew().ModelsInfo);
+
+            var options = new QueryObject
+                          {
+                              Filter = new Filter
+                                       {
+                                           Definition = new List<Definitions>
+                                                        {
+                                                            new Definitions
+                                                            {
+                                                                FieldName = nameof(UserView.Email),
+                                                                Values = new[] { "abc@mail.com" },
+                                                                BinaryOperator = BinaryOperator.Or,
+                                                                Operator = FilterOperator.EqualsCaseInsensitive
+                                                            }
+                                                        }
+                                       }
+                          };
+
+            string text = startingPoint
+                          .UsingOptions(options)
+                          .ToQuery(CollectionScope.Query);
+            
+            text.Should().MatchRegex(
+                @$"FOR\s+u0\s+IN\s+{"profilesQuery".GetDefaultCollectionNameInTest()}\s+FILTER\s*\(\(u0\.Kind\s*==\s*""User""\s*AND\s*\[\s*""abc@mail\.com""\s*\]\s*\[\s*\*\s+RETURN\s+LOWER\(u0\.Email\)\s*==\s*LOWER\(CURRENT\)\]ANY\s*==\s*true\)\)\s*LIMIT\s+0,100\s+RETURN\s+u0");
         }
 
         [Fact]

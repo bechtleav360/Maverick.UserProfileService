@@ -884,6 +884,7 @@ public sealed class ArangoDbFilterTreeVisitor : ArangoDbTreeVisitorBase
 
         bool isContainsQuery =
             operatorArgument?.RelatedObject is FilterOperator.Contains;
+        bool isEqualsCi = operatorArgument?.RelatedObject is FilterOperator.EqualsCaseInsensitive;
 
         // comparison value will be an IEnumerable<string>, i.e. ["2","8","7"]
         // the field name will be passed due of better exception handling
@@ -911,6 +912,17 @@ public sealed class ArangoDbFilterTreeVisitor : ArangoDbTreeVisitorBase
         {
             _strings.Append(
                 GetAqlOfContainsOperatorInContainsMethod(
+                    comparisonExpression?.Result,
+                    propertyNameExpression?.Result.GetModifiedAqlString(conversionMethod),
+                    useAllInQuery));
+
+            return;
+        }
+
+        if (isEqualsCi && CheckTypeCanBeContained(comparisonExpression?.Type))
+        {
+            _strings.Append(
+                GetAqlOfEqualsCiOperatorInContainsMethod(
                     comparisonExpression?.Result,
                     propertyNameExpression?.Result.GetModifiedAqlString(conversionMethod),
                     useAllInQuery));
@@ -997,6 +1009,32 @@ public sealed class ArangoDbFilterTreeVisitor : ArangoDbTreeVisitorBase
             "[* RETURN LIKE(",
             propertyNameExpression,
             ",CONCAT(\"%\",CURRENT,\"%\"),true)]",
+            useAllInQuery
+                ? "ALL"
+                : "ANY",
+            "==true");
+    }
+
+    private static string GetAqlOfEqualsCiOperatorInContainsMethod(
+        string comparisonExpression,
+        string propertyNameExpression,
+        bool useAllInQuery)
+    {
+        if (string.IsNullOrEmpty(comparisonExpression) || string.IsNullOrEmpty(propertyNameExpression))
+        {
+            return string.Empty;
+        }
+
+        // ArangoDb query should look like:
+        // FOR x IN Whatever FILTER ["input", "values"][* RETURN UPPER(x.Name)==UPPER(CURRENT)] ANY == true RETURN x
+        //                          °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+        // The underlined filter query should be returned by this method. Don't forget to escape % and _ in input values!
+
+        return string.Concat(
+            comparisonExpression,
+            "[* RETURN LOWER(",
+            propertyNameExpression,
+            ")==LOWER(CURRENT)]",
             useAllInQuery
                 ? "ALL"
                 : "ANY",
