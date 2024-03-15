@@ -239,7 +239,7 @@ internal class RepoValidationService : IRepoValidationService
 
         var validationResult = new ValidationAttribute(
             nameof(UserBasic.Email),
-            "Email is already used by another user.");
+            $"Email is already used by another user. Used E-Mail-Address: {email}.");
 
         return _logger.ExitMethod(new ValidationResult(validationResult));
     }
