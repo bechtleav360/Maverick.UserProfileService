@@ -5,6 +5,7 @@ services:
     image: arangodb:latest
     ports:
       - 8529:8529
+    container_name: arangodb
     environment:
       - ARANGO_ROOT_PASSWORD=$ARANGO_ROOT_PASSWORD
     volumes:
@@ -19,6 +20,7 @@ services:
 
   arangodatabasecreator:
       image: alpine:latest
+      container_name: arangodatabasecreator
       depends_on:
         arangodb:
           condition: service_healthy
@@ -57,6 +59,7 @@ services:
 
   postgres:
     image: postgres
+    container_name: postgres
     restart: always
     environment:
       POSTGRES_USER: $POSTGRES_USER
@@ -75,6 +78,7 @@ services:
 
   redis:
     image: redis:6.2-alpine
+    container_name: redis
     restart: always
     ports:
       - '6379:6379'
@@ -89,7 +93,7 @@ services:
 
   rabbitmq:
     image: rabbitmq:3-management-alpine
-    container_name: "rabbitmq"
+    container_name: rabbitmq
     ports:
       - 5672:5672
       - 15672:15672
@@ -131,6 +135,7 @@ services:
         condition: service_healthy
     
   userprofile-saga-worker:
+    container_name: userprofile-saga-worker
     build:
       context: $WORKING_DIRECTORY_CONTEXT
       dockerfile: src/UserProfileService.Saga.Worker/Dockerfile
@@ -150,6 +155,7 @@ services:
         condition: service_healthy
 
   userprofile-sync:
+    container_name: userprofile-sync
     build:
       context: $WORKING_DIRECTORY_CONTEXT
       dockerfile: src/UserProfileService.Sync/Dockerfile

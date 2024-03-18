@@ -5,6 +5,7 @@ services:
     image: arangodb:latest
     ports:
       - 8529:8529
+    container_name: arangodb
     environment:
       - ARANGO_ROOT_PASSWORD=$ARANGO_ROOT_PASSWORD
     volumes:
@@ -22,6 +23,7 @@ services:
       depends_on:
         arangodb:
           condition: service_healthy
+      container_name: arangodatabasecreator
       environment:
         ARANGO_ROOT_USER_NAME: $ARANGO_ROOT_USER_NAME
         ARANGO_ROOT_PASSWORD: $ARANGO_ROOT_PASSWORD
@@ -58,6 +60,7 @@ services:
   postgres:
     image: postgres
     restart: always
+    container_name: postgres
     environment:
       POSTGRES_USER: $POSTGRES_USER
       POSTGRES_PASSWORD: $POSTGRES_PASSWORD
@@ -76,6 +79,7 @@ services:
   redis:
     image: redis:6.2-alpine
     restart: always
+    container_name: redis
     ports:
       - '6379:6379'
     command: redis-server --save 20 1 --loglevel warning
@@ -89,7 +93,7 @@ services:
 
   rabbitmq:
     image: rabbitmq:3-management-alpine
-    container_name: "rabbitmq"
+    container_name: rabbitmq
     ports:
       - 5672:5672
       - 15672:15672
@@ -110,6 +114,7 @@ services:
   userprofile-api:
     env_file:
       - 'userprofile-service.env'
+    container_name: userprofile-api
     ports: 
       - 5010:8000
     build:
@@ -133,6 +138,7 @@ services:
       dockerfile: src/UserProfileService.Saga.Worker/Dockerfile
       tags:
         - "userprofile-saga-worker:develop"
+    container_name: userprofile-saga-worker
     env_file:
       - 'userprofile-saga-worker.env'
     environment:
@@ -160,6 +166,7 @@ services:
       dockerfile: src/UserProfileService.Sync/Dockerfile
       tags:
         - "userprofile-sync:develop"
+    container_name: userprofile-sync
     environment:
       - PROFILESTORAGE__CLUSTERCONFIGURATION__DOCUMENTCOLLECTIONS__*__NUMBEROFSHARDS=3
       - PROFILESTORAGE__CLUSTERCONFIGURATION__DOCUMENTCOLLECTIONS__*__REPLICATIONFACTOR=2
