@@ -1,4 +1,5 @@
-﻿using Marten;
+﻿using JasperFx.CodeGeneration;
+using Marten;
 using Marten.Services.Json;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using UserProfileService.Adapter.Marten.Abstractions;
 using UserProfileService.Adapter.Marten.DbBuilders;
+using UserProfileService.Adapter.Marten.EntityModels;
 using UserProfileService.Adapter.Marten.Helpers;
 using UserProfileService.Adapter.Marten.Implementations;
 using UserProfileService.Adapter.Marten.Options;
@@ -64,7 +66,7 @@ public static class MartenAdapterServiceCollectionExtensions
                     }
 
                     options.Connection(volatileStoreOptions.ConnectionString);
-
+                    
                     if (!string.IsNullOrWhiteSpace(volatileStoreOptions.DatabaseSchema))
                     {
                         logger?.LogInfoMessage(
@@ -77,7 +79,15 @@ public static class MartenAdapterServiceCollectionExtensions
                     options.UseDefaultSerialization(serializerType: SerializerType.SystemTextJson);
 
                     options.Schema.Include<UserSettingsRegistry>();
-
+                    
+                    // Register document types beforehand to prevent duplicate runtime code generation
+                    // when multiple user settings messages are queued up when launching.
+                    options.RegisterDocumentType<UserSettingObjectDbModel>();
+                    options.RegisterDocumentType<UserSettingSectionDbModel>();
+                    options.RegisterDocumentType<UserDbModel>();
+                    // GeneratedCodeMode needs to be set to Auto for this to take effect.
+                    options.GeneratedCodeMode = TypeLoadMode.Auto;
+                    
                     return options;
                 })
             .ApplyAllDatabaseChangesOnStartup();
