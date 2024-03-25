@@ -75,12 +75,12 @@ namespace UserProfileService.Saga.Validation.UnitTests
         [Theory]
         [InlineData("test", null)]
         [InlineData(null, "test")]
-        public void ValidateDuplicateFunctionAsync_Should_Throw_ArgumentNullException_IfRoleOrOrganizationIdIsNull(
+        public async Task ValidateDuplicateFunctionAsync_Should_Throw_ArgumentNullException_IfRoleOrOrganizationIdIsNull(
             string roleId,
             string oeId)
         {
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(() => _service.ValidateDuplicateFunctionAsync(roleId, oeId));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _service.ValidateDuplicateFunctionAsync(roleId, oeId));
         }
 
         [Theory]
@@ -88,12 +88,12 @@ namespace UserProfileService.Saga.Validation.UnitTests
         [InlineData("test", " ")]
         [InlineData("", "test")]
         [InlineData(" ", "test")]
-        public void ValidateDuplicateFunctionAsync_Should_Throw_ArgumentNullException_IfRoleOrOrganizationIdIsEmpty(
+        public async Task ValidateDuplicateFunctionAsync_Should_Throw_ArgumentNullException_IfRoleOrOrganizationIdIsEmpty(
             string roleId,
             string oeId)
         {
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentException>(() => _service.ValidateDuplicateFunctionAsync(roleId, oeId));
+            await Assert.ThrowsAsync<ArgumentException>(() => _service.ValidateDuplicateFunctionAsync(roleId, oeId));
         }
 
         #endregion
@@ -137,19 +137,19 @@ namespace UserProfileService.Saga.Validation.UnitTests
         }
 
         [Fact]
-        public void ValidateRoleExistsAsync_Should_Throw_ArgumentNullException_IfIdIsNull()
+        public async Task ValidateRoleExistsAsync_Should_Throw_ArgumentNullException_IfIdIsNull()
         {
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(() => _service.ValidateRoleExistsAsync(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _service.ValidateRoleExistsAsync(null));
         }
 
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
-        public void ValidateRoleExistsAsync_Should_Throw_ArgumentNullException_IfIdIsEmpty(string id)
+        public async Task  ValidateRoleExistsAsync_Should_Throw_ArgumentNullException_IfIdIsEmpty(string id)
         {
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentException>(() => _service.ValidateRoleExistsAsync(id));
+            await Assert.ThrowsAsync<ArgumentException>(() => _service.ValidateRoleExistsAsync(id));
         }
 
         #endregion
@@ -195,19 +195,19 @@ namespace UserProfileService.Saga.Validation.UnitTests
         }
 
         [Fact]
-        public void ValidateOrganizationExistsAsync_Should_Throw_ArgumentNullException_IfIdIsNull()
+        public async Task ValidateOrganizationExistsAsync_Should_Throw_ArgumentNullException_IfIdIsNull()
         {
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(() => _service.ValidateOrganizationExistsAsync(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _service.ValidateOrganizationExistsAsync(null));
         }
 
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
-        public void ValidateOrganizationExistsAsync_Should_Throw_ArgumentNullException_IfIdIsEmpty(string id)
+        public async Task ValidateOrganizationExistsAsync_Should_Throw_ArgumentNullException_IfIdIsEmpty(string id)
         {
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentException>(() => _service.ValidateOrganizationExistsAsync(id));
+            await Assert.ThrowsAsync<ArgumentException>(() => _service.ValidateOrganizationExistsAsync(id));
         }
 
         #endregion
@@ -251,19 +251,19 @@ namespace UserProfileService.Saga.Validation.UnitTests
         }
 
         [Fact]
-        public void ValidateFunctionExistsAsync_Should_Throw_ArgumentNullException_IfIdIsNull()
+        public async Task ValidateFunctionExistsAsync_Should_Throw_ArgumentNullException_IfIdIsNull()
         {
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(() => _service.ValidateFunctionExistsAsync(null));
+           await Assert.ThrowsAsync<ArgumentNullException>(() => _service.ValidateFunctionExistsAsync(null));
         }
 
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
-        public void ValidateFunctionExistsAsync_Should_Throw_ArgumentNullException_IfIdIsEmpty(string id)
+        public async Task ValidateFunctionExistsAsync_Should_Throw_ArgumentNullException_IfIdIsEmpty(string id)
         {
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentException>(() => _service.ValidateFunctionExistsAsync(id));
+            await Assert.ThrowsAsync<ArgumentException>(() => _service.ValidateFunctionExistsAsync(id));
         }
 
         #endregion
@@ -307,19 +307,19 @@ namespace UserProfileService.Saga.Validation.UnitTests
         }
 
         [Fact]
-        public void ValidateTagExistsAsync_Should_Throw_ArgumentNullException_IfIdIsNull()
+        public async Task ValidateTagExistsAsync_Should_Throw_ArgumentNullException_IfIdIsNull()
         {
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(() => _service.ValidateTagExistsAsync(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _service.ValidateTagExistsAsync(null));
         }
 
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
-        public void ValidateTagExistsAsync_Should_Throw_ArgumentNullException_IfIdIsEmpty(string id)
+        public async Task ValidateTagExistsAsync_Should_Throw_ArgumentNullException_IfIdIsEmpty(string id)
         {
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentException>(() => _service.ValidateTagExistsAsync(id));
+            await Assert.ThrowsAsync<ArgumentException>(() => _service.ValidateTagExistsAsync(id));
         }
 
         #endregion
@@ -380,10 +380,10 @@ namespace UserProfileService.Saga.Validation.UnitTests
         }
 
         [Fact]
-        public void ValidateTagsExistAsync_Should_Throw_ArgumentNullException_IfIdIsNull()
+        public async Task ValidateTagsExistAsync_Should_Throw_ArgumentNullException_IfIdIsNull()
         {
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(() => _service.ValidateTagsExistAsync(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _service.ValidateTagsExistAsync(null));
         }
 
         #endregion
@@ -481,19 +481,19 @@ namespace UserProfileService.Saga.Validation.UnitTests
         }
 
         [Fact]
-        public void ValidateUserEmailExistsAsync_Should_Throw_ArgumentNullException_IfEmailIsNull()
+        public async Task ValidateUserEmailExistsAsync_Should_Throw_ArgumentNullException_IfEmailIsNull()
         {
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(() => _service.ValidateUserEmailExistsAsync(null, "id123"));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _service.ValidateUserEmailExistsAsync(null, "id123"));
         }
 
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
-        public void ValidateUserEmailExistsAsync_Should_Throw_ArgumentNullException_IfEmailIsEmpty(string email)
+        public async Task ValidateUserEmailExistsAsync_Should_Throw_ArgumentNullException_IfEmailIsEmpty(string email)
         {
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentException>(() => _service.ValidateUserEmailExistsAsync(email, "id123"));
+            await Assert.ThrowsAsync<ArgumentException>(() => _service.ValidateUserEmailExistsAsync(email, "id123"));
         }
 
         #endregion
@@ -543,10 +543,10 @@ namespace UserProfileService.Saga.Validation.UnitTests
         }
 
         [Fact]
-        public void ValidateObjectExistsAsync_Should_Throw_ArgumentNullException_IfObjectIdentIsNull()
+        public async Task ValidateObjectExistsAsync_Should_Throw_ArgumentNullException_IfObjectIdentIsNull()
         {
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(() => _service.ValidateObjectExistsAsync(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _service.ValidateObjectExistsAsync(null));
         }
 
         #endregion
@@ -602,10 +602,10 @@ namespace UserProfileService.Saga.Validation.UnitTests
         }
 
         [Fact]
-        public void ValidateObjectExistsAsync_Should_Throw_ArgumentNullException_IfProfileIdentIsNull()
+        public async Task ValidateObjectExistsAsync_Should_Throw_ArgumentNullException_IfProfileIdentIsNull()
         {
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(() => _service.ValidateProfileExistsAsync(null));
+           await Assert.ThrowsAsync<ArgumentNullException>(() => _service.ValidateProfileExistsAsync(null));
         }
 
         #endregion
@@ -670,10 +670,10 @@ namespace UserProfileService.Saga.Validation.UnitTests
         }
 
         [Fact]
-        public void ValidateObjectsExistAsync_Should_Throw_ArgumentNullException_IfObjectIdentsListIsNull()
+        public async Task ValidateObjectsExistAsync_Should_Throw_ArgumentNullException_IfObjectIdentsListIsNull()
         {
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(() => _service.ValidateObjectsExistAsync(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _service.ValidateObjectsExistAsync(null));
         }
 
         #endregion
@@ -767,27 +767,27 @@ namespace UserProfileService.Saga.Validation.UnitTests
         }
 
         [Fact]
-        public void ValidateClientSettingsExistsAsync_Should_Throw_ArgumentNullException_IfProfileIsNull()
+        public async Task ValidateClientSettingsExistsAsync_Should_Throw_ArgumentNullException_IfProfileIsNull()
         {
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(() => _service.ValidateClientSettingsExistsAsync(null, "oe1"));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _service.ValidateClientSettingsExistsAsync(null, "oe1"));
         }
 
         [Fact]
-        public void ValidateClientSettingsExistsAsync_Should_Throw_ArgumentNullException_IfKeyIsNull()
+        public async Task ValidateClientSettingsExistsAsync_Should_Throw_ArgumentNullException_IfKeyIsNull()
         {
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(
+            await Assert.ThrowsAsync<ArgumentNullException>(
                 () => _service.ValidateClientSettingsExistsAsync(new ProfileIdent("id", ProfileKind.User), null));
         }
 
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
-        public void ValidateClientSettingsExistsAsync_Should_Throw_ArgumentNullException_IfKeyIsEmpty(string key)
+        public async Task ValidateClientSettingsExistsAsync_Should_Throw_ArgumentNullException_IfKeyIsEmpty(string key)
         {
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentException>(
+            await Assert.ThrowsAsync<ArgumentException>(
                 () => _service.ValidateClientSettingsExistsAsync(new ProfileIdent("id", ProfileKind.User), key));
         }
 
@@ -884,20 +884,20 @@ namespace UserProfileService.Saga.Validation.UnitTests
         }
 
         [Fact]
-        public void
+        public async Task
             ValidateContainerProfileAssignmentGraphAsync_Should_Throw_ArgumentNullException_IfObjectIdentIsNull()
         {
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(
+            await Assert.ThrowsAsync<ArgumentNullException>(
                 () => _service.ValidateContainerProfileAssignmentGraphAsync(null, new List<ConditionObjectIdent>()));
         }
 
         [Fact]
-        public void
+        public async Task
             ValidateContainerProfileAssignmentGraphAsync_Should_Throw_ArgumentNullException_IfAssignmentListIsNull()
         {
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(
+            await Assert.ThrowsAsync<ArgumentNullException>(
                 () => _service.ValidateContainerProfileAssignmentGraphAsync(
                     new ObjectIdent("123", ObjectType.Function),
                     null));
@@ -958,19 +958,19 @@ namespace UserProfileService.Saga.Validation.UnitTests
         }
 
         [Fact]
-        public void ValidateRoleAssignmentsAsync_Should_Throw_ArgumentNullException_IfIdIsNull()
+        public async Task ValidateRoleAssignmentsAsync_Should_Throw_ArgumentNullException_IfIdIsNull()
         {
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentNullException>(() => _service.ValidateRoleAssignmentsAsync(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _service.ValidateRoleAssignmentsAsync(null));
         }
 
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
-        public void ValidateRoleAssignmentsAsync_Should_Throw_ArgumentNullException_IfIdIsEmpty(string id)
+        public async Task ValidateRoleAssignmentsAsync_Should_Throw_ArgumentNullException_IfIdIsEmpty(string id)
         {
             // Act & Assert
-            Assert.ThrowsAsync<ArgumentException>(() => _service.ValidateRoleAssignmentsAsync(id));
+            await Assert.ThrowsAsync<ArgumentException>(() => _service.ValidateRoleAssignmentsAsync(id));
         }
 
         #endregion
