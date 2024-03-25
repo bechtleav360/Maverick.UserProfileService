@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using OpenTelemetry.Exporter;
 using OpenTelemetry.Resources;
@@ -55,7 +54,7 @@ namespace UserProfileService.Hosting.Tracing
             Activity.DefaultIdFormat = ActivityIdFormat.W3C;
             Activity.ForceDefaultIdFormat = true;
 
-            services.AddOpenTelemetryTracing(
+            services.AddOpenTelemetry().WithTracing(
                 builder =>
                 {
                     if (!string.IsNullOrWhiteSpace(tracingOptions.ServiceName))
@@ -73,26 +72,50 @@ namespace UserProfileService.Hosting.Tracing
                     }
 
                     builder.AddAspNetCoreInstrumentation(
-                        options => options.Enrich
-                            = (activity, eventName, rawObject) =>
-                            {
-                                if (eventName.Equals("OnStartActivity"))
-                                {
-                                    if (rawObject is HttpRequest httpRequest)
-                                    {
-                                        HttpContext context = httpRequest.HttpContext;
-                                        activity.AddTag("http.scheme", httpRequest.Scheme);
-                                        activity.AddTag("http.client_ip", context.Connection.RemoteIpAddress);
-                                        activity.AddTag("http.request_content_length", httpRequest.ContentLength);
-                                        activity.AddTag("http.request_content_type", httpRequest.ContentType);
-                                    }
-                                }
-                                else if (rawObject is HttpResponse response)
-                                {
-                                    activity.AddTag("http.response_content_length", response.ContentLength);
-                                    activity.AddTag("http.response_content_type", response.ContentType);
-                                }
-                            });
+                        o =>
+                        {
+                            o.EnrichWithHttpRequest = (activity, httpRequest) =>
+                                                      {
+                                                          activity.SetTag("requestProtocol", httpRequest.Protocol);
+                                                          activity.AddTag("http.scheme", httpRequest.Scheme);
+
+                                                          activity.AddTag(
+                                                              "http.client_ip",
+                                                              httpRequest.HttpContext.Connection.RemoteIpAddress);
+
+                                                          activity.AddTag(
+                                                              "http.request_content_length",
+                                                              httpRequest.ContentLength);
+
+                                                          activity.AddTag(
+                                                              "http.request_content_type",
+                                                              httpRequest.ContentType);
+                                                      };
+
+                            o.EnrichWithHttpResponse = (activity, httpResponse) =>
+                                                       {
+                                                           activity.AddTag(
+                                                               "http.response_content_length",
+                                                               httpResponse.ContentLength);
+
+                                                           activity.AddTag(
+                                                               "http.response_content_type",
+                                                               httpResponse.ContentType);
+                                                       };
+
+                            o.EnrichWithException = (activity, exception) =>
+                                                    {
+                                                        activity.SetTag(
+                                                            "http.exception.type",
+                                                            exception.GetType().ToString());
+
+                                                        activity.SetTag("http.exception.message", exception.Message);
+
+                                                        activity.SetTag(
+                                                            "http.exception.stacktrace",
+                                                            exception.StackTrace);
+                                                    };
+                        });
 
                     builder.AddHttpClientInstrumentation();
 

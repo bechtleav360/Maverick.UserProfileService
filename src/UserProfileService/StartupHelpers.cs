@@ -1,11 +1,11 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.Serialization;
-using Hellang.Middleware.ProblemDetails;
 using Microsoft.AspNetCore.Mvc;
 using UserProfileService.Common.V2.Exceptions;
 using UserProfileService.Queries.Language.ValidationException;
 using UserProfileService.Validation.Abstractions;
+using ProblemDetailsOptions = Hellang.Middleware.ProblemDetails.ProblemDetailsOptions;
 
 namespace UserProfileService;
 
