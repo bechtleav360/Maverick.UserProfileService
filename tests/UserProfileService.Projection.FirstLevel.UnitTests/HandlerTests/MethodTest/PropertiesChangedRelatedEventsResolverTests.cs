@@ -381,7 +381,7 @@ namespace UserProfileService.Projection.FirstLevel.UnitTests.HandlerTests.Method
         }
 
         [Fact]
-        public void CreateFunctionPropertiesChanged_NotSupportedException()
+        public async Task CreateFunctionPropertiesChanged_NotSupportedException()
         {
             var sourceValue = "function_SourceProperty";
 
@@ -400,8 +400,8 @@ namespace UserProfileService.Projection.FirstLevel.UnitTests.HandlerTests.Method
                                                           }
                                             };
 
-            Assert.ThrowsAsync<NotSupportedException>(
-                () => PropertiesResolver.CreateFunctionPropertiesChangedEventsAsync(
+            await Assert.ThrowsAsync<NotSupportedException>(
+                 () => PropertiesResolver.CreateFunctionPropertiesChangedEventsAsync(
                     "59CEC8EE-4CF4-41BC-80EC-0E331C511E7E",
                     functionPropertiesChanged,
                     PropertiesChangedContext.IndirectMember,
