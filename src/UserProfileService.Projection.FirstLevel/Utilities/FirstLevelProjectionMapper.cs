@@ -47,6 +47,16 @@ internal class FirstLevelProjectionMapper : Profile
         CreateMap<FirstLevelProjectionTagAssignment, TagAssignmentsResolved>();
         CreateMap<IList<FirstLevelProjectionTagAssignment>, List<TagAssignmentsResolved>>();
 
+        CreateMap<FirstLevelProjectionTagAssignment, TagAssignmentsResolved>()
+            .ForMember(
+                tagAss => tagAss.TagDetails,
+                opt => opt.MapFrom(
+                    src => new TagResolved
+                           {
+                               Name = string.Empty,
+                               Id = src.TagId
+                           })).ReverseMap();
+        
         CreateMap<OrganizationCreatedResolvedEvent, OrganizationCreatedPayload>()
             .ReverseMap();
 
