@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using MassTransit;
 using Maverick.Client.ArangoDb.Public.Configuration;
@@ -140,7 +141,7 @@ public class SyncStartup : DefaultStartupBase
             Configuration.GetSection(WellKnownConfigurationKeys.ProfileStorage);
 
         services
-            .AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies())
+            .AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies().ToList())
             .AddSwaggerGen(
                 c =>
                 {
