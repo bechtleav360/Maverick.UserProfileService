@@ -1,6 +1,6 @@
 ﻿{
   "ProfileStorage": {
-    "ConnectionString": "endpoints=http://192.168.1.110:8529;UserName=root;Password=rootpassword;database=ups_test",
+    "ConnectionString": "endpoints=http://localhost:8529;UserName=root;Password=rootPassword;database=ups_test",
     "MinutesBetweenChecks": 60,
     "ClusterConfiguration": {
       "DocumentCollections": {

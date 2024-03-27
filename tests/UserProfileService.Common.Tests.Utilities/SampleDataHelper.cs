@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using AutoMapper;
 using Bogus;
+using FluentAssertions;
 using Maverick.UserProfileService.Models.Abstraction;
 using Maverick.UserProfileService.Models.BasicModels;
 using Maverick.UserProfileService.Models.EnumModels;
@@ -397,15 +398,17 @@ namespace UserProfileService.Common.Tests.Utilities
                             .ForMember(g => g.Name, m => { m.MapFrom(s => s.Name); });
 
                         cfg.CreateMap<UserBasic, Member>()
-                            .ForMember(g => g.DisplayName, m => { m.MapFrom(s => s.DisplayName); })
-                            .ForMember(g => g.Id, m => { m.MapFrom(s => s.Id); })
-                            .ForMember(g => g.Kind, m => { m.MapFrom(s => s.Kind); })
-                            .ForMember(g => g.Name, m => { m.MapFrom(s => s.Name); });
+                           .ForMember(g => g.DisplayName, m => { m.MapFrom(s => s.DisplayName); })
+                           .ForMember(g => g.Id, m => { m.MapFrom(s => s.Id); })
+                           .ForMember(g => g.Kind, m => { m.MapFrom(s => s.Kind); })
+                           .ForMember(g => g.Name, m => { m.MapFrom(s => s.Name); });
 
                         cfg.CreateMap<FunctionView, ILinkedObject>()
-                            .ForMember(linkObj => linkObj.Id, m => { m.MapFrom(func => func.Id); })
-                            .ForMember(linkObj => linkObj.Name, m => { m.MapFrom(func => func.Name); })
-                            .ForMember(linkObj => linkObj.Type, m => { m.MapFrom(func => func.Type.ToString()); });
+                           .ForMember(linkObj => linkObj.Id, m => { m.MapFrom(func => func.Id); })
+                           .ForMember(linkObj => linkObj.Name, m => { m.MapFrom(func => func.Name); })
+                           .ForMember(linkObj => linkObj.Type, m => { m.MapFrom(func => func.Type.ToString()); })
+                           .ConstructUsing(
+                               p => p.Type == RoleType.Function ? (ILinkedObject)new LinkedFunctionObject() : new LinkedRoleObject());
                     });
 
             return new Mapper(config);
