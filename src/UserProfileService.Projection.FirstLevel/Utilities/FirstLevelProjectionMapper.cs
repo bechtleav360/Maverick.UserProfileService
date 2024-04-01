@@ -45,7 +45,7 @@ internal class FirstLevelProjectionMapper : Profile
         CreateMap<IFirstLevelProjectionProfile, MemberResolved>().ReverseMap();
         CreateMap<TagResolved, FirstLevelProjectionTag>().ReverseMap();
         CreateMap<FirstLevelProjectionTagAssignment, TagAssignmentsResolved>();
-        CreateMap<IList<FirstLevelProjectionTagAssignment>, List<TagAssignmentsResolved>>();
+        CreateMap<FirstLevelProjectionTagAssignment, TagAssignmentsResolved>();
 
         CreateMap<FirstLevelProjectionTagAssignment, TagAssignmentsResolved>()
             .ForMember(
