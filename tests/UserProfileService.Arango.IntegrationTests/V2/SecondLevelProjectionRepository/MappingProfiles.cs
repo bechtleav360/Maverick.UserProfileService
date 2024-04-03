@@ -183,7 +183,18 @@ namespace UserProfileService.Arango.IntegrationTests.V2.SecondLevelProjectionRep
             CreateMap<SecondLevelProjectionGroup, Member>().ReverseMap();
             CreateMap<Member, AVMember>();
             CreateMap<SecondLevelProjectionRole, LinkedRoleObject>().ReverseMap();
-            CreateMap<Member, IContainerProfile>().ReverseMap();
+            CreateMap<Member, IContainerProfile>().ConstructUsing(
+                (source, context) =>
+                {
+                    return source.Kind switch
+                           {
+                               Maverick.UserProfileService.AggregateEvents.Common.Enums.ProfileKind.Organization =>
+                                   context.Mapper.Map<OrganizationBasic>(source),
+                               Maverick.UserProfileService.AggregateEvents.Common.Enums.ProfileKind.Group => context
+                                   .Mapper.Map<GroupBasic>(source),
+                             _ => throw new ArgumentOutOfRangeException()
+                           };
+                }).ReverseMap();
             CreateMap<Member, Organization>();
             CreateMap<Member, OrganizationBasic>();
             CreateMap<Member, OrganizationView>();
@@ -384,14 +395,18 @@ namespace UserProfileService.Arango.IntegrationTests.V2.SecondLevelProjectionRep
                 .ForMember(
                     lo => lo.Type,
                     options
-                        => options.MapFrom(function => function.ContainerType.ToString()));
+                        => options.MapFrom(function => function.ContainerType.ToString()))
+                .ConstructUsing(
+                    (source, context) => context.Mapper.Map<LinkedFunctionObject>(source));
 
             CreateMap<SecondLevelProjectionRole, ILinkedObject>()
                 .Include<SecondLevelProjectionRole, LinkedRoleObject>()
                 .ForMember(
                     lo => lo.Type,
                     options
-                        => options.MapFrom(role => role.ContainerType.ToString()));
+                        => options.MapFrom(role => role.ContainerType.ToString()))
+                .ConstructUsing(
+                    (source, context) => context.Mapper.Map<LinkedRoleObject>(source));
         }
 
         private static string GenerateFunctionName(FunctionCreated functionCreated)

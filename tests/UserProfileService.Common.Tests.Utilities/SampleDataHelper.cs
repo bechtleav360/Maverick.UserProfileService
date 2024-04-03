@@ -403,12 +403,11 @@ namespace UserProfileService.Common.Tests.Utilities
                            .ForMember(g => g.Kind, m => { m.MapFrom(s => s.Kind); })
                            .ForMember(g => g.Name, m => { m.MapFrom(s => s.Name); });
 
+                        cfg.CreateMap<FunctionView, LinkedFunctionObject>()
+                           .ForMember(linkObj => linkObj.Type, m => { m.MapFrom(func => func.Type.ToString()); });
+
                         cfg.CreateMap<FunctionView, ILinkedObject>()
-                           .ForMember(linkObj => linkObj.Id, m => { m.MapFrom(func => func.Id); })
-                           .ForMember(linkObj => linkObj.Name, m => { m.MapFrom(func => func.Name); })
-                           .ForMember(linkObj => linkObj.Type, m => { m.MapFrom(func => func.Type.ToString()); })
-                           .ConstructUsing(
-                               p => p.Type == RoleType.Function ? (ILinkedObject)new LinkedFunctionObject() : new LinkedRoleObject());
+                           .ConstructUsing((source, context) => context.Mapper.Map<LinkedFunctionObject>(source));
                     });
 
             return new Mapper(config);
