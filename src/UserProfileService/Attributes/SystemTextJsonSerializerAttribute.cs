@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -24,6 +25,9 @@ public class SystemTextJsonSerializerAttribute : ActionFilterAttribute
         }
 
         objectResult.Formatters.Add(
-            new SystemTextJsonOutputFormatter(new JsonSerializerOptions(JsonSerializerDefaults.General)));
+            new SystemTextJsonOutputFormatter(new JsonSerializerOptions(JsonSerializerDefaults.General)
+                                              {
+                                                  TypeInfoResolver = new DefaultJsonTypeInfoResolver()
+                                              }));
     }
 }
