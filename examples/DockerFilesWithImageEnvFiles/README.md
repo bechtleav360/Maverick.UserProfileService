@@ -3,7 +3,7 @@
 In these examples, Docker will pull the latest image for the services available on ghcr.io. All configurations are stored in env files. For guidance on configuring the main components, please refer to the [README.md](https://github.com/bechtleav360/Maverick.UserProfileService/blob/main/README.md) file. To initiate the build for the ups-environment, you can use the following command:
 
 ```ps1
-docker compose -f .\docker-compose-ups-environment.yml --env-file docker-compose-env-vars.env  up
+docker compose --env-file docker-compose-env-vars.env  up
 ```
 
 ## The docker-compose-env-var file
