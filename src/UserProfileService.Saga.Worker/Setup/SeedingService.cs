@@ -314,12 +314,14 @@ public class SeedingService : BackgroundService
             // contain over 30k event.
             do
             {
+                var batchEnd = from + batchSize;
+                
                 List<IEvent> eventsToHandle = documentSession.Events.QueryAllRawEvents()
                     .Where(
                         e => e.StreamKey
                             == _eventStoreConfiguration.SubscriptionName
                             && e.Version > from
-                            && e.Version < from + batchSize)
+                            && e.Version <= batchEnd)
                     .OrderBy(r => r.Version)
                     .ToList();
 
