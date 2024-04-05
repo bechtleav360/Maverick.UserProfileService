@@ -3,7 +3,7 @@
 In these examples, Docker will build the specific Dockerfile located within the service/worker folder. Here, you are free to modify the Dockerfile as needed. For instance, you can alter the base image or adjust other components. All configurations are now stored in env files. For guidance on configuring the main components, please refer to the [README.md](https://github.com/bechtleav360/Maverick.UserProfileService/blob/main/README.md) file. To initiate the build for the ups-environment, you can use the following command:
 
 ```ps1
-docker compose -f .\docker-compose-ups-environment.yml --env-file docker-compose-env-vars.env  up
+docker compose --env-file docker-compose-env-vars.env  up
 ```
 
 ## The docker-compose-env-var file
