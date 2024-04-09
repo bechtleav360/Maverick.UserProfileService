@@ -46,7 +46,7 @@ The UserProfileService consists of three main components:
 
 ## Building UserProfileService
 
-- [Install](https://dotnet.microsoft.com/en-us/download/dotnet/6.0) the latest .NET 6.0 SDK
+- [Install](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) the latest .NET 8.0 SDK
 - [Install](https://git-scm.com/downloads) Git
 - Clone this repo
 - Run `dotnet restore` and `dotnet build` in solution folder
