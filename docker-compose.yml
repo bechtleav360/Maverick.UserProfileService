@@ -1,0 +1,14 @@
+version: '3.7'
+
+services:
+  mkdocs-example:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      tags:
+        - "mkdocs:container"
+    ports:
+      - 8000:8000
+    volumes:
+      - ".:/docs"
+  
