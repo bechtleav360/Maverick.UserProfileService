@@ -1,6 +1,6 @@
 nav:
     - Service.md
-    - Collections.md
+    - Datastructure.md
     - TicketStore.md
     - RangeConditions.md
     - ...
