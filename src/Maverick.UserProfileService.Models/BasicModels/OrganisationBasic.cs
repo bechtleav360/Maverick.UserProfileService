@@ -78,7 +78,10 @@ namespace Maverick.UserProfileService.Models.BasicModels
 
         /// <inheritdoc />
         public DateTime UpdatedAt { get; set; }
-
+        
+        /// <inheritdoc />
+        public IList<string> Paths { get; set; }
+        
         /// <summary>
         ///     The weight of a organization profile that can be used to sort a result set.
         /// </summary>
