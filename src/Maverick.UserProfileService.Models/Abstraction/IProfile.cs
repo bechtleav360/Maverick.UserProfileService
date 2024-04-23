@@ -59,5 +59,10 @@ namespace Maverick.UserProfileService.Models.Abstraction
         ///     The time when the resource has been updated lastly.
         /// </summary>
         DateTime UpdatedAt { set; get; }
+        
+        /// <summary>
+        ///     Gets or sets a list of paths that lead to this profile.
+        /// </summary>
+        public IList<string> Paths { get; set; }
     }
 }

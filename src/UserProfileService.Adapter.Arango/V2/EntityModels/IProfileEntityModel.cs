@@ -23,11 +23,6 @@ public interface IProfileEntityModel : IProfile, ITagsIncludedObject
     IList<Member> MemberOf { set; get; }
 
     /// <summary>
-    ///     Gets or sets a list of paths that lead to this profile.
-    /// </summary>
-    public IList<string> Paths { get; set; }
-
-    /// <summary>
     ///     Gets or sets a list of linked objects (i.e. functions, roles) that this profile is assigned to.
     /// </summary>
     IList<ILinkedObject> SecurityAssignments { get; set; }
