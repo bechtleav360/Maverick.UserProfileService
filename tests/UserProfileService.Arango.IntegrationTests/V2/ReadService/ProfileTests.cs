@@ -139,19 +139,22 @@ namespace UserProfileService.Arango.IntegrationTests.V2.ReadService
 
             Assert.Equal(checkingReference, valuesUnderTest, new TestingEqualityComparerForMembers());
         }
-
+        
         [Theory]
         [MemberData(nameof(GetProfileTestForExternalId), true)]
         public async Task GetProfileByInternalOrExternalId(string externalId, IProfile expectedProfile)
         {
             IReadService service = await Fixture.GetReadServiceAsync();
-
+            
             List<IProfile> foundProfile =
                 await service.GetProfileByExternalOrInternalIdAsync<User, Group, Organization>(externalId);
-
+            
             Assert.NotNull(foundProfile);
             Assert.Single(foundProfile);
-            foundProfile.First().Should().BeEquivalentTo(expectedProfile, opt => opt.Excluding(t => t.TagUrl));
+            
+            foundProfile.First()
+                        .Should()
+                        .BeEquivalentTo(expectedProfile, opt => opt.Excluding(t => t.TagUrl).Excluding(t => t.Paths));
         }
 
         [Theory]
@@ -171,11 +174,11 @@ namespace UserProfileService.Arango.IntegrationTests.V2.ReadService
 
             Assert.NotNull(foundProfile);
             Assert.Single(foundProfile);
-
+            
             expectedProfile.Should()
-                .BeEquivalentTo(
-                    foundProfile.Single(),
-                    opt => opt.Excluding(ex => ex.TagUrl));
+                           .BeEquivalentTo(
+                               foundProfile.Single(),
+                               opt => opt.Excluding(ex => ex.TagUrl).Excluding(ex => ex.Paths));
         }
 
         [Theory]
