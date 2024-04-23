@@ -85,7 +85,10 @@ namespace Maverick.UserProfileService.Models.BasicModels
 
         /// <inheritdoc cref="IProfile.UpdatedAt" />
         public DateTime UpdatedAt { get; set; }
-
+        
+        /// <inheritdoc cref="IProfile.Path" />
+        public IList<string> Paths { get; set; }
+        
         /// <summary>
         ///     The name of the user.
         /// </summary>
