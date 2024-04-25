@@ -6,25 +6,35 @@ The service utilizes all collections with the suffix *Service_*. All data access
 
 
 ### Service_clientSettingsQuery
-The client settings 
+The client settings are also represented as key-value pairs. In addition to custom properties, client settings can be inherited. They can only be used for users and groups. Groups are containers that can be assigned to each other, allowing you to create a hierarchy. Let's first take a look at this example.
+![ClientSettings](.attachment/ClientSettings.svg)
 
+The example illustrates groups that are assigned to each other, with users being assigned to these groups. Both entities contain client settings, all of which are inherited in this example. The group `Bechtle` has client settings that define the `IDE` used by users in the company. Similarly, the group 'SH Bonn' also has client settings with the same key (`IDE`). Consequently, the client settings from the 'Bechtle' group are overwritten. As a result, the user `Andreas Minz`, inheriting client settings from the 'SH Bonn' group, will use the Vim editor as their IDE. 
+
+In general, client settings are combined when there are multiple instances. Therefore, both the IDE and the OS client settings will be merged. For example, the user 'Max Mustermann' will use Linux as his  OS, as the client settings from the 'AVS' group will overwrite others. However, Max inherits the IDE settings from the 'SH-Bonn' group. On the other hand, the user 'Sandy Musterfrau' will use Windows 11 as her OS because she inherits it from the 'AVS' group. Nonetheless, her IDE setting will be overridden by her specific client settings, so she uses Visual Studio as her IDE.
+
+In summary, inherited client settings are sourced from higher levels and can be overwritten. When multiple client settings exist, they are combined
+ 
+The client settings may appear like this:
 ```json
 {
-  "Hops": 0,
-  "IsInherited": false,
-  "Kind": "Unknown",
+  "IsInherited": true,
+  "Kind": "User",
   "ProfileId": "b2aba1cc-0d86-4056-9358-594a560baae9",
-  "SettingsKey": "FunctionalAccessRights",
+  "SettingsKey": "OS",
   "UpdatedAt": "0001-01-01T00:00:00Z",
   "Value": {
-    "data": [
-      "SELECT_DOCUMENTS_RELEVANT_FOR_FILING",
-      "SEND_DOCUMENTS_EXTERNALLY"
-    ]
-  },
-  "Weight": 0
+    "data": ["Windows"]
+  }
 }
 ```
+
+- `IsInherited`: Indicates whether the client setting is inherited.
+- `Kind`: Denotes the type of profile associated with the client setting.
+- `ProfileId`: Represents the Id of the profile associated with the client setting.
+- `SettingsKey`: Identifies the key of the client setting.
+- `UpdatedAt`: Specifies when the client setting was last updated.
+- `Value`: Represents the value of the client setting.
 
 
 ### Service_customPropertiesQuery
