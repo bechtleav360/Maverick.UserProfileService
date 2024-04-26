@@ -13,7 +13,7 @@ The example illustrates groups that are assigned to each other, with users being
 
 In general, client settings are combined when there are multiple instances. Therefore, both the IDE and the OS client settings will be merged. For example, the user 'Max Mustermann' will use Linux as his  OS, as the client settings from the 'AVS' group will overwrite others. However, Max inherits the IDE settings from the 'SH-Bonn' group. On the other hand, the user 'Sandy Musterfrau' will use Windows 11 as her OS because she inherits it from the 'AVS' group. Nonetheless, her IDE setting will be overridden by her specific client settings, so she uses Visual Studio as her IDE.
 
-In summary, inherited client settings are sourced from higher levels and can be overwritten. When multiple client settings exist, they are combined
+In summary, inherited client settings are sourced from higher levels and can be overwritten. When multiple client settings exist, they are combined.
  
 The client settings may appear like this:
 ```json
@@ -233,6 +233,6 @@ This collections store tags that are associated with an entity. Tags can be look
 
 
 ### Service_tickets
-The collection stores the service ticket when an entity is created, updated, or deleted. This will be explained here.
+The collection stores the service ticket when an entity is created, updated, or deleted. This will be explained [here]().
 
   
