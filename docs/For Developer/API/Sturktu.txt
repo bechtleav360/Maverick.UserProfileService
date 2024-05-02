@@ -1,0 +1,26 @@
+Struktur der Doku:
+Introduction
+    - License
+    - Feautures
+    - Applied Designed Patterns
+Architecture:
+    - Main Architecture
+    - Datan Model ...
+        - Überstunzungen
+Installation
+#   - Containerzation --> löschen
+    - Configuration
+    - Requierements
+    - Get Started
+       - Single Instance 
+       - Docker-yaml datein
+Troubleshooting
+    - Health-Endpoints
+    - Known Issues
+    - Solution
+Further Information for Developer
+ - API
+# - SagaWorker
+# - Sync
+# - Querying Entities
+# - Projections
