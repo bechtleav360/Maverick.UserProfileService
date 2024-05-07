@@ -1,0 +1,9 @@
+# Applied Designed Pattern
+
+The UPS has evolved over time into a complex service with multiple components that adhere to current architecture and design patterns.
+
+Firstly, the service relies on [Event-Driven Design](https://www.redhat.com/en/topics/integration/what-is-event-driven-architecture) (EDD). In EDD, all events related to UPS are stored centrally. An event is an atomic occurrence that propagates a state change. In our case, an event could involve creating, deleting, or modifying an entity (e.g., a user). Data from this central source can be projected into any database and then retrieved. Projection transforms and stores input data into a database-specific format, significantly reducing access times as data doesn't need conversion during reads.
+
+Next, the service follows the [Command-Query-Responsibility-Segregation](https://learn.microsoft.com/de-de/azure/architecture/patterns/cqrs) (CQRS) pattern. This pattern advocates for splitting object models into separate read and write parts within a database. The advantage of this pattern is improved scalability, as write operations can run on different hardware from read operations.
+
+Furthermore, the UPS API supports the [Asynchronous Request-Reply Pattern](https://learn.microsoft.com/en-us/azure/architecture/patterns/async-request-reply)(ARRP). This pattern ensures that the API asynchronously handles data modification requests. The status of these modifications can be queried at any time using a dedicated endpoint. Communication in the command part between components is achieved through queuing. Retrieving an entity from the database still occurs via a [REST](https://learn.microsoft.com/en-us/azure/architecture/best-practices/api-design) call. Lastly, the UPS utilizes the [Saga](https://microservices.io/patterns/data/saga.html) pattern, which simplifies data handling in distributed systems.

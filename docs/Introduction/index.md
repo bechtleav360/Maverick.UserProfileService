@@ -1,4 +1,4 @@
-# Introduction
+# Indroduction
 
 Welcome to the UserProfileService (abbreviated: **UPS**) documentation. It should provide you with all necessary information to work with this powerful service.
 
@@ -15,9 +15,6 @@ In this context, "modify" refers to performing CRUD (Create, Read, Update, Delet
 1. **Sync Service**: The Sync Service is used to synchronize entities from a third-party system, specifically LDAP (Lightweight Directory Access Protocol) systems in this case. This component facilitates the synchronization of user data and related entities between the UPS and LDAP systems.
 
 The UPS provides a wide range of functionality that will be explained further in this documenation.
-
-## Main feature
-
 
 ## History / Motivation
 

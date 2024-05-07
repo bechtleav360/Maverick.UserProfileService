@@ -8,7 +8,6 @@ Architecture:
     - Datan Model ...
         - Überstunzungen
 Installation
-#   - Containerzation --> löschen
     - Configuration
     - Requierements
     - Get Started

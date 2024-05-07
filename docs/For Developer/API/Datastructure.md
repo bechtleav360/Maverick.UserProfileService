@@ -7,7 +7,8 @@ The service utilizes all collections with the suffix *Service_*. All data access
 
 ### Service_clientSettingsQuery
 The client settings are also represented as key-value pairs. In addition to custom properties, client settings can be inherited. They can only be used for users and groups. Groups are containers that can be assigned to each other, allowing you to create a hierarchy. Let's first take a look at this example.
-![ClientSettings](.attachment/ClientSettings.svg)
+
+![ClientSettings](.attachments/svg/ClientSettings.svg)
 
 The example illustrates groups that are assigned to each other, with users being assigned to these groups. Both entities contain client settings, all of which are inherited in this example. The group `Bechtle` has client settings that define the `IDE` used by users in the company. Similarly, the group 'SH Bonn' also has client settings with the same key (`IDE`). Consequently, the client settings from the 'Bechtle' group are overwritten. As a result, the user `Andreas Minz`, inheriting client settings from the 'SH Bonn' group, will use the Vim editor as their IDE. 
 
