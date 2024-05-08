@@ -1,4 +1,4 @@
-# Indroduction
+# Opening remarks
 
 Welcome to the UserProfileService (abbreviated: **UPS**) documentation. It should provide you with all necessary information to work with this powerful service.
 
