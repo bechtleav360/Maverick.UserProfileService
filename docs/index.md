@@ -1,4 +1,3 @@
 # Home
----
-redirect_to: Introduction/index.md
----
+
+Here is the documentation for the UserProfileService. You can begin [here](Introduction/index.md).
