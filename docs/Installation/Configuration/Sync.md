@@ -13,17 +13,17 @@ A valid sync configuration can look like this. Please note that you should creat
     }
   },
   "Marten": {
-    "ConnectionString": "",
+    "ConnectionString": "Host=localhost;Port=5432;Username=myUser;Password=myPassword;Database=UserProfileService",
     "DatabaseSchema": "UserProfile",
     "StreamNamePrefix": "ups",
     "SubscriptionName": "UserProfileServiceStream"
   },
   "Messaging": {
     "RabbitMQ": {
-      "Host": "",
-      "Password": "",
+      "Host": "localhost",
+      "Password": "1",
       "Port": 5672,
-      "User": "",
+      "User": "sb",
       "VirtualHost": "/"
     },
     "Type": "RabbitMQ"
@@ -45,7 +45,7 @@ A valid sync configuration can look like this. Please note that you should creat
         }
       }
     },
-    "ConnectionString": "",
+    "ConnectionString": "Endpoints=http://localhost:8529;UserName=myUser;Password=myPassword;database=UserProfileService",
     "MinutesBetweenChecks": 60
   },
   "Redis": {
@@ -53,7 +53,7 @@ A valid sync configuration can look like this. Please note that you should creat
     "AllowAdmin": true,
     "ConnectRetry": 5,
     "ConnectTimeout": 5000,
-    "EndpointUrls": [],
+    "EndpointUrls": [ "localhost:6379"],
     "ExpirationTime": 7200,
     "Password": null,
     "User": null
