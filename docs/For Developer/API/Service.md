@@ -4,7 +4,7 @@ The Service or the API-Service is the interface for you to interact with the UPS
 ## Handling Entity Operations
 The Service utilizes the **Asynchronous Request-Reply Pattern**.The benefit of this pattern is that requests are handled asynchronously. Only operations that manipulate a entity are handled by this pattern.
 
-When an entity is created, deleted, or updated, a **202 (Accepted) HTTP** response code is received, along with a location link in the header. This link allows tracking the progress of the operation. If the entity is not yet ready, a **200 (OK) HTTP** status code is returned. Upon completion of the operation, the location link is redirected using a **302 (Redirect) HTTP** code to the corresponding resource. This approach offers a significant advantage: the service can efficiently handle a high volume of requests simultaneously, while GET requests are processed as usual.
+When an entity is created, deleted, or updated, a **202 (Accepted) HTTP** response code is received, along with a location link in the header. This link allows tracking the progress of the operation. If the entity is not yet ready, a **202 (Accepted) HTTP** status code is returned. Upon completion of the operation, the location link is redirected using a **302 (Redirect) HTTP** code to the corresponding resource. This approach offers a significant advantage: the service can efficiently handle a high volume of requests simultaneously, while GET requests are processed as usual.
 
 ## Operation progess
 

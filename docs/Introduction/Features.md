@@ -1,7 +1,7 @@
 # Features
 
 * Manages user data including their relations
-* Used entities are hierarchical structured and therefore are stored in a graph.  
+* Used entities are hierarchically structured and therefore are stored in a graph.  
   like:
     * _Users_ are stored in groups
     * _Organizations_ can contain other _organizations_

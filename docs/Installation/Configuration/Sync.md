@@ -89,7 +89,7 @@ A valid sync configuration can look like this. Please note that you should creat
 The service is configured to allow access to all necessary third-party components through the localhost endpoints.
 
 ## Configure the UPS-Sync with LDAP Connector
-As of now, we offer support for an LDAP Connector capable of synchronizing data from an existing Active Direcotry for example. The configuration for this feature can be found under the `LDAP` section. We will explane all section step by step. Below is an example configuration for the Active Directory System.
+As of now, we offer support for an LDAP Connector capable of synchronizing data from an existing Active Direcotry for example. The configuration for this feature can be found under the `LDAP` section. We will explain all sections step by step. Below is an example configuration for the Active Directory System.
 
 ```json
 "Ldap": {

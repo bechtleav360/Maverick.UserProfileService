@@ -10,9 +10,9 @@ It consists of three main components:
 1. **Service**: The UPS provides a comprehensive API that allows users to modify entities
 In this context, "modify" refers to performing CRUD (Create, Read, Update, Delete) operations. This API likely includes endpoints for actions such as creating, updating, deleting, and querying user profiles, groups, organizations, roles, and functions.
 
-1. **Saga Worker**: This component is responsible for validating and creating or modifying entities based on the requests received through the API. It likely handles business logic, data validation, and ensures consistency and integrity of the data. The Saga Worker can be considered the centerpiece of the UPS.
+1. **Saga Worker**: This component is responsible for validating and creating or modifying entities based on the requests received through the API. It handles business logic, data validation, and ensures consistency and integrity of the data. The Saga Worker can be considered the centerpiece of the UPS.
 
-1. **Sync Service**: The Sync Service is used to synchronize entities from a third-party system, specifically LDAP (Lightweight Directory Access Protocol) systems in this case. This component facilitates the synchronization of user data and related entities between the UPS and LDAP systems.
+2. **Sync Service**: The Sync Service is used to synchronize entities from a third-party system, specifically LDAP (Lightweight Directory Access Protocol) systems in this case. This component facilitates the synchronization of user data and related entities between the UPS and LDAP systems.
 
 The UPS provides a wide range of functionality that will be explained further in this documenation.
 
