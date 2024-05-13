@@ -82,9 +82,3 @@ While writing this extension we could find no real use-case for **Option-3**.
 
 While we don't expect usage of **Option-4**, we can see scenarios where this configuration makes sense, so we added it to this extension.  
 Using `DiscardResponsePathBase` with any other setting did not produce usable results, so we chose to treat its use with other settings as an error.
-
-
-## Tracing
-
-Basic configuration requires you to set at least a service name. The service name will be displayed in the trace graph and used to correlate the logs
-If you also provide an OtlpEndpoint URI the OtlpExporter will be setup to send traces via GRPC in the OTLP format to the provided endpoint
