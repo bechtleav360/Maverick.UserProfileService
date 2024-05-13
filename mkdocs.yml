@@ -5,6 +5,9 @@ docs_dir: docs
 
 theme:
   name: material
+  features:
+    - content.code.copy
+    - content.code.select
 
 plugins: 
   - search
@@ -23,3 +26,5 @@ markdown_extensions:
   - pymdownx.keys
   - pymdownx.mark
   - pymdownx.tilde
+  - pymdownx.inlinehilite
+  - pymdownx.snippets

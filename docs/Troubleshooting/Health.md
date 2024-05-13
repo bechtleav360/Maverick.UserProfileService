@@ -1,6 +1,6 @@
 # Health Endpoints
 Cloud environments, including Kubernetes, rely on health endpoints to monitor and maintain application performance and availability, enabling automated actions and improving system reliability.
-The USP can also run within a cloud-based environment and provide health endpoints. The type of health-Endpoints that are supported are:
+The UPS can also run within a cloud-based environment and provide health endpoints. The types of supported health-endpoints are:
 
 - Liveness
     - `/health/live`

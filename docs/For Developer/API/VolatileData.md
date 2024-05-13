@@ -17,7 +17,7 @@ The **$filter** query is used to filter of result-set through restrictions. It c
     "Id": 235
 }
 ```
-Let say we want all user that have the same last name. In a database there can be user with the same last name. The query would look like:
+Let's say we want all user that have the same last name. Several users with the same name can be stored in the database. The query would look like:
 
  `LastName eq 'Smith'`
 

@@ -2,9 +2,10 @@
 
 Additionally, you can opt-in to automatically handle routing base-paths.  
 This is useful to make your service available behind a reverse-proxy or similar setup.
-To do this, you need to use this method: 
-- Full Path: `Maverick.Extensions.Hosting.ApplicationBuilderExtensions.UseMaverickProxyPaths`
-- As extension: `appBuilder.UseMaverickProxyPaths(Configuration)`
+To do this, you need to use this method:
+
+- Full Path: `UserProfileService.Hosting.ApplicationBuilderExtensions.UseReverseProxyPathBases`
+- As extension: `appBuilder.UseReverseProxyPathBases(Configuration)`
 
 This extension will look for these settings, and configure your application accordingly:
 ```json
@@ -21,13 +22,13 @@ This ensures compatibility with or without reverse-proxy, and pushes consumers o
 You can check `HttpContext.Request.PathBase` to see if the current request was handled with or without base-path.  
 If `Routing:PathBase` is set, all redirects will be relative to the configured `PathBase`, even for those that were handled without it.
 
-- `/api/foo` redirecting to the `api/bar`-Endpoint will instead be redirected to `/service/api/bar`
-- `/service/api/foo` redirecting to the `api/bar`-Endpoint will also redirect to `/service/api/bar`
+- `/api/foo` redirecting to the `api/bar`-endpoint will instead be redirected to `/service/api/bar`
+- `/service/api/foo` redirecting to the `api/bar`-endpoint will also redirect to `/service/api/bar`
 
 When setting `Routing:DiscardResponsePathBase` your application will behave as if `Routing:PathBase` was set, but instead of changing all redirects to use the configured prefix, it will be removed from all redirects.
 
-- `/api/foo` redirecting to the `api/bar`-Endpoint will still be redirected to `/api/bar`
-- `/service/api/foo` redirecting to the `api/bar`-Endpoint will instead redirect to `/api/bar`
+- `/api/foo` redirecting to the `api/bar`-endpoint will still be redirected to `/api/bar`
+- `/service/api/foo` redirecting to the `api/bar`-endpoint will instead redirect to `/api/bar`
 
 ## Technical notes to Base-Path handling
 
