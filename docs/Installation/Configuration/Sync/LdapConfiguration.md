@@ -1,94 +1,4 @@
-# Sync Configuration
-A valid sync configuration can look like this. Please note that you should create a database in ArangoDB and PostgreSQL and grant permissions for the user. This is not done automatically:
-
-```json
-{
-  "Logging": {
-    "EnableLogFile": false,
-    "LogFileMaxHistory": 3,
-    "LogFilePath": "logs",
-    "LogFormat": "json",
-    "LogLevel": {
-      "default": "Information"
-    }
-  },
-  "Marten": {
-    "ConnectionString": "Host=localhost;Port=5432;Username=myUser;Password=myPassword;Database=UserProfileService",
-    "DatabaseSchema": "UserProfile",
-    "StreamNamePrefix": "ups",
-    "SubscriptionName": "UserProfileServiceStream"
-  },
-  "Messaging": {
-    "RabbitMQ": {
-      "Host": "localhost",
-      "Password": "1",
-      "Port": 5672,
-      "User": "sb",
-      "VirtualHost": "/"
-    },
-    "Type": "RabbitMQ"
-  },
-  "ProfileStorage": {
-    "ClusterConfiguration": {
-      "DocumentCollections": {
-        "*": {
-          "NumberOfShards": 3,
-          "ReplicationFactor": 2,
-          "WriteConcern": 1
-        }
-      },
-      "EdgeCollections": {
-        "*": {
-          "NumberOfShards": 3,
-          "ReplicationFactor": 2,
-          "WriteConcern": 1
-        }
-      }
-    },
-    "ConnectionString": "Endpoints=http://localhost:8529;UserName=myUser;Password=myPassword;database=UserProfileService",
-    "MinutesBetweenChecks": 60
-  },
-  "Redis": {
-    "AbortOnConnectFail": false,
-    "AllowAdmin": true,
-    "ConnectRetry": 5,
-    "ConnectTimeout": 5000,
-    "EndpointUrls": [ "localhost:6379"],
-    "ExpirationTime": 7200,
-    "Password": null,
-    "User": null
-  },
-  "Routing": {
-    "DiscardResponsePathBase": "",
-    "PathBase": ""
-  },
-  # Configuration is explained below.
-  "SyncConfiguration": {
-    "SourceConfiguration": {
-      "Systems": null,
-      "Validation": {
-        "Commands": {
-          "External": {
-            "profile-deleted": false
-          }
-        },
-        "Internal": {
-          "User": {
-            "DuplicateEmailAllowed": false
-          }
-        }
-      }
-    }
-  },
-  "Tracing": {
-    "OtlpEndpoint": "",
-    "ServiceName": "userprofile-sync"
-  }
-}
-```
-The service is configured to allow access to all necessary third-party components through the localhost endpoints.
-
-## Configure the UPS-Sync with LDAP Connector
+# Configure LDAP Connector
 As of now, we offer support for an LDAP Connector capable of synchronizing data from an existing Active Direcotry for example. The configuration for this feature can be found under the `LDAP` section. We will explain all sections step by step. Below is an example configuration for the Active Directory System.
 
 ```json
@@ -145,20 +55,19 @@ The Connection object encapsulates all the necessary properties required to esta
 
 `BasePath` - The base bath to the LDPA System.
 
-`ConnectionString` - The conenction to the LDPA System.
+`ConnectionString` - The connection to the LDAP System.
 
 `Description` - The description of the used system. This property is optional.
 
-`IgnoreCertificate` - If a certificate is to be ignored during synchronization with the LDPA System.
+`IgnoreCertificate` - If a certificate is to be ignored during synchronization with the LDAP System. The default value is `false`.
 
-`Port` - The port used to establish the connection. Port 389 is the standard port, while port 636 is used when SSL is enabled.
+`Port` - The port that is used to create a connection to the LDAP-System. The port used to establish the connection is typically 389, which is the standard port for LDAP. The secured standard port is 636, and it should be used when `UseSsL` is set to true. **Please note** that these ports are standard settings. When configuring your LDAP system, you may also use **other ports**.
 
 `ServiceUser` - The Service user that is used to connect to the LDAP System.
 
-`ServiceUserPassword` - The password of the `ServiceUser``for logging into the LDAP system.
+`ServiceUserPassword` - The password of the `ServiceUser` for logging into the LDAP system.
 
-`UseSsl` -  Describes if a secure connection to the LDAP System is used. If this propery is enabled that the `Port` must be 636. And the `IgnoreCertificate` must be set to true. Otherwise the `IgnoreCertificate` should be set to false.
-
+`UseSsl` - Indicates whether a secure connection to the LDAP system is being used. If this property is enabled, the port must be set to **the secure port**. The standard secure port is 636, but it can vary based on your LDAP system configuration.
 
 ### LdapQueries Section
 LDAP queries are search requests sent to an LDAP directory to retrieve specific information. They allow for searching and retrieving data about users, groups, organizational units, and other directory objects. LDAP queries can include various parameters such as filters defining specific search criteria and attributes specifying which information to return.

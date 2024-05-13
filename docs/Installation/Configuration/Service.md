@@ -4,20 +4,15 @@ A valid service configuration can look like this. Please note that you should cr
 
 ```json
 {
-  # Delays between the health-checks
-  # pushing and checking in minutes
   "Delays": {
     "HealthCheck": "1:00:00",
     "HealthPush": "1:00:00"
   },
 
-  # If you want to user swagger ui in development environment
   "Features": {
     "UseSwaggerUI": true
   },
 
- # If you wish to enable authorization, then only the 'user/me' 
- # endpoint is secured
  "IdentitySettings": {
     "ApiName": "",
     "ApiSecret": "",
@@ -65,16 +60,11 @@ A valid service configuration can look like this. Please note that you should cr
     "DiscardResponsePathBase": "",
     "PathBase": ""
   },
-
-  # The route for the sync controller is only necessary if 
-  # you intend to trigger a sync from the service
  
   "SyncProxyConfiguration": {
     "Endpoint": ""
   },
 
-  # The ticket store where the tickets are stored
-  # Possible bankends are: Msql, sql, sqLite, postgres and arangodb
   "TicketStore": {
     "Backend": "arangodb"
   },

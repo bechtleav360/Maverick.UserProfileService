@@ -6,9 +6,9 @@ services:
       context: .
       dockerfile: Dockerfile
       tags:
-        - "mkdocs:container"
+        - "mkdocs:github_container"
     ports:
-      - 8000:8000
+      - 9000:8000
     volumes:
       - ".:/docs"
   

@@ -4,7 +4,7 @@ A valid saga worker configuration can look like this. Please note that you shoul
 
 ```json
 {
-# Cleanup old data from the collections
+
 "Cleanup": {
     "AssignmentProjection": null,
     "EventCollector": null,
@@ -68,7 +68,6 @@ A valid saga worker configuration can look like this. Please note that you shoul
     "PathBase": ""
   },
 
-  # Seeding-Service is disabled
   "Seeding": {
     "Disabled": true
   },
@@ -78,19 +77,19 @@ A valid saga worker configuration can look like this. Please note that you shoul
     "ServiceName": "userprofile-saga-worker"
   },
 
- # Validation Rules for the worker
+
   "Validation": {
     "Commands": {
       "External": {
         "profile-deleted": false
       }
     },
-    # Functions with the same name are not allowed
+
     "Internal": {
       "Function": {
         "DuplicateAllowed": false
       },
-      # Groups with the same name are not allowed (case insensitive)
+
       "Group": {
         "Name": {
           "Duplicate": false,
@@ -98,7 +97,7 @@ A valid saga worker configuration can look like this. Please note that you shoul
           "Regex": "^[a-zA-Z0-9ÄÖÜäöüß_\\]\\[\\-\\.\\\\ @]+$"
         }
       },
-      # Users with a dublicated emails are not allowed
+
       "User": {
         "DuplicateEmailAllowed": false
       }

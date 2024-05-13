@@ -29,4 +29,5 @@ The Client also has the capability to create an entity, such as a group. When a 
 
 If the validation of the group or the storing in the EventStore fails, the entire process will be aborted and reversed.
 
+### UPS-Sync
 It is also noted that UPS-Sync can synchronize entities from an external source, currently limited to LDAP systems. UPS-Sync uses Redis to temporarily store entities that need synchronization. The Sync module then sends messages to the queue, where the SagaWorker listens and creates the necessary entities in the database. Once an entity is created, the Sync module receives a confirmation message.UPS-Sync can thus keep track of the synchronized entities.

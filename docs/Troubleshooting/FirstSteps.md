@@ -30,7 +30,7 @@ For deeper insights into the issue, consider increasing the log level to Debug o
 #### Health-Endpoints Analysis
 
 4. **Check Health-Endpoints:**
-   - Utilize health-endpoints to assess the overall system health.
+   - Utilize health-endpoints to assess the [overall system health](Health.md).
      - Verify the existence and accessibility of critical components like databases (e.g., ArangDb, Postgres) through state endpoints.
      - Ensure that the correct credentials are used for accessing these components.
 
