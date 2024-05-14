@@ -12,7 +12,7 @@ This system operates behind the scenes, carrying out commands triggered by the A
 It facilitates the synchronization of data from external sources with the data currently stored. Currently, we have implemented an LDAP connector as one of these external sources.
 
 ### The Architecture
-![Alt text](.attachments/png/architecture-overview.png "Overview architecture")
+!["Overview architecture"](attachments/png/architecture-overview.png)
 
 
 The picture illustrates the comprehensive architecture of the UPS system. Clients can request entities stored in the database. The UPS API then retrieves these entities directly from ArangoDB. The models are stored in the database in the format required by the program, minimizing the need for significant transformations when they are returned.
