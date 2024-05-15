@@ -57,7 +57,7 @@ The UserProfileService consists of three main components:
 
 ## Bug reports and feature requests
 
-Please use the [issue tracker](https://github.com/EmmanuelAv360/UserProfileService/issues) for that.
+Please use the [issue tracker](https://github.com/bechtleav360/Maverick.UserProfileService/issues) for that.
 
 ## Running UserProfileService
 
