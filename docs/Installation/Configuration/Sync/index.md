@@ -67,56 +67,57 @@ The LDAP configuration currently in use is invalid; it's purely an EXAMPLE. Here
   },
   "SyncConfiguration": {
     "SourceConfiguration": {
-      "Systems": {"Ldap": {
-        "EntitiesMapping": {
-          "DisplayName": "displayname",
-          "Email": "mail",
-          "FirstName": "givenName",
-          "LastName": "sn",
-          "Name": "Name",
-          "UserName": "cn"
-        },
-        "LdapConfiguration": [
-          {
-            "Connection": {
-              "AuthenticationType": "None",
-              "BasePath": "dc=ad, dc=example, dc=com",
-              "ConnectionString": "LDAP://ad.exmpale.com",
-              "Description": "Default AD of A365 development environment",
-              "IgnoreCertificate": false,
-              "Port": 389,
-              "ServiceUser": "CN=dev,OU=ExampleOU,OU=ExampleOU2,OU=DEVOU,DC=ad,DC=example,DC=com",
-              "ServiceUserPassword": "Password",
-              "UseSsl": false
-            },
-            "LdapQueries": [
-              {
-                "Filter": "(&(|(objectClass=user)(objectClass=inetOrgPerson))(!(objectClass=computer))(!(UserAccountControl:1.2.840.113556.1.4.803:=2)))",
-                "SearchBase": "OU=Users,OU=Accounts,OU=Management"
-              }
-            ]
-          }
-        ],
-        "Source": {
-          "users": {
-            "ForceDelete": "False",
-            "Operations": "Add,Update,Delete"
-          }
-        },
-        "Validation": {
-          "Commands": {
-            "External": {
-              "profile-deleted": false
+      "Systems": {
+        "Ldap": {
+          "EntitiesMapping": {
+            "DisplayName": "displayname",
+            "Email": "mail",
+            "FirstName": "givenName",
+            "LastName": "sn",
+            "Name": "Name",
+            "UserName": "cn"
+          },
+          "LdapConfiguration": [
+            {
+              "Connection": {
+                "AuthenticationType": "None",
+                "BasePath": "dc=ad, dc=example, dc=com",
+                "ConnectionString": "LDAP://ad.exmpale.com",
+                "Description": "Default AD of A365 development environment",
+                "IgnoreCertificate": false,
+                "Port": 389,
+                "ServiceUser": "CN=dev,OU=ExampleOU,OU=ExampleOU2,OU=DEVOU,DC=ad,DC=example,DC=com",
+                "ServiceUserPassword": "Password",
+                "UseSsl": false
+              },
+              "LdapQueries": [
+                {
+                  "Filter": "(&(|(objectClass=user)(objectClass=inetOrgPerson))(!(objectClass=computer))(!(UserAccountControl:1.2.840.113556.1.4.803:=2)))",
+                  "SearchBase": "OU=Users,OU=Accounts,OU=Management"
+                }
+              ]
+            }
+          ],
+          "Source": {
+            "users": {
+              "ForceDelete": "False",
+              "Operations": "Add,Update,Delete"
             }
           },
-          "Internal": {
-            "User": {
-              "DuplicateEmailAllowed": false
+          "Validation": {
+            "Commands": {
+              "External": {
+                "profile-deleted": false
+              }
+            },
+            "Internal": {
+              "User": {
+                "DuplicateEmailAllowed": false
+              }
             }
           }
         }
       }
-    }
     },
     "Tracing": {
       "OtlpEndpoint": "",
