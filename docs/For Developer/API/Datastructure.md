@@ -234,6 +234,6 @@ This collections store tags that are associated with an entity. Tags can be look
 
 
 ### Service_tickets
-The collection stores the service ticket when an entity is created, updated, or deleted. This will be explained [here]().
+The collection stores the service ticket when an entity is created, updated, or deleted. This will be explained [here](TicketStore.md).
 
   
