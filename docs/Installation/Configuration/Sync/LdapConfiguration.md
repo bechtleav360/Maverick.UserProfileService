@@ -81,7 +81,20 @@ You can specify as many queries as needed, ensuring they match the configuration
 For more information, it's recommended to explore LDAP and familiarize yourself with the various [filters](https://ldap.com/ldap-filters/) that can be utilized.
 
 ### Source Section
-This section solely describes the entities that can be synchronized from the LDAP system and whether the entities can be modified in the UserProfileService. For the LDAP Connector, only user entities can be synchronized from an LDAP system. In our example above, users can be added, updated, or deleted from our system if changes occur in the LDAP system.
+This section solely describes the entities that can be synchronized from the LDAP system and whether the entities can be modified in the UserProfileService. For the LDAP Connector, only user entities can be synchronized from an LDAP system. Here is a brief configuration of the source section:
+```json
+{
+  "Source": {
+    "users": {
+      "ForceDelete": "False",
+      "Operations": "Add,Update,Delete"
+    }
+  }
+}
+```
+`Operations` - Defines the operations that can be performed on users. Possible configurations include `added`, `updated`, or `deleted`.
+
+`ForceDelete` - Indicates whether users should be forcefully deleted if they are not present in the LDAP system.
 
 ### Recommendation
 This was just a brief introduction to configuring the synchronization system using LDAP. We assume familiarity with this protocol. If not, we recommend further reading to gain understanding.
