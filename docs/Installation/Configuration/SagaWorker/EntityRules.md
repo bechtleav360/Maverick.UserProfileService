@@ -1,0 +1,1 @@
+# Configure Internal Entity Rules

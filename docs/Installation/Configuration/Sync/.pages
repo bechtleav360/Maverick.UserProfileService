@@ -1,0 +1,4 @@
+nav:
+    - index.md
+    - Configure LDAP: LdapConfiguration.md
+    - Configure Validation: Validation.md

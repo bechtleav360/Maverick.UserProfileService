@@ -1,0 +1,14 @@
+version: '3.7'
+
+services:
+  mkdocs-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      tags:
+        - "mkdocs:github_container"
+    ports:
+      - 9000:8000
+    volumes:
+      - ".:/docs"
+  
