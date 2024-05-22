@@ -229,7 +229,6 @@ internal class ArangoFirstLevelProjectionRepository : ArangoRepositoryBase, IFir
         string profileId,
         ArangoTransaction transaction,
         CancellationToken cancellationToken)
-
     {
         IList<FirstLevelProjectionsClientSetting> clientSettings =
             await ExecuteQueryAsync<FirstLevelProjectionsClientSetting>(
@@ -240,7 +239,8 @@ internal class ArangoFirstLevelProjectionRepository : ArangoRepositoryBase, IFir
                     _modelsInfo.GetRelation<IFirstLevelProjectionProfile, FirstLevelProjectionGroup>()
                         .EdgeCollection,
                     _modelsInfo.GetRelation<IFirstLevelProjectionProfile, FirstLevelProjectionClientSettingsBasic>()
-                        .EdgeCollection),
+                        .EdgeCollection,
+                    _modelsInfo.GetCollectionName<FirstLevelProjectionFunction>()),
                 transaction,
                 cancellationToken,
                 w =>
