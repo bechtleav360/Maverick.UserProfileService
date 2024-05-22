@@ -84,7 +84,7 @@ internal static class WellKnownFirstLevelProjectionQueries
         string clientSettingsCollection,
         string assignmentsEdge,
         string clientSettingsLinks,
-        string functionCollection)
+        string functionsCollection)
     {
         return new ParameterizedAql
         {
@@ -137,7 +137,7 @@ internal static class WellKnownFirstLevelProjectionQueries
                 { "@clientSettingsCollection", clientSettingsCollection },
                 { "@assignmentsCollection", assignmentsEdge },
                 { "@settingsLinks", clientSettingsLinks },
-                { "@functionCollection", functionCollection}
+                { "@functionCollection", functionsCollection}
             }
         };
     }
