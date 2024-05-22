@@ -83,12 +83,13 @@ internal static class WellKnownFirstLevelProjectionQueries
         string profilesCollection,
         string clientSettingsCollection,
         string assignmentsEdge,
-        string clientSettingsLinks)
+        string clientSettingsLinks,
+        string functionCollection)
     {
         return new ParameterizedAql
         {
             Query = $@"
-                            WITH @@profilesCollection, @@clientSettingsCollection
+                            WITH @@profilesCollection, @@clientSettingsCollection, @@functionCollection
                             LET startVertex = DOCUMENT(@@profilesCollection, @profileId)
 
                             FOR v, e, p IN 1..100 OUTBOUND startVertex @@assignmentsCollection, @@settingsLinks
@@ -135,7 +136,8 @@ internal static class WellKnownFirstLevelProjectionQueries
                 { "@profilesCollection", profilesCollection },
                 { "@clientSettingsCollection", clientSettingsCollection },
                 { "@assignmentsCollection", assignmentsEdge },
-                { "@settingsLinks", clientSettingsLinks }
+                { "@settingsLinks", clientSettingsLinks },
+                { "@functionCollection", functionCollection}
             }
         };
     }
