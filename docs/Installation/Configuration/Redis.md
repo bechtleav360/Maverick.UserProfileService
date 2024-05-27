@@ -4,6 +4,7 @@ The UserProfileService-Sync uses Redis as a temporary storage for the synchroniz
 An example configuration section could look like this:
 
 ```json
+{
   "Redis": {
     "ServiceName": "redis",
     "AbortOnConnectFail": "False",
@@ -17,6 +18,7 @@ An example configuration section could look like this:
     "Password": "",
     "User": ""
   }
+}
 ```
 
 The `EndpointUrls` define the endpoints for Redis. Please note that `EndpointUrls` is an array where you can store more than one Redis endpoint. In this section, Redis is only bound to localhost. The port **6379** is the standard port for Redis.

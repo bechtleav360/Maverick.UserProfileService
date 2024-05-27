@@ -4,7 +4,6 @@ A valid saga worker configuration can look like this. Please note that you shoul
 
 ```json
 {
-
 "Cleanup": {
     "AssignmentProjection": null,
     "EventCollector": null,

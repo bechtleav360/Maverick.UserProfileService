@@ -8,8 +8,7 @@ The seeding service is responsible for seeding configurations at startup. It can
  * Roles
  * Users 
 
-A brief section to create a User at the start looks like this:
-
+A brief section on configuring the seeding service with various entities:
 ```json
 {
   "SeedingService": {
