@@ -107,7 +107,9 @@ A brief section to create a User at the start looks like this:
 
 `Organizations` - This describes the organizations that need to be created. It is represented as a dictionary. Each organization is identified by a unique ID which serves as the key, followed by the organizations's properties that need to be filled out.
 
-`Functions` - This describes the functions that need to be created. It is represented as a dictionary. Each functions is identified by a unique ID which serves as the key, followed by the functions's properties that need to be filled out. **Please Note**: The function consists of an organization and a role ID. The role and organization ID must be present; otherwise, the function won't be created. "Present" means that the role and organization object must already exist or be defined in the seeding service. If it's not present, the function won't be created.
+`Functions` - This describes the functions that need to be created. It is represented as a dictionary. Each functions is identified by a unique ID which serves as the key, followed by the functions's properties that need to be filled out. 
+
+**Please Note**: The function consists of an organization and a role ID. The role and organization ID must be present; otherwise, the function won't be created. "Present" means that the role and organization object must already exist or be defined in the seeding service. If it's not present, the function won't be created.
 
 `Disabled` - Indicates whether the seeding service should be disabled. If the seeding service is disabled, none of the creation objects should be configured. The configuration can than look like this:
 
