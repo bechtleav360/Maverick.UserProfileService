@@ -3,4 +3,3 @@ nav:
     - Configure Cleanup: Cleanup.md
     - Configure Seeding: Seeding.md
     - Configure Validation: Validation.md
-    - Configure Entity Rules: EntityRules.md
