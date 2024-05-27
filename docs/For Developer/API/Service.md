@@ -78,7 +78,7 @@ The GET operations are handled synchronously. If you need to request a large amo
         }
       ]
     }
-      ...
+  ]
 }
 ```
 In this scenario, the '**next**' link will fetch the next 10 groups of items. The batch size can be chosen according to preference.

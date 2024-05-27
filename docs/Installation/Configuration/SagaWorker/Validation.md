@@ -28,7 +28,7 @@ Here is a brief section on how the validation can be configured:
 }
 ```
 
-`profile-deleted` - Indicates whether a function with the same role and organization may be recreated.
+`profile-deleted` - Specifies whether the profile-deleted messages will be validated by an external system or not.
 
 `DuplicateAllowed` - Specifies if duplicate functions are permissible.
 
