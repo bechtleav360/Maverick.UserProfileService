@@ -99,11 +99,28 @@ public static class ServiceCollectionExtension
         {
             AbortOnConnectFail = redisConfig.AbortOnConnectFail,
             AllowAdmin = redisConfig.AllowAdmin,
+            ChannelPrefix = redisConfig.ChannelPrefix,
+            CheckCertificateRevocation = redisConfig.CheckCertificateRevocation,
             ConnectRetry = redisConfig.ConnectRetry,
             ConnectTimeout = redisConfig.ConnectTimeout,
-            User = redisConfig.User,
+            ConfigurationChannel = redisConfig.ConfigurationChannel,
+            ConfigCheckSeconds = redisConfig.ConfigCheckSeconds,
+            DefaultDatabase = redisConfig.DefaultDatabase,
+            KeepAlive = redisConfig.KeepAlive,
+            ClientName = redisConfig.ClientName,
             Password = redisConfig.Password,
-            ServiceName = redisConfig.ServiceName
+            User = redisConfig.User,
+            Proxy = redisConfig.Proxy,
+            ResolveDns = redisConfig.ResolveDns,
+            ServiceName = redisConfig.ServiceName,
+            Ssl = redisConfig.Ssl,
+            SslHost = redisConfig.SslHost,
+            SslProtocols = redisConfig.SslProtocols,
+            SyncTimeout = redisConfig.SyncTimeout,
+            AsyncTimeout = redisConfig.AsyncTimeout,
+            TieBreaker = redisConfig.TieBreaker,
+            SetClientLibrary = redisConfig.SetClientLibrary,
+            Protocol = redisConfig.Protocol
         };
 
         foreach (string endpoint in redisConfig.EndpointUrls
