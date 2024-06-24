@@ -65,7 +65,7 @@ public class RedisConfiguration
     ///     Identification for the connection within redis
     /// </summary>
     public string ClientName { get; set; } = null;
-    
+
     /// <summary>
     ///     Connection urls for redis instances.
     /// </summary>
@@ -86,18 +86,17 @@ public class RedisConfiguration
     ///     User for the redis server (for use with ACLs on redis 6 and above).
     /// </summary>
     public string User { get; set; }
-    
+
     /// <summary>
-    /// Type of proxy in use (if any); for example “twemproxy/envoyproxy”
+    ///     Type of proxy in use. Possible value are: Twemproxy or Envoyproxy.
     /// </summary>
     public Proxy Proxy { get; set; } = Proxy.None;
-    
+
     /// <summary>
     ///     Specifies that DNS resolution should be explicit and eager, rather than implicit
     /// </summary>
     public bool ResolveDns { get; set; } = false;
-    
-    
+
     /// <summary>
     ///     The service name used to resolve a service via sentinel.
     /// </summary>
@@ -127,12 +126,12 @@ public class RedisConfiguration
     public int SyncTimeout { get; set; } = 5000;
 
     /// <summary>
-    /// Time (ms) to allow for asynchronous operations
+    ///     Time (ms) to allow for asynchronous operations
     /// </summary>
     public int AsyncTimeout { get; set; } = 5000;
 
     /// <summary>
-    /// 	Key to use for selecting a server in an ambiguous primary scenario.
+    ///     Key to use for selecting a server in an ambiguous primary scenario.
     /// </summary>
     public string TieBreaker { get; set; } = "__Booksleeve_TieBreak";
 
@@ -142,7 +141,7 @@ public class RedisConfiguration
     public bool SetClientLibrary { get; set; } = true;
 
     /// <summary>
-    ///     Redis protocol to use; see section below
+    ///     For more information see: https://stackexchange.github.io/StackExchange.Redis/Configuration#redis-protocol
     /// </summary>
     public RedisProtocol? Protocol { get; set; }
 }
