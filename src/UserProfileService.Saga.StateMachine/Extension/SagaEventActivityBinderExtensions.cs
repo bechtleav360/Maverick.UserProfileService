@@ -120,7 +120,7 @@ internal static class SagaEventActivityBinderExtensions
         this TCommand message,
         BehaviorContext<TSaga> context)
         where TCommand : class
-        where TSaga : class, ISaga
+        where TSaga : class, ISaga, SagaStateMachineInstance
     {
         return context.Init<TCommand>(message);
     }
