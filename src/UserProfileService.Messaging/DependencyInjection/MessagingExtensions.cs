@@ -29,9 +29,10 @@ public static class MessagingExtensions
     /// <param name="inMemoryCustomizer">
     ///     optional customization for the in-memory bus after default configuration.
     /// </param>
+    /// <param name="serviceBusCustomizer"> optional customization for the service bus after default configuration.</param>
     /// <param name="nameFormatter">custom name formatter for endpoints and entities</param>
-    /// <exception cref="InvalidMessagingConfigurationException"></exception>
-    /// <exception cref="InvalidMessagingPlatformException"></exception>
+    /// <exception cref="InvalidMessagingConfigurationException">Thrown when the message configuration is missing or invalid.</exception>
+    /// <exception cref="InvalidMessagingPlatformException">Thrown when the message configuration is not supported.</exception>
     private static void ConfigureMassTransit(
         IBusRegistrationConfigurator configurator,
         ServiceMessagingMetadata metadata,
@@ -40,6 +41,7 @@ public static class MessagingExtensions
         Action<IBusRegistrationConfigurator>? busConfigurator,
         Action<IBusRegistrationContext, IRabbitMqBusFactoryConfigurator>? rabbitMqCustomizer,
         Action<IBusRegistrationContext, IInMemoryBusFactoryConfigurator>? inMemoryCustomizer,
+        Action<IBusRegistrationContext, IServiceBusBusFactoryConfigurator>? serviceBusCustomizer,
         CustomEntityNameFormatter nameFormatter)
     {
         string messagingType =
@@ -84,6 +86,18 @@ public static class MessagingExtensions
                             memoryConfigurator,
                             metadata,
                             inMemoryCustomizer,
+                            nameFormatter));
+
+                    break;
+                
+                case "servicebus":
+                    configurator.UsingAzureServiceBus(
+                        (context, sbConfigurator) => ConfigureServiceBus(
+                            context,
+                            sbConfigurator,
+                            metadata,
+                            messagingConfig,
+                            serviceBusCustomizer,
                             nameFormatter));
 
                     break;
@@ -213,6 +227,33 @@ public static class MessagingExtensions
 
         configurator.ConfigureEndpoints(context);
     }
+    
+    /// <summary>
+    ///     Sets the service bus transport with our customizations.
+    /// </summary>
+    /// <param name="context">context in which this transport is being configured</param>
+    /// <param name="configurator">configuration-handle through which the transport can be configured</param>
+    /// <param name="metadata">metadata for the current application, used to configure messaging</param>
+    /// <param name="messagingConfig">root-section for all messaging related configuration</param>
+    /// <param name="serviceBusCustomizer">
+    ///     optional customization for the azure service bus after default configuration.
+    /// </param>
+    /// <param name="nameFormatter">custom name formatter for endpoints and entities</param>
+    private static void ConfigureServiceBus(
+        IBusRegistrationContext context,
+        IServiceBusBusFactoryConfigurator configurator,
+        ServiceMessagingMetadata metadata,
+        IConfiguration messagingConfig,
+        Action<IBusRegistrationContext, IServiceBusBusFactoryConfigurator>? serviceBusCustomizer,
+        CustomEntityNameFormatter nameFormatter)
+    {
+        UseCommonConfiguration(configurator, metadata, nameFormatter);
+        var connectionString = messagingConfig.GetValue<string>("Messaging:ServiceBus:ConnectionString")
+            ?? throw new InvalidMessagingConfigurationException("ServiceBus connection string is missing.");
+        configurator.Host(connectionString);
+        serviceBusCustomizer?.Invoke(context, configurator);
+        configurator.ConfigureEndpoints(context);
+    }
 
     /// <summary>
     ///     Register all components required for Maverick-Style messaging in the given service-collection.
@@ -232,6 +273,7 @@ public static class MessagingExtensions
     /// <param name="inMemoryCustomizer">
     ///     optional customization for the in-memory bus after default configuration.
     /// </param>
+    /// <param name="serviceBusCustomizer"> optional customization for the service bus after default configuration.</param>
     /// <returns>modified instance of <paramref name="services" /></returns>
     public static IServiceCollection AddMessaging(
         this IServiceCollection services,
@@ -240,7 +282,9 @@ public static class MessagingExtensions
         IEnumerable<Assembly>? assemblies = null,
         Action<IBusRegistrationConfigurator>? busConfigurator = null,
         Action<IBusRegistrationContext, IRabbitMqBusFactoryConfigurator>? rabbitMqCustomizer = null,
-        Action<IBusRegistrationContext, IInMemoryBusFactoryConfigurator>? inMemoryCustomizer = null)
+        Action<IBusRegistrationContext, IInMemoryBusFactoryConfigurator>? inMemoryCustomizer = null,
+        Action<IBusRegistrationContext, IServiceBusBusFactoryConfigurator>? serviceBusCustomizer = null
+        )
     {
         try
         {
@@ -250,10 +294,11 @@ public static class MessagingExtensions
                         configurator,
                         metadata,
                         messagingConfig,
-                        assemblies?.ToArray() ?? new[] { Assembly.GetEntryAssembly()! },
+                        assemblies?.ToArray() ?? [Assembly.GetEntryAssembly()!],
                         busConfigurator,
                         rabbitMqCustomizer,
                         inMemoryCustomizer,
+                        serviceBusCustomizer,
                         new CustomEntityNameFormatter(
                             new KebabCaseEndpointNameFormatter(false),
                             new MessageNameFormatterEntityNameFormatter(
