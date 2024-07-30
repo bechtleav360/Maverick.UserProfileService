@@ -138,10 +138,30 @@ Example:
   }
 }
 ```
+##### Message Configuration
+The UPS can be configured to use two different queue communication systems for communication between its workers. You can use:
 
-#### Message broker connection
+* [RabbitMq](#rabbitmq-as-message-provider) 
+* [ServiceBus](#azure-service-bus-as-message-provider)
 
-The UserProfileService uses [RabbitMq](https://www.rabbitmq.com/) to send its internal messages.
+The important key is `Type`. This key configures the communication system. The JSON to configure the messaging looks similar to these examples:
+
+
+```json
+{
+  "Messaging": {
+    "MessageType": {
+        ...
+    },
+    "Type": "MessageType"
+  }
+}
+```
+For the `Type` key, you can use the value `RabbitMq` or `ServiceBus`. The keywords are case-insensitive, so it doesn't matter how you write them.
+
+##### RabbitMQ as Message Provider
+If you want to use [RabbitMq](https://www.rabbitmq.com/) for communication, you need to set `RabbitMQ` as the value for the `Type` key. This will ensure that internal messaging uses RabbitMQ.
+
 
 An example configuration section could look like this:
 
@@ -154,14 +174,44 @@ An example configuration section could look like this:
       "Port": 5672,
       "User": "myUser",
       "VirtualHost": "/"
-    }
+    },
+    "Type": "RabbitMQ"
   }
 }
 ```
 
-`Host`, `Port` and `VirtualHost` define the endpoint of rabbitMQ.
+`Host` - The RabbitMQ server's hostname or IP address.
 
-`User` and `Password` are credential information to connect to RabbitMQ.
+`Port` - The port number on which RabbitMQ is listening.
+
+`VirtualHost` - The virtual host in RabbitMQ to which you want to connect.
+
+`User` - The username used to authenticate with RabbitMQ.
+
+`Password` - The password associated with the RabbitMQ user.
+
+##### Azure Service Bus as Message Provider
+If you want to use [AzureServicBus](https://learn.microsoft.com/en-us/azure/service-bus-messaging/service-bus-messaging-overview) for communication, you need to set `ServiceBus` as the value for the `Type` key. This will ensure that internal messaging uses Azure Service Bus.
+
+An example configuration section could look like this:
+
+```json
+{
+  "Messaging": {
+    "ServiceBus": {
+      "ConnectionString": "Endpoint=sb://<NamespaceName>.servicebus.windows.net/;
+      SharedAccessKeyName=<KeyName>;SharedAccessKey=<KeyValue>",
+    },
+    "Type": "ServiceBus"
+  }
+}
+```
+
+`Endpoint` - The URL of your Service Bus namespace. This always starts with **sb://**, followed by your Service Bus namespace name, and ends with **.servicebus.windows**.net/.
+
+`SharedAccessKeyName` - The name of the shared access policy you are using. This is usually a policy that grants access to the Service Bus namespace or a specific queue/topic.
+
+`SharedAccessKey` - The key associated with the shared access policy. This is a secret value that acts like a password for the connection.
 
 #### Redis
 The UserProfileService-Sync uses Redis as a temporary storage for the synchronized data.
