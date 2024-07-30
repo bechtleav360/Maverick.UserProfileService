@@ -13,7 +13,8 @@ An example configuration section could look like this:
       "Port": 5672,
       "User": "myUser",
       "VirtualHost": "/"
-    }
+    },
+    "Type": "RabbitMQ"
   }
 }
 ```
