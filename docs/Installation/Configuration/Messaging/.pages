@@ -1,4 +1,4 @@
 nav:
-    - Messaging Configuration: index.md
-    - RabbitMq: RabbitMq.md
+    - Message Configuration: index.md
     - AzureServiceBus: AzureServiceBus.md
+    - RabbitMQ: RabbitMq.md
