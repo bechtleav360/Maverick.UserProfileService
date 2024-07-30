@@ -4,7 +4,7 @@
 To start the service, you need at least the Service and the SagaWorker components, along with the following third-party components:
 
 * [ArangoDb](https://www.arangodb.com/) - open-source graph-and document database where user data will be stored. [How to configure Arangodb](Configuration/DatabaseConnection.md#arangodb).
-* [RabbitMq](https://www.rabbitmq.com/) - multi-protocol messaging and streaming broker - used to send messages between applications. [How to configure Rabbitmq](Configuration/RabbitMq.md).
+* Messaging - multi-protocol messaging and streaming broker - used to send messages between applications. [How to configure Messaging](Configuration/Messaging/index.md).
 * [PostgreSQL](https://www.postgresql.org/) - fast relational database used as volatile store and eventStore. [How to configure PostgreSQL](Configuration/DatabaseConnection.md#postgresql).
 
 If you want to use UPS-Sync, you will also need this third-party component:

@@ -2,7 +2,7 @@ nav:
     - Service
     - SagaWorker
     - Sync
+    - Messaging
     - Base Path: BasePath.md
     - Database: DatabaseConnection.md
-    - Message Broker: RabbitMq.md
     - ...
