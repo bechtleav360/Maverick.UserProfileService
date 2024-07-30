@@ -1,6 +1,7 @@
-# Message broker connection
+# RabbitMQ
 
-The UserProfileService uses [RabbitMq](https://www.rabbitmq.com/) to send its internal messages.
+If you want to use [RabbitMq](https://www.rabbitmq.com/) for communication, you need to set `RabbitMQ` as the value for the `Type` key. This will ensure that internal messaging uses RabbitMQ.
+
 
 An example configuration section could look like this:
 
@@ -19,6 +20,13 @@ An example configuration section could look like this:
 }
 ```
 
-`Host`, `Port` and `VirtualHost` define the endpoint of rabbitMQ.
+`Host` - The RabbitMQ server's hostname or IP address.
 
-`User` and `Password` are credential information to connect to RabbitMQ.
+`Port` - The port number on which RabbitMQ is listening.
+
+`VirtualHost` - The virtual host in RabbitMQ to which you want to connect.
+
+`User` - The username used to authenticate with RabbitMQ.
+
+`Password` - The password associated with the RabbitMQ user.
+
