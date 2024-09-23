@@ -17,18 +17,19 @@ In general, client settings are combined when there are multiple instances. Ther
 In summary, inherited client settings are sourced from higher levels and can be overwritten. When multiple client settings exist, they are combined.
  
 The client settings may appear like this:
-```json
-{
-  "IsInherited": true,
-  "Kind": "User",
-  "ProfileId": "b2aba1cc-0d86-4056-9358-594a560baae9",
-  "SettingsKey": "OS",
-  "UpdatedAt": "0001-01-01T00:00:00Z",
-  "Value": {
-    "data": ["Windows"]
-  }
-}
-```
+??? example "Client settings example"
+    ```json
+    {
+      "IsInherited": true,
+      "Kind": "User",
+      "ProfileId": "b2aba1cc-0d86-4056-9358-594a560baae9",
+      "SettingsKey": "OS",
+      "UpdatedAt": "0001-01-01T00:00:00Z",
+      "Value": {
+        "data": ["Windows"]
+      }
+    }
+    ```
 
 - `IsInherited`: Indicates whether the client setting is inherited.
 - `Kind`: Denotes the type of profile associated with the client setting.
@@ -41,13 +42,14 @@ The client settings may appear like this:
 ### Service_customPropertiesQuery
 The collections store custom properties for specific users, group or an organization. A custom property consists of a key-value pair, which can be used to add additional information to an entity. The data model for this can look like following:
 
-```json
-{
-  "Related": "Service_profilesQuery/6ad843e6-b3cd-457f-b205-33a5813c3c53",
-  "Key": "FavoriteColor",
-  "Value": "Green"
-}
-```
+??? example "Custom property example"
+    ```json
+    {
+      "Related": "Service_profilesQuery/6ad843e6-b3cd-457f-b205-33a5813c3c53",
+      "Key": "FavoriteColor",
+      "Value": "Green"
+    }
+    ```
 - `Related`- The profile the custom property is added to (user, group or organization)
 
 - `Key` - The key of the custom property
@@ -58,13 +60,14 @@ The collections store custom properties for specific users, group or an organiza
 The path tree contains every profile that has assignments to another profile. This means that for a single profile, we have all the assignments necessary to retrieve its members.
 Nowadays, we are not using the Path-Tree. It is used to compute the Path of an profile. An Example how an item can look like:
 
-```json
-{
-  "RelatedProfileId": "b5f59454-be26-4035-b1d8-5cfacbc518a4",
-  "ObjectId": "b5f59454-be26-4035-b1d8-5cfacbc518a4",
-  "Tags": []
-}
-```
+??? example "Service path tree example"
+    ```json
+    {
+      "RelatedProfileId": "b5f59454-be26-4035-b1d8-5cfacbc518a4",
+      "ObjectId": "b5f59454-be26-4035-b1d8-5cfacbc518a4",
+      "Tags": []
+    }
+    ```
 
 - `RelatedProfileId` - The Id of the profile for which the member will be retrieved.
 
@@ -79,81 +82,82 @@ The collection stores the edges that connect the pathTree documents. Each edge c
 
 #### PathTree-Documents
 
-```json
-{
-  "RelatedProfileId": "123",
-  "ObjectId": "123",
-  "Tags": [],
-  "_id:":"Service_pathTree/45",
-  "_key":"45"
-}
+??? example "Path tree documents example"
+    ```json
+    {
+      "RelatedProfileId": "123",
+      "ObjectId": "123",
+      "Tags": [],
+      "_id:":"Service_pathTree/45",
+      "_key":"45"
+    }
 
-{
-  "RelatedProfileId": "123",
-  "ObjectId": "456",
-  "Tags": [],
-  "_id:":"Service_pathTree/46",
-  "_key":"46"
-}
-```
+    {
+      "RelatedProfileId": "123",
+      "ObjectId": "456",
+      "Tags": [],
+      "_id:":"Service_pathTree/46",
+      "_key":"46"
+    }
+    ```
 
 #### Edge Connection the documents 
 - `_from` - Service_pathTree/45
 
 - `_to` - Service_pathTree/46
 
-
-```json
-{
-  "Conditions": [
+??? example "Path tree connection example"
+    ```json
     {
-      "Start": null,
-      "End": null
+      "Conditions": [
+        {
+          "Start": null,
+          "End": null
+        }
+      ],
+      "RelatedProfileId": "123"
     }
-  ],
-  "RelatedProfileId": "123"
-}
-```
+    ```
 So, the two documents `Service_pathTree/45` and `Service_pathTree/46` are now connected via the edge. Through a graph query across these collections, we can determine which profile has assignments. This can be used to retrieve all users who have active assignments to a group or a function.
 
 ### Service_profilesQuery
 
 The `Service_profiles` collection stores profiles along with their relationships to other profiles. Within this collection, users, organizations, and groups are stored. An example user entry might look like this:
 
-```json
-
-{
-  "FunctionalAccessRights": null,
-  "MemberOf": [],
-  "SecurityAssignments": [],
-  "Paths": [],
-  "Tags": [],
-  "CustomPropertyUrl": null,
-  "UserName": "andreas.mustermann",
-  "FirstName": "Andreas",
-  "LastName": "Mustermann",
-  "Email": "andreas.mustermann@gmx.de",
-  "ImageUrl": null,
-  "UserStatus": null,
-  "Id": "6d78353b-5ff6-4314-aae6-50700afa7295",
-  "Name": "Andreas Mustermann",
-  "DisplayName": "Andreas Hinz",
-  "Kind": "User",
-  "CreatedAt": "2023-01-02T19:15:09.9954893Z",
-  "UpdatedAt": "2024-02-29T10:51:12.7416251Z",
-  "TagUrl": null,
-  "SynchronizedAt": null,
-  "Source": "Ldap",
-  "Domain": "ad.example.org",
-  "ExternalIds": [
+??? example "User profile example"
+    ```json
     {
-      "Id": "S-1-5-21-966539559-2079964620-3194842515-3311",
-      "IsConverted": false,
-      "Source": "Ldap"
+      "FunctionalAccessRights": null,
+      "MemberOf": [],
+      "SecurityAssignments": [],
+      "Paths": [],
+      "Tags": [],
+      "CustomPropertyUrl": null,
+      "UserName": "andreas.mustermann",
+      "FirstName": "Andreas",
+      "LastName": "Mustermann",
+      "Email": "andreas.mustermann@gmx.de",
+      "ImageUrl": null,
+      "UserStatus": null,
+      "Id": "6d78353b-5ff6-4314-aae6-50700afa7295",
+      "Name": "Andreas Mustermann",
+      "DisplayName": "Andreas Hinz",
+      "Kind": "User",
+      "CreatedAt": "2023-01-02T19:15:09.9954893Z",
+      "UpdatedAt": "2024-02-29T10:51:12.7416251Z",
+      "TagUrl": null,
+      "SynchronizedAt": null,
+      "Source": "Ldap",
+      "Domain": "ad.example.org",
+      "ExternalIds": [
+        {
+          "Id": "S-1-5-21-966539559-2079964620-3194842515-3311",
+          "IsConverted": false,
+          "Source": "Ldap"
+        }
+      ]
     }
-  ]
-}
-```
+    ```
 Most attributes are self-explanatory, such as `UserName`, `FirstName`, `LastName`, `Email`, `Id`, `Name`, `DisplayName`, `CreatedAt`, and `UpdatedAt`.
 
 - `MemberOf`: Represents the groups or organizations to which the profile belongs. For example, a user can be a member of a group.
@@ -183,28 +187,29 @@ This entities can be retrieved via Endpoints that the user profile service provi
 ### Service_rolesFunctionsQuery
 This collection stores the roles and functions. A function can be looked like this:
 
-```json
-{
-  "Conditions": null,
-  "LinkedProfiles": [],
-  "Id": "65525461-aad5-4a79-95df-b64ce54fe978",
-  "Name": "Z20 Administration",
-  "Type": "Function",
-  "OrganizationId": "629c6a09-7c5f-40bd-b1aa-a31667c26511",
-  "Organization": {
-      ...
-  },
-  "Role": {
-     ...
-  },
-  "RoleId": "83fdde77-a78c-4b04-80c6-2221991cf909",
-  "CreatedAt": "2021-10-04T09:41:53.0954287Z",
-  "UpdatedAt": "2021-10-04T09:41:53.0954287Z",
-  "SynchronizedAt": null,
-  "Source": "Api",
-  "ExternalIds": []
-}
-```
+??? example "Service role/function example"
+    ```json
+    {
+      "Conditions": null,
+      "LinkedProfiles": [],
+      "Id": "65525461-aad5-4a79-95df-b64ce54fe978",
+      "Name": "Z20 Administration",
+      "Type": "Function",
+      "OrganizationId": "629c6a09-7c5f-40bd-b1aa-a31667c26511",
+      "Organization": {
+          ...
+      },
+      "Role": {
+        ...
+      },
+      "RoleId": "83fdde77-a78c-4b04-80c6-2221991cf909",
+      "CreatedAt": "2021-10-04T09:41:53.0954287Z",
+      "UpdatedAt": "2021-10-04T09:41:53.0954287Z",
+      "SynchronizedAt": null,
+      "Source": "Api",
+      "ExternalIds": []
+    }
+    ```
 
 A function consists of a role and an organization, although the organization is not shown in the JSON.
 
@@ -216,13 +221,14 @@ A function consists of a role and an organization, although the organization is 
 ### Service_tagsQuery
 This collections store tags that are associated with an entity. Tags can be look like this:
 
-```json
-{
-  "Id": "916f7364-bf20-4086-84bd-34033d3a5011",
-  "Name": "Green",
-  "Type": "Custom"
-}
-```
+??? example "Tag example"
+    ```json
+    {
+      "Id": "916f7364-bf20-4086-84bd-34033d3a5011",
+      "Name": "Green",
+      "Type": "Custom"
+    }
+    ```
 
 - `Id`: The ID of the tag.
 - `Name`: The name of the tag.

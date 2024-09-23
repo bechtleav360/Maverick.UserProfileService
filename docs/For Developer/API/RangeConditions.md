@@ -24,39 +24,36 @@ The assignment starts immediately and lasts indefinitely.
 
 ```json
 {
-
-       "conditions": [
-        {
-          "end": "2099-05-02T12:55:19.830Z",
-          "start": null
-        }
-       ]
+  "conditions": [
+    {
+      "end": "2099-05-02T12:55:19.830Z",
+      "start": null
+    }
+  ]
 }
 ```
 The assignment starts immediately and continues until May 2099.
 
 ```json
 {
-       "conditions": [
-        {
-          "end": null
-          "start": "2099-05-02T12:55:19.830Z"
-          
-        }
-       ]
+  "conditions": [
+    {
+      "end": null,
+      "start": "2099-05-02T12:55:19.830Z"
+    }
+  ]
 }
 ```
 The assignment begins in May 2099 and is permanent.
 
 ```json
 {
-       "conditions": [
-        {
-          "end": "2102-05-02T12:55:19.830Z"
-          "start": "2099-05-02T12:55:19.830Z"
-          
-        }
-       ]
+  "conditions": [
+    {
+      "end": "2102-05-02T12:55:19.830Z",
+      "start": "2099-05-02T12:55:19.830Z"
+    }
+  ]
 }
 ```
 The assignment begins in May 2099 and ends in May 2102.
