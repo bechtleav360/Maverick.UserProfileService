@@ -8,15 +8,16 @@ If you are looking for specific user settings, you can filter and sort the resul
 ### Usage of the $filter query
 The **$filter** query is used to filter of result-set through restrictions. It can be seen as a where-Clause  in the sense of SQL. The filter can only be applied to properties of the result item. Nested properties are not supported yet. Filter expressions can be combined with an `OR` or an `AND`. In the example below we have a simple data set that represents a user that has only five properties. The filter can be applied of all of these properties.
 
-```json
-{
-    "Name": "Sam, Smith",
-    "FirstName": "Sam",
-    "LastName": "Smith",
-    "CreatedAt": "2022-09-11T09:30:11.6796611+02:00",
-    "Id": 235
-}
-```
+??? example "Sam Smith example filter user"
+    ```json
+    {
+        "Name": "Sam, Smith",
+        "FirstName": "Sam",
+        "LastName": "Smith",
+        "CreatedAt": "2022-09-11T09:30:11.6796611+02:00",
+        "Id": 235
+    }
+    ```
 Let's say we want all user that have the same last name. Several users with the same name can be stored in the database. The query would look like:
 
  `LastName eq 'Smith'`
