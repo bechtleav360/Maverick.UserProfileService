@@ -2,13 +2,14 @@
 
 Here is a sample section on how to configure the SwaggerUI:
 
-```json
-{
-  "Features": {
-    "UseSwaggerUI": true
-  }
-}
-```
+??? abstract "SwaggerUI example configuration"
+    ```json
+    {
+      "Features": {
+        "UseSwaggerUI": true
+      }
+    }
+    ```
 
 `UseSwaggerUI` - The UseSwaggerUI setting controls the visibility of the Swagger UI. When enabled, users can access and interact with the API documentation through the Swagger UI. Conversely, when disabled, the Swagger UI is not accessible.
 

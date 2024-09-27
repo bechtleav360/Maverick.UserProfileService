@@ -4,17 +4,18 @@ If you want to use [AzureServicBus](https://learn.microsoft.com/en-us/azure/serv
 
 An example configuration section could look like this:
 
-```json
-{
-  "Messaging": {
-    "ServiceBus": {
-      "ConnectionString": "Endpoint=sb://<NamespaceName>.servicebus.windows.net/;
-      SharedAccessKeyName=<KeyName>;SharedAccessKey=<KeyValue>",
-    },
-    "Type": "ServiceBus"
-  }
-}
-```
+??? abstract "Azure Service Bus example configuration"
+    ```json
+    {
+      "Messaging": {
+        "ServiceBus": {
+          "ConnectionString": "Endpoint=sb://<NamespaceName>.servicebus.windows.net/;
+          SharedAccessKeyName=<KeyName>;SharedAccessKey=<KeyValue>",
+        },
+        "Type": "ServiceBus"
+      }
+    }
+    ```
 
 `Endpoint` - The URL of your Service Bus namespace. This always starts with **sb://**, followed by your Service Bus namespace name, and ends with **.servicebus.windows**.net/.
 

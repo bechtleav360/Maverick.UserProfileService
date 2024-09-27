@@ -1,32 +1,33 @@
 # Configure SagWorker Validation
 Here is a brief section on how the validation can be configured:
 
-```json
-{
-  "Validation": {
-    "Commands": {
-      "External": {
-        "profile-deleted": false
-      }
-    },
-    "Internal": {
-      "Function": {
-        "DuplicateAllowed": false
-      },
-      "Group": {
-        "Name": {
-          "Duplicate": false,
-          "IgnoreCase": true,
-          "Regex": "^[a-zA-Z0-9ÄÖÜäöüß_\\]\\[\\-\\.\\\\ @]+$"
+??? abstract "SagaWorker example validation configuration"
+    ```json
+    {
+      "Validation": {
+        "Commands": {
+          "External": {
+            "profile-deleted": false
+          }
+        },
+        "Internal": {
+          "Function": {
+            "DuplicateAllowed": false
+          },
+          "Group": {
+            "Name": {
+              "Duplicate": false,
+              "IgnoreCase": true,
+              "Regex": "^[a-zA-Z0-9ÄÖÜäöüß_\\]\\[\\-\\.\\\\ @]+$"
+            }
+          },
+          "User": {
+            "DuplicateEmailAllowed": false
+          }
         }
-      },
-      "User": {
-        "DuplicateEmailAllowed": false
       }
     }
-  }
-}
-```
+    ```
 
 `profile-deleted` - Specifies whether the profile-deleted messages will be validated by an external system or not.
 

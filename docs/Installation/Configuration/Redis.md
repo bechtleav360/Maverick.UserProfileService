@@ -3,23 +3,24 @@ The UserProfileService-Sync uses Redis as a temporary storage for the synchroniz
 
 An example configuration section could look like this:
 
-```json
-{
-  "Redis": {
-    "ServiceName": "redis",
-    "AbortOnConnectFail": "False",
-    "AllowAdmin": "True",
-    "ConnectRetry": 5,
-    "ConnectTimeout": 5000,
-    "EndpointUrls": [
-      "localhost:6379"
-    ],
-    "ExpirationTime": 7200,
-    "Password": "",
-    "User": ""
-  }
-}
-```
+??? abstract "Redis example configuration" 
+    ```json
+    {
+      "Redis": {
+        "ServiceName": "redis",
+        "AbortOnConnectFail": "False",
+        "AllowAdmin": "True",
+        "ConnectRetry": 5,
+        "ConnectTimeout": 5000,
+        "EndpointUrls": [
+          "localhost:6379"
+        ],
+        "ExpirationTime": 7200,
+        "Password": "",
+        "User": ""
+      }
+    }
+    ```
 
 The `EndpointUrls` define the endpoints for Redis. Please note that `EndpointUrls` is an array where you can store more than one Redis endpoint. In this section, Redis is only bound to localhost. The port **6379** is the standard port for Redis.
 

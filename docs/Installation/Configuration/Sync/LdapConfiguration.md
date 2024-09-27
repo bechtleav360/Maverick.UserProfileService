@@ -1,47 +1,48 @@
 # Configure LDAP Connector
 As of now, we offer support for an LDAP Connector capable of synchronizing data from an existing Active Direcotry for example. The configuration for this feature can be found under the `LDAP` section. We will explain all sections step by step. Below is an example configuration for the Active Directory System.
 
-```json
-{
-  "Ldap": {
-    "EntitiesMapping": {
-      "DisplayName": "displayname",
-      "Email": "mail",
-      "FirstName": "givenName",
-      "LastName": "sn",
-      "Name": "Name",
-      "UserName": "cn"
-    },
-    "LdapConfiguration": [
-      {
-        "Connection": {
-          "AuthenticationType": "None",
-          "BasePath": "dc=ad, dc=example, dc=com",
-          "ConnectionString": "LDAP://ad.exmpale.com",
-          "Description": "Default AD of A365 development environment",
-          "IgnoreCertificate": false,
-          "Port": 389,
-          "ServiceUser": "CN=dev,OU=ExampleOU,OU=ExampleOU2,OU=DEVOU,DC=ad,DC=example,DC=com",
-          "ServiceUserPassword": "Password",
-          "UseSsl": false
+??? abstract "LDAP example configuration"
+    ```json
+    {
+      "Ldap": {
+        "EntitiesMapping": {
+          "DisplayName": "displayname",
+          "Email": "mail",
+          "FirstName": "givenName",
+          "LastName": "sn",
+          "Name": "Name",
+          "UserName": "cn"
         },
-        "LdapQueries": [
+        "LdapConfiguration": [
           {
-            "Filter": "(&(|(objectClass=user)(objectClass=inetOrgPerson))(!(objectClass=computer))(!(UserAccountControl:1.2.840.113556.1.4.803:=2)))",
-            "SearchBase": "OU=Users,OU=Accounts,OU=Management"
+            "Connection": {
+              "AuthenticationType": "None",
+              "BasePath": "dc=ad, dc=example, dc=com",
+              "ConnectionString": "LDAP://ad.exmpale.com",
+              "Description": "Default AD of A365 development environment",
+              "IgnoreCertificate": false,
+              "Port": 389,
+              "ServiceUser": "CN=dev,OU=ExampleOU,OU=ExampleOU2,OU=DEVOU,DC=ad,DC=example,DC=com",
+              "ServiceUserPassword": "Password",
+              "UseSsl": false
+            },
+            "LdapQueries": [
+              {
+                "Filter": "(&(|(objectClass=user)(objectClass=inetOrgPerson))(!(objectClass=computer))(!(UserAccountControl:1.2.840.113556.1.4.803:=2)))",
+                "SearchBase": "OU=Users,OU=Accounts,OU=Management"
+              }
+            ]
           }
-        ]
-      }
-    ],
-    "Source": {
-      "users": {
-        "ForceDelete": "False",
-        "Operations": "Add,Update,Delete"
+        ],
+        "Source": {
+          "users": {
+            "ForceDelete": "False",
+            "Operations": "Add,Update,Delete"
+          }
+        }
       }
     }
-  }
-}
-```
+    ```
 
 ### EntitiesMapping Section
 The entity mapping is utilized to map [LDAP attributes](https://documentation.sailpoint.com/connectors/active_directory/help/integrating_active_directory/ldap_names.html) to the user. On the left side, properties of the user model are specified. On the right side, LDAP attributes are utilized. Therefore, the **DisplayName** property will contain values stored under the attribute **displayName** in the LDAP Sytem. It's important to note that the properties of the user model must be written exactly as in the class. Refer to the [UserModel](https://github.com/bechtleav360/Maverick.UserProfileService/blob/main/src/Maverick.UserProfileService.Models/BasicModels/UserBasic.cs) for more details.
@@ -84,16 +85,17 @@ For more information, it's recommended to explore LDAP and familiarize yourself 
 
 ### Source Section
 This section solely describes the entities that can be synchronized from the LDAP system and whether the entities can be modified in the UserProfileService. For the LDAP Connector, only user entities can be synchronized from an LDAP system. Here is a brief configuration of the source section:
-```json
-{
-  "Source": {
-    "users": {
-      "ForceDelete": "False",
-      "Operations": "Add,Update,Delete"
+??? abstract "LDAP source example configuration"
+    ```json
+    {
+      "Source": {
+        "users": {
+          "ForceDelete": "False",
+          "Operations": "Add,Update,Delete"
+        }
+      }
     }
-  }
-}
-```
+    ```
 `Operations` - Defines the operations that can be performed on users. Possible configurations include `added`, `updated`, or `deleted`.
 
 `ForceDelete` - Indicates whether users should be forcefully deleted if they are not present in the LDAP system.

@@ -6,30 +6,31 @@ The UserProfileService uses a graph database called [ArangoDb](https://www.arang
 
 Example configuration section (as part of the complete appsettings file):
 
-```json
-{
-  "ProfileStorage": {
-    "ClusterConfiguration": {
-      "DocumentCollections": {
-        "*": {
-          "NumberOfShards": 3,
-          "ReplicationFactor": 2,
-          "WriteConcern": 1
-        }
-      },
-      "EdgeCollections": {
-        "*": {
-          "NumberOfShards": 3,
-          "ReplicationFactor": 2,
-          "WriteConcern": 1
-        }
+??? abstract "Arangodb example configuration"
+    ```json
+    {
+      "ProfileStorage": {
+        "ClusterConfiguration": {
+          "DocumentCollections": {
+            "*": {
+              "NumberOfShards": 3,
+              "ReplicationFactor": 2,
+              "WriteConcern": 1
+            }
+          },
+          "EdgeCollections": {
+            "*": {
+              "NumberOfShards": 3,
+              "ReplicationFactor": 2,
+              "WriteConcern": 1
+            }
+          }
+        },
+        "ConnectionString": "Endpoints=http://localhost:8529;UserName=myUser;Password=myPassword;database=UserProfileService",
+        "MinutesBetweenChecks": 60
       }
-    },
-    "ConnectionString": "Endpoints=http://localhost:8529;UserName=myUser;Password=myPassword;database=UserProfileService",
-    "MinutesBetweenChecks": 60
-  }
-}
-```
+    }
+    ```
 
 The `ConnectionString` contains the endpoint of the ArangoDb graph database, the credentials and the database to use.
 
@@ -50,11 +51,12 @@ The `ConnectionString` defines all parameters to establish a database connection
 
 Example:
 
-```json
-{
-  "Marten": {
-    "ConnectionString": "Host=localhost;Port=5432;Username=myUser;Password=myPassword;Database=UserProfileService",
-    "DatabaseSchema": "UserProfile"
-  }
-}
-```
+??? abstract "PostgreSQL example configuration"
+    ```json
+    {
+      "Marten": {
+        "ConnectionString": "Host=localhost;Port=5432;Username=myUser;Password=myPassword;Database=UserProfileService",
+        "DatabaseSchema": "UserProfile"
+      }
+    }
+    ```
