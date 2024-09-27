@@ -6,11 +6,12 @@ If you also provide an `OtlpEndpoint` URI the OtlpExporter will be setup to send
 
 An example of the trace configuration can resemble this:
 
-```json
-{
-    "Tracing": {
-        "OtlpEndpoint": "http://localhost:4317",
-        "ServiceName": "userprofile-service"
+??? abstract "Tracing exmaple configuration"
+    ```json
+    {
+        "Tracing": {
+            "OtlpEndpoint": "http://localhost:4317",
+            "ServiceName": "userprofile-service"
+        }
     }
-}
-```
+    ```

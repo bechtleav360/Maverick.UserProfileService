@@ -5,20 +5,21 @@ If you want to use [RabbitMq](https://www.rabbitmq.com/) for communication, you 
 
 An example configuration section could look like this:
 
-```json
-{
-  "Messaging": {
-    "RabbitMQ": {
-      "Host": "localhost",
-      "Password": "myPassword",
-      "Port": 5672,
-      "User": "myUser",
-      "VirtualHost": "/"
-    },
-    "Type": "RabbitMQ"
-  }
-}
-```
+??? abstract "RabbitMQ example configuration"
+    ```json
+    {
+      "Messaging": {
+        "RabbitMQ": {
+          "Host": "localhost",
+          "Password": "myPassword",
+          "Port": 5672,
+          "User": "myUser",
+          "VirtualHost": "/"
+        },
+        "Type": "RabbitMQ"
+      }
+    }
+    ```
 
 `Host` - The RabbitMQ server's hostname or IP address.
 

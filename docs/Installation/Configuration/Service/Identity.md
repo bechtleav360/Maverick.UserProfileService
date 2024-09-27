@@ -2,19 +2,20 @@
 
 Here is a sample section on how to configure the identity settings:
 
-```json
-{
-  "IdentitySettings": {
-    "ApiName": "MyApi",
-    "ApiSecret": "SuperSecretKey",
-    "Authority": "https://identity.example.com",
-    "EnableAnonymousImpersonation": false,
-    "EnableAuthorization": true,
-    "EnableCaching": true,
-    "RequireHttpsMetadata": true
-  }
-}
-```
+??? abstract "Identity example configuration"
+    ```json
+    {
+      "IdentitySettings": {
+        "ApiName": "MyApi",
+        "ApiSecret": "SuperSecretKey",
+        "Authority": "https://identity.example.com",
+        "EnableAnonymousImpersonation": false,
+        "EnableAuthorization": true,
+        "EnableCaching": true,
+        "RequireHttpsMetadata": true
+      }
+    }
+    ```
 
 `ApiName` - The name of the API, typically used to identify the API within your identity provider.
 

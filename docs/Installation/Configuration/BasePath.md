@@ -8,14 +8,15 @@ To do this, you need to use this method:
 - As extension: `appBuilder.UseReverseProxyPathBases(Configuration)`
 
 This extension will look for these settings, and configure your application accordingly:
-```json
-{
-    "Routing": {
-        "PathBase": "",
-        "DiscardResponsePathBase": ""
+??? abstract "Base-Path example configuration"
+    ```json
+    {
+        "Routing": {
+            "PathBase": "",
+            "DiscardResponsePathBase": ""
+        }
     }
-}
-```
+    ```
 
 When setting `Routing:PathBase`, your application will accept requests to all of your usual endpoints (`/api/foo`), but also those that have the configured Prefix (`/service/api/foo`).  
 This ensures compatibility with or without reverse-proxy, and pushes consumers of your API to use endpoints with their respective `PathBase`.  

@@ -2,22 +2,23 @@
 
 Here is a brief section on how the validation can be configured
 
-```json
-{
-  "Validation": {
-    "Commands": {
-      "External": {
-        "profile-deleted": false
-      }
-    },
-    "Internal": {
-      "User": {
-        "DuplicateEmailAllowed": false
+??? abstract "Sync validation example configuration"
+    ```json
+    {
+      "Validation": {
+        "Commands": {
+          "External": {
+            "profile-deleted": false
+          }
+        },
+        "Internal": {
+          "User": {
+            "DuplicateEmailAllowed": false
+          }
+        }
       }
     }
-  }
-}
-```
+    ```
 
 `profile-deleted` - Specifies whether the profile-deleted messages will be validated by an external system or not.
 

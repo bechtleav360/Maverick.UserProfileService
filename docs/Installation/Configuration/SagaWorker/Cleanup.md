@@ -1,17 +1,18 @@
 # Configure Cleanup Service
 The Cleanup configuration section outlines the frequency at which data cleanup operations are performed for various components. Here is a brief example of how to configure the cleanup:
 
-```json
-{
-  "Cleanup": {
-    "AssignmentProjection": "05:00:00",
-    "EventCollector": "05:00:00",
-    "Facade": "05:00:00",
-    "FirstLevelProjection": "05:00:00",
-    "Service": "05:00:00"
-  }
-}
-```
+??? abstract "Cleaup service example configuration"
+    ```json
+    {
+      "Cleanup": {
+        "AssignmentProjection": "05:00:00",
+        "EventCollector": "05:00:00",
+        "Facade": "05:00:00",
+        "FirstLevelProjection": "05:00:00",
+        "Service": "05:00:00"
+      }
+    }
+    ```
 
 `AssignmentProjection`- Specifies the interval at which cleanup operations are performed for the Assignment Projection component.
 

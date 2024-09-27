@@ -23,50 +23,55 @@ We are using `NLog` internally to write logs.
 
 To specify the global loglevel use the `Default` category name
 
-``` json
-{
-  "Logging": {
-    "LogLevel": {
-      "Default": "Trace",
-      "<CategoryName>": "<LogLevel as string>"
+??? abstract "Logging example configuration"
+    ``` json
+    {
+      "Logging": {
+        "LogLevel": {
+          "Default": "Trace",
+          "<CategoryName>": "<LogLevel as string>"
+        }
+      }
     }
-  }
-}
-```
+    ```
 
 ##### Default configuration (console only)
-``` json
-{
-  "Logging": {
-    "LogLevel": {
-      "Default": "Information"
+
+??? abstract "Logging example console configuration"
+    ``` json
+    {
+      "Logging": {
+        "LogLevel": {
+          "Default": "Information"
+        }
+      }
     }
-  }
-}
-```
+    ```
 
 ## File Logging
 
 To include file logging you need to add the following config-keys inside the "Logging" section
 
-``` json
-{
-  "Logging": {
-    "EnableLogFile": true, // (Optional) default: false
-    "LogFilePath": "logs" // (Optional) default: "logs"
-    "LogFileMaxHistory": 3 // (Optional) default: 3
-  }
-}
-```
+??? abstract "Logging example file configuration"
+    ``` json
+    {
+      "Logging": {
+        "EnableLogFile": true, // (Optional) default: false
+        "LogFilePath": "logs" // (Optional) default: "logs"
+        "LogFileMaxHistory": 3 // (Optional) default: 3
+      }
+    }
+    ```
 
 ## Log format (Text or JSON)
 
 To change the log format from JSON (default) to Plaintext change the `LogFormat` key to the value of `text` or `json`
 
-``` json
-{
-  "Logging": {
-    "LogFormat": "text"
-  }
-}
-```
+??? abstract "Logging example log format configuration"
+    ``` json
+    {
+      "Logging": {
+        "LogFormat": "text"
+      }
+    }
+    ```
