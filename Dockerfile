@@ -7,7 +7,6 @@ RUN pip install \
     mkdocs \
     mkdocs-material \
     mkdocs-mermaid2-plugin \
-  #  mkdocs-drawio-exporter \
     mkdocs-rtd-dropdown \
     mkdocs-git-revision-date-plugin \
     mkdocs-git-revision-date-localized-plugin \
