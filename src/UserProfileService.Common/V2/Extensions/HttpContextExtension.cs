@@ -34,11 +34,12 @@ public static class HttpContextExtension
 
         if (string.IsNullOrWhiteSpace(userId))
         {
-            userId = context.User?.Claims
-                            ?.FirstOrDefault(c => c.Type == "sub")
+            userId = context.User.Claims.FirstOrDefault(c => c.Type == "sub")
                             ?.Value;
 
-            logger?.LogDebugMessage("Received user id from token: {externalId}.", LogHelpers.Arguments(userId));
+            logger?.LogDebugMessage(
+                "Received user id from token via {claim} claim: {userId}.",
+                LogHelpers.Arguments("sub", userId));
         }
 
         if (string.IsNullOrWhiteSpace(userId))
@@ -47,7 +48,7 @@ public static class HttpContextExtension
                             ?.Value;
 
             logger?.LogDebugMessage(
-                "Received user id from token via {claim} claim: {externalId}.",
+                "Received user id from token via {claim} claim: {userId}.",
                 LogHelpers.Arguments(ClaimTypes.NameIdentifier, userId));
         }
 

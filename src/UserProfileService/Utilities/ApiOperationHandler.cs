@@ -87,7 +87,7 @@ public class ApiOperationHandler : IOperationHandler, IVolatileDataOperationHand
         var ticketGuid = Guid.NewGuid();
         var ticketId = ticketGuid.ToString("D");
         DateTime startTime = DateTime.UtcNow;
-        CommandInitiator initiator = await GetInitiator();
+        CommandInitiator initiator = GetInitiator();
 
         try
         {
@@ -157,10 +157,11 @@ public class ApiOperationHandler : IOperationHandler, IVolatileDataOperationHand
         }
     }
 
-    private async Task<CommandInitiator> GetInitiator()
+    private CommandInitiator GetInitiator()
     {
         _logger.EnterMethod();
-        string userId = await _userContext.GetIdOfCurrentUserAsync();
+        
+        string userId = _userContext.GetIdOfCurrentUser();
 
         return _logger.ExitMethod(
             !string.IsNullOrWhiteSpace(userId)
