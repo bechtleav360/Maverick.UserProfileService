@@ -198,7 +198,7 @@ public class ProfilesController : ControllerBase
         }
 
         List<IProfile> foundProfile =
-            await _readService.GetProfileByExternalOrInternalIdAsync<User, Group, Organization>(
+            await _readService.GetProfilesByExternalOrInternalIdAsync<User, Group, Organization>(
                 profileId,
                 allowExternalIds,
                 source,

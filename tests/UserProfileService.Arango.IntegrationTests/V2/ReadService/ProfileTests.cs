@@ -147,7 +147,7 @@ namespace UserProfileService.Arango.IntegrationTests.V2.ReadService
             IReadService service = await Fixture.GetReadServiceAsync();
             
             List<IProfile> foundProfile =
-                await service.GetProfileByExternalOrInternalIdAsync<User, Group, Organization>(externalId);
+                await service.GetProfilesByExternalOrInternalIdAsync<User, Group, Organization>(externalId);
             
             Assert.NotNull(foundProfile);
             Assert.Single(foundProfile);
@@ -167,7 +167,7 @@ namespace UserProfileService.Arango.IntegrationTests.V2.ReadService
             IReadService service = await Fixture.GetReadServiceAsync();
 
             List<IProfile> foundProfile =
-                await service.GetProfileByExternalOrInternalIdAsync<User, Group, Organization>(
+                await service.GetProfilesByExternalOrInternalIdAsync<User, Group, Organization>(
                     externalId,
                     true,
                     source);
@@ -192,7 +192,7 @@ namespace UserProfileService.Arango.IntegrationTests.V2.ReadService
             source = $"{source}-wrong";
 
             List<IProfile> foundProfile =
-                await service.GetProfileByExternalOrInternalIdAsync<User, Group, Organization>(
+                await service.GetProfilesByExternalOrInternalIdAsync<User, Group, Organization>(
                     externalId,
                     true,
                     source);
@@ -208,7 +208,7 @@ namespace UserProfileService.Arango.IntegrationTests.V2.ReadService
             IReadService service = await Fixture.GetReadServiceAsync();
 
             List<IProfile> foundProfile =
-                await service.GetProfileByExternalOrInternalIdAsync<User, Group, Organization>(externalId, false);
+                await service.GetProfilesByExternalOrInternalIdAsync<User, Group, Organization>(externalId, false);
 
             Assert.Empty(foundProfile);
         }
@@ -222,7 +222,7 @@ namespace UserProfileService.Arango.IntegrationTests.V2.ReadService
             IReadService service = await Fixture.GetReadServiceAsync();
 
             List<IProfile> foundProfile =
-                await service.GetProfileByExternalOrInternalIdAsync<User, Group, Organization>(profileId);
+                await service.GetProfilesByExternalOrInternalIdAsync<User, Group, Organization>(profileId);
 
             Assert.NotNull(foundProfile);
             Assert.Single(foundProfile);
