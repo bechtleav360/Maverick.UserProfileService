@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
@@ -34,10 +35,20 @@ public static class HttpContextExtension
         if (string.IsNullOrWhiteSpace(userId))
         {
             userId = context.User?.Claims
-                ?.FirstOrDefault(c => c.Type == "sub")
-                ?.Value;
+                            ?.FirstOrDefault(c => c.Type == "sub")
+                            ?.Value;
 
             logger?.LogDebugMessage("Received user id from token: {externalId}.", LogHelpers.Arguments(userId));
+        }
+
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            userId = context.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)
+                            ?.Value;
+
+            logger?.LogDebugMessage(
+                "Received user id from token via {claim} claim: {externalId}.",
+                LogHelpers.Arguments(ClaimTypes.NameIdentifier, userId));
         }
 
         if (userId == null)

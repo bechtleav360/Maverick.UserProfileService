@@ -17,13 +17,10 @@ using UserProfileService.Api.Common.Abstractions;
 using UserProfileService.Api.Common.Attributes;
 using UserProfileService.Api.Common.Configuration;
 using UserProfileService.Api.Common.Extensions;
-using UserProfileService.Attributes;
 using UserProfileService.Common.Logging;
 using UserProfileService.Common.Logging.Extensions;
 using UserProfileService.Common.V2.Abstractions;
 using UserProfileService.Common.V2.Exceptions;
-using UserProfileService.Configuration;
-using UserProfileService.Extensions;
 using UserProfileService.Utilities;
 
 namespace UserProfileService.Controllers.V2;
@@ -208,12 +205,12 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> GetOwnProfileAsync(CancellationToken cancellationToken = default)
     {
         _logger.EnterMethod();
+
         string currentUserId = await _userContextStore.GetIdOfCurrentUserAsync();
 
-        var profile =
-            await _readService.GetProfileAsync<User>(
+        List<IProfile> profile =
+            await _readService.GetProfileByExternalOrInternalIdAsync<User, Group, Organization>(
                 currentUserId,
-                RequestedProfileKind.User,
                 cancellationToken: cancellationToken);
 
         IActionResult result =
@@ -688,6 +685,7 @@ public class UsersController : ControllerBase
     /// <response code="200">If the request was successful and the response body contains a list of users.</response>
     /// <response code="401">Required authentication information is either missing or not valid for the resource.</response>
     /// <response code="403">
+    /// 
     ///     Access is denied to the requested resource.The user might not have enough permission.The response
     ///     body contains an error object with detailed information.
     /// </response>
