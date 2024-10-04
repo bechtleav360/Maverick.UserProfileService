@@ -214,15 +214,18 @@ public class UsersController : ControllerBase
                 currentUserId,
                 cancellationToken: cancellationToken);
 
-        IProfile profile = profiles.FirstOrDefault();
+        IProfile profile = profiles.FirstOrDefault(p => p.Kind == ProfileKind.User);
 
-        if (profiles.Count == 0
-            || profile is not
-            {
-                Kind: ProfileKind.User
-            })
+        if (profile == null)
         {
             return _logger.ExitMethod(NotFound($"The user with the id {currentUserId} could not be found!"));
+        }
+
+        if (profiles.Count > 1)
+        {
+            _logger.LogWarnMessage(
+                "More than one profiles ({profileCount} profiles) were found for the {Id}.",
+                LogHelpers.Arguments(profiles.Count, currentUserId));
         }
 
         IActionResult result = ActionResultHelper.ToActionResult(profile.ToPropertiesChangeDictionary());
