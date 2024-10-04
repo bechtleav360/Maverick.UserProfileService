@@ -21,6 +21,7 @@ using UserProfileService.Common.Logging;
 using UserProfileService.Common.Logging.Extensions;
 using UserProfileService.Common.V2.Abstractions;
 using UserProfileService.Common.V2.Exceptions;
+using UserProfileService.Extensions;
 using UserProfileService.Utilities;
 
 namespace UserProfileService.Controllers.V2;
@@ -208,15 +209,19 @@ public class UsersController : ControllerBase
 
         string currentUserId = _userContextStore.GetIdOfCurrentUser();
 
-        List<IProfile> profile =
-            await _readService.GetProfileByExternalOrInternalIdAsync<User, Group, Organization>(
+        List<IProfile> profiles =
+            await _readService.GetProfilesByExternalOrInternalIdAsync<User, Group, Organization>(
                 currentUserId,
+                true,
                 cancellationToken: cancellationToken);
 
-        IActionResult result =
-            ActionResultHelper.ToActionResult(profile.ResolveUrlProperties(ControllerContext));
+        foreach (IProfile profile in profiles.Where(profile => profile.Kind == ProfileKind.User))
+        {
+            return
+                ActionResultHelper.ToActionResult(profile.ToPropertiesChangeDictionary());
+        }
 
-        return _logger.ExitMethod(result);
+        return _logger.ExitMethod(NotFound($"The user with the id {currentUserId} could not be found!"));
     }
 
     /// <summary>
