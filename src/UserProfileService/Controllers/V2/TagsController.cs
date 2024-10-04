@@ -266,7 +266,7 @@ public class TagsController : ControllerBase
         CancellationToken cancellationToken = default)
     {
         _logger.EnterMethod();
-        string currentUserId = await _userContextStore.GetIdOfCurrentUserAsync();
+        string currentUserId = _userContextStore.GetIdOfCurrentUser();
 
         IPaginatedList<CalculatedTag> tags =
             await _readService

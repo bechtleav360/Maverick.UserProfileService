@@ -206,7 +206,7 @@ public class UsersController : ControllerBase
     {
         _logger.EnterMethod();
 
-        string currentUserId = await _userContextStore.GetIdOfCurrentUserAsync();
+        string currentUserId = _userContextStore.GetIdOfCurrentUser();
 
         List<IProfile> profile =
             await _readService.GetProfileByExternalOrInternalIdAsync<User, Group, Organization>(
@@ -253,7 +253,7 @@ public class UsersController : ControllerBase
                 LogHelpers.Arguments(userProperties.ToLogString()));
         }
 
-        string currentUserId = await _userContextStore.GetIdOfCurrentUserAsync();
+        string currentUserId = _userContextStore.GetIdOfCurrentUser();
 
         IActionResult value = await ActionResultHelper.GetAcceptedAtStatusResultAsync(
             () =>

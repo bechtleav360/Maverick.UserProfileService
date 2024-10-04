@@ -13,7 +13,7 @@ public class UserContextStore : IUserContextStore
 {
     private readonly HttpContext _context;
     private readonly ILogger<UserContextStore> _logger;
-    private readonly Lazy<Task<string>> _userId;
+    private readonly Lazy<string> _userId;
 
     /// <summary>
     ///     Initializes a new instance of <see cref="UserContextStore" />.
@@ -28,10 +28,10 @@ public class UserContextStore : IUserContextStore
     {
         _logger = logger;
         _context = contextAccessor.HttpContext;
-        _userId = new Lazy<Task<string>>(GetUserIdInternal);
+        _userId = new Lazy<string>(GetUserIdInternal);
     }
 
-    private async Task<string> GetUserIdInternal()
+    private string GetUserIdInternal()
     {
         _logger.EnterMethod();
 
@@ -41,8 +41,8 @@ public class UserContextStore : IUserContextStore
     }
     
 
-    /// <inheritdoc cref="IUserContextStore.GetIdOfCurrentUserAsync" />
-    public Task<string> GetIdOfCurrentUserAsync()
+    /// <inheritdoc cref="IUserContextStore.GetIdOfCurrentUser" />
+    public string GetIdOfCurrentUser()
     {
         return _userId.Value;
     }
