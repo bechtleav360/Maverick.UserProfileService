@@ -13,7 +13,6 @@ public class UserContextStore : IUserContextStore
 {
     private readonly HttpContext _context;
     private readonly ILogger<UserContextStore> _logger;
-    private readonly IReadService _readService;
     private readonly Lazy<Task<string>> _userId;
 
     /// <summary>
@@ -29,7 +28,6 @@ public class UserContextStore : IUserContextStore
     {
         _logger = logger;
         _context = contextAccessor.HttpContext;
-        _readService = readService;
         _userId = new Lazy<Task<string>>(GetUserIdInternal);
     }
 
@@ -37,49 +35,11 @@ public class UserContextStore : IUserContextStore
     {
         _logger.EnterMethod();
 
-        string externalId = _context.GetUserId(_logger);
-
-        if (string.IsNullOrWhiteSpace(externalId))
-        {
-            _logger.LogInfoMessage(
-                "Current user is not authenticated or no user id is given by header.",
-                Arguments(externalId));
-
-            return _logger.ExitMethod<string>(default);
-        }
-
-        IProfile profile =
-            await _readService.GetProfileByIdOrExternalIdAsync<UserBasic, GroupBasic, OrganizationBasic>(externalId);
-
-        if (string.IsNullOrWhiteSpace(profile?.Id))
-        {
-            _logger.LogInfoMessage(
-                "Current user is not authenticated, because user id {userId} is not a stored id.",
-                Arguments(externalId));
-
-            return _logger.ExitMethod<string>(default);
-        }
-
-        _logger.LogDebugMessage(
-            "Current authenticated user: Name: {name} (id: {id})",
-            Arguments(
-                EscapeName(profile.Name),
-                profile.Id));
-
-        return _logger.ExitMethod<string>(profile.Id);
+        string userId = _context.GetUserId(_logger);
+            
+        return _logger.ExitMethod<string>(userId);
     }
-
-    private static object[] Arguments(params object[] input)
-    {
-        return input;
-    }
-
-    private static string EscapeName(string name)
-    {
-        return string.IsNullOrWhiteSpace(name)
-            ? "<empty>"
-            : $"{name[0]}***";
-    }
+    
 
     /// <inheritdoc cref="IUserContextStore.GetIdOfCurrentUserAsync" />
     public Task<string> GetIdOfCurrentUserAsync()
