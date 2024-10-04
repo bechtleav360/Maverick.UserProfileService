@@ -212,16 +212,22 @@ public class UsersController : ControllerBase
         List<IProfile> profiles =
             await _readService.GetProfilesByExternalOrInternalIdAsync<User, Group, Organization>(
                 currentUserId,
-                true,
                 cancellationToken: cancellationToken);
 
-        foreach (IProfile profile in profiles.Where(profile => profile.Kind == ProfileKind.User))
+        IProfile profile = profiles.FirstOrDefault();
+
+        if (profiles.Count == 0
+            || profile is not
+            {
+                Kind: ProfileKind.User
+            })
         {
-            return
-                ActionResultHelper.ToActionResult(profile.ToPropertiesChangeDictionary());
+            return _logger.ExitMethod(NotFound($"The user with the id {currentUserId} could not be found!"));
         }
 
-        return _logger.ExitMethod(NotFound($"The user with the id {currentUserId} could not be found!"));
+        IActionResult result = ActionResultHelper.ToActionResult(profile.ToPropertiesChangeDictionary());
+
+        return result;
     }
 
     /// <summary>
