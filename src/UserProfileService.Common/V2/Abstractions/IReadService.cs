@@ -770,7 +770,7 @@ public interface IReadService
         CancellationToken cancellationToken = default);
     
     /// <summary>
-    ///     Returns an  <see cref="IProfile" />  regarding the specified <paramref name="profileId" /> and the
+    ///     Returns a list of <see cref="IProfile" />  regarding the specified <paramref name="profileId" /> and the
     ///     optional parameter <paramref name="allowExternalIds" /> and <paramref name="source" />.
     /// </summary>
     /// <param name="profileId">
@@ -787,10 +787,10 @@ public interface IReadService
     ///     <see cref="CancellationToken.None" />.
     /// </param>
     /// <returns>
-    ///     A task representing the asynchronous read operation. It wraps a <see cref="IProfile" />.
+    ///     A task representing the asynchronous read operation. It wraps a list of <see cref="IProfile" />.
     ///     A <see cref="IProfile" /> can be a <see cref="Organization" />, <see cref="Group" /> or an <see cref="User" />.
     /// </returns>
-    Task<List<IProfile>> GetProfileByExternalOrInternalIdAsync<TUser, TGroup, TOrgUnit>(
+    Task<List<IProfile>> GetProfilesByExternalOrInternalIdAsync<TUser, TGroup, TOrgUnit>(
         string profileId,
         bool allowExternalIds = true,
         string source = null,

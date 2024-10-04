@@ -1244,7 +1244,7 @@ public class ArangoReadService : ArangoRepositoryBase, IReadService
     }
 
     /// <inheritdoc />
-    public async Task<List<IProfile>> GetProfileByExternalOrInternalIdAsync<TUser, TGroup, TOrgUnit>(
+    public async Task<List<IProfile>> GetProfilesByExternalOrInternalIdAsync<TUser, TGroup, TOrgUnit>(
         string profileId,
         bool allowExternalIds = true,
         string source = null,

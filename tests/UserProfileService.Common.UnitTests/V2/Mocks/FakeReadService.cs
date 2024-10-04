@@ -312,7 +312,7 @@ namespace UserProfileService.Common.UnitTests.V2.Mocks
             throw new NotImplementedException();
         }
 
-        public Task<List<IProfile>> GetProfileByExternalOrInternalIdAsync<TUser, TGroup, TOrgUnit>(
+        public Task<List<IProfile>> GetProfilesByExternalOrInternalIdAsync<TUser, TGroup, TOrgUnit>(
             string profileId,
             bool allowExternalIds = true,
             string source = null,
