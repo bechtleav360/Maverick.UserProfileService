@@ -181,7 +181,7 @@ public class ProfilesController : ControllerBase
         CancellationToken cancellationToken = default)
     {
         _logger.EnterMethod();
-
+        
         if (_logger.IsEnabledForTrace())
         {
             _logger.LogTraceMessage(
@@ -223,6 +223,9 @@ public class ProfilesController : ControllerBase
                 // ReSharper disable once StringLiteralTypo
                 "x-userprofileservice-warning",
                 $"For the id: {profileId} where {foundProfile.Count} profiles found.");
+
+            // Here we return the first profile that was created.
+            foundProfile = foundProfile.OrderBy(p => p.CreatedAt).ToList();
         }
 
         if (_logger.IsEnabledForTrace())
@@ -234,7 +237,7 @@ public class ProfilesController : ControllerBase
                     profileId.ToLogString(),
                     foundProfile.ToLogString()));
         }
-
+        
         IActionResult resultProfileActionResult = ActionResultHelper.ToActionResult(foundProfile.First());
 
         return _logger.ExitMethod(resultProfileActionResult);
