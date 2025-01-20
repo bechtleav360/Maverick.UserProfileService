@@ -91,7 +91,9 @@ public sealed class ArangoDbOrderByTreeVisitor : ArangoDbTreeVisitorBase
 
         return new SubTreeVisitorResult
         {
-            ReturnString = $"SORT {Key}.{s} {sortOrder}",
+            //HINT:  the expression key._key (id of entity) is added to sort expression to avoid random behavior for elements with same
+            // sort property value (especially in cluster mode)
+            ReturnString = $"SORT {Key}.{s} {sortOrder},{Key}._key",
             CollectionToIterationVarMapping =
                 new Dictionary<string, string>(VarMapping, StringComparer.OrdinalIgnoreCase)
         };
@@ -111,7 +113,9 @@ public sealed class ArangoDbOrderByTreeVisitor : ArangoDbTreeVisitorBase
 
         return new SubTreeVisitorResult
         {
-            ReturnString = $"SORT {Key}.{node.Member.Name} {sortOrder}",
+            //HINT:  the expression key._key (id of entity) is added to sort expression to avoid random behavior for elements with same
+            // sort property value (especially in cluster mode)
+            ReturnString = $"SORT {Key}.{node.Member.Name} {sortOrder},{Key}._key",
             CollectionToIterationVarMapping =
                 new Dictionary<string, string>(VarMapping, StringComparer.OrdinalIgnoreCase)
         };
