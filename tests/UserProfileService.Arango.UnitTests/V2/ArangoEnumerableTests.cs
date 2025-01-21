@@ -135,7 +135,7 @@ namespace UserProfileService.Arango.UnitTests.V2
                 .ToQuery(CollectionScope.Query);
 
             Assert.Matches($@"^FOR\s+i0\s+IN\s+{"profilesQuery".GetDefaultCollectionNameInTest()}", text);
-            Assert.Matches(@"SORT\s+i0.Name\s+DESC\s+LIMIT\s+1\s*,\s*23", text);
+            Assert.Matches(@"SORT\s+i0.Name\s+DESC,\s*i0._key\s+LIMIT\s+1\s*,\s*23", text);
 
             const string filterPattern =
                 @"FILTER\(LIKE\(i0\.Name,""Test%"",true\)\s*AND\s*" + 
@@ -204,7 +204,7 @@ namespace UserProfileService.Arango.UnitTests.V2
                 $"FOR\\s+nested0\\s+IN\\s+FLATTEN\\s*\\(\\s*FOR\\s+g0\\s+IN\\s+{"profilesQuery".GetDefaultCollectionNameInTest()}"
                 + "\\s+FILTER\\s+g0\\.Kind\\s*==\\s*\"Group\"\\s+AND\\s*\\(\\s*g0\\.Id\\s*==\\s*\"123\"\\s*\\)\\s+LIMIT"
                 + "\\s+0\\s*,\\s*1\\s+RETURN\\s+g0\\.Members\\s*\\)\\s*FILTER\\s+LIKE\\s*\\(\\s*nested0\\.Name\\s*,"
-                + "\\s*\"A%\"\\s*,\\s*true\\s*\\)\\s+SORT\\s+nested0\\.DisplayName\\s+Asc\\s+LIMIT\\s+0\\s*,"
+                + "\\s*\"A%\"\\s*,\\s*true\\s*\\)\\s+SORT\\s+nested0\\.DisplayName\\s+Asc,\\s*nested0\\._key\\s+LIMIT\\s+0\\s*,"
                 + "\\s*10\\s+RETURN\\s+nested0";
 
             Assert.Matches(checkingPattern, text);
@@ -283,7 +283,7 @@ namespace UserProfileService.Arango.UnitTests.V2
             string pattern =
                 $"FOR\\s+a0\\s+IN\\s+{"activityLogs".GetDefaultCollectionNameInTest()}\\s+FILTER\\s+\\(a0\\.Scope\\s*==\\s*\"Group\"\\s*\\)\\s*"
                 + "LET\\s+value\\s*=\\s*FIRST\\(RETURN\\s+a0\\)\\s*COLLECT\\s+key\\s*=\\s*value\\.EventId\\s+INTO\\s+grouped\\s*=\\s*value\\s+"
-                + "LET\\s+a0\\s*=\\s*FIRST\\(grouped\\)\\s*SORT\\s+a0\\.Timestamp\\s+DESC\\s+RETURN\\s+a0";
+                + "LET\\s+a0\\s*=\\s*FIRST\\(grouped\\)\\s*SORT\\s+a0\\.Timestamp\\s+DESC,\\s*a0._key\\s+RETURN\\s+a0";
 
             Assert.Matches(pattern, text);
         }
