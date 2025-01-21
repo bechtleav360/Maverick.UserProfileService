@@ -179,7 +179,7 @@ namespace UserProfileService.Arango.UnitTests.V2
                             query);
 
                         Assert.Matches(
-                            "SORT\\s+[A-Za-z0-9]0.Name\\s+DESC\\s+LIMIT\\s+2\\s*,5",
+                            "SORT\\s+[A-Za-z0-9]0.Name\\s+DESC,\\s*[A-Za-z0-9]0\\._key\\s+LIMIT\\s+2\\s*,5",
                             query);
 
                         Assert.Matches(filterCheckPattern, query);
@@ -737,7 +737,7 @@ namespace UserProfileService.Arango.UnitTests.V2
 
                 if (sortActive)
                 {
-                    s += $"\\s+SORT\\s+i0\\.{GetPascalCase(sortProperty)}\\s+({sortOrder:G}|{sortOrder.ToString("G").ToUpperInvariant()})";
+                    s += $"\\s+SORT\\s+i0\\.{GetPascalCase(sortProperty)}\\s+({sortOrder:G}|{sortOrder.ToString("G").ToUpperInvariant()}),\\s*i0\\._key";
                 }
 
                 s += "\\s+RETURN\\s+i0";

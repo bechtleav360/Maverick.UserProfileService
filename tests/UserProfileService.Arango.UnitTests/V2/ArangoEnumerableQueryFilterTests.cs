@@ -252,7 +252,7 @@ namespace UserProfileService.Arango.UnitTests.V2
                 .ToQuery(CollectionScope.Query);
 
             Assert.Matches(
-                "^FOR\\s+t0\\s+IN\\s+test_objectsQuery\\s+FILTER\\(\\(t0\\.Type\\s*==\\s*\"TestEntity\"\\s+AND\\s+t0\\.Tags\\[\\*]\\.Name\\s+ANY\\s+IN\\s+\\[\"my\\#stuff\",\"develop\"]\\s*AND\\s+t0\\.Type\\s*==\\s*\"TestEntity\"\\s+AND\\s+t0\\.Characteristics\\s+ANY\\s+IN\\s*\\[\"av360\",\"bund\"]\\s*AND\\s*t0\\.Type\\s*==\\s*\"TestEntity\"\\s+AND\\s+\\[23]\\s*ANY\\s*<\\s*t0\\.Weight\\s*AND\\s+t0\\.Type\\s*==\\s*\"TestEntity\"\\s+AND\\s+\\[\"2001-01-01T00:00:00\",\"2000-12-31T00:00:00\"]\\s*ALL\\s*>=\\s*t0\\.BirthDay\\)\\s*OR\\s+t0\\.Type\\s*==\\s*\"TestEntity\"\\s+AND\\s*\\(\\(LIKE\\(t0\\.Type,\"%st%\",true\\)\\s+OR\\s+LIKE\\(t0\\.FirstName,\"%st%\",true\\)\\)\\s+OR\\s+LIKE\\(t0\\.LastName,\"%st%\",true\\)\\)\\)\\s+SORT\\s+t0\\.LastName\\s+DESC\\s+LIMIT\\s+1,3\\s+RETURN\\s+t0$",
+                "^FOR\\s+t0\\s+IN\\s+test_objectsQuery\\s+FILTER\\(\\(t0\\.Type\\s*==\\s*\"TestEntity\"\\s+AND\\s+t0\\.Tags\\[\\*]\\.Name\\s+ANY\\s+IN\\s+\\[\"my\\#stuff\",\"develop\"]\\s*AND\\s+t0\\.Type\\s*==\\s*\"TestEntity\"\\s+AND\\s+t0\\.Characteristics\\s+ANY\\s+IN\\s*\\[\"av360\",\"bund\"]\\s*AND\\s*t0\\.Type\\s*==\\s*\"TestEntity\"\\s+AND\\s+\\[23]\\s*ANY\\s*<\\s*t0\\.Weight\\s*AND\\s+t0\\.Type\\s*==\\s*\"TestEntity\"\\s+AND\\s+\\[\"2001-01-01T00:00:00\",\"2000-12-31T00:00:00\"]\\s*ALL\\s*>=\\s*t0\\.BirthDay\\)\\s*OR\\s+t0\\.Type\\s*==\\s*\"TestEntity\"\\s+AND\\s*\\(\\(LIKE\\(t0\\.Type,\"%st%\",true\\)\\s+OR\\s+LIKE\\(t0\\.FirstName,\"%st%\",true\\)\\)\\s+OR\\s+LIKE\\(t0\\.LastName,\"%st%\",true\\)\\)\\)\\s+SORT\\s+t0\\.LastName\\s+DESC,\\s*t0\\._key\\s+LIMIT\\s+1,3\\s+RETURN\\s+t0$",
                 text);
         }
 
@@ -315,7 +315,7 @@ namespace UserProfileService.Arango.UnitTests.V2
                 .ToQuery(CollectionScope.Query);
 
             Assert.Matches(
-                "^FOR\\s+t0\\s+IN\\s+test_objectsQuery\\s+FILTER\\(\\(t0\\.Type\\s*==\\s*\"TestEntity\"\\s+AND\\s+t0\\.Tags\\[\\*]\\.Name\\s+ANY\\s+IN\\s+\\[\"my\\#stuff\",\"develop\"]\\s*OR\\s+t0\\.Type\\s*==\\s*\"TestEntity\"\\s+AND\\s+t0\\.Characteristics\\s+ANY\\s+IN\\s*\\[\"av360\",\"bund\"]\\s*OR\\s*t0\\.Type\\s*==\\s*\"TestEntity\"\\s+AND\\s+\\[23]\\s*ANY\\s*<\\s*t0\\.Weight\\s*OR\\s+t0\\.Type\\s*==\\s*\"TestEntity\"\\s+AND\\s+\\[\"2001-01-01T00:00:00\",\"2000-12-31T00:00:00\"]\\s*ALL\\s*>=\\s*t0\\.BirthDay\\)\\s*OR\\s+t0\\.Type\\s*==\\s*\"TestEntity\"\\s+AND\\s*\\(\\(LIKE\\(t0\\.Type,\"%st%\",true\\)\\s+OR\\s+LIKE\\(t0\\.FirstName,\"%st%\",true\\)\\)\\s+OR\\s+LIKE\\(t0\\.LastName,\"%st%\",true\\)\\)\\)\\s+SORT\\s+t0\\.LastName\\s+DESC\\s+LIMIT\\s+1,3\\s+RETURN\\s+t0$",
+                "^FOR\\s+t0\\s+IN\\s+test_objectsQuery\\s+FILTER\\(\\(t0\\.Type\\s*==\\s*\"TestEntity\"\\s+AND\\s+t0\\.Tags\\[\\*]\\.Name\\s+ANY\\s+IN\\s+\\[\"my\\#stuff\",\"develop\"]\\s*OR\\s+t0\\.Type\\s*==\\s*\"TestEntity\"\\s+AND\\s+t0\\.Characteristics\\s+ANY\\s+IN\\s*\\[\"av360\",\"bund\"]\\s*OR\\s*t0\\.Type\\s*==\\s*\"TestEntity\"\\s+AND\\s+\\[23]\\s*ANY\\s*<\\s*t0\\.Weight\\s*OR\\s+t0\\.Type\\s*==\\s*\"TestEntity\"\\s+AND\\s+\\[\"2001-01-01T00:00:00\",\"2000-12-31T00:00:00\"]\\s*ALL\\s*>=\\s*t0\\.BirthDay\\)\\s*OR\\s+t0\\.Type\\s*==\\s*\"TestEntity\"\\s+AND\\s*\\(\\(LIKE\\(t0\\.Type,\"%st%\",true\\)\\s+OR\\s+LIKE\\(t0\\.FirstName,\"%st%\",true\\)\\)\\s+OR\\s+LIKE\\(t0\\.LastName,\"%st%\",true\\)\\)\\)\\s+SORT\\s+t0\\.LastName\\s+DESC,\\s*t0\\._key\\s+LIMIT\\s+1,3\\s+RETURN\\s+t0$",
                 text);
         }
 
@@ -383,7 +383,7 @@ namespace UserProfileService.Arango.UnitTests.V2
                    @"OR\s+LIKE\(i0\.(?:Display)?Name,""%test%"",true\)\)\)\s*OR\s*\(i0\.Kind\s*==\s*""Organization""\s*"+
                    @"AND\s*\(LIKE\(i0\.(?:Display)?Name,""%test%"",true\)\s*"+
                    @"OR\s+LIKE\(i0\.(?:Display)?Name,""%test%"",true\)\)\)\)\)\s*"+
-                   @"SORT\s+i0\.DisplayName\s+Asc\s+LIMIT\s+2,2\s+RETURN\s+i0";
+                   @"SORT\s+i0\.DisplayName\s+Asc,\s*i0\._key\s+LIMIT\s+2,2\s+RETURN\s+i0";
 
             Assert.Matches(pattern, text);
         }
@@ -675,6 +675,7 @@ namespace UserProfileService.Arango.UnitTests.V2
                 + "FILTER\\s*\\(f0\\.Type\\s*==\\s*\"Function\"\\s*"
                 + "AND\\s\\[\"Z23\"\\]\\s+ALL\\s*==\\s*f0\\.Organization\\.Name\\)\\s*"
                 + "SORT\\s*f0\\.Organization\\.Weight\\s*DESC\\s*"
+                + ",s*f0\\._key\\s*"
                 + "LIMIT\\s+0,100\\s+RETURN\\s+f0";
 
             Assert.Matches(pattern, text);
@@ -721,6 +722,7 @@ namespace UserProfileService.Arango.UnitTests.V2
                 + "FILTER\\s*\\(f0\\.Type\\s*==\\s*\"Function\"\\s*"
                 + "AND\\s\\[\"Z23\"\\]\\s+ALL\\s*==\\s*f0\\.Organization\\.Name\\)\\s*"
                 + "SORT\\s*f0\\.Organization\\.Name\\s*DESC\\s*"
+                + ",s*f0\\._key\\s*"
                 + "LIMIT\\s+0,100\\s+RETURN\\s+f0";
 
             Assert.Matches(pattern, text);
