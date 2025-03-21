@@ -94,10 +94,11 @@ internal class UserCreatedFirstLevelEventHandler : FirstLevelEventHandlerTagsInc
         string externalId = firstLevelUser.ExternalIds.FirstOrDefaultUnconverted()?.Id;
         string displayName = firstLevelUser.DisplayName;
         string email = firstLevelUser.Email;
+        string semaphoreKey = externalId ?? displayName ?? email;
 
 
         SemaphoreSlim semaphore = _propertyLocks.GetOrAdd(
-            externalId ?? displayName ?? email,
+            semaphoreKey,
             _ => new SemaphoreSlim(1, 1));
 
 
@@ -156,6 +157,7 @@ internal class UserCreatedFirstLevelEventHandler : FirstLevelEventHandlerTagsInc
         finally
         {
             semaphore.Release();
+            _propertyLocks.Remove(semaphoreKey, out semaphore);
         }
 
         Logger.ExitMethod();
