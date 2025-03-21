@@ -22,6 +22,9 @@ using ResolvedInitiator = Maverick.UserProfileService.AggregateEvents.Common.Eve
 using TagResolved = Maverick.UserProfileService.AggregateEvents.Common.Models.Tag;
 using TagAssignmentResolved = Maverick.UserProfileService.AggregateEvents.Common.Models.TagAssignment;
 using TagAddedResolved = Maverick.UserProfileService.AggregateEvents.Resolved.V1.TagsAdded;
+using System.Collections.Concurrent;
+using UserProfileService.Common.V2.Exceptions;
+using UserProfileService.Common.V2.Extensions;
 
 namespace UserProfileService.Projection.FirstLevel.Handler.V3;
 
@@ -30,6 +33,9 @@ namespace UserProfileService.Projection.FirstLevel.Handler.V3;
 /// </summary>
 internal class UserCreatedFirstLevelEventHandler : FirstLevelEventHandlerTagsIncludedBase<UserCreatedEventV3>
 {
+
+    private static readonly ConcurrentDictionary<string, SemaphoreSlim> _propertyLocks = new();
+
     /// <summary>
     ///     Creates an instance of the object <see cref="UserCreatedFirstLevelEventHandler" />.
     /// </summary>
@@ -85,34 +91,74 @@ internal class UserCreatedFirstLevelEventHandler : FirstLevelEventHandlerTagsInc
         var createdUserEvent = Mapper.Map<UserCreatedEventResolved>(eventObject);
         var firstLevelUser = Mapper.Map<FirstLevelProjectionUser>(eventObject);
 
-        await Repository.CreateProfileAsync(firstLevelUser, transaction, cancellationToken);
+        string externalId = firstLevelUser.ExternalIds.FirstOrDefaultUnconverted()?.Id;
+        string displayName = firstLevelUser.DisplayName;
+        string email = firstLevelUser.Email;
+        string semaphoreKey = externalId ?? displayName ?? email;
 
-        Guid batchId = await SagaService.CreateBatchAsync(
-            cancellationToken,
-            Creator.CreateEvents(
-                    firstLevelUser.ToObjectIdent(),
-                    new List<IUserProfileServiceEvent>
-                    {
-                        createdUserEvent
-                    },
-                    eventObject)
-                .ToArray());
 
-        await CreateTagsAddedEvent(
-            transaction,
-            batchId,
-            eventObject.Payload.Tags.ToList(),
-            async (repo, tag) =>
-                await repo.AddTagToProfileAsync(
-                    tag,
-                    firstLevelUser.Id,
-                    transaction,
-                    cancellationToken),
-            eventObject,
-            firstLevelUser.ToObjectIdent(),
-            cancellationToken);
+        SemaphoreSlim semaphore = _propertyLocks.GetOrAdd(
+            semaphoreKey,
+            _ => new SemaphoreSlim(1, 1));
 
-        await SagaService.ExecuteBatchAsync(batchId, cancellationToken);
+
+        await semaphore.WaitAsync(cancellationToken);
+
+        try
+        {
+
+            bool userExist = await Repository.UserExistAsync(
+             externalId,
+               displayName,
+               email, cancellationToken);
+
+            if (userExist)
+            {
+                
+                Logger.LogWarnMessage(
+                    "The profile with the external Id: {extId} and displayName: {d} already exist and can not be created",
+                    LogHelpers.Arguments(
+                        firstLevelUser.ExternalIds.FirstOrDefaultUnconverted()?.Id,
+                        firstLevelUser.DisplayName));
+
+                throw new AlreadyExistsException(
+                    $"The profile with the external Id: {externalId} and displayName: {displayName} already exist and can not be created");
+            }
+
+            await Repository.CreateProfileAsync(firstLevelUser, transaction, cancellationToken);
+
+            Guid batchId = await SagaService.CreateBatchAsync(
+                cancellationToken,
+                Creator.CreateEvents(
+                        firstLevelUser.ToObjectIdent(),
+                        new List<IUserProfileServiceEvent>
+                        {
+                            createdUserEvent
+                        },
+                        eventObject)
+                    .ToArray());
+
+            await CreateTagsAddedEvent(
+                transaction,
+                batchId,
+                eventObject.Payload.Tags.ToList(),
+                async (repo, tag) =>
+                    await repo.AddTagToProfileAsync(
+                        tag,
+                        firstLevelUser.Id,
+                        transaction,
+                        cancellationToken),
+                eventObject,
+                firstLevelUser.ToObjectIdent(),
+                cancellationToken);
+
+            await SagaService.ExecuteBatchAsync(batchId, cancellationToken);
+        }
+        finally
+        {
+            semaphore.Release();
+            _propertyLocks.Remove(semaphoreKey, out semaphore);
+        }
 
         Logger.ExitMethod();
     }

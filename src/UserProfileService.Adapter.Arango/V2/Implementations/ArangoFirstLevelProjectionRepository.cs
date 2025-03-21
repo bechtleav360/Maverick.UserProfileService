@@ -2393,6 +2393,27 @@ internal class ArangoFirstLevelProjectionRepository : ArangoRepositoryBase, IFir
     }
 
     /// <inheritdoc />
+    public async Task<bool> UserExistAsync(
+        string externalId,
+        string displayName,
+        string email,
+        CancellationToken cancellationToken = default)
+    {
+        Logger.EnterMethod();
+
+        string collectionName = _modelsInfo.GetCollectionName<IFirstLevelProjectionProfile>();
+        ParameterizedAql aqlQuery = WellKnownFirstLevelProjectionQueries.UserExist(
+            collectionName,
+            externalId,
+            email,
+            displayName);
+
+        IList<bool> result = await ExecuteQueryAsync<bool>(aqlQuery, null, cancellationToken);
+
+        return Logger.ExitMethod(result.FirstOrDefault());
+    }
+
+    /// <inheritdoc />
     public Task DeleteProfileAssignmentAsync(
         string parentId,
         ContainerType parentType,
