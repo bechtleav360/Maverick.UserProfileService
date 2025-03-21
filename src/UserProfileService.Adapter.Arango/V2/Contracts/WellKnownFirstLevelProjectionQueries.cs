@@ -1224,4 +1224,41 @@ internal static class WellKnownFirstLevelProjectionQueries
             }
         };
     }
+
+    /// <summary>
+    /// Checks if a user exists in the specified collection based on their display name, email, or external ID.
+    /// </summary>
+    /// <param name="profileCollectionName">The name of the ArangoDB collection where the user profiles are stored.</param>
+    /// <param name="arangoExternalId">The external ID to check against the profiles in the collection.</param>
+    /// <param name="arangoEmail">The email to check against the profiles in the collection.</param>
+    /// <param name="arangoDisplayName">The display name to check against the profiles in the collection.</param>
+    /// <returns>A <see cref="ParameterizedAql"/> object containing the AQL query and parameters to check for the existence of a user based on the provided details.</returns>
+    /// <remarks>
+    /// The query returns a boolean indicating whether a user exists in the collection based on the provided criteria:
+    /// - The user's `DisplayName` matches the provided display name.
+    /// - The user's `Email` matches the provided email.
+    /// - The user's `ExternalId` array contains an entry with the provided external ID.
+    /// If any of these conditions are met, the user exists in the collection, and the query will return `true`.
+    /// </remarks>
+    public static ParameterizedAql UserExist(
+        string profileCollectionName,
+        string arangoExternalId,
+        string arangoEmail,
+        string arangoDisplayName)
+    {
+        return new ParameterizedAql
+        {
+            Query = @"      RETURN LENGTH(
+                            FOR p IN @@profileCollection
+                            FILTER p.DisplayName == @displayName OR p.Email == @email OR LENGTH(p.ExternalId[* FILTER CURRENT.Id == @externalId ]) > 0                    
+                            RETURN p) > 0",
+            Parameter = new Dictionary<string, object>
+            {
+                {"@profileCollection", profileCollectionName},
+                {"displayName", arangoDisplayName},
+                {"email", arangoEmail},
+                {"externalId", arangoExternalId}
+            }
+        };
+    }
 }

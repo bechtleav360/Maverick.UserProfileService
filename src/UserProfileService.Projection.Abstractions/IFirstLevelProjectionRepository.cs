@@ -833,4 +833,19 @@ public interface IFirstLevelProjectionRepository : IProjectionStateRepository
         IList<FirstLevelProjectionTemporaryAssignment> desiredStates,
         IDatabaseTransaction transaction,
         CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Asynchronously checks if a user exists based on the provided parameters.
+    /// </summary>
+    /// <param name="externalId">The external ID of the user. Must be provided along with either display name or email.</param>
+    /// <param name="displayName">The display name of the user. Must be provided along with either external ID or email.</param>
+    /// <param name="email">The email of the user. Must be provided along with either external ID or display name.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation (optional).</param>
+    /// <returns>A task that represents the asynchronous operation. The task result is true if the user exists, otherwise false.</returns>
+    /// <exception cref="ArgumentException">Thrown if none of externalId, displayName, or email is provided.</exception>
+    Task<bool> UserExistAsync(
+        string externalId,
+        string displayName,
+        string email,
+        CancellationToken cancellationToken = default);
 }
