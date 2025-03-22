@@ -138,6 +138,14 @@ namespace UserProfileService.Projection.FirstLevel.UnitTests.HandlerTests.V3
                         CancellationToken.None))
                 .Returns(Task.CompletedTask);
 
+            repositoryMock.Setup(
+                    repo => repo.UserExistAsync(
+                        It.IsAny<string>(),
+                        It.IsAny<string>(),
+                        It.IsAny<string>(),
+                        CancellationToken.None))
+                .Returns(Task.FromResult(false));
+
             var sagaService = new MockSagaService();
 
             IServiceProvider services = FirstLevelHandlerTestsPreparationHelper.GetWithDefaultTestSetup(
@@ -172,6 +180,62 @@ namespace UserProfileService.Projection.FirstLevel.UnitTests.HandlerTests.V3
         }
 
         [Fact]
+        public async Task Handler_should_throw_when_user_already_exist()
+        {
+            //arrange
+            var transaction = new MockDatabaseTransaction();
+            Mock<IFirstLevelProjectionRepository> repositoryMock = GetRepository(transaction);
+
+            repositoryMock.Setup(
+                    repo => repo.CreateProfileAsync(
+                        It.IsAny<FirstLevelProjectionUser>(),
+                        It.IsAny<IDatabaseTransaction>(),
+                        CancellationToken.None))
+                .Returns(Task.CompletedTask);
+
+            repositoryMock.Setup(
+                    repo => repo.UserExistAsync(
+                        It.IsAny<string>(),
+                        It.IsAny<string>(),
+                        It.IsAny<string>(),
+                        CancellationToken.None))
+                .Returns(Task.FromResult(true));
+
+            var sagaService = new MockSagaService();
+
+            IServiceProvider services = FirstLevelHandlerTestsPreparationHelper.GetWithDefaultTestSetup(
+                s =>
+                {
+                    s.AddSingleton(repositoryMock.Object);
+                    s.AddSingleton<ISagaService>(sagaService);
+                });
+
+            var sut = ActivatorUtilities.CreateInstance<UserCreatedFirstLevelEventHandler>(services);
+
+            await Assert.ThrowsAsync<AlreadyExistsException>(
+                () => sut.HandleEventAsync(
+                    _createdUserEventWithTags,
+                    _createdUserEventWithTags.GenerateEventHeader(10),
+                    CancellationToken.None));
+
+            repositoryMock.Verify(
+                repo => repo.CreateProfileAsync(
+                    It.Is(_user, new FirstLevelUserComparer()),
+                    It.Is<IDatabaseTransaction>(
+                        t =>
+                            ((MockDatabaseTransaction)t).Id == transaction.Id),
+                    CancellationToken.None),
+                Times.Never);
+
+            repositoryMock.Verify(
+                repo => repo.GetTagAsync(
+                    It.IsAny<string>(),
+                    It.IsAny<IDatabaseTransaction>(),
+                    CancellationToken.None),
+                Times.Never);
+        }
+
+        [Fact]
         public async Task Handler_work_with_tagsAssignments()
         {
             //arrange
@@ -185,6 +249,14 @@ namespace UserProfileService.Projection.FirstLevel.UnitTests.HandlerTests.V3
                         It.IsAny<IDatabaseTransaction>(),
                         CancellationToken.None))
                 .Returns(Task.CompletedTask);
+
+            repositoryMock.Setup(
+                    repo => repo.UserExistAsync(
+                        It.IsAny<string>(),
+                        It.IsAny<string>(),
+                        It.IsAny<string>(),
+                        CancellationToken.None))
+                .Returns(Task.FromResult(false));
 
             repositoryMock.Setup(
                     repo => repo.AddTagToProfileAsync(
@@ -270,6 +342,14 @@ namespace UserProfileService.Projection.FirstLevel.UnitTests.HandlerTests.V3
                         It.IsAny<IDatabaseTransaction>(),
                         CancellationToken.None))
                 .Returns(Task.CompletedTask);
+
+            repositoryMock.Setup(
+                    repo => repo.UserExistAsync(
+                        It.IsAny<string>(),
+                        It.IsAny<string>(),
+                        It.IsAny<string>(),
+                        CancellationToken.None))
+                .Returns(Task.FromResult(false));
 
             repositoryMock.Setup(
                     opt => opt.GetTagAsync(
