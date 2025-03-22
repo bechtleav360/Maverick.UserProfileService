@@ -2401,6 +2401,13 @@ internal class ArangoFirstLevelProjectionRepository : ArangoRepositoryBase, IFir
     {
         Logger.EnterMethod();
 
+        if (string.IsNullOrWhiteSpace(externalId)
+            && string.IsNullOrWhiteSpace(displayName)
+            && string.IsNullOrWhiteSpace(email))
+        {
+            throw new ArgumentException("External Id, displayName and email should not be all null or whitespace");
+        }
+
         string collectionName = _modelsInfo.GetCollectionName<IFirstLevelProjectionProfile>();
         ParameterizedAql aqlQuery = WellKnownFirstLevelProjectionQueries.UserExist(
             collectionName,

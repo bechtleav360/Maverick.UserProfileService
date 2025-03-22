@@ -1250,7 +1250,10 @@ internal static class WellKnownFirstLevelProjectionQueries
         {
             Query = @"      RETURN LENGTH(
                             FOR p IN @@profileCollection
-                            FILTER p.DisplayName == @displayName OR p.Email == @email OR LENGTH(p.ExternalId[* FILTER CURRENT.Id == @externalId ]) > 0                    
+                            FILTER
+                            (LENGTH(TRIM(@externalId)) > 0 AND LENGTH(p.ExternalIds[* FILTER CURRENT.Id == @externalId ]) > 0) OR 
+                            (LENGTH(TRIM(@displayName)) > 0 AND p.DisplayName == @displayName) OR
+                            (LENGTH(TRIM(@email)) > 0 AND p.Email == @email)                                           
                             RETURN p) > 0",
             Parameter = new Dictionary<string, object>
             {
