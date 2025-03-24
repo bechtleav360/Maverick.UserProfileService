@@ -129,10 +129,9 @@ internal class UserCreatedFirstLevelEventHandler : FirstLevelEventHandlerTagsInc
             }
 
             Logger.LogInfoMessage(
-                "The profile with the external Id: {extId} and displayName: {d} don't exist and will be created",
+                "The User with the external Id: {extId} doesn't exist and will be created",
                 LogHelpers.Arguments(
-                    firstLevelUser.ExternalIds.FirstOrDefaultUnconverted()?.Id,
-                    firstLevelUser.DisplayName));
+                    firstLevelUser.ExternalIds.FirstOrDefaultUnconverted()?.Id));
 
             await Repository.CreateProfileAsync(firstLevelUser, transaction, cancellationToken);
 
