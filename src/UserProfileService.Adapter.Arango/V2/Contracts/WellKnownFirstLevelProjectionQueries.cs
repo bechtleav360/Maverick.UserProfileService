@@ -1250,13 +1250,56 @@ internal static class WellKnownFirstLevelProjectionQueries
         {
             Query = @"      RETURN LENGTH(
                             FOR p IN @@profileCollection
-                            FILTER p.DisplayName == @displayName OR p.Email == @email OR LENGTH(p.ExternalId[* FILTER CURRENT.Id == @externalId ]) > 0                    
+                            FILTER
+                            p.Kind == ""User"" AND (
+                            (LENGTH(TRIM(@externalId)) > 0 AND LENGTH(p.ExternalIds[* FILTER CURRENT.Id == @externalId ]) > 0) OR 
+                            (LENGTH(TRIM(@displayName)) > 0 AND p.DisplayName == @displayName) OR
+                            (LENGTH(TRIM(@email)) > 0 AND p.Email == @email))                                           
                             RETURN p) > 0",
             Parameter = new Dictionary<string, object>
             {
                 {"@profileCollection", profileCollectionName},
                 {"displayName", arangoDisplayName},
                 {"email", arangoEmail},
+                {"externalId", arangoExternalId}
+            }
+        };
+    }
+
+    /// <summary>
+    /// Checks if a group exists in the specified ArangoDB profile collection based on the provided parameters.
+    /// </summary>
+    /// <param name="profileCollectionName">The name of the ArangoDB profile collection to query.</param>
+    /// <param name="arangoExternalId">The external ID to check for existence in the collection.</param>
+    /// <param name="arangoName">The name of the group to check for existence in the collection.</param>
+    /// <param name="arangoDisplayName">The display name of the group to check for existence in the collection.</param>
+    /// <returns>A <see cref="ParameterizedAql"/> object containing the AQL query and parameters for querying ArangoDB.</returns>
+    /// <remarks>
+    /// This method constructs an AQL query to check if a group exists in the ArangoDB collection based on the provided `externalId`, 
+    /// `displayName`, and `name` parameters. The query checks if any of these parameters match the corresponding properties in the 
+    /// collection's documents of type "Group". The result will be true if a matching group exists, otherwise false.
+    /// </remarks>
+    public static ParameterizedAql GroupExist(
+        string profileCollectionName,
+        string arangoExternalId,
+        string arangoName,
+        string arangoDisplayName)
+    {
+        return new ParameterizedAql
+        {
+            Query = @"      RETURN LENGTH(
+                            FOR p IN @@profileCollection
+                            FILTER
+                            p.Kind == ""Group"" AND (
+                            (LENGTH(TRIM(@externalId)) > 0 AND LENGTH(p.ExternalIds[* FILTER CURRENT.Id == @externalId ]) > 0) OR 
+                            (LENGTH(TRIM(@displayName)) > 0 AND p.DisplayName == @displayName) OR
+                            (LENGTH(TRIM(@name)) > 0 AND p.Name == @name))                                           
+                            RETURN p) > 0",
+            Parameter = new Dictionary<string, object>
+            {
+                {"@profileCollection", profileCollectionName},
+                {"displayName", arangoDisplayName},
+                {"name", arangoName},
                 {"externalId", arangoExternalId}
             }
         };
