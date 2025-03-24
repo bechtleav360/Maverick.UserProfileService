@@ -101,11 +101,14 @@ internal class UserCreatedFirstLevelEventHandler : FirstLevelEventHandlerTagsInc
             semaphoreKey,
             _ => new SemaphoreSlim(1, 1));
 
+        Logger.LogDebugMessage("Trying to enter semaphore for key: {property}", LogHelpers.Arguments(semaphoreKey));
 
         await semaphore.WaitAsync(cancellationToken);
 
         try
         {
+
+            Logger.LogDebugMessage("Entered semaphore for key: {property}", LogHelpers.Arguments(semaphoreKey));
 
             bool userExist = await Repository.UserExistAsync(
              externalId,
@@ -124,6 +127,11 @@ internal class UserCreatedFirstLevelEventHandler : FirstLevelEventHandlerTagsInc
                 throw new AlreadyExistsException(
                     $"The profile with the external Id: {externalId} and displayName: {displayName} already exist and can not be created");
             }
+
+            Logger.LogInfoMessage(
+                "The User with the external Id: {extId} doesn't exist and will be created",
+                LogHelpers.Arguments(
+                    firstLevelUser.ExternalIds.FirstOrDefaultUnconverted()?.Id));
 
             await Repository.CreateProfileAsync(firstLevelUser, transaction, cancellationToken);
 
@@ -157,6 +165,7 @@ internal class UserCreatedFirstLevelEventHandler : FirstLevelEventHandlerTagsInc
         finally
         {
             semaphore.Release();
+            Logger.LogDebugMessage("Left semaphore for key: {property}", LogHelpers.Arguments(semaphoreKey));
             _propertyLocks.Remove(semaphoreKey, out semaphore);
         }
 
