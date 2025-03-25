@@ -870,4 +870,26 @@ public interface IFirstLevelProjectionRepository : IProjectionStateRepository
         string displayName,
         bool ignoreCase,
         CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Asynchronously checks if an organization with the specified external ID, name, and display name exists.
+    /// </summary>
+    /// <param name="externalId">The external ID of the organization to search for.</param>
+    /// <param name="name">The name of the organization to search for.</param>
+    /// <param name="displayName">The display name of the group to search for.</param>
+    /// <param name="ignoreCase">Specifies whether the comparison should be case-insensitive.</param>
+    /// <param name="cancellationToken">A token to cancel the operation, if needed.</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation. The task result is <c>true</c> if the group exists,
+    /// and <c>false</c> otherwise.
+    /// </returns>
+    /// <exception cref="OperationCanceledException">
+    /// Thrown if the operation is canceled via the <paramref name="cancellationToken"/>.
+    /// </exception>
+    Task<bool> OrganizationExistAsync(
+        string externalId,
+        string name,
+        string displayName,
+        bool ignoreCase = true,
+        CancellationToken cancellationToken = default);
 }
