@@ -1273,6 +1273,7 @@ internal static class WellKnownFirstLevelProjectionQueries
     /// <param name="arangoExternalId">The external ID to check for existence in the collection.</param>
     /// <param name="arangoName">The name of the group to check for existence in the collection.</param>
     /// <param name="arangoDisplayName">The display name of the group to check for existence in the collection.</param>
+    /// <param name="ignoreCase">Specifies whether the string comparison should ignore case sensitivity.</param>
     /// <returns>A <see cref="ParameterizedAql"/> object containing the AQL query and parameters for querying ArangoDB.</returns>
     /// <remarks>
     /// This method constructs an AQL query to check if a group exists in the ArangoDB collection based on the provided `externalId`, 
@@ -1283,18 +1284,29 @@ internal static class WellKnownFirstLevelProjectionQueries
         string profileCollectionName,
         string arangoExternalId,
         string arangoName,
-        string arangoDisplayName)
+        string arangoDisplayName,
+        bool ignoreCase)
     {
         return new ParameterizedAql
         {
-            Query = @"      RETURN LENGTH(
+            Query = !ignoreCase ? 
+                @"      RETURN LENGTH(
                             FOR p IN @@profileCollection
                             FILTER
                             p.Kind == ""Group"" AND (
                             (LENGTH(TRIM(@externalId)) > 0 AND LENGTH(p.ExternalIds[* FILTER CURRENT.Id == @externalId ]) > 0) OR 
                             (LENGTH(TRIM(@displayName)) > 0 AND p.DisplayName == @displayName) OR
                             (LENGTH(TRIM(@name)) > 0 AND p.Name == @name))                                           
-                            RETURN p) > 0",
+                            RETURN p) > 0" :
+
+                @"      RETURN LENGTH(
+                            FOR p IN @@profileCollection
+                            FILTER
+                            p.Kind == ""Group"" AND (
+                            (LENGTH(TRIM(@externalId)) > 0 AND LENGTH(p.ExternalIds[* FILTER CURRENT.Id == @externalId ]) > 0) OR 
+                            (LENGTH(TRIM(@displayName)) > 0 AND LOWER(p.DisplayName) == LOWER(@displayName)) OR
+                            (LENGTH(TRIM(@name)) > 0 AND LOWER(p.Name) == LOWER(@name)))                                           
+                            RETURN p) > 0" ,
             Parameter = new Dictionary<string, object>
             {
                 {"@profileCollection", profileCollectionName},
