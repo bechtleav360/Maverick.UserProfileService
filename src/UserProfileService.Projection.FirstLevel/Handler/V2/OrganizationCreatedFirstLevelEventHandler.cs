@@ -21,6 +21,9 @@ using UserProfileService.Projection.FirstLevel.Extensions;
 using OrganizationCreatedResolvedEvent = Maverick.UserProfileService.AggregateEvents.Resolved.V1.OrganizationCreated;
 using ResolvedInitiator = Maverick.UserProfileService.AggregateEvents.Common.EventInitiator;
 using RequestTagAssignment = Maverick.UserProfileService.Models.RequestModels.TagAssignment;
+using System.Collections.Concurrent;
+using UserProfileService.Common.V2.Exceptions;
+using UserProfileService.Common.V2.Extensions;
 
 namespace UserProfileService.Projection.FirstLevel.Handler.V2;
 
@@ -29,6 +32,8 @@ namespace UserProfileService.Projection.FirstLevel.Handler.V2;
 /// </summary>
 internal class OrganizationCreatedFirstLevelEventHandler : FirstLevelEventHandlerTagsIncludedBase<OrganizationCreatedEvent>
 {
+    private static readonly ConcurrentDictionary<string, SemaphoreSlim> _propertyLocks = new();
+
     /// <summary>
     ///     Creates an instance of the object <see cref="OrganizationCreatedFirstLevelEventHandler" />.
     /// </summary>
@@ -87,46 +92,91 @@ internal class OrganizationCreatedFirstLevelEventHandler : FirstLevelEventHandle
 
         var organization = Mapper.Map<FirstLevelProjectionOrganization>(eventObject);
 
-        await Repository.CreateProfileAsync(organization, transaction, cancellationToken);
+        string externalId = organization.ExternalIds.FirstOrDefaultUnconverted()?.Id;
+        string name = organization.Name;
+        string displayName = organization.DisplayName;
 
-        var organizationCreatedResolvedEvent = Mapper.Map<OrganizationCreatedResolvedEvent>(eventObject);
+        string semaphoreKey = string.IsNullOrWhiteSpace(externalId)
+            ? (string.IsNullOrWhiteSpace(name) ? displayName : name)
+            : externalId;
 
-        Guid batchSagaId = await SagaService.CreateBatchAsync(
-            cancellationToken,
-            Creator.CreateEvents(
-                    new ObjectIdent(eventObject.Payload.Id, ObjectType.Organization),
-                    new List<IUserProfileServiceEvent>
-                    {
-                        organizationCreatedResolvedEvent
-                    },
-                    eventObject)
-                .ToArray());
+        SemaphoreSlim semaphore = _propertyLocks.GetOrAdd(
+            semaphoreKey,
+            _ => new SemaphoreSlim(1, 1));
 
-        await CreateTagsAddedEvent(
-            transaction,
-            batchSagaId,
-            eventObject.Payload.Tags.ToList(),
-            async (repo, tag) =>
-                await repo.AddTagToProfileAsync(
-                    tag,
-                    organization.Id,
-                    transaction,
-                    cancellationToken),
-            eventObject,
-            organization.ToObjectIdent(),
-            cancellationToken);
+        Logger.LogDebugMessage("Trying to enter semaphore for key: {property}", LogHelpers.Arguments(semaphoreKey));
 
-        await CreateProfileAssignmentsAsync(
-            transaction,
-            organization.ToObjectIdent(),
-            eventObject.Payload.Members,
-            batchSagaId,
-            eventObject,
-            eventObject.Payload.Id,
-            eventObject.Payload.Tags.Where(tag => tag.IsInheritable).ToList(),
-            cancellationToken);
+        await semaphore.WaitAsync(cancellationToken);
 
-        await SagaService.ExecuteBatchAsync(batchSagaId, cancellationToken);
+        try
+        {
+            Logger.LogDebugMessage("Entered semaphore for key: {property}", LogHelpers.Arguments(semaphoreKey));
+
+            bool organizationExist = await Repository.OrganizationExistAsync(
+                externalId,
+                name,
+                displayName, cancellationToken: cancellationToken);
+
+            if (organizationExist)
+            {
+
+                Logger.LogWarnMessage(
+                    "The organization with the external Id: {extId} and displayName: {d} already exist and can not be created",
+                    LogHelpers.Arguments(
+                        organization.ExternalIds.FirstOrDefaultUnconverted()?.Id,
+                        organization.DisplayName));
+
+                throw new AlreadyExistsException(
+                    $"The organization with the external Id: {externalId} and displayName: {displayName} already exist and can not be created");
+            }
+
+            await Repository.CreateProfileAsync(organization, transaction, cancellationToken);
+
+            var organizationCreatedResolvedEvent = Mapper.Map<OrganizationCreatedResolvedEvent>(eventObject);
+
+            Guid batchSagaId = await SagaService.CreateBatchAsync(
+                cancellationToken,
+                Creator.CreateEvents(
+                        new ObjectIdent(eventObject.Payload.Id, ObjectType.Organization),
+                        new List<IUserProfileServiceEvent>
+                        {
+                            organizationCreatedResolvedEvent
+                        },
+                        eventObject)
+                    .ToArray());
+
+            await CreateTagsAddedEvent(
+                transaction,
+                batchSagaId,
+                eventObject.Payload.Tags.ToList(),
+                async (repo, tag) =>
+                    await repo.AddTagToProfileAsync(
+                        tag,
+                        organization.Id,
+                        transaction,
+                        cancellationToken),
+                eventObject,
+                organization.ToObjectIdent(),
+                cancellationToken);
+
+            await CreateProfileAssignmentsAsync(
+                transaction,
+                organization.ToObjectIdent(),
+                eventObject.Payload.Members,
+                batchSagaId,
+                eventObject,
+                eventObject.Payload.Id,
+                eventObject.Payload.Tags.Where(tag => tag.IsInheritable).ToList(),
+                cancellationToken);
+
+            await SagaService.ExecuteBatchAsync(batchSagaId, cancellationToken);
+        }
+        finally
+        {
+            semaphore.Release();
+            Logger.LogDebugMessage("Left semaphore for key: {property}", LogHelpers.Arguments(semaphoreKey));
+            _propertyLocks.Remove(semaphoreKey, out semaphore);
+        }
 
         Logger.ExitMethod();
     }

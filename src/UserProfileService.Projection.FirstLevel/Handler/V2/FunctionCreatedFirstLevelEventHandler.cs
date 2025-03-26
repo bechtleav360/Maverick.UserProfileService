@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Maverick.UserProfileService.AggregateEvents.Common;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using UserProfileService.Common;
 using UserProfileService.Common.Logging;
 using UserProfileService.Common.Logging.Extensions;
@@ -12,6 +13,7 @@ using UserProfileService.EventSourcing.Abstractions.Models;
 using UserProfileService.Projection.Abstractions;
 using UserProfileService.Projection.Common.Abstractions;
 using UserProfileService.Projection.FirstLevel.Abstractions;
+using UserProfileService.Validation.Abstractions.Configuration;
 using V3FunctionCreatedHandler = UserProfileService.Projection.FirstLevel.Handler.V3;
 using V3FunctionCreatedEvent = UserProfileService.Events.Implementation.V3.FunctionCreatedEvent;
 
@@ -38,6 +40,7 @@ internal class FunctionCreatedFirstLevelEventHandler : FirstLevelEventHandlerBas
     ///     The read service is used to read from the internal query storage to get all information to
     ///     generate all needed stream events.
     /// </param>
+    /// <param name="validationConfiguration"> <see cref="ValidationConfiguration"/></param>
     /// <param name="sagaService">
     ///     The saga service is used to write all created <see cref="IUserProfileServiceEvent" /> to the
     ///     write stream.
@@ -49,6 +52,7 @@ internal class FunctionCreatedFirstLevelEventHandler : FirstLevelEventHandlerBas
         IFirstLevelProjectionRepository repository,
         ISagaService sagaService,
         IFirstLevelEventTupleCreator creator,
+        IOptions<ValidationConfiguration> validationConfiguration,
         IMapper mapper) : base(logger, repository)
     {
         _Mapper = mapper;
@@ -58,6 +62,7 @@ internal class FunctionCreatedFirstLevelEventHandler : FirstLevelEventHandlerBas
             repository,
             sagaService,
             creator,
+            validationConfiguration,
             mapper);
     }
 

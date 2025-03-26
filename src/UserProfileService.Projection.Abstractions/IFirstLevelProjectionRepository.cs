@@ -848,4 +848,72 @@ public interface IFirstLevelProjectionRepository : IProjectionStateRepository
         string displayName,
         string email,
         CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Asynchronously checks if a group with the specified external ID, name, and display name exists.
+    /// </summary>
+    /// <param name="externalId">The external ID of the group to search for.</param>
+    /// <param name="name">The name of the group to search for.</param>
+    /// <param name="displayName">The display name of the group to search for.</param>
+    /// <param name="ignoreCase">Specifies whether the comparison should be case-insensitive.</param>
+    /// <param name="cancellationToken">A token to cancel the operation, if needed.</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation. The task result is <c>true</c> if the group exists,
+    /// and <c>false</c> otherwise.
+    /// </returns>
+    /// <exception cref="OperationCanceledException">
+    /// Thrown if the operation is canceled via the <paramref name="cancellationToken"/>.
+    /// </exception>
+    Task<bool> GroupExistAsync(
+        string externalId,
+        string name,
+        string displayName,
+        bool ignoreCase,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Asynchronously checks if an organization with the specified external ID, name, and display name exists.
+    /// </summary>
+    /// <param name="externalId">The external ID of the organization to search for.</param>
+    /// <param name="name">The name of the organization to search for.</param>
+    /// <param name="displayName">The display name of the group to search for.</param>
+    /// <param name="ignoreCase">Specifies whether the comparison should be case-insensitive.</param>
+    /// <param name="cancellationToken">A token to cancel the operation, if needed.</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation. The task result is <c>true</c> if the group exists,
+    /// and <c>false</c> otherwise.
+    /// </returns>
+    /// <exception cref="OperationCanceledException">
+    /// Thrown if the operation is canceled via the <paramref name="cancellationToken"/>.
+    /// </exception>
+    Task<bool> OrganizationExistAsync(
+        string externalId,
+        string name,
+        string displayName,
+        bool ignoreCase = true,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Asynchronously checks whether a function exists based on the given role ID, organization ID,
+    /// and optionally, external IDs for both role and organization.
+    /// </summary>
+    /// <param name="roleId">The ID of the role to match the function against.</param>
+    /// <param name="organizationId">The ID of the organization to match the function against.</param>
+    /// <param name="roleExternalId">The external ID of the role to match the function against (optional).</param>
+    /// <param name="organizationExternalId">The external ID of the organization to match the function against (optional).</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation (optional, default is no cancellation).</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains a boolean value indicating
+    /// whether the function exists that matches the provided parameters.</returns>
+    /// <remarks>
+    /// The method checks if a function exists based on the following conditions:
+    /// 1. The function's organization ID and role ID match the provided values.
+    /// 2. OR if the provided external IDs for role and/or organization match those in the function.
+    /// The method will return true if a matching function exists, otherwise false.
+    /// </remarks>
+    Task<bool> FunctionExistAsync(
+        string roleId,
+        string organizationId,
+        string roleExternalId,
+        string organizationExternalId,
+        CancellationToken cancellationToken = default);
 }

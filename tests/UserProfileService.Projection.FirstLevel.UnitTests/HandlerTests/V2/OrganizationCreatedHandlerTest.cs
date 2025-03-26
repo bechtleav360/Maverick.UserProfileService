@@ -12,6 +12,7 @@ using UserProfileService.Common;
 using UserProfileService.Common.Tests.Utilities.Extensions;
 using UserProfileService.Common.Tests.Utilities.MockDataBuilder;
 using UserProfileService.Common.Tests.Utilities.Utilities;
+using UserProfileService.Common.V2.Exceptions;
 using UserProfileService.Events.Implementation.V2;
 using UserProfileService.Projection.Abstractions;
 using UserProfileService.Projection.Abstractions.EnumModels;
@@ -81,6 +82,15 @@ namespace UserProfileService.Projection.FirstLevel.UnitTests.HandlerTests.V2
 
             Mock<ISagaService> sagaService = MockProvider.GetDefaultMock<ISagaService>();
 
+            repoMock.Setup(
+                    m => m.OrganizationExistAsync(
+                        It.IsAny<string>(),
+                        It.IsAny<string>(),
+                        It.IsAny<string>(),
+                        It.IsAny<bool>(),
+                        It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(false));
+
             IServiceProvider services = FirstLevelHandlerTestsPreparationHelper.GetWithDefaultTestSetup(
                 s =>
                 {
@@ -138,6 +148,83 @@ namespace UserProfileService.Projection.FirstLevel.UnitTests.HandlerTests.V2
         }
 
         [Fact]
+        public async Task Handler_should_throw_when_organization_already_exist()
+        {
+            // arrange
+            IDatabaseTransaction transaction = MockProvider.GetDefaultTransactionMock();
+
+            Mock<IFirstLevelProjectionRepository> repoMock =
+                MockProvider.GetDefaultMock<IFirstLevelProjectionRepository>();
+
+            Mock<ISagaService> sagaService = MockProvider.GetDefaultMock<ISagaService>();
+
+            repoMock.Setup(
+                    m => m.OrganizationExistAsync(
+                        It.IsAny<string>(),
+                        It.IsAny<string>(),
+                        It.IsAny<string>(),
+                        It.IsAny<bool>(),
+                        It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(true));
+
+            IServiceProvider services = FirstLevelHandlerTestsPreparationHelper.GetWithDefaultTestSetup(
+                s =>
+                {
+                    s.AddSingleton(repoMock.Object);
+                    s.AddSingleton(sagaService.Object);
+                });
+
+            var sut = ActivatorUtilities.CreateInstance<OrganizationCreatedFirstLevelEventHandler>(services);
+
+            // act
+
+            await Assert.ThrowsAsync<AlreadyExistsException>(async () => await sut.HandleEventAsync(
+                _createdEventWithoutTagsWithoutMembers,
+                _createdEventWithoutTagsWithoutMembers.GenerateEventHeader(10),
+                CancellationToken.None));
+
+            // assert
+            repoMock.Verify(
+                repo => repo.CreateProfileAsync(
+                    ItShould.BeEquivalentTo(
+                        _organization,
+                        opt => opt.Excluding(g => g.SynchronizedAt).Excluding(g => g.IsMarkedForDeletion)),
+                    It.Is<IDatabaseTransaction>(
+                        t => ((MockDatabaseTransaction)t).Id == ((MockDatabaseTransaction)transaction).Id),
+                    CancellationToken.None),
+                Times.Never);
+
+            repoMock.Verify(
+                repo => repo.GetTagAsync(
+                    It.IsAny<string>(),
+                    It.IsAny<IDatabaseTransaction>(),
+                    CancellationToken.None),
+                Times.Never);
+
+            repoMock.Verify(
+                repo => repo.CreateProfileAssignmentAsync(
+                    It.IsAny<string>(),
+                    It.IsAny<ContainerType>(),
+                    It.IsAny<string>(),
+                    It.IsAny<RangeCondition[]>(),
+                    It.IsAny<IDatabaseTransaction>(),
+                    It.IsAny<CancellationToken>()),
+                Times.Never);
+
+            sagaService.Verify(
+                s => s.CreateBatchAsync(
+                    CancellationToken.None,
+                    It.IsAny<EventTuple[]>()),
+                Times.Never);
+
+            sagaService.Verify(
+                s => s.ExecuteBatchAsync(
+                    It.Is<Guid>(guid => guid == MockProvider.BatchGuid),
+                    CancellationToken.None),
+                Times.Never);
+        }
+
+        [Fact]
         public async Task Handler_should_work_with_member_without_tags()
         {
             // arrange
@@ -154,6 +241,15 @@ namespace UserProfileService.Projection.FirstLevel.UnitTests.HandlerTests.V2
                     s.AddSingleton(repoMock.Object);
                     s.AddSingleton(sagaService.Object);
                 });
+
+            repoMock.Setup(
+                    m => m.OrganizationExistAsync(
+                        It.IsAny<string>(),
+                        It.IsAny<string>(),
+                        It.IsAny<string>(),
+                        It.IsAny<bool>(),
+                        It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(false));
 
             repoMock
                 .Setup(
@@ -272,6 +368,15 @@ namespace UserProfileService.Projection.FirstLevel.UnitTests.HandlerTests.V2
                     s.AddSingleton(repoMock.Object);
                     s.AddSingleton(sagaService.Object);
                 });
+
+            repoMock.Setup(
+                    m => m.OrganizationExistAsync(
+                        It.IsAny<string>(),
+                        It.IsAny<string>(),
+                        It.IsAny<string>(),
+                        It.IsAny<bool>(),
+                        It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(false));
 
             repoMock
                 .Setup(

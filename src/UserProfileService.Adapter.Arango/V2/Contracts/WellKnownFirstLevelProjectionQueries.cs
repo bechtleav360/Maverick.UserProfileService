@@ -1273,6 +1273,7 @@ internal static class WellKnownFirstLevelProjectionQueries
     /// <param name="arangoExternalId">The external ID to check for existence in the collection.</param>
     /// <param name="arangoName">The name of the group to check for existence in the collection.</param>
     /// <param name="arangoDisplayName">The display name of the group to check for existence in the collection.</param>
+    /// <param name="ignoreCase">Specifies whether the string comparison should ignore case sensitivity.</param>
     /// <returns>A <see cref="ParameterizedAql"/> object containing the AQL query and parameters for querying ArangoDB.</returns>
     /// <remarks>
     /// This method constructs an AQL query to check if a group exists in the ArangoDB collection based on the provided `externalId`, 
@@ -1283,17 +1284,79 @@ internal static class WellKnownFirstLevelProjectionQueries
         string profileCollectionName,
         string arangoExternalId,
         string arangoName,
-        string arangoDisplayName)
+        string arangoDisplayName,
+        bool ignoreCase)
     {
         return new ParameterizedAql
         {
-            Query = @"      RETURN LENGTH(
+            Query = !ignoreCase ? 
+                @"      RETURN LENGTH(
                             FOR p IN @@profileCollection
                             FILTER
                             p.Kind == ""Group"" AND (
                             (LENGTH(TRIM(@externalId)) > 0 AND LENGTH(p.ExternalIds[* FILTER CURRENT.Id == @externalId ]) > 0) OR 
                             (LENGTH(TRIM(@displayName)) > 0 AND p.DisplayName == @displayName) OR
                             (LENGTH(TRIM(@name)) > 0 AND p.Name == @name))                                           
+                            RETURN p) > 0" :
+
+                @"      RETURN LENGTH(
+                            FOR p IN @@profileCollection
+                            FILTER
+                            p.Kind == ""Group"" AND (
+                            (LENGTH(TRIM(@externalId)) > 0 AND LENGTH(p.ExternalIds[* FILTER CURRENT.Id == @externalId ]) > 0) OR 
+                            (LENGTH(TRIM(@displayName)) > 0 AND LOWER(p.DisplayName) == LOWER(@displayName)) OR
+                            (LENGTH(TRIM(@name)) > 0 AND LOWER(p.Name) == LOWER(@name)))                                           
+                            RETURN p) > 0" ,
+            Parameter = new Dictionary<string, object>
+            {
+                {"@profileCollection", profileCollectionName},
+                {"displayName", arangoDisplayName},
+                {"name", arangoName},
+                {"externalId", arangoExternalId}
+            }
+        };
+    }
+
+    /// <summary>
+    /// Checks if an organization exists in the specified ArangoDB profile collection based on the provided parameters.
+    /// </summary>
+    /// <param name="profileCollectionName">The name of the ArangoDB profile collection to query.</param>
+    /// <param name="arangoExternalId">The external ID to check for existence in the collection.</param>
+    /// <param name="arangoName">The name of the group to check for existence in the collection.</param>
+    /// <param name="arangoDisplayName">The display name of the group to check for existence in the collection.</param>
+    /// <param name="ignoreCase">Specifies whether the string comparison should ignore case sensitivity.</param>
+    /// <returns>A <see cref="ParameterizedAql"/> object containing the AQL query and parameters for querying ArangoDB.</returns>
+    /// <remarks>
+    /// This method constructs an AQL query to check if a group exists in the ArangoDB collection based on the provided `externalId`, 
+    /// `displayName`, and `name` parameters. The query checks if any of these parameters match the corresponding properties in the 
+    /// collection's documents of type "Group". The result will be true if a matching group exists, otherwise false.
+    /// </remarks>
+    public static ParameterizedAql OrganizationExist(
+        string profileCollectionName,
+        string arangoExternalId,
+        string arangoName,
+        string arangoDisplayName,
+        bool ignoreCase = true)
+    {
+        return new ParameterizedAql
+        {
+            Query = !ignoreCase ?
+                @"      RETURN LENGTH(
+                            FOR p IN @@profileCollection
+                            FILTER
+                            p.Kind == ""Organization"" AND (
+                            (LENGTH(TRIM(@externalId)) > 0 AND LENGTH(p.ExternalIds[* FILTER CURRENT.Id == @externalId ]) > 0) OR 
+                            (LENGTH(TRIM(@displayName)) > 0 AND p.DisplayName == @displayName) OR
+                            (LENGTH(TRIM(@name)) > 0 AND p.Name == @name))                                           
+                            RETURN p) > 0" :
+
+                @"      RETURN LENGTH(
+                            FOR p IN @@profileCollection
+                            FILTER
+                            p.Kind == ""Organization"" AND (
+                            (LENGTH(TRIM(@externalId)) > 0 AND LENGTH(p.ExternalIds[* FILTER CURRENT.Id == @externalId ]) > 0) OR 
+                            (LENGTH(TRIM(@displayName)) > 0 AND LOWER(p.DisplayName) == LOWER(@displayName)) OR
+                            (LENGTH(TRIM(@name)) > 0 AND LOWER(p.Name) == LOWER(@name)))                                           
                             RETURN p) > 0",
             Parameter = new Dictionary<string, object>
             {
@@ -1301,6 +1364,52 @@ internal static class WellKnownFirstLevelProjectionQueries
                 {"displayName", arangoDisplayName},
                 {"name", arangoName},
                 {"externalId", arangoExternalId}
+            }
+        };
+    }
+
+
+    /// <summary>
+    /// Checks whether a profile exists in the specified collection based on organization and role identifiers,
+    /// including both direct IDs and external IDs for organization and role.
+    /// </summary>
+    /// <param name="options">The model builder options <see cref="ModelBuilderOptions"/>.</param>
+    /// <param name="arangoOrganizationId">The ID of the organization to match profiles against.</param>
+    /// <param name="arangoOrganizationExternalId">The external ID of the organization to match profiles against.</param>
+    /// <param name="arangoRoleId">The ID of the role to match profiles against.</param>
+    /// <param name="arangoRoleExternalId">The external ID of the role to match profiles against.</param>
+    /// <returns>A <see cref="ParameterizedAql"/> object containing the AQL query and parameters for checking profile existence.</returns>
+    /// <remarks>
+    /// The query checks if any profile exists where either:
+    /// 1. The organization's ID and role's ID match the given IDs,
+    /// 2. OR the organization's and role's external IDs match the provided external IDs, if given.
+    /// The result returns true if any profile matches the given conditions.
+    /// </remarks>
+    public static ParameterizedAql FunctionExist(
+        ModelBuilderOptions options,
+        string arangoOrganizationId,
+        string arangoOrganizationExternalId,
+        string arangoRoleId,
+        string arangoRoleExternalId)
+    {
+        return new ParameterizedAql
+        {
+            Query =
+                @"      RETURN LENGTH(
+                            FOR p IN @@profileCollection
+                            FILTER
+                            (p.Organization.Id == @organizationId AND p.Role.Id == @roleId) OR (
+                            (LENGTH(TRIM(@organizationExternalId)) > 0 AND LENGTH(p.Organization.ExternalIds[* FILTER CURRENT.Id == @organizationExternalId ]) > 0) AND
+                            (LENGTH(TRIM(@roleExternalId)) > 0 AND LENGTH(p.Role.ExternalIds[* FILTER CURRENT.Id == @roleExternalId ]) > 0) )                                         
+                            RETURN p) > 0",
+
+            Parameter = new Dictionary<string, object>
+            {
+                {"@profileCollection",  options.GetCollectionName<FirstLevelProjectionFunction>()},
+                {"organizationId", arangoOrganizationId},
+                {"roleId", arangoRoleId},
+                {"organizationExternalId", arangoOrganizationExternalId},
+                {"roleExternalId", arangoOrganizationExternalId}
             }
         };
     }

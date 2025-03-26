@@ -8,10 +8,12 @@ using Maverick.UserProfileService.AggregateEvents.Common.Enums;
 using Maverick.UserProfileService.Models.Models;
 using Maverick.UserProfileService.Models.RequestModels;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Moq;
 using UserProfileService.Common.Tests.Utilities.Extensions;
 using UserProfileService.Common.Tests.Utilities.MockDataBuilder;
 using UserProfileService.Common.Tests.Utilities.Utilities;
+using UserProfileService.Common.V2.Exceptions;
 using UserProfileService.Events.Implementation.V2;
 using UserProfileService.Projection.Abstractions;
 using UserProfileService.Projection.Abstractions.Models;
@@ -22,6 +24,7 @@ using UserProfileService.Projection.FirstLevel.UnitTests.Comparer;
 using UserProfileService.Projection.FirstLevel.UnitTests.Extensions;
 using UserProfileService.Projection.FirstLevel.UnitTests.Mocks;
 using UserProfileService.Projection.FirstLevel.UnitTests.Utilities;
+using UserProfileService.Validation.Abstractions.Configuration;
 using Xunit;
 using ObjectType = Maverick.UserProfileService.Models.EnumModels.ObjectType;
 using TagTypeApi = Maverick.UserProfileService.Models.EnumModels.TagType;
@@ -104,6 +107,24 @@ namespace UserProfileService.Projection.FirstLevel.UnitTests.HandlerTests.V2
             return mock;
         }
 
+        private ValidationConfiguration GetConfiguration(bool duplicateAllowed)
+        {
+            return new ValidationConfiguration
+            {
+                Internal = new EntityConfiguration
+                {
+                    Group = new GroupValidationConfiguration
+                    {
+                        Name = new NameConfiguration
+                        {
+                            Duplicate = duplicateAllowed
+                        }
+                    }
+                }
+
+            };
+        }
+
         [Fact]
         public async Task Handler_should_fail_because_of_null_event()
         {
@@ -117,6 +138,7 @@ namespace UserProfileService.Projection.FirstLevel.UnitTests.HandlerTests.V2
                 {
                     s.AddSingleton(repoMock.Object);
                     s.AddSingleton<ISagaService>(sagaService);
+                    s.AddSingleton<IOptions<ValidationConfiguration>>(Options.Create(GetConfiguration(true)));
                 });
 
             var sut = ActivatorUtilities.CreateInstance<GroupCreatedFirstLevelEventHandler>(services);
@@ -137,6 +159,7 @@ namespace UserProfileService.Projection.FirstLevel.UnitTests.HandlerTests.V2
                 {
                     s.AddSingleton(repoMock.Object);
                     s.AddSingleton<ISagaService>(sagaService);
+                    s.AddSingleton<IOptions<ValidationConfiguration>>(Options.Create(GetConfiguration(false)));
                 });
 
             var sut = ActivatorUtilities.CreateInstance<GroupCreatedFirstLevelEventHandler>(services);
@@ -163,6 +186,15 @@ namespace UserProfileService.Projection.FirstLevel.UnitTests.HandlerTests.V2
                         It.IsAny<IDatabaseTransaction>(),
                         It.IsAny<CancellationToken>()))
                 .Returns(Task.CompletedTask);
+
+            repositoryMock.Setup(
+                    repo => repo.GroupExistAsync(
+                        It.IsAny<string>(),
+                        It.IsAny<string>(),
+                        It.IsAny<string>(),
+                        It.IsAny<bool>(),
+                        It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(false));
 
             repositoryMock.Setup(
                     repo => repo.SaveProjectionStateAsync(
@@ -226,6 +258,7 @@ namespace UserProfileService.Projection.FirstLevel.UnitTests.HandlerTests.V2
                 {
                     s.AddSingleton(repositoryMock.Object);
                     s.AddSingleton<ISagaService>(sagaService);
+                    s.AddSingleton<IOptions<ValidationConfiguration>>(Options.Create(GetConfiguration(false)));
                 });
 
             var mapper = services.GetRequiredService<IMapper>();
@@ -348,6 +381,15 @@ namespace UserProfileService.Projection.FirstLevel.UnitTests.HandlerTests.V2
                 .Returns(Task.CompletedTask);
 
             repositoryMock.Setup(
+                    repo => repo.GroupExistAsync(
+                        It.IsAny<string>(),
+                        It.IsAny<string>(),
+                        It.IsAny<string>(),
+                        It.IsAny<bool>(),
+                        It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(false));
+
+            repositoryMock.Setup(
                     repo => repo.SetUpdatedAtAsync(
                         It.IsAny<DateTime>(),
                         It.IsAny<IList<ObjectIdent>>(),
@@ -386,6 +428,7 @@ namespace UserProfileService.Projection.FirstLevel.UnitTests.HandlerTests.V2
                 {
                     s.AddSingleton(repositoryMock.Object);
                     s.AddSingleton<ISagaService>(sagaService);
+                    s.AddSingleton<IOptions<ValidationConfiguration>>(Options.Create(GetConfiguration(false)));
                 });
 
             var sut = ActivatorUtilities.CreateInstance<GroupCreatedFirstLevelEventHandler>(services);
@@ -474,6 +517,15 @@ namespace UserProfileService.Projection.FirstLevel.UnitTests.HandlerTests.V2
                         CancellationToken.None))
                 .ReturnsAsync(new FirstLevelProjectionTag());
 
+            repositoryMock.Setup(
+                    repo => repo.GroupExistAsync(
+                        It.IsAny<string>(),
+                        It.IsAny<string>(),
+                        It.IsAny<string>(),
+                        It.IsAny<bool>(),
+                        It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(false));
+
             var sagaService = new MockSagaService();
 
             IServiceProvider services = FirstLevelHandlerTestsPreparationHelper.GetWithDefaultTestSetup(
@@ -481,6 +533,7 @@ namespace UserProfileService.Projection.FirstLevel.UnitTests.HandlerTests.V2
                 {
                     s.AddSingleton(repositoryMock.Object);
                     s.AddSingleton<ISagaService>(sagaService);
+                    s.AddSingleton<IOptions<ValidationConfiguration>>(Options.Create(GetConfiguration(false)));
                 });
 
             repositoryMock.Setup(
@@ -529,6 +582,152 @@ namespace UserProfileService.Projection.FirstLevel.UnitTests.HandlerTests.V2
                     It.IsAny<IDatabaseTransaction>(),
                     It.IsAny<CancellationToken>()),
                 Times.Never);
+        }
+
+        [Fact]
+        public async Task Handler_should_throw_when_group_exist_and_duplicate_are_not_allowed()
+        {
+            //arrange
+            var transaction = new MockDatabaseTransaction();
+            Mock<IFirstLevelProjectionRepository> repositoryMock = GetRepository(transaction);
+
+            repositoryMock.Setup(
+                    repo => repo.GetTagAsync(
+                        It.IsAny<string>(),
+                        It.IsAny<IDatabaseTransaction>(),
+                        CancellationToken.None))
+                .ReturnsAsync(new FirstLevelProjectionTag());
+
+            repositoryMock.Setup(
+                    repo => repo.GroupExistAsync(
+                        It.IsAny<string>(),
+                        It.IsAny<string>(),
+                        It.IsAny<string>(),
+                        It.IsAny<bool>(),
+                        It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(true));
+
+            var sagaService = new MockSagaService();
+
+            IServiceProvider services = FirstLevelHandlerTestsPreparationHelper.GetWithDefaultTestSetup(
+                s =>
+                {
+                    s.AddSingleton(repositoryMock.Object);
+                    s.AddSingleton<ISagaService>(sagaService);
+                    s.AddSingleton<IOptions<ValidationConfiguration>>(Options.Create(GetConfiguration(duplicateAllowed:false)));
+                });
+
+            repositoryMock.Setup(
+                    repo => repo.SaveProjectionStateAsync(
+                        It.IsAny<ProjectionState>(),
+                        It.IsAny<IDatabaseTransaction>(),
+                        CancellationToken.None))
+                .Returns(Task.CompletedTask);
+
+            repositoryMock.Setup(
+                    repo => repo.CreateProfileAsync(
+                        It.IsAny<IFirstLevelProjectionProfile>(),
+                        It.IsAny<IDatabaseTransaction>(),
+                        CancellationToken.None))
+                .Returns(Task.CompletedTask);
+
+            var sut = ActivatorUtilities.CreateInstance<GroupCreatedFirstLevelEventHandler>(services);
+
+            await Assert.ThrowsAsync<AlreadyExistsException>(async () => await sut.HandleEventAsync(
+                _createdGroupEventWithoutTags,
+                _createdGroupEventWithoutTags.GenerateEventHeader(10),
+                CancellationToken.None));
+
+            repositoryMock.Verify(
+                repo => repo.CreateProfileAsync(
+                    It.Is(_group, new FirstLevelGroupComparer()),
+                    It.Is<IDatabaseTransaction>(
+                        t =>
+                            ((MockDatabaseTransaction)t).Id == transaction.Id),
+                    It.IsAny<CancellationToken>()),
+                Times.Never);
+
+            repositoryMock.Verify(
+                repo => repo.GetTagAsync(
+                    It.IsAny<string>(),
+                    It.IsAny<IDatabaseTransaction>(),
+                    CancellationToken.None),
+                Times.Never);
+
+            repositoryMock.Verify(
+                repo => repo.CreateProfileAssignmentAsync(
+                    It.IsAny<string>(),
+                    It.IsAny<ContainerType>(),
+                    It.IsAny<string>(),
+                    It.IsAny<RangeCondition[]>(),
+                    It.IsAny<IDatabaseTransaction>(),
+                    It.IsAny<CancellationToken>()),
+                Times.Never);
+        }
+
+        [Fact]
+        public async Task Handler_should_work_when_group_exist_and_duplicate_are_allowed()
+        {
+            //arrange
+            var transaction = new MockDatabaseTransaction();
+            Mock<IFirstLevelProjectionRepository> repositoryMock = GetRepository(transaction);
+
+            repositoryMock.Setup(
+                    repo => repo.GetTagAsync(
+                        It.IsAny<string>(),
+                        It.IsAny<IDatabaseTransaction>(),
+                        CancellationToken.None))
+                .ReturnsAsync(new FirstLevelProjectionTag());
+
+            repositoryMock.Setup(
+                    repo => repo.GroupExistAsync(
+                        It.IsAny<string>(),
+                        It.IsAny<string>(),
+                        It.IsAny<string>(),
+                        It.IsAny<bool>(),
+                        It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(true));
+
+            var sagaService = new MockSagaService();
+
+            IServiceProvider services = FirstLevelHandlerTestsPreparationHelper.GetWithDefaultTestSetup(
+                s =>
+                {
+                    s.AddSingleton(repositoryMock.Object);
+                    s.AddSingleton<ISagaService>(sagaService);
+                    s.AddSingleton<IOptions<ValidationConfiguration>>(Options.Create(GetConfiguration(duplicateAllowed: true)));
+                });
+
+            repositoryMock.Setup(
+                    repo => repo.SaveProjectionStateAsync(
+                        It.IsAny<ProjectionState>(),
+                        It.IsAny<IDatabaseTransaction>(),
+                        CancellationToken.None))
+                .Returns(Task.CompletedTask);
+
+            repositoryMock.Setup(
+                    repo => repo.CreateProfileAsync(
+                        It.IsAny<IFirstLevelProjectionProfile>(),
+                        It.IsAny<IDatabaseTransaction>(),
+                        CancellationToken.None))
+                .Returns(Task.CompletedTask);
+
+            var sut = ActivatorUtilities.CreateInstance<GroupCreatedFirstLevelEventHandler>(services);
+
+           await sut.HandleEventAsync(
+                _createdGroupEventWithoutTags,
+                _createdGroupEventWithoutTags.GenerateEventHeader(10),
+                CancellationToken.None);
+
+            repositoryMock.Verify(
+                repo => repo.CreateProfileAsync(
+                    It.Is(_group, new FirstLevelGroupComparer()),
+                    It.Is<IDatabaseTransaction>(
+                        t =>
+                            ((MockDatabaseTransaction)t).Id == transaction.Id),
+                    It.IsAny<CancellationToken>()),
+                Times.Once);
+
         }
     }
 }

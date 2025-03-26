@@ -2421,6 +2421,94 @@ internal class ArangoFirstLevelProjectionRepository : ArangoRepositoryBase, IFir
     }
 
     /// <inheritdoc />
+    public async Task<bool> GroupExistAsync(
+        string externalId,
+        string name,
+        string displayName,
+        bool ignoreCase,
+        CancellationToken cancellationToken = default)
+    {
+        Logger.EnterMethod();
+
+        if (string.IsNullOrWhiteSpace(externalId)
+            && string.IsNullOrWhiteSpace(displayName)
+            && string.IsNullOrWhiteSpace(name))
+        {
+            throw new ArgumentException("External Id, displayName and name of the group should not be all null or whitespace");
+        }
+
+        string collectionName = _modelsInfo.GetCollectionName<IFirstLevelProjectionProfile>();
+        ParameterizedAql aqlQuery = WellKnownFirstLevelProjectionQueries.GroupExist(
+            collectionName,
+            externalId,
+            name,
+            displayName, ignoreCase);
+
+        IList<bool> result = await ExecuteQueryAsync<bool>(aqlQuery, null, cancellationToken);
+
+        return Logger.ExitMethod(result.FirstOrDefault());
+    }
+
+    /// <inheritdoc />
+    public async Task<bool> OrganizationExistAsync(
+        string externalId,
+        string name,
+        string displayName,
+        bool ignoreCase = true,
+        CancellationToken cancellationToken = default)
+    {
+        Logger.EnterMethod();
+
+        if (string.IsNullOrWhiteSpace(externalId)
+            && string.IsNullOrWhiteSpace(displayName)
+            && string.IsNullOrWhiteSpace(name))
+        {
+            throw new ArgumentException("External Id, displayName and name of organization should not be all null or whitespace");
+        }
+
+        string collectionName = _modelsInfo.GetCollectionName<IFirstLevelProjectionProfile>();
+        ParameterizedAql aqlQuery = WellKnownFirstLevelProjectionQueries.OrganizationExist(
+            collectionName,
+            externalId,
+            name,
+            displayName,ignoreCase);
+
+        IList<bool> result = await ExecuteQueryAsync<bool>(aqlQuery, null, cancellationToken);
+
+        return Logger.ExitMethod(result.FirstOrDefault());
+    }
+
+    /// <inheritdoc />
+    public async Task<bool> FunctionExistAsync(
+        string roleId,
+        string organizationId,
+        string roleExternalId,
+        string organizationExternalId,
+        CancellationToken cancellationToken = default)
+    {
+        Logger.EnterMethod();
+
+        if ((string.IsNullOrWhiteSpace(roleId) && string.IsNullOrWhiteSpace(organizationId))
+            || (string.IsNullOrWhiteSpace(roleExternalId) && string.IsNullOrWhiteSpace(organizationExternalId)))
+        {
+            throw new ArgumentException(
+                "Either role ID and organization ID or role external ID and organization external ID must be provided.");
+        }
+
+        ParameterizedAql aqlQuery = WellKnownFirstLevelProjectionQueries.FunctionExist(
+            _modelsInfo,
+            organizationId,
+            organizationExternalId,
+            roleId,
+            roleExternalId);
+
+        IList<bool> result = await ExecuteQueryAsync<bool>(aqlQuery, null, cancellationToken);
+
+        return Logger.ExitMethod(result.FirstOrDefault());
+    }
+
+
+    /// <inheritdoc />
     public Task DeleteProfileAssignmentAsync(
         string parentId,
         ContainerType parentType,

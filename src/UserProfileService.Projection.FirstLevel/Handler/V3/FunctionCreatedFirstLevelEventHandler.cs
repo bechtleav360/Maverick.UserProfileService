@@ -19,6 +19,11 @@ using UserProfileService.Projection.FirstLevel.Abstractions;
 using FunctionCreatedResolvedEvent = Maverick.UserProfileService.AggregateEvents.Resolved.V1.FunctionCreated;
 using ResolvedInitiator = Maverick.UserProfileService.AggregateEvents.Common.EventInitiator;
 using FunctionCreatedEventV3 = UserProfileService.Events.Implementation.V3.FunctionCreatedEvent;
+using System.Collections.Concurrent;
+using Microsoft.Extensions.Options;
+using UserProfileService.Validation.Abstractions.Configuration;
+using UserProfileService.Common.V2.Exceptions;
+using UserProfileService.Common.V2.Extensions;
 
 namespace UserProfileService.Projection.FirstLevel.Handler.V3;
 
@@ -27,6 +32,9 @@ namespace UserProfileService.Projection.FirstLevel.Handler.V3;
 /// </summary>
 internal class FunctionCreatedFirstLevelEventHandler : FirstLevelEventHandlerTagsIncludedBase<FunctionCreatedEventV3>
 {
+    private static readonly ConcurrentDictionary<string, SemaphoreSlim> _propertyLocks = new();
+    private readonly ValidationConfiguration _validationConfiguration;
+
     /// <summary>
     ///     Creates an instance of the object <see cref="FunctionCreatedFirstLevelEventHandler" />.
     /// </summary>
@@ -39,6 +47,7 @@ internal class FunctionCreatedFirstLevelEventHandler : FirstLevelEventHandlerTag
     ///     The read service is used to read from the internal query storage to get all information to
     ///     generate all needed stream events.
     /// </param>
+    /// <param name="validationConfiguration"> <see cref="ValidationConfiguration"/></param>
     /// <param name="sagaService">
     ///     The saga service is used to write all created <see cref="IUserProfileServiceEvent" /> to the
     ///     write stream.
@@ -49,6 +58,7 @@ internal class FunctionCreatedFirstLevelEventHandler : FirstLevelEventHandlerTag
         IFirstLevelProjectionRepository repository,
         ISagaService sagaService,
         IFirstLevelEventTupleCreator creator,
+        IOptions<ValidationConfiguration> validationConfiguration,
         IMapper mapper) : base(
         logger,
         repository,
@@ -56,6 +66,7 @@ internal class FunctionCreatedFirstLevelEventHandler : FirstLevelEventHandlerTag
         mapper,
         creator)
     {
+        _validationConfiguration = validationConfiguration.Value;
     }
 
     protected override async Task HandleInternalAsync(
@@ -97,35 +108,104 @@ internal class FunctionCreatedFirstLevelEventHandler : FirstLevelEventHandlerTag
 
         var functionCreatedResolvedEvent = Mapper.Map<FunctionCreatedResolvedEvent>(function);
 
-        Guid batchSagaId = await SagaService.CreateBatchAsync(
-            cancellationToken,
-            Creator.CreateEvents(
-                    new ObjectIdent(eventObject.Payload.Id, ObjectType.Function),
-                    new List<IUserProfileServiceEvent>
-                    {
-                        functionCreatedResolvedEvent
-                    },
-                    eventObject)
-                .ToArray());
+        bool duplicateFunctionAllowed = _validationConfiguration.Internal.Function.DuplicateAllowed;
 
-        await Repository.CreateFunctionAsync(function, transaction, cancellationToken);
+        string organizationId = function.Organization?.Id;
+        string organizationExternalId = function.Organization?.ExternalIds.FirstOrDefaultUnconverted()?.Id;
+        string roleExternalId = function.Role?.ExternalIds.FirstOrDefaultUnconverted()?.Id;
+        string roleId = function.Role?.Id;
+        string semaphoreKey = $"{organizationId}{roleId}";
 
-        await CreateTagsAddedEvent(
-            transaction,
-            batchSagaId,
-            eventObject.Payload.Tags.ToList(),
-            async (repo, tag) =>
-                await repo.AddTagToFunctionAsync(
-                    tag,
-                    eventObject.Payload.Id,
-                    transaction,
-                    cancellationToken),
-            eventObject,
-            new ObjectIdent(eventObject.Payload.Id, ObjectType.Group),
-            cancellationToken);
+        Logger.LogDebugMessage(
+            "Trying to create function with roleId: {rId} and organizationId: {oId}",
+            LogHelpers.Arguments(roleId, organizationId));
 
-        await SagaService.ExecuteBatchAsync(batchSagaId, cancellationToken);
+        SemaphoreSlim semaphore = null;
 
+        if (!duplicateFunctionAllowed)
+        {
+            semaphore = _propertyLocks.GetOrAdd(
+                semaphoreKey,
+                _ => new SemaphoreSlim(1, 1));
+
+            await semaphore.WaitAsync(cancellationToken);
+
+            Logger.LogDebugMessage("Entered semaphore for key: {property}", LogHelpers.Arguments(semaphoreKey));
+
+        }
+
+        try
+        {
+            bool functionExist = await Repository.FunctionExistAsync(
+               roleId,
+               organizationId,
+                roleExternalId,
+               organizationExternalId,
+                cancellationToken);
+
+            if (functionExist && !duplicateFunctionAllowed)
+            {
+                Logger.LogWarnMessage(
+                    "The function with the OrganizationId: {oId} and roleId: {rId} already exist and can not be created",
+                    LogHelpers.Arguments(
+                        organizationId,
+                       roleId));
+
+                throw new AlreadyExistsException(
+                    $"The function with following properties: organizationId (external): {organizationExternalId}, organizationId: {organizationId}, roleId (external): {roleExternalId}, roleId:{roleId} already exist and can not be created");
+            }
+            else if (functionExist)
+            {
+                Logger.LogWarnMessage(
+                    "The function with following properties: organizationId (external): {organizationExternalId}, organizationId: {organizationId}, roleId (external): {roleExternalId}, roleId:{roleId} already exist but will created again, DUPLICATED FUNCTIONS are allowed ",
+                    LogHelpers.Arguments(
+                        organizationExternalId,
+                        organizationId,
+                        roleExternalId,
+                        roleId));
+            }
+
+            Guid batchSagaId = await SagaService.CreateBatchAsync(
+                cancellationToken,
+                Creator.CreateEvents(
+                        new ObjectIdent(eventObject.Payload.Id, ObjectType.Function),
+                        new List<IUserProfileServiceEvent>
+                        {
+                            functionCreatedResolvedEvent
+                        },
+                        eventObject)
+                    .ToArray());
+
+            await Repository.CreateFunctionAsync(function, transaction, cancellationToken);
+
+            await CreateTagsAddedEvent(
+                transaction,
+                batchSagaId,
+                eventObject.Payload.Tags.ToList(),
+                async (repo, tag) =>
+                    await repo.AddTagToFunctionAsync(
+                        tag,
+                        eventObject.Payload.Id,
+                        transaction,
+                        cancellationToken),
+                eventObject,
+                new ObjectIdent(eventObject.Payload.Id, ObjectType.Group),
+                cancellationToken);
+
+            await SagaService.ExecuteBatchAsync(batchSagaId, cancellationToken);
+
+        }
+        finally
+        {
+            if (!duplicateFunctionAllowed)
+            {
+                semaphore?.Release();
+                Logger.LogDebugMessage("Left semaphore for key: {property}", LogHelpers.Arguments(semaphoreKey));
+                _propertyLocks.Remove(semaphoreKey, out semaphore);
+            }
+        }
+
+      
         Logger.ExitMethod();
     }
 }
