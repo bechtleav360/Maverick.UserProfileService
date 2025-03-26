@@ -44,7 +44,7 @@ namespace Maverick.UserProfileService.Models.Models
                 return true;
             }
 
-            return other.SequenceEqual(MemberOf);
+            return other.OrderBy(x => x.Id).SequenceEqual(MemberOf.OrderBy(x => x.Id));
         }
 
         /// <summary>
