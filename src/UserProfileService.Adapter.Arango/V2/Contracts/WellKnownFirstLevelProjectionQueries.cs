@@ -1367,4 +1367,50 @@ internal static class WellKnownFirstLevelProjectionQueries
             }
         };
     }
+
+
+    /// <summary>
+    /// Checks whether a profile exists in the specified collection based on organization and role identifiers,
+    /// including both direct IDs and external IDs for organization and role.
+    /// </summary>
+    /// <param name="options">The model builder options <see cref="ModelBuilderOptions"/>.</param>
+    /// <param name="arangoOrganizationId">The ID of the organization to match profiles against.</param>
+    /// <param name="arangoOrganizationExternalId">The external ID of the organization to match profiles against.</param>
+    /// <param name="arangoRoleId">The ID of the role to match profiles against.</param>
+    /// <param name="arangoRoleExternalId">The external ID of the role to match profiles against.</param>
+    /// <returns>A <see cref="ParameterizedAql"/> object containing the AQL query and parameters for checking profile existence.</returns>
+    /// <remarks>
+    /// The query checks if any profile exists where either:
+    /// 1. The organization's ID and role's ID match the given IDs,
+    /// 2. OR the organization's and role's external IDs match the provided external IDs, if given.
+    /// The result returns true if any profile matches the given conditions.
+    /// </remarks>
+    public static ParameterizedAql FunctionExist(
+        ModelBuilderOptions options,
+        string arangoOrganizationId,
+        string arangoOrganizationExternalId,
+        string arangoRoleId,
+        string arangoRoleExternalId)
+    {
+        return new ParameterizedAql
+        {
+            Query =
+                @"      RETURN LENGTH(
+                            FOR p IN @@profileCollection
+                            FILTER
+                            (p.Organization.Id == @organizationId AND p.Role.Id == @roleId) OR (
+                            (LENGTH(TRIM(@organizationExternalId)) > 0 AND LENGTH(p.Organization.ExternalIds[* FILTER CURRENT.Id == @organizationExternalId ]) > 0) AND
+                            (LENGTH(TRIM(@roleExternalId)) > 0 AND LENGTH(p.Role.ExternalIds[* FILTER CURRENT.Id == @roleExternalId ]) > 0) )                                         
+                            RETURN p) > 0",
+
+            Parameter = new Dictionary<string, object>
+            {
+                {"@profileCollection",  options.GetCollectionName<FirstLevelProjectionFunction>()},
+                {"organizationId", arangoOrganizationId},
+                {"roleId", arangoRoleId},
+                {"organizationExternalId", arangoOrganizationExternalId},
+                {"roleExternalId", arangoOrganizationExternalId}
+            }
+        };
+    }
 }

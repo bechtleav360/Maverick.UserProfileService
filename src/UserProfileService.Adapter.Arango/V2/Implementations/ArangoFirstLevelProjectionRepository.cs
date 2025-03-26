@@ -2478,6 +2478,35 @@ internal class ArangoFirstLevelProjectionRepository : ArangoRepositoryBase, IFir
         return Logger.ExitMethod(result.FirstOrDefault());
     }
 
+    /// <inheritdoc />
+    public async Task<bool> FunctionExistAsync(
+        string roleId,
+        string organizationId,
+        string roleExternalId,
+        string organizationExternalId,
+        CancellationToken cancellationToken = default)
+    {
+        Logger.EnterMethod();
+
+        if ((string.IsNullOrWhiteSpace(roleId) && string.IsNullOrWhiteSpace(organizationId))
+            || (string.IsNullOrWhiteSpace(roleExternalId) && string.IsNullOrWhiteSpace(organizationExternalId)))
+        {
+            throw new ArgumentException(
+                "Either role ID and organization ID or role external ID and organization external ID must be provided.");
+        }
+
+        ParameterizedAql aqlQuery = WellKnownFirstLevelProjectionQueries.FunctionExist(
+            _modelsInfo,
+            organizationId,
+            organizationExternalId,
+            roleId,
+            roleExternalId);
+
+        IList<bool> result = await ExecuteQueryAsync<bool>(aqlQuery, null, cancellationToken);
+
+        return Logger.ExitMethod(result.FirstOrDefault());
+    }
+
 
     /// <inheritdoc />
     public Task DeleteProfileAssignmentAsync(

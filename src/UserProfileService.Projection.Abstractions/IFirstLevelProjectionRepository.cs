@@ -892,4 +892,28 @@ public interface IFirstLevelProjectionRepository : IProjectionStateRepository
         string displayName,
         bool ignoreCase = true,
         CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Asynchronously checks whether a function exists based on the given role ID, organization ID,
+    /// and optionally, external IDs for both role and organization.
+    /// </summary>
+    /// <param name="roleId">The ID of the role to match the function against.</param>
+    /// <param name="organizationId">The ID of the organization to match the function against.</param>
+    /// <param name="roleExternalId">The external ID of the role to match the function against (optional).</param>
+    /// <param name="organizationExternalId">The external ID of the organization to match the function against (optional).</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation (optional, default is no cancellation).</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains a boolean value indicating
+    /// whether the function exists that matches the provided parameters.</returns>
+    /// <remarks>
+    /// The method checks if a function exists based on the following conditions:
+    /// 1. The function's organization ID and role ID match the provided values.
+    /// 2. OR if the provided external IDs for role and/or organization match those in the function.
+    /// The method will return true if a matching function exists, otherwise false.
+    /// </remarks>
+    Task<bool> FunctionExistAsync(
+        string roleId,
+        string organizationId,
+        string roleExternalId,
+        string organizationExternalId,
+        CancellationToken cancellationToken = default);
 }
